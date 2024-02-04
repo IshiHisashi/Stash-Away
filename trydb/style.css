@@ -1,0 +1,83 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  background-color: ivory;
+  color: #666;
+  margin: 0 1rem;
+}
+header {
+  color: #444;
+  border-bottom: 1px solid #444;
+  padding-bottom: 1rem;
+}
+h1 {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+.a-wrapper {
+  text-align: end;
+  a {
+    text-decoration: none;
+    color: white;
+    background-color: #777;
+    padding: 4px 12px;
+    cursor: pointer;
+  }
+}
+
+main {
+  /* margin-top: 1rem; */
+  margin: 0 2rem;
+  .name-wrapper {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  div {
+    margin-top: 1rem;
+  }
+  label {
+    display: block;
+    /* margin-top: 1rem; */
+  }
+  input,
+  select {
+    padding: 6px 6px;
+    width: 70%;
+    color: #666;
+    font-size: 1rem;
+    margin-top: 8px;
+    background-color: white;
+    border: 1px solid #999;
+  }
+  button {
+    margin-top: 1.5rem;
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: hotpink;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  #btnSave {
+    background-color: plum;
+  }
+  #btnLoad {
+    background-color: burlywood;
+  }
+  #price {
+    margin-top: 1rem;
+  }
+  .btn-delete {
+    background-color: #777;
+    padding: 0.3rem;
+    margin-left: 1rem;
+    font-size: 12px;
+  }
+  #btnSet {
+    display: none;
+  }
+}

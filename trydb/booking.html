@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test DB</title>
+    <!-- <script src="trydb.js" type="module"></script> -->
+    <script src="booking.js" type="module" defer></script>
+    <script
+      src="https://kit.fontawesome.com/8611811e56.js"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style2.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Test DB_Handling</h1>
+
+      <div class="a-wrapper">
+        <!-- <a href="booking.html">Basic booking</a> -->
+        <a href="storageMgmt.html">Storage mgmt</a>
+      </div>
+    </header>
+    <main>
+      <form id="form_list">
+        <div class="name-wrapper">
+          <div class="fname">
+            <label>Firstname</label>
+            <input type="text" id="firstname" />
+          </div>
+          <div class="lname">
+            <label>Lastname</label>
+            <input type="text" id="lastname" />
+          </div>
+          <div class="location">
+            <label>Your strage plan</label>
+            <select id="storagePlan">
+              <option value="none">--please choose your plan--</option>
+              <option value="plan1">plan1</option>
+              <option value="plan2">plan2</option>
+            </select>
+          </div>
+          <div class="priceBox">
+            <p>Your price</p>
+            <p id="price"></p>
+          </div>
+        </div>
+        <div class="item-wrapper">
+          <label>Write an item to store</label>
+          <input type="text" id="item" />
+          <!-- <button type="submit" class="btn-delete">delete</button> -->
+        </div>
+
+        <button id="btnSave" type="submit">
+          <i class="fa-regular fa-floppy-disk"></i> Save
+        </button>
+        <button id="btnLoad" type="submit">
+          <i class="fa-solid fa-rotate-right"></i> Load saved data
+        </button>
+
+        <div class="item-list-wrapper">
+          <h3>Current item list_on going</h3>
+          <ul id="item-list">
+            <p>You item list...</p>
+          </ul>
+        </div>
+
+        <div class="delivery">
+          <div class="detail">
+            <label>Detail address</label>
+            <input type="text" id="detail" />
+          </div>
+          <div class="city">
+            <label>City</label>
+            <input type="text" id="city" />
+          </div>
+          <div class="province">
+            <label>Province</label>
+            <input type="text" id="province" />
+          </div>
+          <div class="zip">
+            <label>Zip Code</label>
+            <input type="text" id="zip" />
+          </div>
+        </div>
+
+        <div>
+          <button id="btnSubmit" type="submit">
+            <i class="fa-solid fa-suitcase"></i> Submit
+          </button>
+        </div>
+
+        <div><button id="btnSet">Set</button></div>
+
+        <!-- USED only in data registration -->
+        <!-- <div><button id="x">Set</button></div> -->
+      </form>
+    </main>
+  </body>
+</html>
