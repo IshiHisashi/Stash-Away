@@ -4,7 +4,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebas
 import {
   getFirestore,
   collection,
+  collectionGroup,
+  query,
+  doc,
+  getDoc,
   getDocs,
+  updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -26,15 +31,26 @@ const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
 // Firebase handling---------------
 // For getting data on driver's end
 const objArr = [];
-const queryOrder = collection(db, "users", userId, "order");
+const queryOrder = query(collectionGroup(db, "order"));
 const order = await getDocs(queryOrder);
 order.forEach((el) => {
-  //   console.log(el.id);
-  //   console.log(el.data());
   const obj = { [el.id]: el.data() };
   objArr.push(obj);
 });
 
-console.log(objArr);
+// Update driver's id and its status
+const update = async (uid, oid, driver) => {
+  await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
+    driverId: `${driver.value}`,
+    status: "on going",
+  });
+};
 
-export { objArr };
+// getdata for specific id
+const getOrder = async (uid, oid) => {
+  // const arr = [];
+  const get = await getDoc(doc(db, "users", `${uid}`, "order", `${oid}`));
+  return get;
+};
+
+export { objArr, update, db, getOrder };

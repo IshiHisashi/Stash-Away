@@ -1,11 +1,12 @@
-import { objArr } from "./forDriverEnd/load.js";
+import { objArr, update, db, getOrder } from "./forDriverEnd/load.js";
 console.log(objArr);
 
 const showPickUps = (userID, name, date, status, address, items, orderID) => {
   const addingSection = document.querySelector(".adding");
 
   const form = document.createElement("form");
-  form.setAttribute("id", userID);
+  // form.setAttribute("id", userID);
+  form.setAttribute("id", `${userID}_${orderID}`);
   const userIDP = document.createElement("p");
   const nameP = document.createElement("p");
   const dateP = document.createElement("p");
@@ -62,7 +63,7 @@ const showPickUps = (userID, name, date, status, address, items, orderID) => {
     btnToOngoing.disabled = isDefaultValue;
   };
 
-  form.onsubmit = (event) => {
+  form.onsubmit = async (event) => {
     event.preventDefault();
 
     statusP.textContent = `Current status: on-going`;
@@ -72,8 +73,19 @@ const showPickUps = (userID, name, date, status, address, items, orderID) => {
     driver.disabled = true;
 
     console.log(
-      `userId: ${event.target.id}, driverId: ${driver.value}, status: on going`
+      `orderId: ${event.target.id}, driverId: ${driver.value}, status: on going`
     );
+    // --UPDATE DB--
+    //  Destructure form id into userid and orderid
+    const ids = event.target.id;
+    const uid = ids.split("_")[0];
+    const oid = ids.split("_")[1];
+    // Update driverid and status
+    update(uid, oid, driver);
+    // Get the updated order info.
+    const get = await getOrder(uid, oid);
+    const order = get.data();
+    console.log(order);
   };
 };
 
@@ -89,7 +101,8 @@ const showDeliveries = (
   const retrievalSection = document.querySelector(".retrieval");
 
   const form = document.createElement("form");
-  form.setAttribute("id", userID);
+  // form.setAttribute("id", userID);
+  form.setAttribute("id", `${userID}_${orderID}`);
   const userIDP = document.createElement("p");
   const nameP = document.createElement("p");
   const dateP = document.createElement("p");
