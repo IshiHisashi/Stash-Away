@@ -44,11 +44,36 @@ const detailAddress = document.getElementById("detail");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zip = document.getElementById("zip");
-// console.log(item.value);
-
 const btnSubmit = document.getElementById("btnSubmit");
 const btnSave = document.getElementById("btnSave");
 const btnLoad = document.getElementById("btnLoad");
+// fnc
+// foreach __NOT IN USE__
+const renderList = (docs) => {
+  docs.forEach((doc) => {
+    if (doc.data().status === "saved") {
+      const item = doc.data();
+      const itemID = doc.id;
+      itemList.insertAdjacentHTML(
+        "beforeend",
+        `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+      );
+    }
+  });
+};
+// forloop
+const renderListFor = function (doc) {
+  for (let i = 0; i < doc.length; i++) {
+    if (doc[i].data().status === "saved") {
+      const item = doc[i].data();
+      const itemID = doc[i].id;
+      itemList.insertAdjacentHTML(
+        "beforeend",
+        `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+      );
+    }
+  }
+};
 
 // Firebase handling---------------
 // Get User document
@@ -94,16 +119,9 @@ btnLoad.addEventListener("click", async function (e) {
   itemList.innerHTML = "";
   const queryStorage = collection(db, "users", `${userId}`, "inStorage");
   const snapShot = await getDocs(queryStorage);
-  snapShot.forEach((doc) => {
-    if (doc.data().status === "saved") {
-      const item = doc.data();
-      const itemID = doc.id;
-      itemList.insertAdjacentHTML(
-        "beforeend",
-        `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
-      );
-    }
-  });
+  const snapDoc = snapShot.docs;
+  // rendering
+  renderListFor(snapDoc);
   // Camera access ---coming sonn...----
   const elementsCamera = document.querySelectorAll(".pic");
   elementsCamera.forEach((el) => {
@@ -112,7 +130,6 @@ btnLoad.addEventListener("click", async function (e) {
       console.log(e.target.id);
     });
   });
-
   // Delete function
   const elementsDelete = document.querySelectorAll(".delete");
   elementsDelete.forEach((el) => {
@@ -124,12 +141,8 @@ btnLoad.addEventListener("click", async function (e) {
         doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
       );
       console.log(`${e.target.id} is deleted`);
-
-      // re-render => coming soon...
-      const blank = async function () {
-        console.log(elementsDelete);
-      };
-      const blankExe = await blank();
+      // re-rendering
+      btnLoad.click();
     });
   });
 });
