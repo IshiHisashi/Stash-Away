@@ -43,6 +43,10 @@ main {
   div {
     margin-top: 1rem;
   }
+  h3 {
+    grid-column: 1/-1;
+    margin-top: 1rem;
+  }
   label {
     display: block;
     /* margin-top: 1rem; */
@@ -106,6 +110,13 @@ main {
       }
     }
   }
+  .plan {
+    h3 {
+      border-top: 1px solid black;
+      padding-top: 2rem;
+    }
+  }
+
   .btn-delete {
     background-color: #777;
     padding: 0.3rem;

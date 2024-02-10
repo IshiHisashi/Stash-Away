@@ -36,17 +36,17 @@ const db = getFirestore(app);
 const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
-const selectedPlan = document.getElementById("storagePlan");
-const price = document.getElementById("price");
 const item = document.getElementById("item");
 const itemList = document.getElementById("item-list");
 const detailAddress = document.getElementById("detail");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zip = document.getElementById("zip");
+const sizePlan = document.getElementById("size-plan");
+const termPlan = document.getElementById("term-plan");
+const price = document.getElementById("price");
 const btnSubmit = document.getElementById("btnSubmit");
 const btnSave = document.getElementById("btnSave");
-const btnLoad = document.getElementById("btnLoad");
 // fnc
 // foreach __NOT IN USE__
 const renderList = (docs) => {
@@ -84,18 +84,36 @@ const userDoc = docSnap.data();
 firstname.value = userDoc.userName.firstName;
 lastname.value = userDoc.userName.lastName;
 
-// Plan : rendered once it's selected. => NOT WORKING NOW
-// selectedPlan.addEventListener("change", async (e) => {
-//   currentPlan = e.target.value;
-//   // Get info. from corporate DB
-//   if (currentPlan === "plan1" || currentPlan === "plan2") {
-//     const docPlan = await getDoc(doc(db, "plans", currentPlan));
-//     const plan = docPlan.data();
-//     price.innerText = `$${plan.price}`;
-//   } else {
-//     price.innerText = "";
-//   }
-// });
+// Render list
+itemList.innerHTML = "";
+const queryStorage = collection(db, "users", `${userId}`, "inStorage");
+const snapShot = await getDocs(queryStorage);
+const snapDoc = snapShot.docs;
+// rendering
+renderListFor(snapDoc);
+
+// Camera access ---coming sonn...----
+const elementsCamera = document.querySelectorAll(".pic");
+elementsCamera.forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log(e.target.id);
+  });
+});
+
+// Delete function
+const elementsDelete = document.querySelectorAll(".delete");
+elementsDelete.forEach((el) => {
+  el.addEventListener("click", async (e) => {
+    e.preventDefault();
+    // delete
+    const deleteID = e.target.id.split("_")[1];
+    await deleteDoc(doc(db, "users", `${userId}`, "inStorage", `${deleteID}`));
+    console.log(`${e.target.id} is deleted`);
+    // re-render to update the list
+    window.location.reload();
+  });
+});
 
 // Save data
 btnSave.addEventListener("click", async function (e) {
@@ -111,40 +129,7 @@ btnSave.addEventListener("click", async function (e) {
     storedDate: "2024-01-31",
     status: "saved",
   });
-});
-
-// Load data
-btnLoad.addEventListener("click", async function (e) {
-  e.preventDefault();
-  itemList.innerHTML = "";
-  const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-  const snapShot = await getDocs(queryStorage);
-  const snapDoc = snapShot.docs;
-  // rendering
-  renderListFor(snapDoc);
-  // Camera access ---coming sonn...----
-  const elementsCamera = document.querySelectorAll(".pic");
-  elementsCamera.forEach((el) => {
-    el.addEventListener("click", (e) => {
-      e.preventDefault();
-      console.log(e.target.id);
-    });
-  });
-  // Delete function
-  const elementsDelete = document.querySelectorAll(".delete");
-  elementsDelete.forEach((el) => {
-    el.addEventListener("click", async (e) => {
-      e.preventDefault();
-      // delete
-      const deleteID = e.target.id.split("_")[1];
-      await deleteDoc(
-        doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
-      );
-      console.log(`${e.target.id} is deleted`);
-      // re-rendering
-      btnLoad.click();
-    });
-  });
+  window.location.reload();
 });
 
 // Delivery info.
@@ -152,6 +137,66 @@ detailAddress.value = userDoc.address.detail;
 city.value = userDoc.address.city;
 province.value = userDoc.address.province;
 zip.value = userDoc.address.zipCode;
+
+// Plan : rendered once it's selected. => NOT WORKING NOW
+// load plan data and render first
+const docPlan = await getDoc(doc(db, "Company", "plan"));
+const docPlanSize = docPlan.data().size;
+// console.log(docPlanSize.small);
+Object.keys(docPlanSize).forEach((el) => {
+  document
+    .getElementById("size-option")
+    .insertAdjacentHTML("afterend", `<option value='${el}'>${el}</option>`);
+});
+const docPlanTerm = docPlan.data().term;
+Object.keys(docPlanTerm).forEach((el) => {
+  document
+    .getElementById("term-option")
+    .insertAdjacentHTML("afterend", `<option value='${el}'>${el}</option>`);
+});
+
+let size = {};
+let term = {};
+sizePlan.addEventListener("change", async (e) => {
+  const d = await getDoc(doc(db, "users", `${userId}`));
+  const user = d.data();
+  const selectedsize = e.target.value;
+  const termUser = user.plan.term;
+  if (selectedsize !== "none") {
+    size = { [selectedsize]: docPlanSize[selectedsize] };
+    await updateDoc(doc(db, "users", `${userId}`), {
+      "plan.size": `${selectedsize}`,
+    });
+    pricing(selectedsize, termUser);
+  }
+});
+
+// Plan_term
+termPlan.addEventListener("change", async (e) => {
+  const d = await getDoc(doc(db, "users", `${userId}`));
+  const user = d.data();
+  const selectedterm = e.target.value;
+  const sizeUser = user.plan.size;
+  if (selectedterm !== "none") {
+    term = { [selectedterm]: docPlanTerm[selectedterm] };
+    await updateDoc(doc(db, "users", `${userId}`), {
+      "plan.term": `${selectedterm}`,
+    });
+    pricing(sizeUser, selectedterm);
+  }
+});
+
+// pricing
+const pricing = async (size, term) => {
+  let sizeUser = size;
+  let termUser = term;
+  let monthlyFee = docPlanSize[sizeUser].price * docPlanTerm[termUser].discount;
+  console.log(monthlyFee);
+  price.textContent = "$" + monthlyFee;
+  await updateDoc(doc(db, "users", `${userId}`), {
+    "plan.monthlyFee": `${monthlyFee}`,
+  });
+};
 
 // Submit data
 btnSubmit.addEventListener("click", async (e) => {

@@ -39,18 +39,6 @@
             <label>Lastname</label>
             <input type="text" id="lastname" />
           </div>
-          <div class="location">
-            <label>Your strage plan</label>
-            <select id="storagePlan">
-              <option value="none">--please choose your plan--</option>
-              <option value="plan1">plan1</option>
-              <option value="plan2">plan2</option>
-            </select>
-          </div>
-          <div class="priceBox">
-            <p>Your price</p>
-            <p id="price"></p>
-          </div>
         </div>
         <div class="item-wrapper">
           <label>Write an item to store</label>
@@ -61,9 +49,9 @@
         <button id="btnSave" type="submit">
           <i class="fa-regular fa-floppy-disk"></i> Save
         </button>
-        <button id="btnLoad" type="submit">
+        <!-- <button id="btnLoad" type="submit">
           <i class="fa-solid fa-rotate-right"></i> Load saved data
-        </button>
+        </button> -->
 
         <div class="item-list-wrapper">
           <h3>Current item list_on going</h3>
@@ -73,6 +61,7 @@
         </div>
 
         <div class="delivery">
+          <h3>Pick up information</h3>
           <div class="detail">
             <label>Detail address</label>
             <input type="text" id="detail" />
@@ -88,6 +77,30 @@
           <div class="zip">
             <label>Zip Code</label>
             <input type="text" id="zip" />
+          </div>
+        </div>
+
+        <div class="plan">
+          <h3>Choose your plan</h3>
+          <div class="size">
+            <label>Your storage size</label>
+            <select id="size-plan">
+              <option id="size-option" value="none">
+                --please choose your plan--
+              </option>
+            </select>
+          </div>
+          <div class="term">
+            <label>Term Length</label>
+            <select id="term-plan">
+              <option id="term-option" value="none">
+                --please choose your plan--
+              </option>
+            </select>
+          </div>
+          <div class="priceBox">
+            <p>Your price</p>
+            <p id="price"></p>
           </div>
         </div>
 

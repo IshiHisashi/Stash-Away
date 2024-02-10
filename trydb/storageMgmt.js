@@ -56,15 +56,37 @@ userName.textContent = `${hp.userName.firstName}`;
 const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 const snapShot = await getDocs(queryStorage);
 snapShot.forEach((doc) => {
-  if (doc.data().storedDate !== "saved") {
+  // Show the list except for saved
+  if (doc.data().status !== "saved") {
     const item = doc.data();
+    const itemID = doc.id;
     itemList.insertAdjacentHTML(
       "beforeend",
-      `<li  class='item-list-li'><input id=check_${doc.id} class="checkbox" type="checkbox" />
-    <p class="item-name">Box #${item.boxNumber} : ${item.itemName} </p> <span class='icon-span'><i class="fa-regular fa-image icon pic-item${item.boxNumber}"></i></span>
+      `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" />
+    <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
+        doc.data().status === "retrieved"
+          ? "| retrieved"
+          : doc.data().status === "requested"
+          ? "| on request"
+          : ""
+      }</p> 
+    <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
       </li>`
     );
   }
+  // Disable checkbox if the item is on retrieval request.
+  if (doc.data().status === "requested" || doc.data().status === "retrieved") {
+    document.getElementById(`check_${doc.id}`).disabled = true;
+  }
+});
+
+// Get camera id (on click the camera icon)
+const elementsCamera = document.querySelectorAll(".pic");
+elementsCamera.forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log(e.target.id);
+  });
 });
 
 // Address
@@ -124,4 +146,6 @@ btnRetrieve.addEventListener("click", async (e) => {
       zipCode: `${zip.value}`,
     },
   });
+  // Process4 : Reload the display to reflect change in item status and update list accordingly
+  window.location.reload();
 });

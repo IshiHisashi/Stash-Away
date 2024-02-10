@@ -32,7 +32,7 @@ h3 {
     border-bottom: 1px solid #999;
     font-size: 1.1rem;
     display: grid;
-    grid-template-columns: 30px 1fr 1fr;
+    grid-template-columns: 30px 1fr auto;
     align-content: center;
   }
   input {
