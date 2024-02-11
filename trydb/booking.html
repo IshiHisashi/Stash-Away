@@ -10,7 +10,7 @@
       src="https://kit.fontawesome.com/8611811e56.js"
       crossorigin="anonymous"
     ></script>
-    <link rel="stylesheet" href="style.css" />
+    <!-- <link rel="stylesheet" href="style.css" /> -->
     <link rel="stylesheet" href="style2.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -42,7 +42,58 @@
         </div>
         <div class="item-wrapper">
           <label>Write an item to store</label>
-          <input type="text" id="item" />
+          <input type="text" id="item" /><i
+            class="fa-regular fa-image icon"
+            id="listup-pic"
+          ></i>
+          <!-- MODAL -->
+          <div id="easyModal" class="modal">
+            <div class="modal-content">
+              <!-- <div class="modal-header">
+                <h1>Great job 🎉</h1>
+                <span class="modalClose">×</span>
+              </div> -->
+              <div class="modal-body">
+                <!-- HTML from Prathibha -->
+                <div>
+                  <label for="itemName">Item:</label>
+                  <input
+                    type="text"
+                    id="itemName"
+                    placeholder="Enter item name"
+                  />
+                  <i
+                    id="cameraIcon"
+                    class="fas fa-camera"
+                    aria-hidden="true"
+                  ></i>
+                </div>
+                <video
+                  id="video"
+                  width="320"
+                  height="240"
+                  autoplay
+                  hidden
+                ></video>
+                <button id="capture" disabled>Capture Image</button>
+                <canvas id="canvas" width="320" height="240" hidden></canvas>
+                <button id="retake" disabled>Retake Image</button>
+                <!-- <div>
+              <label for="photoUpload">Or upload a photo:</label>
+              <input type="file" id="photoUpload" accept="image/*">
+            </div> -->
+                <button id="save" disabled>Save</button>
+                <div id="itemsContainer"></div>
+
+                <button id="showItems">Show Items</button>
+                <button id="x">X</button>
+                <div id="itemsContainer"></div>
+                <!-- end -->
+              </div>
+              <span class="modalClose">×</span>
+            </div>
+          </div>
+
           <!-- <button type="submit" class="btn-delete">delete</button> -->
         </div>
 
@@ -117,4 +168,31 @@
       </form>
     </main>
   </body>
+
+  <!-- FROM Prathibha configs-->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+  />
+  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
+      authDomain: "fir-jan24.firebaseapp.com",
+      projectId: "fir-jan24",
+      storageBucket: "fir-jan24.appspot.com",
+      messagingSenderId: "831417179844",
+      appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
+      measurementId: "G-DSYKEF99M1",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Access Firebase services using the compat API
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
 </html>

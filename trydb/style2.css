@@ -33,7 +33,7 @@ h1 {
 }
 
 main {
-  /* margin-top: 1rem; */
+  margin-top: 1rem;
   margin: 0 2rem;
   .name-wrapper,
   .delivery {
@@ -70,6 +70,10 @@ main {
     font-weight: bold;
     cursor: pointer;
     border-radius: 10px;
+  }
+  .item-wrapper i {
+    cursor: pointer;
+    margin-left: 1rem;
   }
   #btnSave {
     background-color: plum;
@@ -123,4 +127,45 @@ main {
     margin-left: 1rem;
     font-size: 12px;
   }
+  #btnSet {
+    display: none;
+  }
+}
+
+/* for modal */
+.modal {
+  /* display: none; */
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  background-color: #f4f4f4;
+  margin: 20% auto;
+  width: 85%;
+  height: 40rem;
+  box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+  position: relative;
+}
+
+.modalClose {
+  font-size: 2rem;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+}
+
+.modalClose:hover {
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 10px 20px;
+  color: black;
 }

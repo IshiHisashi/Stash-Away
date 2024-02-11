@@ -47,6 +47,7 @@ const termPlan = document.getElementById("term-plan");
 const price = document.getElementById("price");
 const btnSubmit = document.getElementById("btnSubmit");
 const btnSave = document.getElementById("btnSave");
+
 // fnc
 // foreach __NOT IN USE__
 const renderList = (docs) => {
@@ -95,9 +96,13 @@ renderListFor(snapDoc);
 // Camera access ---coming sonn...----
 const elementsCamera = document.querySelectorAll(".pic");
 elementsCamera.forEach((el) => {
-  el.addEventListener("click", (e) => {
+  el.addEventListener("click", async (e) => {
     e.preventDefault();
-    console.log(e.target.id);
+    const id = e.target.id.split("_")[1];
+    console.log(id);
+    await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${id}`), {
+      picture: "2bc",
+    });
   });
 });
 
@@ -155,15 +160,13 @@ Object.keys(docPlanTerm).forEach((el) => {
     .insertAdjacentHTML("afterend", `<option value='${el}'>${el}</option>`);
 });
 
-let size = {};
-let term = {};
 sizePlan.addEventListener("change", async (e) => {
   const d = await getDoc(doc(db, "users", `${userId}`));
   const user = d.data();
   const selectedsize = e.target.value;
   const termUser = user.plan.term;
   if (selectedsize !== "none") {
-    size = { [selectedsize]: docPlanSize[selectedsize] };
+    // size = { [selectedsize]: docPlanSize[selectedsize] };
     await updateDoc(doc(db, "users", `${userId}`), {
       "plan.size": `${selectedsize}`,
     });
@@ -178,7 +181,7 @@ termPlan.addEventListener("change", async (e) => {
   const selectedterm = e.target.value;
   const sizeUser = user.plan.size;
   if (selectedterm !== "none") {
-    term = { [selectedterm]: docPlanTerm[selectedterm] };
+    // term = { [selectedterm]: docPlanTerm[selectedterm] };
     await updateDoc(doc(db, "users", `${userId}`), {
       "plan.term": `${selectedterm}`,
     });
@@ -236,6 +239,31 @@ btnSubmit.addEventListener("click", async (e) => {
   });
   console.log(orderedArrItem);
 });
+
+// for modal
+const listupPic = document.getElementById("listup-pic");
+const modal = document.getElementById("easyModal");
+const buttonClose = document.getElementsByClassName("modalClose")[0];
+
+// pic icon is clicked
+listupPic.addEventListener("click", modalOpen);
+function modalOpen() {
+  modal.style.display = "block";
+}
+
+// close sign is clicked
+buttonClose.addEventListener("click", modalClose);
+function modalClose() {
+  modal.style.display = "none";
+}
+
+// you can close modal by clicking any place.
+addEventListener("click", outsideClose);
+function outsideClose(e) {
+  if (e.target == modal) {
+    modal.style.display = "none";
+  }
+}
 
 // ----------------------------------------
 
