@@ -1,0 +1,28 @@
+main {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 2rem;
+}
+
+.map-container {
+    border: 5px solid darkblue;
+}
+
+#map {
+    width: 100%;
+    height: 600px;
+}
+
+.loc-marker {
+    background-image: url("images/location.png");
+    background-size: cover;
+    width: 70px;
+    height: 70px;
+  }
+
+#current-location-marker {
+    background-image: url("images/you-are-here.png");
+    background-size: cover;
+    width: 53px;
+    height: 70px;
+}
