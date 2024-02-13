@@ -117,7 +117,7 @@ btnRetrieve.addEventListener("click", async (e) => {
       // PROCESS2 : Update status
       await updateDoc(
         doc(db, "users", `${userId}`, "inStorage", `${checkedID}`),
-        { status: "requested" }
+        { status: "retrieval requested" }
       );
     } else {
     }

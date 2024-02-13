@@ -212,17 +212,18 @@ btnSubmit.addEventListener("click", async (e) => {
   snapShot.forEach((doc) => {
     if (doc.data().status === "saved") {
       let docid = doc.id;
-      // update status
+      // Update status
       batch.update(doc.ref, {
-        status: "stored",
+        status: "add requested",
       });
-      // push to arr
-      const updatedItem = [docid];
+      // Push to arr
+      const updatedItem = docid;
       orderedArrID.push(updatedItem);
+      console.log(orderedArrID);
     }
   });
   await batch.commit();
-  // get updated data and create an object array
+  // Get updated data and create an object array
   const orderedArrItem = [];
   orderedArrID.forEach(async (id) => {
     const queryUpdatedItem = doc(
@@ -238,6 +239,26 @@ btnSubmit.addEventListener("click", async (e) => {
     orderedArrItem.push(idAndData);
   });
   console.log(orderedArrItem);
+
+  // Generate new ORDER
+  await addDoc(collection(db, "users", `${userId}`, "order"), {
+    userId: `${userId}`,
+    userName: {
+      firstName: `${userDoc.userName.firstName}`,
+      lastName: `${userDoc.userName.lastName}`,
+    },
+    driverId: "",
+    itemKey: orderedArrID,
+    orderDate: "2024-01-31",
+    orderType: "add",
+    status: "requested",
+    address: {
+      detail: `${detailAddress.value}`,
+      city: `${city.value}`,
+      province: `${province.value}`,
+      zipCode: `${zip.value}`,
+    },
+  });
 });
 
 // for modal
@@ -247,7 +268,8 @@ const buttonClose = document.getElementsByClassName("modalClose")[0];
 
 // pic icon is clicked
 listupPic.addEventListener("click", modalOpen);
-function modalOpen() {
+function modalOpen(e) {
+  e.preventDefault();
   modal.style.display = "block";
 }
 
