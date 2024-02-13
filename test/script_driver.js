@@ -1,199 +1,198 @@
 import { objArr, update, db, getOrder } from "./forDriverEnd/load.js";
 console.log(objArr);
 
-const showPickUps = (userID, name, date, status, address, items, orderID) => {
-  const addingSection = document.querySelector(".adding");
-
-  const form = document.createElement("form");
-  // form.setAttribute("id", userID);
-  form.setAttribute("id", `${userID}_${orderID}`);
-  const userIDP = document.createElement("p");
-  const nameP = document.createElement("p");
-  const dateP = document.createElement("p");
-  const statusP = document.createElement("p");
-  const addressP = document.createElement("p");
-  const itemsP = document.createElement("p");
-  const orderIDP = document.createElement("p");
-
-  userIDP.textContent = `User ID: ${userID}`;
-  nameP.textContent = `User Name: ${name}`;
-  dateP.textContent = `Order Date: ${date}`;
-  statusP.textContent = `Current status: ${status}`;
-  addressP.textContent = `Pick-up address: ${address}`;
-  itemsP.textContent = `Items: ${items}`;
-  orderIDP.textContent = `Order ID: ${orderID}`;
-
-  // generate driver dropdown
-  const driver = document.createElement("select");
-  const driverDefault = document.createElement("option");
-  const driverOption1 = document.createElement("option");
-  const driverOption2 = document.createElement("option");
-  const driverOption3 = document.createElement("option");
-  driverDefault.textContent = "---Allocate a driver---";
-  driverOption1.textContent = "driver 1";
-  driverOption2.textContent = "driver 2";
-  driverOption3.textContent = "driver 3";
-  driverOption1.value = "driver 1";
-  driverOption2.value = "driver 2";
-  driverOption3.value = "driver 3";
-  const btnToOngoing = document.createElement("button");
-  btnToOngoing.disabled = true;
-
-  btnToOngoing.textContent = "Update status to ongoing";
-  btnToOngoing.type = "submit";
-
-  addingSection.appendChild(form);
-  form.appendChild(userIDP);
-  form.appendChild(nameP);
-  form.appendChild(dateP);
-  form.appendChild(statusP);
-  form.appendChild(addressP);
-  form.appendChild(itemsP);
-  form.appendChild(orderIDP);
-  form.appendChild(driver);
-  driver.add(driverDefault);
-  driver.add(driverOption1);
-  driver.add(driverOption2);
-  driver.add(driverOption3);
-  form.appendChild(btnToOngoing);
-
-  driver.onchange = (event) => {
-    const isDefaultValue = event.target.value === "---Allocate a driver---";
-
-    btnToOngoing.disabled = isDefaultValue;
-  };
-
-  form.onsubmit = async (event) => {
-    event.preventDefault();
-
-    statusP.textContent = `Current status: on-going`;
-    statusP.style.color = "red";
-
-    btnToOngoing.disabled = true;
-    driver.disabled = true;
-
-    console.log(
-      `orderId: ${event.target.id}, driverId: ${driver.value}, status: on going`
-    );
-    // --UPDATE DB--
-    //  Destructure form id into userid and orderid
-    const ids = event.target.id;
-    const uid = ids.split("_")[0];
-    const oid = ids.split("_")[1];
-    // Update driverid and status
-    update(uid, oid, driver);
-    // Get the updated order info.
-    const get = await getOrder(uid, oid);
-    const order = get.data();
-    console.log(order);
-  };
+const createFormElement = (type, value = null, textContent = null) => {
+  const element = document.createElement(type);
+  if (value) {
+    element.value = value;
+  }
+  if (textContent) {
+    element.textContent = textContent;
+  }
+  return element;
 };
 
-const showDeliveries = (
+const showOrderForm = (
+  section,
   userID,
   name,
   date,
   status,
   address,
   items,
-  orderID
+  orderID,
+  driverID,
+  type
 ) => {
-  const retrievalSection = document.querySelector(".retrieval");
-
-  const form = document.createElement("form");
-  // form.setAttribute("id", userID);
+  // create a form field
+  const form = createFormElement("form");
   form.setAttribute("id", `${userID}_${orderID}`);
-  const userIDP = document.createElement("p");
-  const nameP = document.createElement("p");
-  const dateP = document.createElement("p");
-  const statusP = document.createElement("p");
-  const addressP = document.createElement("p");
-  const itemsP = document.createElement("p");
-  const orderIDP = document.createElement("p");
 
-  userIDP.textContent = `User ID: ${orderID}`;
-  nameP.textContent = `User Name: ${name}`;
-  dateP.textContent = `Order Date: ${date}`;
-  statusP.textContent = `Current status: ${status}`;
-  addressP.textContent = `Pick-up address: ${address}`;
-  itemsP.textContent = `Items: ${items}`;
-  orderIDP.textContent = `Order ID: ${orderID}`;
+  // create elements which will belong to one form and append them
+  const elements = [
+    { type: "p", value: null, textContent: `Order ID: ${orderID}` },
+    { type: "p", value: null, textContent: `Order Date: ${date}` },
+    { type: "p", value: null, textContent: `User ID: ${userID}` },
+    { type: "p", value: null, textContent: `User Name: ${name}` },
+    { type: "p", value: null, textContent: `Address: ${address}` },
+    { type: "p", value: null, textContent: `Items: ${items}` },
+    { type: "p", value: null, textContent: `Current status: ${status}` },
+    { type: "select", value: "" },
+    { type: "button", value: null, textContent: "Update status to on going" },
+    { type: "button", value: null, textContent: "Update status to done" },
+  ];
 
-  // generate driver dropdown
-  const driver = document.createElement("select");
-  const driverDefault = document.createElement("option");
-  const driverOption1 = document.createElement("option");
-  const driverOption2 = document.createElement("option");
-  const driverOption3 = document.createElement("option");
-  driverDefault.textContent = "---Allocate a driver---";
-  driverOption1.textContent = "driver 1";
-  driverOption2.textContent = "driver 2";
-  driverOption3.textContent = "driver 3";
-  driverOption1.value = "driver 1";
-  driverOption2.value = "driver 2";
-  driverOption3.value = "driver 3";
-  const btnToOngoing = document.createElement("button");
+  let buttonNumber = 1;
+  elements.forEach(({ type, value, textContent }) => {
+    const element = createFormElement(type, value, textContent);
 
-  btnToOngoing.textContent = "Update status";
-  btnToOngoing.type = "submit";
+    // add name to buttons. button 1 would be "change to on going", and button 2 would be "change to done"
+    if (type === "button") {
+      element.name = `button${buttonNumber}`;
+      buttonNumber++;
+    }
 
-  retrievalSection.appendChild(form);
-  form.appendChild(userIDP);
-  form.appendChild(nameP);
-  form.appendChild(dateP);
-  form.appendChild(statusP);
-  form.appendChild(addressP);
-  form.appendChild(itemsP);
-  form.appendChild(orderIDP);
-  form.appendChild(driver);
-  driver.add(driverDefault);
-  driver.add(driverOption1);
-  driver.add(driverOption2);
-  driver.add(driverOption3);
-  form.appendChild(btnToOngoing);
+    // control if the select and buttons are abled or disabled by default
+    // REFACTOR LATER
+    if (
+      (type === "select" && status === "done") ||
+      (type === "button" && status === "done")
+    ) {
+      element.disabled = true;
+    } else if (
+      (type === "select" && status === "on going") ||
+      (type === "button" &&
+        textContent === "Update status to on going" &&
+        status === "on going")
+    ) {
+      element.disabled = true;
+    } else if (type === "button" && status === "requested") {
+      element.disabled = true;
+    }
 
-  form.onsubmit = (event) => {
+    form.appendChild(element);
+  });
+
+  // create dropdown options and add them to the select element
+  const driverSelect = form.querySelector("select");
+  if (driverID !== "") {
+    const element = createFormElement("option", driverID, driverID);
+    driverSelect.add(element);
+  } else {
+    const options = [
+      { type: "option", value: "", textContent: "--- Allocate a driver ---" },
+      { type: "option", value: "driver 1", textContent: "driver 1" },
+      { type: "option", value: "driver 2", textContent: "driver 2" },
+      { type: "option", value: "driver 3", textContent: "driver 3" },
+    ];
+    options.forEach(({ type, value, textContent }) => {
+      const element = createFormElement(type, value, textContent);
+      driverSelect.add(element);
+    });
+  }
+
+  // append the form to a section
+  section.appendChild(form);
+
+  // add an event to the dropdown
+  driverSelect.onchange = (event) => {
+    const isDefaultValue = event.target.value === "--- Allocate a driver ---";
+    form.querySelector("button:nth-of-type(1)").disabled = isDefaultValue;
+  };
+
+  // add a submit event
+  form.onsubmit = async (event) => {
     event.preventDefault();
 
-    statusP.textContent = `Current status: on-going`;
-    statusP.style.color = "red";
+    console.log(event.submitter.name);
+    console.log(event);
 
-    btnToOngoing.disabled = true;
-    driver.disabled = true;
+    //  Destructure form id into userid and orderid
+    const ids = event.target.id;
+    const uid = ids.split("_")[0];
+    const oid = ids.split("_")[1];
 
-    console.log(
-      `userId: ${event.target.id}, driverId: ${driver.value}, status: on going`
-    );
+    // if the submit event is triggered by button 1 (change to on going)
+    if (event.submitter.name === "button1") {
+      // --UPDATE DB--
+      // Update driverid and status
+      await update(uid, oid, driverSelect);
+      // Get the updated order info.
+      const get = await getOrder(uid, oid);
+      const order = get.data();
+      console.log(order);
+
+      form.querySelector(
+        "p:nth-of-type(7)"
+      ).textContent = `Current status: ${order.status}`;
+      form.querySelector("select").value = order.driverId;
+      form.querySelector("select").disabled = true;
+      form.querySelector("button:nth-of-type(1)").disabled = true;
+      form.querySelector("button:nth-of-type(2)").disabled = false;
+      return;
+    }
+
+    // if the submit event is triggered by button 2 (change to done)
+    if (event.submitter.name === "button2") {
+      await update(uid, oid);
+      const get = await getOrder(uid, oid);
+      const order = get.data();
+      console.log(order);
+      form.querySelector(
+        "p:nth-of-type(7)"
+      ).textContent = `Current status: ${order.status}`;
+      form.querySelector("button:nth-of-type(2)").disabled = true;
+
+      // remove the "done" status order
+      if (order.status === "done") {
+        // helper function which returns a promise
+        const delay = (ms) => {
+          return new Promise((resolve) => {
+            setTimeout(resolve, ms);
+          });
+        };
+
+        (async () => {
+          console.log(event.target);
+          await delay(0);
+          event.target.classList.add("done");
+          await delay(1000);
+          event.target.style.display = "none";
+        })();
+      }
+    }
   };
 };
 
 objArr.forEach((orderObj) => {
   const orderID = Object.keys(orderObj)[0];
-  const fullName = `${orderObj[orderID].userName.firstName} ${orderObj[orderID].userName.lastName}`;
-  const orderDate = orderObj[orderID].orderDate;
   const status = orderObj[orderID].status;
-  const address = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
-  const itemKey = orderObj[orderID].itemKey;
-  const userID = orderObj[orderID].userId;
 
-  const orderType = orderObj[orderID].orderType;
+  // don't show 'done' status order
+  if (status !== "done") {
+    const orderDate = orderObj[orderID].orderDate;
+    const userID = orderObj[orderID].userId;
+    const fullName = `${orderObj[orderID].userName.firstName} ${orderObj[orderID].userName.lastName}`;
+    const address = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
+    const itemKey = orderObj[orderID].itemKey;
+    const driverID = orderObj[orderID].driverId;
 
-  // const storeOrders = [];
-  // const retrievalOrders = [];
+    const orderType = orderObj[orderID].orderType;
+    const section = document.querySelector(
+      orderType === "add" ? ".adding" : ".retrieval"
+    );
 
-  if (orderType === "retrieval") {
-    showPickUps(userID, fullName, orderDate, status, address, itemKey, orderID);
-  }
-
-  if (orderType === "add") {
-    showDeliveries(
+    showOrderForm(
+      section,
       userID,
       fullName,
       orderDate,
       status,
       address,
       itemKey,
-      orderID
+      orderID,
+      driverID,
+      orderType
     );
   }
 });

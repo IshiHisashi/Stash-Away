@@ -39,11 +39,17 @@ order.forEach((el) => {
 });
 
 // Update driver's id and its status
-const update = async (uid, oid, driver) => {
-  await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
-    driverId: `${driver.value}`,
-    status: "on going",
-  });
+const update = async (uid, oid, driver = null) => {
+  if (driver) {
+    await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
+      driverId: `${driver.value}`,
+      status: "on going",
+    });
+  } else {
+    await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
+      status: "done",
+    });
+  }
 };
 
 // getdata for specific id
