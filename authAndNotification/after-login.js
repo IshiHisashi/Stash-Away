@@ -65,6 +65,16 @@ onAuthStateChanged(auth, (user) => {
 });
 
 //
+// see pickup and delivery updates page /////////////////////////
+
+const btnUpdates = document.querySelector("#updates");
+
+btnUpdates.onclick = (e) => {
+  e.preventDefault();
+  window.location.href = "pickup-and-delivery-updates.html";
+};
+
+//
 // log out behaviour /////////////////////////////////////////
 
 const btnLogout = document.querySelector("#logout");
