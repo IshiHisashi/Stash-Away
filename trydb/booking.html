@@ -57,37 +57,24 @@
                 <!-- HTML from Prathibha -->
                 <div>
                   <label for="itemName">Item:</label>
-                  <input
-                    type="text"
-                    id="itemName"
-                    placeholder="Enter item name"
-                  />
-                  <i
-                    id="cameraIcon"
-                    class="fas fa-camera"
-                    aria-hidden="true"
-                  ></i>
-                </div>
-                <video
-                  id="video"
-                  width="320"
-                  height="240"
-                  autoplay
-                  hidden
-                ></video>
-                <button id="capture" disabled>Capture Image</button>
-                <canvas id="canvas" width="320" height="240" hidden></canvas>
-                <button id="retake" disabled>Retake Image</button>
-                <!-- <div>
-              <label for="photoUpload">Or upload a photo:</label>
-              <input type="file" id="photoUpload" accept="image/*">
-            </div> -->
-                <button id="save" disabled>Save</button>
-                <div id="itemsContainer"></div>
-
-                <button id="showItems">Show Items</button>
-                <button id="x">X</button>
-                <div id="itemsContainer"></div>
+                  <input type="text" id="itemName" placeholder="Enter item name">
+                  <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i>
+              </div>
+              <video id="video" width="320" height="240" autoplay hidden></video>
+              <button id="capture" type="button" style="display: none;" disabled>Capture Image</button>
+              <canvas id="canvas" width="320" height="240" hidden></canvas>
+              <button id="retake" style="display: none;" disabled>Retake Image</button>
+              <input type="file" id="imageUpload" accept="image/*" hidden>
+              <button id="uploadButton" class="button" style="display: none;">Upload Image</button>
+              <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i>
+              
+              
+              
+              <button id="save" style="display: none;" disabled>+ Add Image</button>
+              <div id="itemsContainer"></div>
+              
+              <button id="showItems">Show Items</button>
+              <div id="itemsContainer"></div>
                 <!-- end -->
               </div>
               <span class="modalClose">×</span>
