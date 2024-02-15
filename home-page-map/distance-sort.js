@@ -1,4 +1,13 @@
 
+import * as geo from "./geo.js";
+
+// Company's location
+console.log(geo.storageLocationObj);
+console.log(geo.storageLocationArr);
+
+// user's data
+console.log(geo.userAddress);
+
 class City {
   constructor(name, geoLoc) {
     this.name = name;
@@ -7,6 +16,9 @@ class City {
   }
 }
 const cityArray = [];
+
+// 🚨🚨🚨 Get data from database as an array and use loop to make city objects and store them right away
+
 const northVanObj = new City("North Vancouver", [-123.125820, 49.351542]);
 const richmondObj = new City("Richmond", [-123.108487, 49.173966]);
 const surreyObj = new City("Surrey", [-122.841305, 49.159780]);
@@ -51,20 +63,43 @@ if ( navigator.geolocation ) {
 
           // CALCULATE DINTANCE FOR EACH LOCATION =============
 
-          // 🚨 WHY IS NOT THIS WORKING PROPERLY??????? 🚨
+          // 🚨 WHY IS NOT THIS WORKING PROPERLY??????? Doesn't fire sort after all the city's ditance calculation 🚨
+
+          let promises = [];
 
           for (let i in cityArray) {
             let twoLocs = [currentLoc, cityArray[i].geoLoc];
             console.log(twoLocs);
-            tt.services.calculateRoute({
+
+
+            promises.push(new Promise((resolve, reject)=>{
+              tt.services.calculateRoute({
               key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
               routeType: 'shortest',
               locations: twoLocs
             })
               .then((result) => {
+                
                 cityArray[i].distance = result.routes[0].summary.lengthInMeters;
-                console.log(cityArray[i]);
-                if (i == 4) {
+                console.log("Resolved" , i)
+                resolve();
+               
+              })
+            }))
+            
+          }
+
+          waitforpromises();
+
+          async function waitforpromises(){
+            await Promise.all(promises);
+            console.log("All Resolved")
+            tr();
+          }
+        
+
+          async function tr(){
+                
                   // SORT LOCATIONS ====================================
                   cityArray.sort(compare);
                   console.log(cityArray);
@@ -80,8 +115,6 @@ if ( navigator.geolocation ) {
                   document.getElementById("location-3").innerHTML = `Location: ${cityArray[2].name}<br>Distance: ${Math.round((cityArray[2].distance / 10)) / 100} kilo mtrs`
                   document.getElementById("location-4").innerHTML = `Location: ${cityArray[3].name}<br>Distance: ${Math.round((cityArray[3].distance / 10)) / 100} kilo mtrs`
                   document.getElementById("location-5").innerHTML = `Location: ${cityArray[4].name}<br>Distance: ${Math.round((cityArray[4].distance / 10)) / 100} kilo mtrs`
-                }
-              })
           }
 
           // FUNCTION FOR SORTING =========================================
@@ -106,6 +139,8 @@ if ( navigator.geolocation ) {
             left: [25, -35],
             right: [-25, -35],
           }
+
+          //　🚨🚨🚨 Use loop to put makers on each point. Regardless of its name, it's gonna use an array which contains name, location details and everything. So doesn't need to care about which city I'm handling.
 
           var nvEl = document.createElement("div");
           nvEl.className = "loc-marker"
