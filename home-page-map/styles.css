@@ -18,7 +18,7 @@ main {
     background-size: cover;
     width: 50px;
     height: 50px;
-  }
+}
 
 #current-location-marker {
     background-image: url("images/you-are-here.png");
@@ -27,7 +27,7 @@ main {
     height: 50px;
 }
 
-#location-list div {
+fieldset div {
     width: 100%;
     min-height: 50px;
     border: 2px solid plum;
