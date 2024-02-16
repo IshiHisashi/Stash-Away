@@ -32,7 +32,7 @@ if ( navigator.geolocation ) {
             return data;
           }
 
-
+          // 🚨🚨🚨 Store the data into the DB!!!
 
           let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`
 
