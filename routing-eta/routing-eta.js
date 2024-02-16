@@ -76,8 +76,7 @@ if ( navigator.geolocation ) {
             tt.services.calculateRoute({
               key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY", // Get on for free at developer.tomtom.com
               routeType: 'shortest',
-              locations: waypoints,
-              timeZone: 'GMT-8'
+              locations: waypoints
             })
               .then((result) => {
                 console.log(result)
