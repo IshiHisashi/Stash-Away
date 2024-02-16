@@ -32,7 +32,8 @@ h3 {
     border-bottom: 1px solid #999;
     font-size: 1.1rem;
     display: grid;
-    grid-template-columns: 30px 1fr auto;
+    grid-template-columns: 30px auto 1fr auto;
+    gap: 1rem;
     align-content: center;
   }
   input {
@@ -51,6 +52,12 @@ h3 {
   }
   .icon {
     cursor: pointer;
+  }
+  .placeholder-pic {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
   }
 }
 

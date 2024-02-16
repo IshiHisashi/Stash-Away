@@ -40,7 +40,7 @@ const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zip = document.getElementById("zip");
 const btnRetrieve = document.getElementById("btnRetrieve");
-const btnDriver = document.getElementById("btnDriver");
+const btnTest = document.getElementById("btnTest");
 
 // Firebase handling---------------
 // Name
@@ -62,7 +62,9 @@ snapShot.forEach((doc) => {
     const itemID = doc.id;
     itemList.insertAdjacentHTML(
       "beforeend",
-      `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" />
+      `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" /><img src='${
+        item.picture ? item.picture : ""
+      }' class=placeholder-pic alt=${itemID}>
     <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
         doc.data().status === "retrieved"
           ? "| retrieved"
@@ -148,4 +150,9 @@ btnRetrieve.addEventListener("click", async (e) => {
   });
   // Process4 : Reload the display to reflect change in item status and update list accordingly
   window.location.reload();
+});
+
+btnTest.addEventListener("click", (e) => {
+  e.preventDefault();
+  console.log("x");
 });
