@@ -15,6 +15,7 @@ import {
   writeBatch,
   query,
   where,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -92,7 +93,6 @@ const renderListFor = function (doc) {
           item.itemName
         }</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
       );
-      console.log(item.picture);
     }
   }
 };
@@ -111,19 +111,31 @@ itemList.innerHTML = "";
 const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 const snapShot = await getDocs(queryStorage);
 const snapDoc = snapShot.docs;
-// rendering
-renderListFor(snapDoc);
+const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
+  itemList.innerHTML = "";
+  renderListFor(querySnapshot.docs);
 
-// Camera access ---coming sonn...----
-const elementsCamera = document.querySelectorAll(".pic");
-elementsCamera.forEach((el) => {
-  el.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const id = e.target.id.split("_")[1];
-    console.log(id);
-    // await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${id}`), {
-    //   picture: "2bc",
-    // });
+  // camera access;
+  const elementsCamera = document.querySelectorAll(".pic");
+  elementsCamera.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const id = e.target.id.split("_")[1];
+      console.log(id);
+    });
+  });
+  //Delete
+  const elementsDelete = document.querySelectorAll(".delete");
+  elementsDelete.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      // delete
+      const deleteID = e.target.id.split("_")[1];
+      await deleteDoc(
+        doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      );
+      console.log(`${e.target.id} is deleted`);
+    });
   });
 });
 
@@ -336,20 +348,6 @@ function fetchAndDisplayItems() {
     });
 }
 
-// Delete function
-const elementsDelete = document.querySelectorAll(".delete");
-elementsDelete.forEach((el) => {
-  el.addEventListener("click", async (e) => {
-    e.preventDefault();
-    // delete
-    const deleteID = e.target.id.split("_")[1];
-    await deleteDoc(doc(db, "users", `${userId}`, "inStorage", `${deleteID}`));
-    console.log(`${e.target.id} is deleted`);
-    // re-render to update the list
-    window.location.reload();
-  });
-});
-
 // Save data
 btnSave.addEventListener("click", async function (e) {
   e.preventDefault();
@@ -368,11 +366,10 @@ btnSave.addEventListener("click", async function (e) {
   await addDoc(collection(db, "users", `${userId}`, "inStorage"), {
     itemName: inputItemName,
     boxNumber: storage.docs.length + 1,
-    picture: imageReference,
+    picture: `${imageReference ? imageReference : ""}`,
     storedDate: "2024-01-31",
     status: "saved",
   });
-  window.location.reload();
 });
 
 // Delivery info.
