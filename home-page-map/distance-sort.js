@@ -21,7 +21,10 @@ const cityArray = [];
 
 for (let i in geo.storageLocationArr) {
   let stName = geo.storageLocationArr[i][1].name;
-  let stGeoLoc = [geo.storageLocationArr[i][1].geoInfo._long, geo.storageLocationArr[i][1].geoInfo._lat];
+  let stGeoLoc = [
+    geo.storageLocationArr[i][1].geoInfo._long,
+    geo.storageLocationArr[i][1].geoInfo._lat,
+  ];
   let stAddress = `${geo.storageLocationArr[i][1].address.street}, ${geo.storageLocationArr[i][1].address.city}, ${geo.storageLocationArr[i][1].address.zipCode}`;
   let cityObj = new City(stName, stGeoLoc, stAddress);
   cityArray.push(cityObj);
@@ -29,7 +32,7 @@ for (let i in geo.storageLocationArr) {
 
 // 🚨 DUE TO QPS (QUOTA PER SECOND, WHICH IS 5 QUOTAS PER SECOND) OF ROUTING API FOR FREE ACOUNT, I LIMITED THE NUMBER OF LOCATIONS ONLY 5. AFTER ASKING AMANDEEP, WE MAY BE ABLE TO ADD THE LAST THREE CITIES AGAIN　🚨
 
-console.log("👇 A list of cities in an array")
+console.log("👇 A list of cities in an array");
 console.log(cityArray);
 
 if (navigator.geolocation) {
@@ -82,14 +85,16 @@ if (navigator.geolocation) {
       async function sortAndShow() {
         // SORT
         cityArray.sort(compare);
-        console.log("👇 The array sorted by distance")
+        console.log("👇 The array sorted by distance");
         console.log(cityArray);
 
         // SHOW ON THE SIDE MENU
         for (let i in cityArray) {
-          let idName = `location-${i}`
+          let idName = `location-${i}`;
           document.getElementById(idName).value = cityArray[i].name;
-          document.querySelector(`[for="${idName}"]`).innerHTML = `Location: ${cityArray[i].name}<br>Distance: ${cityArray[i].distance} mtrs`
+          document.querySelector(
+            `[for="${idName}"]`
+          ).innerHTML = `Location: ${cityArray[i].name}<br>Distance: ${cityArray[i].distance} mtrs`;
         }
       }
 
@@ -102,12 +107,16 @@ if (navigator.geolocation) {
 
       var selectedCity = "";
       const submitBtn = document.getElementById("submit");
-      submitBtn.addEventListener("click", function(event) {
+      submitBtn.addEventListener("click", function (event) {
         event.preventDefault();
-        selectedCity = document.querySelector(`input[name="location"]:checked`).value;
+        selectedCity = document.querySelector(
+          `input[name="location"]:checked`
+        ).value;
         console.log(selectedCity);
-        alert(`Location: ${selectedCity} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`);
-      })
+        alert(
+          `Location: ${selectedCity} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`
+        );
+      });
 
       // SET MAP =======================================================
       const map = tt.map({
