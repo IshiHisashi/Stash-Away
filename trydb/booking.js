@@ -15,6 +15,7 @@ import {
   writeBatch,
   query,
   where,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -49,16 +50,16 @@ const btnSubmit = document.getElementById("btnSubmit");
 const btnSave = document.getElementById("btnSave");
 
 //using camera
-const cameraIcon = document.getElementById('cameraIcon');
-const captureBtn = document.getElementById('capture');
-const retakeBtn = document.getElementById('retake');
-const saveBtn = document.getElementById('save');
-const video = document.getElementById('video');
-const canvas = document.getElementById('canvas');
-const context = canvas.getContext('2d');
-const uploadButton = document.getElementById('uploadButton');
-const imageUpload = document.getElementById('imageUpload');
-const deleteIcon = document.getElementById('deleteIcon');
+const cameraIcon = document.getElementById("cameraIcon");
+const captureBtn = document.getElementById("capture");
+const retakeBtn = document.getElementById("retake");
+const saveBtn = document.getElementById("save");
+const video = document.getElementById("video");
+const canvas = document.getElementById("canvas");
+const context = canvas.getContext("2d");
+const uploadButton = document.getElementById("uploadButton");
+const imageUpload = document.getElementById("imageUpload");
+const deleteIcon = document.getElementById("deleteIcon");
 let stream = null;
 let image;
 let savedItemName;
@@ -66,18 +67,18 @@ let imageReference;
 
 // fnc
 // foreach __NOT IN USE__
-const renderList = (docs) => {
-  docs.forEach((doc) => {
-    if (doc.data().status === "saved") {
-      const item = doc.data();
-      const itemID = doc.id;
-      itemList.insertAdjacentHTML(
-        "beforeend",
-        `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
-      );
-    }
-  });
-};
+// const renderList = (docs) => {
+//   docs.forEach((doc) => {
+//     if (doc.data().status === "saved") {
+//       const item = doc.data();
+//       const itemID = doc.id;
+//       itemList.insertAdjacentHTML(
+//         "beforeend",
+//         `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+//       );
+//     }
+//   });
+// };
 // forloop
 const renderListFor = function (doc) {
   for (let i = 0; i < doc.length; i++) {
@@ -86,7 +87,11 @@ const renderListFor = function (doc) {
       const itemID = doc[i].id;
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+        `<li class='item-list-li'><img src='${
+          item.picture ? item.picture : ""
+        }' class=placeholder-pic alt=${itemID}><p>${
+          item.itemName
+        }</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
       );
     }
   }
@@ -106,93 +111,109 @@ itemList.innerHTML = "";
 const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 const snapShot = await getDocs(queryStorage);
 const snapDoc = snapShot.docs;
-// rendering
-renderListFor(snapDoc);
+const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
+  itemList.innerHTML = "";
+  renderListFor(querySnapshot.docs);
 
-// Camera access ---coming sonn...----
-const elementsCamera = document.querySelectorAll(".pic");
-elementsCamera.forEach((el) => {
-  el.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const id = e.target.id.split("_")[1];
-    console.log(id);
-    await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${id}`), {
-      picture: "2bc",
+  // camera access;
+  const elementsCamera = document.querySelectorAll(".pic");
+  elementsCamera.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      const id = e.target.id.split("_")[1];
+      console.log(id);
+    });
+  });
+  //Delete
+  const elementsDelete = document.querySelectorAll(".delete");
+  elementsDelete.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      // delete
+      const deleteID = e.target.id.split("_")[1];
+      await deleteDoc(
+        doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      );
+      console.log(`${e.target.id} is deleted`);
     });
   });
 });
 
 //camera
 
-document.getElementById('itemName').addEventListener('input', function () {
-  const itemNameValue = document.getElementById('itemName').value.trim();
-  document.getElementById('save').disabled = itemNameValue === '';
+document.getElementById("itemName").addEventListener("input", function () {
+  const itemNameValue = document.getElementById("itemName").value.trim();
+  document.getElementById("save").disabled = itemNameValue === "";
 });
 
 // Function to enable the camera
-cameraIcon.addEventListener('click', function (e) {
+cameraIcon.addEventListener("click", function (e) {
   e.preventDefault();
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
       .then(function (localStream) {
         stream = localStream;
         video.srcObject = stream;
         video.hidden = false;
         captureBtn.disabled = false;
-        captureBtn.style.display = 'inline-block';
-        uploadButton.style.display = 'inline-block';
-        saveBtn.style.display = 'inline-block';
-      }).catch(function (err) {
+        captureBtn.style.display = "inline-block";
+        uploadButton.style.display = "inline-block";
+        saveBtn.style.display = "inline-block";
+      })
+      .catch(function (err) {
         console.log("An error occurred: " + err);
       });
   }
 });
 // Function to capture the image
-captureBtn.addEventListener('click', function (e) {
+captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
   canvas.width = video.videoWidth;
   canvas.height = video.videoHeight;
   context.drawImage(video, 0, 0, canvas.width, canvas.height);
   captureBtn.hidden = true;
   retakeBtn.disabled = false;
-  retakeBtn.style.display = 'inline-block';
+  retakeBtn.style.display = "inline-block";
   saveBtn.disabled = false;
   video.hidden = true;
   canvas.hidden = false;
   // Stop the camera after capturing the image
   if (stream) {
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach((track) => track.stop());
   }
 });
 
-retakeBtn.addEventListener('click', function (e) {
+retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
   canvas.hidden = true;
   video.hidden = false;
   captureBtn.disabled = false;
-  retakeBtn.style.display = 'none';
+  retakeBtn.style.display = "none";
   saveBtn.disabled = true;
 
   // Restart the camera stream
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices.getUserMedia({ video: true })
+    navigator.mediaDevices
+      .getUserMedia({ video: true })
       .then(function (localStream) {
         stream = localStream;
         video.srcObject = stream;
-      }).catch(function (err) {
+      })
+      .catch(function (err) {
         console.log("An error occurred: " + err);
       });
   }
 });
 
-uploadButton.addEventListener('click', function (e) {
+uploadButton.addEventListener("click", function (e) {
   e.preventDefault(); // Prevent the form from submitting if the button is part of a form
   imageUpload.click(); // Trigger file input click on button click
   canvas.hidden = true;
   video.hidden = true;
 });
 
-imageUpload.addEventListener('change', function (e) {
+imageUpload.addEventListener("change", function (e) {
   e.preventDefault();
   const file = event.target.files[0];
   if (file) {
@@ -204,7 +225,7 @@ imageUpload.addEventListener('change', function (e) {
         canvas.height = img.height;
         context.drawImage(img, 0, 0);
         canvas.hidden = false;
-        deleteIcon.style.display = 'inline-block'; // Show delete icon
+        deleteIcon.style.display = "inline-block"; // Show delete icon
         saveBtn.disabled = false;
       };
       img.src = e.target.result;
@@ -213,31 +234,29 @@ imageUpload.addEventListener('change', function (e) {
   }
 });
 
-deleteIcon.addEventListener('click', function (e) {
+deleteIcon.addEventListener("click", function (e) {
   e.preventDefault();
   context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
   canvas.hidden = true;
-  deleteIcon.style.display = 'none'; // Hide delete icon
+  deleteIcon.style.display = "none"; // Hide delete icon
   saveBtn.disabled = true; // Disable save button until another image is uploaded or captured
-  imageUpload.value = ''; // Reset file input
+  imageUpload.value = ""; // Reset file input
 });
 
-
-saveBtn.addEventListener('click', function (e) {
+saveBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  const itemName = document.getElementById('itemName').value;
+  const itemName = document.getElementById("itemName").value;
 
   // Only proceed if item name is provided
-  if (itemName.trim() !== '') {
-
+  if (itemName.trim() !== "") {
     canvas.toBlob(function (blob) {
       image = blob;
       savedItemName = itemName;
-    }, 'image/jpeg');
+    }, "image/jpeg");
 
     modalClose();
   } else {
-    alert('Please provide an item name.');
+    alert("Please provide an item name.");
   }
   // retakeBtn.style.display = 'none';
   // captureBtn.style.display = 'none';
@@ -248,14 +267,13 @@ saveBtn.addEventListener('click', function (e) {
   // video.hidden=true;
   // Clear the itemName input field after initiating the save logic
   // document.getElementById('itemName').value = '';
-
 });
 
 async function handleBlob(blob, itemName) {
-  // Get a reference to the storage service  
+  // Get a reference to the storage service
   const storageRef = firebase.storage().ref();
-  // Create a reference to the img file 
-  const imageRef = storageRef.child('photos/photo_' + Date.now() + '.jpg');
+  // Create a reference to the img file
+  const imageRef = storageRef.child("photos/photo_" + Date.now() + ".jpg");
   try {
     // Upload the file to the path 'photos/photo_(timestamp).jpg'
     const snapshot = await imageRef.put(blob);
@@ -277,7 +295,8 @@ function addNewItemWithImage(itemName, imageUrl) {
     itemData.image = imageUrl;
   }
 
-  db.collection("items").add(itemData)
+  db.collection("items")
+    .add(itemData)
     .then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
       alert("Item saved successfully!");
@@ -288,57 +307,46 @@ function addNewItemWithImage(itemName, imageUrl) {
     });
 }
 
+const showItemsBtn = document.getElementById("showItems");
+const itemsContainer = document.getElementById("itemsContainer");
 
-
-const showItemsBtn = document.getElementById('showItems');
-const itemsContainer = document.getElementById('itemsContainer');
-
-showItemsBtn.addEventListener('click', function (e) {
+showItemsBtn.addEventListener("click", function (e) {
   e.preventDefault();
   fetchAndDisplayItems();
 });
 
 function fetchAndDisplayItems() {
   // Clear previous items
-  itemsContainer.innerHTML = '';
+  itemsContainer.innerHTML = "";
 
   // Fetch items from Firestore
-  firebase.firestore().collection('items').get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const item = doc.data();
-      const itemElement = document.createElement('div');
+  firebase
+    .firestore()
+    .collection("items")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const item = doc.data();
+        const itemElement = document.createElement("div");
 
-      const name = document.createElement('h2');
-      name.textContent = item.name;
+        const name = document.createElement("h2");
+        name.textContent = item.name;
 
-      // Create an image element
-      const image = new Image();
-      // Set source to the base64 image string
-      image.src = item.image;
+        // Create an image element
+        const image = new Image();
+        // Set source to the base64 image string
+        image.src = item.image;
 
-      itemElement.appendChild(name);
-      itemElement.appendChild(image);
+        itemElement.appendChild(name);
+        itemElement.appendChild(image);
 
-      itemsContainer.appendChild(itemElement);
+        itemsContainer.appendChild(itemElement);
+      });
+    })
+    .catch((error) => {
+      console.error("Error fetching items: ", error);
     });
-  }).catch((error) => {
-    console.error("Error fetching items: ", error);
-  });
 }
-
-// Delete function
-const elementsDelete = document.querySelectorAll(".delete");
-elementsDelete.forEach((el) => {
-  el.addEventListener("click", async (e) => {
-    e.preventDefault();
-    // delete
-    const deleteID = e.target.id.split("_")[1];
-    await deleteDoc(doc(db, "users", `${userId}`, "inStorage", `${deleteID}`));
-    console.log(`${e.target.id} is deleted`);
-    // re-render to update the list
-    window.location.reload();
-  });
-});
 
 // Save data
 btnSave.addEventListener("click", async function (e) {
@@ -346,23 +354,22 @@ btnSave.addEventListener("click", async function (e) {
   const inputItemName = item.value;
   const queryStorage = query(collection(db, "users", `${userId}`, "inStorage"));
   const storage = await getDocs(queryStorage);
-  debugger
+  debugger;
   if (image) {
     const storageRef = firebase.storage().ref();
-    const imageRef = storageRef.child('photos/photo_' + Date.now() + '.jpg');
+    const imageRef = storageRef.child("photos/photo_" + Date.now() + ".jpg");
     const snapshot = await imageRef.put(image);
     imageReference = await snapshot.ref.getDownloadURL();
   }
-  debugger
+  debugger;
   // store data
   await addDoc(collection(db, "users", `${userId}`, "inStorage"), {
     itemName: inputItemName,
     boxNumber: storage.docs.length + 1,
-    picture: imageReference,
+    picture: `${imageReference ? imageReference : ""}`,
     storedDate: "2024-01-31",
     status: "saved",
   });
-  window.location.reload();
 });
 
 // Delivery info.
@@ -519,7 +526,7 @@ setupEventListener();
 function modalOpen(e) {
   e.preventDefault(); // Prevent default action
   // Check if item.value is not empty
-  if (item && item.value !== '') {
+  if (item && item.value !== "") {
     itemName.value = item.value; // Set the value of the modal input to the value of the item input
     modal.style.display = "block";
   } else {
@@ -538,8 +545,8 @@ function modalClose() {
 addEventListener("click", outsideClose);
 function outsideClose(e) {
   if (e.target == modal) {
-  item.value = itemName.value;
-  modal.style.display = "none";
+    item.value = itemName.value;
+    modal.style.display = "none";
   }
 }
 

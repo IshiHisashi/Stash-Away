@@ -31,7 +31,18 @@
         <h2>Hello <span id="userName"></span>, how are you today?</h2>
       </section>
       <section class="item-list-section">
-        <h3>What's in your storage</h3>
+        <div class="section-header">
+          <h3>What's in your storage</h3>
+          <form>
+            <label>Filter</label>
+            <select id="filter">
+              <option value="all">All</option>
+              <option value="stored">Stored</option>
+              <option value="retrieval requested">On retrival request</option>
+              <option value="retrieved">Retrieved</option>
+            </select>
+          </form>
+        </div>
         <ul class="item-list"></ul>
       </section>
       <section class="delivery">
@@ -55,7 +66,7 @@
 
       <section class="action">
         <button type="submit" id="btnRetrieve">Retrieve</button>
-        <button type="submit" id="btnDriver">(exp. driver)</button>
+        <button type="submit" id="btnTest">test</button>
       </section>
     </main>
   </body>

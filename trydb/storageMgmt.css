@@ -19,9 +19,18 @@ span {
   font-size: 2rem;
 }
 
+.section-header {
+  margin-bottom: 2rem;
+}
+
 h3 {
   margin-bottom: 1rem;
 }
+
+form {
+  width: 300px;
+}
+
 .item-list {
   list-style: none;
   line-height: 2;
@@ -32,7 +41,8 @@ h3 {
     border-bottom: 1px solid #999;
     font-size: 1.1rem;
     display: grid;
-    grid-template-columns: 30px 1fr auto;
+    grid-template-columns: 30px auto 1fr auto;
+    gap: 1rem;
     align-content: center;
   }
   input {
@@ -51,6 +61,12 @@ h3 {
   }
   .icon {
     cursor: pointer;
+  }
+  .placeholder-pic {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
   }
 }
 
