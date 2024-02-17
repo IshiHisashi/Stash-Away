@@ -109,10 +109,17 @@ if (navigator.geolocation) {
       const submitBtn = document.getElementById("submit");
       submitBtn.addEventListener("click", function (event) {
         event.preventDefault();
+        // ----Ishi revised & added----
+        // Specify specific obj as a data pacaked to be sent
         selectedCity = document.querySelector(
           `input[name="location"]:checked`
-        ).value;
-        console.log(selectedCity);
+        ).id;
+        const selectedCityID = selectedCity.split("-")[1];
+        const selectedCityObj = cityArray[selectedCityID];
+
+        // send data to DB
+        geo.updateStorageLocation(selectedCityObj);
+
         alert(
           `Location: ${selectedCity} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`
         );

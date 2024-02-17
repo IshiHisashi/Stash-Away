@@ -37,3 +37,12 @@ export const storageLocationArr = Object.entries(storageQuery.data());
 // Get address info from user's collection
 const userQuery = await getDoc(doc(db, "users", `${userId}`));
 export const userAddress = userQuery.data().address;
+
+// Send selected geolocation
+export const updateStorageLocation = async function (obj) {
+  await updateDoc(doc(db, "users", `${userId}`), {
+    "storageLocation.name": obj.name,
+    "storageLocation.longitude": obj.geoLoc[0],
+    "storageLocation.latitude": obj.geoLoc[1],
+  });
+};
