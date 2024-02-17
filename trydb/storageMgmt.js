@@ -39,8 +39,44 @@ const detailAddress = document.getElementById("detail");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zip = document.getElementById("zip");
+const filter = document.getElementById("filter");
 const btnRetrieve = document.getElementById("btnRetrieve");
 const btnTest = document.getElementById("btnTest");
+
+const renderList = function (snapShot) {
+  snapShot.forEach((doc) => {
+    // Show the list except for before being stored
+    if (
+      doc.data().status !== "saved" &&
+      doc.data().status !== "add requested"
+    ) {
+      const item = doc.data();
+      const itemID = doc.id;
+      itemList.insertAdjacentHTML(
+        "beforeend",
+        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" /><img src='${
+          item.picture ? item.picture : ""
+        }' class=placeholder-pic alt=${itemID}>
+      <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
+          doc.data().status === "retrieved"
+            ? "| retrieved"
+            : doc.data().status === "requested"
+            ? "| on request"
+            : ""
+        }</p> 
+      <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
+        </li>`
+      );
+    }
+    // Disable checkbox if the item is on retrieval request.
+    if (
+      doc.data().status === "requested" ||
+      doc.data().status === "retrieved"
+    ) {
+      document.getElementById(`check_${doc.id}`).disabled = true;
+    }
+  });
+};
 
 // Firebase handling---------------
 // Name
@@ -55,30 +91,22 @@ userName.textContent = `${hp.userName.firstName}`;
 // get data
 const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 const snapShot = await getDocs(queryStorage);
-snapShot.forEach((doc) => {
-  // Show the list except for saved
-  if (doc.data().status !== "saved") {
-    const item = doc.data();
-    const itemID = doc.id;
-    itemList.insertAdjacentHTML(
-      "beforeend",
-      `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" /><img src='${
-        item.picture ? item.picture : ""
-      }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
-        doc.data().status === "retrieved"
-          ? "| retrieved"
-          : doc.data().status === "requested"
-          ? "| on request"
-          : ""
-      }</p> 
-    <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
-      </li>`
+renderList(snapShot);
+
+// filtering
+filter.addEventListener("change", async (e) => {
+  e.preventDefault();
+  const conditionValue = filter.value;
+  itemList.innerHTML = "";
+  if (conditionValue === "all") {
+    // Will be implemented
+  } else {
+    const q = query(
+      collection(db, "users", `${userId}`, "inStorage"),
+      where("status", "==", conditionValue)
     );
-  }
-  // Disable checkbox if the item is on retrieval request.
-  if (doc.data().status === "requested" || doc.data().status === "retrieved") {
-    document.getElementById(`check_${doc.id}`).disabled = true;
+    const querySnapshot = await getDocs(q);
+    renderList(querySnapshot);
   }
 });
 
