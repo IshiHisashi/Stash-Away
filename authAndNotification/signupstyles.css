@@ -1,0 +1,16 @@
+.map-container {
+    border: 5px solid darkblue;
+    width: 60%;
+}
+
+#map {
+    width: 100%;
+    height: 300px;
+}
+
+#current-location-marker {
+    background-image: url("images/you-are-here.png");
+    background-size: cover;
+    width: 38px;
+    height: 50px;
+}

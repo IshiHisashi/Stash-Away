@@ -493,6 +493,11 @@ btnSubmit.addEventListener("click", async (e) => {
       province: `${province.value}`,
       zipCode: `${zip.value}`,
     },
+    storageLocation: {
+      latitude: `${userDoc.storageLocation.latitude}`,
+      longitude: `${userDoc.storageLocation.longitude}`,
+      name: `${userDoc.storageLocation.name}`,
+    },
   });
 });
 

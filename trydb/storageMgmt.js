@@ -175,6 +175,11 @@ btnRetrieve.addEventListener("click", async (e) => {
       province: `${province.value}`,
       zipCode: `${zip.value}`,
     },
+    storageLocation: {
+      latitude: `${hp.storageLocation.latitude}`,
+      longitude: `${hp.storageLocation.longitude}`,
+      name: `${hp.storageLocation.name}`,
+    },
   });
   // Process4 : Reload the display to reflect change in item status and update list accordingly
   window.location.reload();
