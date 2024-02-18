@@ -1,4 +1,11 @@
-import { objArr, update, db, getOrder } from "./forDriverEnd/load.js";
+import {
+  objArr,
+  update,
+  db,
+  getOrder,
+  getDoc,
+  doc,
+} from "./forDriverEnd/load.js";
 console.log(objArr);
 
 const createFormElement = (type, value = null, textContent = null) => {
@@ -114,22 +121,68 @@ const showOrderForm = (
 
     // if the submit event is triggered by button 1 (change to on going)
     if (event.submitter.name === "button1") {
-      // --UPDATE DB--
-      // Update driverid and status
-      await update(uid, oid, driverSelect);
-      // Get the updated order info.
-      const get = await getOrder(uid, oid);
-      const order = get.data();
-      console.log(order);
+      // FIX LATER
+      // Geocode the user's address. If we store latitude and longitude on Firestore, we can get rid of this part.
+      tt.services
+        .geocode({
+          key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+          query: address,
+        })
+        .then((response) => {
+          const userLat = response.results[0].position.lat;
+          const userLon = response.results[0].position.lng;
 
-      form.querySelector(
-        "p:nth-of-type(7)"
-      ).textContent = `Current status: ${order.status}`;
-      form.querySelector("select").value = order.driverId;
-      form.querySelector("select").disabled = true;
-      form.querySelector("button:nth-of-type(1)").disabled = true;
-      form.querySelector("button:nth-of-type(2)").disabled = false;
-      return;
+          // get driver's departure location (= storage location)
+          (async () => {
+            const docSnap = await getDoc(doc(db, "users", uid));
+            const driverLat = docSnap.data().storageLocation.latitude;
+            const driverLon = docSnap.data().storageLocation.longitude;
+
+            // calculate ETA
+            tt.services
+              .calculateRoute({
+                key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+                locations: [
+                  [driverLat, driverLon],
+                  [userLat, userLon],
+                ],
+              })
+              .then((response) => {
+                console.log(response);
+
+                const rawETA = new Date(response.routes[0].summary.arrivalTime);
+                const formattedETA = rawETA.toLocaleString("en-CA", {
+                  timeZone: "America/Vancouver",
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "numeric",
+                  minute: "2-digit",
+                  timeZoneName: "shortGeneric",
+                });
+
+                (async () => {
+                  // --UPDATE DB--
+                  // Update driverid and status
+                  await update(uid, oid, formattedETA, driverSelect);
+                  // Get the updated order info.
+                  const get = await getOrder(uid, oid);
+                  const order = get.data();
+                  console.log(order);
+
+                  form.querySelector(
+                    "p:nth-of-type(7)"
+                  ).textContent = `Current status: ${order.status}`;
+                  form.querySelector("select").value = order.driverId;
+                  form.querySelector("select").disabled = true;
+                  form.querySelector("button:nth-of-type(1)").disabled = true;
+                  form.querySelector("button:nth-of-type(2)").disabled = false;
+                  return;
+                })();
+              });
+          })();
+        });
     }
 
     // if the submit event is triggered by button 2 (change to done)

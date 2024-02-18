@@ -82,6 +82,23 @@ onAuthStateChanged(auth, (user) => {
           );
 
           showUpdate(section, orderID, orderDate, itemKey);
+
+          // If the data has ETA in the first place, show it at the same time.
+          if (orderObj[orderID].ETA) {
+            const h4 = createOrderDivElement("h4", "DRIVER DEPARTED");
+            const p = createOrderDivElement(
+              "p",
+              "---Time stamp would be here---"
+              // FIX LATER: add time stamp (use firestore function?)
+            );
+            document.querySelector(`#${orderID}`).appendChild(h4);
+            document.querySelector(`#${orderID}`).appendChild(p);
+
+            const h4ETA = createOrderDivElement("h4", "ETA");
+            const pETA = createOrderDivElement("p", orderObj[orderID].ETA);
+            document.querySelector(`#${orderID}`).appendChild(h4ETA);
+            document.querySelector(`#${orderID}`).appendChild(pETA);
+          }
         }
       });
     })();
@@ -107,80 +124,17 @@ onAuthStateChanged(auth, (user) => {
             document.querySelector(`#${changedDoc.doc.id}`).appendChild(h4);
             document.querySelector(`#${changedDoc.doc.id}`).appendChild(p);
 
-            // start calculating ETA - get user's address first.
-            const wholeAddress = `${changedDoc.doc.data().address.detail}, ${
-              changedDoc.doc.data().address.city
-            }, ${changedDoc.doc.data().address.province}`;
+            const formattedETA = changedDoc.doc.data().ETA;
 
-            // FIX LATER (maybe)
-            // Geocode the user's address. If we store latitude and longitude on Firestore, we can get rid of this part.
-            tt.services
-              .geocode({
-                key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-                query: wholeAddress,
-              })
-              .then((response) => {
-                console.log(response);
-                const userLat = response.results[0].position.lat;
-                const userLon = response.results[0].position.lng;
+            const h4ETA = createOrderDivElement("h4", "ETA");
+            const pETA = createOrderDivElement("p", formattedETA);
+            document.querySelector(`#${changedDoc.doc.id}`).appendChild(h4ETA);
+            document.querySelector(`#${changedDoc.doc.id}`).appendChild(pETA);
 
-                // Get current geolocation as a driver's location.
-                navigator.geolocation.getCurrentPosition(
-                  (position) => {
-                    const driverLat = position.coords.latitude;
-                    const driverLon = position.coords.longitude;
-
-                    // calculate ETA
-                    tt.services
-                      .calculateRoute({
-                        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-                        locations: [
-                          [driverLat, driverLon],
-                          [userLat, userLon],
-                        ],
-                      })
-                      .then((response) => {
-                        console.log(response);
-
-                        const rawETA = new Date(
-                          response.routes[0].summary.arrivalTime
-                        );
-                        const formattedETA = rawETA.toLocaleString("en-CA", {
-                          timeZone: "America/Vancouver",
-                          weekday: "short",
-                          year: "numeric",
-                          month: "short",
-                          day: "numeric",
-                          hour: "numeric",
-                          minute: "2-digit",
-                          timeZoneName: "shortGeneric",
-                        });
-
-                        const h4 = createOrderDivElement("h4", "ETA");
-                        const p = createOrderDivElement("p", formattedETA);
-                        document
-                          .querySelector(`#${changedDoc.doc.id}`)
-                          .appendChild(h4);
-                        document
-                          .querySelector(`#${changedDoc.doc.id}`)
-                          .appendChild(p);
-
-                        // notification
-                        new Notification("StashAway", {
-                          body: `The driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${formattedETA}`,
-                        });
-                      })
-                      .catch((error) => console.log(error));
-                  },
-                  (error) => {
-                    console.log(error);
-                  }
-                );
-              })
-              .catch((error) => {
-                console.log(error);
-                return;
-              });
+            // notification
+            new Notification("StashAway", {
+              body: `The driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${formattedETA}`,
+            });
           }
         });
       });
