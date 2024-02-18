@@ -118,7 +118,6 @@ onAuthStateChanged(auth, (user) => {
               .geocode({
                 key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
                 query: wholeAddress,
-                timeZone: "iana",
               })
               .then((response) => {
                 console.log(response);
@@ -132,7 +131,6 @@ onAuthStateChanged(auth, (user) => {
                     const driverLon = position.coords.longitude;
 
                     // calculate ETA
-                    // FIX LATER: need to convert the time to vancouver time.
                     tt.services
                       .calculateRoute({
                         key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
@@ -143,11 +141,23 @@ onAuthStateChanged(auth, (user) => {
                       })
                       .then((response) => {
                         console.log(response);
-                        const h4 = createOrderDivElement("h4", "ETA");
-                        const p = createOrderDivElement(
-                          "p",
+
+                        const rawETA = new Date(
                           response.routes[0].summary.arrivalTime
                         );
+                        const formattedETA = rawETA.toLocaleString("en-CA", {
+                          timeZone: "America/Vancouver",
+                          weekday: "short",
+                          year: "numeric",
+                          month: "short",
+                          day: "numeric",
+                          hour: "numeric",
+                          minute: "2-digit",
+                          timeZoneName: "shortGeneric",
+                        });
+
+                        const h4 = createOrderDivElement("h4", "ETA");
+                        const p = createOrderDivElement("p", formattedETA);
                         document
                           .querySelector(`#${changedDoc.doc.id}`)
                           .appendChild(h4);
@@ -157,7 +167,7 @@ onAuthStateChanged(auth, (user) => {
 
                         // notification
                         new Notification("StashAway", {
-                          body: `The driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${response.routes[0].summary.arrivalTime}`,
+                          body: `The driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${formattedETA}`,
                         });
                       })
                       .catch((error) => console.log(error));
