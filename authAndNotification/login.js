@@ -50,6 +50,62 @@ onAuthStateChanged(auth, (user) => {
 
 const btnSignup = document.querySelector("#signup");
 
+// SUGGEST USER'S ADDRESS BASED ON CURRENT LOCATION ==========
+
+if ( navigator.geolocation ) {
+  navigator.geolocation.getCurrentPosition(
+      (position) => {
+          let currentLgt = position.coords.longitude;
+          let currentLat = position.coords.latitude;
+          const currentLoc = [];
+          currentLoc.push(currentLgt);
+          currentLoc.push(currentLat);
+          console.log(currentLoc);
+
+          async function getAddress (url) {
+            let response = await fetch(url);
+            let data = await response.json();
+            console.log(data);
+            document.getElementById("signupaddressdetail").value = data.addresses[0].address.streetNameAndNumber;
+            document.getElementById("signupcity").value = data.addresses[0].address.municipality;
+            document.getElementById("signuppostalcode").value = data.addresses[0].address.extendedPostalCode;
+            var myA = data.addresses[0].address.streetNameAndNumber.split(/(\d+)/g);
+            console.log(myA[1]);
+            return data;
+          }
+
+          // 🚨🚨🚨 Store the data into the DB!!!
+
+          let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`
+
+          getAddress(addressUrl);
+
+          const map = tt.map({
+            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+            container: "map",
+            center: currentLoc,
+            zoom: 9
+          })
+
+          map.on('load', () => {
+            var curLocEl = document.createElement("div");
+            curLocEl.id = "current-location-marker";
+            var currentLocation = new tt.Marker({ element:curLocEl }).setLngLat(currentLoc).addTo(map);
+          })
+          
+      },
+      (error) => {
+          console.log(error);
+          if (error.code == error.PERMISSION_DENIED) {
+              window.alert("geolocation permission denied")
+          }
+      }
+  );
+} else {
+  console.log("Geolocation is not supported by this browser.")
+}
+
+
 // FIX LATER - password validation has to be implemented here (onchange).
 
 btnSignup.onclick = (e) => {
@@ -62,6 +118,30 @@ btnSignup.onclick = (e) => {
   const city = document.querySelector("#signupcity").value;
   const postalcode = document.querySelector("#signuppostalcode").value;
   const password = document.querySelector("#signuppassword").value;
+
+  // GEOCODING ADDRESS AND STORE
+  let cutAddress = addressdetail.split(" ");
+  let houseNum = cutAddress[0];
+  let streetName = cutAddress[1];
+  for (var i = 2; i < cutAddress.length - 1; i++) {
+    streetName += " " + cutAddress[i];
+  };
+  const geoCodeArray = [];
+
+  async function getGeoCode (url) {
+    let response = await fetch(url);
+    let data = await response.json();
+    console.log(data);
+    geoCodeArray.push(data.results[0].position.lon);
+    geoCodeArray.push(data.results[0].position.lat);
+    console.log(geoCodeArray);
+    return data;
+  }
+
+  let geocodeUrl = `https://api.tomtom.com/search/2/structuredGeocode.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&countryCode=CA&streetNumber=${houseNum}&streetName=${streetName}&municipality=${city}
+  &countrySubdivision=BC`;
+
+  getGeoCode(geocodeUrl);
 
   // create an account with Firebase auth
   createUserWithEmailAndPassword(auth, email, password)
@@ -80,6 +160,7 @@ btnSignup.onclick = (e) => {
               detail: addressdetail,
               province: "British Columbia",
               zipCode: postalcode,
+              geoCode: geoCodeArray,
             },
             contact: {
               email: userCredential.user.email,
