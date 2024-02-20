@@ -1,16 +1,28 @@
 .map-container {
-    border: 5px solid darkblue;
-    width: 60%;
+  border: 5px solid darkblue;
+  width: 60%;
 }
 
 #map {
-    width: 100%;
-    height: 300px;
+  width: 100%;
+  height: 300px;
 }
 
 #current-location-marker {
-    background-image: url("images/you-are-here.png");
-    background-size: cover;
-    width: 38px;
-    height: 50px;
+  background-image: url("images/you-are-here.png");
+  background-size: cover;
+  width: 38px;
+  height: 50px;
+}
+
+/* phone number verification form hide/show */
+
+#phoneVerificationForm {
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+  padding: 1rem 0;
+}
+
+#phoneVerificationForm.show {
+  transform: translateX(0);
 }

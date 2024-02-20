@@ -5,6 +5,9 @@ import {
   signInWithEmailAndPassword,
   onAuthStateChanged,
   auth,
+  sendEmailVerification,
+  RecaptchaVerifier,
+  linkWithPhoneNumber,
 } from "./firebase_auth.js";
 
 import {
@@ -52,59 +55,62 @@ const btnSignup = document.querySelector("#signup");
 
 // SUGGEST USER'S ADDRESS BASED ON CURRENT LOCATION ==========
 
-if ( navigator.geolocation ) {
+if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
-      (position) => {
-          let currentLgt = position.coords.longitude;
-          let currentLat = position.coords.latitude;
-          const currentLoc = [];
-          currentLoc.push(currentLgt);
-          currentLoc.push(currentLat);
-          console.log(currentLoc);
+    (position) => {
+      let currentLgt = position.coords.longitude;
+      let currentLat = position.coords.latitude;
+      const currentLoc = [];
+      currentLoc.push(currentLgt);
+      currentLoc.push(currentLat);
+      console.log(currentLoc);
 
-          async function getAddress (url) {
-            let response = await fetch(url);
-            let data = await response.json();
-            console.log(data);
-            document.getElementById("signupaddressdetail").value = data.addresses[0].address.streetNameAndNumber;
-            document.getElementById("signupcity").value = data.addresses[0].address.municipality;
-            document.getElementById("signuppostalcode").value = data.addresses[0].address.extendedPostalCode;
-            var myA = data.addresses[0].address.streetNameAndNumber.split(/(\d+)/g);
-            console.log(myA[1]);
-            return data;
-          }
-
-          // 🚨🚨🚨 Store the data into the DB!!!
-
-          let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`
-
-          getAddress(addressUrl);
-
-          const map = tt.map({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-            container: "map",
-            center: currentLoc,
-            zoom: 9
-          })
-
-          map.on('load', () => {
-            var curLocEl = document.createElement("div");
-            curLocEl.id = "current-location-marker";
-            var currentLocation = new tt.Marker({ element:curLocEl }).setLngLat(currentLoc).addTo(map);
-          })
-          
-      },
-      (error) => {
-          console.log(error);
-          if (error.code == error.PERMISSION_DENIED) {
-              window.alert("geolocation permission denied")
-          }
+      async function getAddress(url) {
+        let response = await fetch(url);
+        let data = await response.json();
+        console.log(data);
+        document.getElementById("signupaddressdetail").value =
+          data.addresses[0].address.streetNameAndNumber;
+        document.getElementById("signupcity").value =
+          data.addresses[0].address.municipality;
+        document.getElementById("signuppostalcode").value =
+          data.addresses[0].address.extendedPostalCode;
+        var myA = data.addresses[0].address.streetNameAndNumber.split(/(\d+)/g);
+        console.log(myA[1]);
+        return data;
       }
+
+      // 🚨🚨🚨 Store the data into the DB!!!
+
+      let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`;
+
+      getAddress(addressUrl);
+
+      const map = tt.map({
+        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+        container: "map",
+        center: currentLoc,
+        zoom: 9,
+      });
+
+      map.on("load", () => {
+        var curLocEl = document.createElement("div");
+        curLocEl.id = "current-location-marker";
+        var currentLocation = new tt.Marker({ element: curLocEl })
+          .setLngLat(currentLoc)
+          .addTo(map);
+      });
+    },
+    (error) => {
+      console.log(error);
+      if (error.code == error.PERMISSION_DENIED) {
+        window.alert("geolocation permission denied");
+      }
+    }
   );
 } else {
-  console.log("Geolocation is not supported by this browser.")
+  console.log("Geolocation is not supported by this browser.");
 }
-
 
 // FIX LATER - password validation has to be implemented here (onchange).
 
@@ -125,10 +131,10 @@ btnSignup.onclick = (e) => {
   let streetName = cutAddress[1];
   for (var i = 2; i < cutAddress.length - 1; i++) {
     streetName += " " + cutAddress[i];
-  };
+  }
   const geoCodeArray = [];
 
-  async function getGeoCode (url) {
+  async function getGeoCode(url) {
     let response = await fetch(url);
     let data = await response.json();
     console.log(data);
@@ -149,30 +155,83 @@ btnSignup.onclick = (e) => {
       console.log(userCredential);
       const user = userCredential.user;
 
-      // store user data on Firestore
-      const usersRef = collection(db, "users");
       (async () => {
         try {
-          await setDoc(doc(usersRef, userCredential.user.uid), {
-            address: {
-              city: city,
-              country: "Canada",
-              detail: addressdetail,
-              province: "British Columbia",
-              zipCode: postalcode,
-              geoCode: geoCodeArray,
-            },
-            contact: {
-              email: userCredential.user.email,
-              phone: phone,
-            },
-            userName: {
-              firstName: fname,
-              lastName: lname,
+          // email verification ///////////////
+          const actionCodeSettings = null;
+          await sendEmailVerification(user, actionCodeSettings);
+
+          // phone number verification ///////////////
+          // !!!! SMS daily quota for a free account is 10/day !!!!
+          // You can use fictional phone numbers for testing: https://firebase.google.com/docs/auth/web/phone-auth?hl=en&authuser=1&_gl=1*9gny7c*_up*MQ..*_ga*MjA1ODE1NjUyNy4xNzA4MzU4MzYy*_ga_CW55HF8NVT*MTcwODM1ODM2MS4xLjAuMTcwODM1ODM2MS4wLjAuMA..#test-with-fictional-phone-numbers
+
+          // FIX LATER - SMS is sent when using a fictional phone number, but when using an actual phone number, SMS is not sent and I get this error: FirebaseError: Firebase: Hostname match not found (auth/captcha-check-failed).
+
+          auth.useDeviceLanguage();
+          window.recaptchaVerifier = new RecaptchaVerifier(auth, "signup", {
+            size: "invisible",
+            callback: (response) => {
+              onSignInSubmit();
             },
           });
 
-          window.location.href = "after-login.html";
+          const appVerifier = window.recaptchaVerifier;
+          linkWithPhoneNumber(user, phone, appVerifier)
+            .then((confirmationResult) => {
+              // SMS sent.
+              console.log(confirmationResult);
+              window.confirmationResult = confirmationResult;
+
+              document
+                .querySelector("#phoneVerificationForm")
+                .classList.add("show");
+              document.querySelector("#signupForm").style.display = "none";
+              document.querySelector(".map-container").style.display = "none";
+              document.querySelector("#loginForm").style.display = "none";
+
+              const btnVerify = document.querySelector("#phoneVerification");
+
+              btnVerify.onclick = async (e) => {
+                e.preventDefault();
+                const code = document.querySelector("#code").value;
+
+                const confirmation = await confirmationResult.confirm(code);
+
+                // store user data on Firestore ////////////////
+                const usersRef = collection(db, "users");
+                await setDoc(doc(usersRef, user.uid), {
+                  address: {
+                    city: city,
+                    country: "Canada",
+                    detail: addressdetail,
+                    province: "British Columbia",
+                    zipCode: postalcode,
+                    geoCode: geoCodeArray,
+                  },
+                  contact: {
+                    email: user.email,
+                    phone: user.phoneNumber,
+                  },
+                  userName: {
+                    firstName: fname,
+                    lastName: lname,
+                  },
+                });
+
+                window.location.href = "after-login.html";
+
+                return confirmation;
+              };
+            })
+            .catch((error) => {
+              // SMS not sent.
+              console.log(error);
+              window.recaptchaVerifier.render().then(function (widgetId) {
+                grecaptcha.reset(widgetId);
+              });
+            });
+
+          // window.location.href = "after-login.html";
         } catch (err) {
           console.log(err);
         }

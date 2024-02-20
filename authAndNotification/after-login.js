@@ -20,6 +20,12 @@ onAuthStateChanged(auth, (user) => {
     console.log(user);
     loginStatusSpan.textContent = `Logged in: (user ID: ${uid})`;
 
+    if (!user.emailVerified) {
+      document.querySelector(".toast").classList.add("show");
+    } else {
+      document.querySelector(".toast").classList.remove("show");
+    }
+
     //
     // notification test ////////////////////////////
 
