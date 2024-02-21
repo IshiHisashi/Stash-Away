@@ -54,7 +54,7 @@ const renderList = function (snapShot) {
       const itemID = doc.id;
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox" /><img src='${
+        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
@@ -93,20 +93,58 @@ const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 const snapShot = await getDocs(queryStorage);
 renderList(snapShot);
 
+// Checkbox
+const checkboxes = document.getElementsByClassName("checkbox");
+// Arr to register checked input id.
+const cArr = [];
+// check contorol
+const checkControl = function () {
+  Array.from(checkboxes).forEach((el) => {
+    el.addEventListener("change", (e) => {
+      if (cArr.includes(el.id)) {
+        cArr.pop(el.id);
+      } else {
+        cArr.push(el.id);
+      }
+      console.log(cArr);
+    });
+  });
+};
+// to retrieve checked status under filtering event
+const recallCheckbox = function () {
+  Array.from(checkboxes).forEach((el) => {
+    if (cArr.includes(el.id)) {
+      el.setAttribute("checked", "");
+    }
+  });
+};
+
+checkControl();
+
 // filtering
 filter.addEventListener("change", async (e) => {
   e.preventDefault();
   const conditionValue = filter.value;
-  itemList.innerHTML = "";
+  while (itemList.firstChild) {
+    itemList.removeChild(itemList.firstChild);
+  }
   if (conditionValue === "all") {
-    // Will be implemented
+    // just render all
+    renderList(snapShot);
+    // checkbox contorol
+    recallCheckbox();
+    checkControl();
   } else {
+    // retrieve data under a certain filter condition
     const q = query(
       collection(db, "users", `${userId}`, "inStorage"),
       where("status", "==", conditionValue)
     );
     const querySnapshot = await getDocs(q);
     renderList(querySnapshot);
+    // checkbox contorol
+    recallCheckbox();
+    checkControl();
   }
 });
 
@@ -129,7 +167,6 @@ zip.value = hp.address.zipCode;
 const checkedArr = [];
 const checkedDocs = [];
 btnRetrieve.addEventListener("click", async (e) => {
-  const checkboxes = document.querySelectorAll("li input");
   e.preventDefault();
   // Process1 : extract checked items and compress them into arr.
   checkboxes.forEach(async (el) => {
