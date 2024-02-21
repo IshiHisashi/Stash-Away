@@ -39,11 +39,12 @@ order.forEach((el) => {
 });
 
 // Update driver's id and its status. Also, update each item's status inStorage when order status is "done".
-const update = async (uid, oid, driver = null) => {
+const update = async (uid, oid, eta, driver = null) => {
   if (driver) {
     await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
       driverId: `${driver.value}`,
       status: "on going",
+      ETA: eta,
     });
   } else {
     await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {
@@ -72,4 +73,4 @@ const getOrder = async (uid, oid) => {
   return get;
 };
 
-export { objArr, update, db, getOrder };
+export { objArr, update, db, getOrder, getDoc, doc };
