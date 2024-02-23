@@ -73,7 +73,7 @@ const showOrderForm = (
         status === "on going")
     ) {
       element.disabled = true;
-    } else if (type === "button" && status === "requested") {
+    } else if (type === "button" && status.includes("requested")) {
       element.disabled = true;
     }
 
