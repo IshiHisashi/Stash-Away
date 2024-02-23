@@ -48,22 +48,22 @@ const btnTest = document.getElementById("btnTest");
 
 const renderList = function (snapShot) {
   snapShot.forEach((doc) => {
+    const item = doc.data();
+    const itemID = doc.id;
     // Show the list except for before being stored
     if (
       doc.data().status !== "saved" &&
       doc.data().status !== "add requested"
     ) {
-      const item = doc.data();
-      const itemID = doc.id;
       itemList.insertAdjacentHTML(
         "beforeend",
         `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
-          doc.data().status === "retrieved"
+          item.status === "retrieved"
             ? "| retrieved"
-            : doc.data().status === "requested"
+            : item.status === "requested"
             ? "| on request"
             : ""
         }</p> 
@@ -72,11 +72,8 @@ const renderList = function (snapShot) {
       );
     }
     // Disable checkbox if the item is on retrieval request.
-    if (
-      doc.data().status === "requested" ||
-      doc.data().status === "retrieved"
-    ) {
-      document.getElementById(`check_${doc.id}`).disabled = true;
+    if (item.status === "requested" || item.status === "retrieved") {
+      document.getElementById(`check_${itemID}`).disabled = true;
     }
   });
 };
@@ -130,17 +127,49 @@ const cleanupList = function () {
   }
 };
 
-// Searching
-btnSearch.addEventListener("click", async (e) => {
+// Search_revision
+// Create arr
+const itemsIDArr = [];
+snapShot.forEach((el) => {
+  const itemArr = [el.id, el.data()];
+  itemsIDArr.push(itemArr);
+});
+// Event
+btnSearch.addEventListener("click", (e) => {
   e.preventDefault();
-  // Make query
-  const searchValue = search.value;
-  const q = query(queryStorage, where("itemName", "==", `${searchValue}`));
-  // Execute query
-  const querySnapshot = await getDocs(q);
-  // Render
+  // Filter based on search
+  const searchItemsIDArr = itemsIDArr.filter((el) => {
+    return el[1].itemName.includes(search.value);
+  });
+  console.log(searchItemsIDArr);
+  // Rendering (hard-code for now, as rendering funcition cannot be used)
   cleanupList();
-  renderList(querySnapshot);
+  searchItemsIDArr.forEach((el) => {
+    const item = el[1];
+    const itemID = el[0];
+    console.log(item, itemID);
+    if (item.status !== "saved" && item.status !== "add requested") {
+      itemList.insertAdjacentHTML(
+        "beforeend",
+        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
+          item.picture ? item.picture : ""
+        }' class=placeholder-pic alt=${itemID}>
+    <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
+          item.status === "retrieved"
+            ? "| retrieved"
+            : item.status === "requested"
+            ? "| on request"
+            : ""
+        }</p>
+    <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
+      </li>`
+      );
+    }
+    // Disable checkbox if the item is on retrieval request.
+    if (item.status === "requested" || item.status === "retrieved") {
+      document.getElementById(`check_${itemID}`).disabled = true;
+    }
+  });
   // checkbox contorol
   recallCheckbox();
   checkControl();
@@ -239,7 +268,7 @@ btnRetrieve.addEventListener("click", async (e) => {
     itemKey: checkedArr,
     orderDate: "2024-01-31",
     orderType: "retrieval",
-    status: "requested",
+    status: "retrieval requested",
     address: {
       detail: `${detailAddress.value}`,
       city: `${city.value}`,
@@ -254,9 +283,4 @@ btnRetrieve.addEventListener("click", async (e) => {
   });
   // Process4 : Reload the display to reflect change in item status and update list accordingly
   window.location.reload();
-});
-
-btnTest.addEventListener("click", (e) => {
-  e.preventDefault();
-  console.log("x");
 });
