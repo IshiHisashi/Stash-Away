@@ -33,6 +33,9 @@ const db = getFirestore(app);
 // Define variables----------------
 const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
 const userName = document.getElementById("userName");
+const search = document.getElementById("search");
+const btnSearch = document.getElementById("btn-search");
+const btnSerachDelete = document.getElementById("btn-search-delete");
 const itemList = document.querySelector(".item-list");
 const itemName = document.querySelector(".item-name");
 const detailAddress = document.getElementById("detail");
@@ -97,7 +100,7 @@ renderList(snapShot);
 const checkboxes = document.getElementsByClassName("checkbox");
 // Arr to register checked input id.
 const cArr = [];
-// check contorol
+// Function1 : Check contorol
 const checkControl = function () {
   Array.from(checkboxes).forEach((el) => {
     el.addEventListener("change", (e) => {
@@ -110,7 +113,9 @@ const checkControl = function () {
     });
   });
 };
-// to retrieve checked status under filtering event
+// Execute it on global scope
+checkControl();
+// Function2 : To retrieve checked status under filtering event
 const recallCheckbox = function () {
   Array.from(checkboxes).forEach((el) => {
     if (cArr.includes(el.id)) {
@@ -118,18 +123,47 @@ const recallCheckbox = function () {
     }
   });
 };
-
-checkControl();
-
-// filtering
-filter.addEventListener("change", async (e) => {
-  e.preventDefault();
-  const conditionValue = filter.value;
+// Function3 : Cleanup list
+const cleanupList = function () {
   while (itemList.firstChild) {
     itemList.removeChild(itemList.firstChild);
   }
+};
+
+// Searching
+btnSearch.addEventListener("click", async (e) => {
+  e.preventDefault();
+  // Make query
+  const searchValue = search.value;
+  const q = query(queryStorage, where("itemName", "==", `${searchValue}`));
+  // Execute query
+  const querySnapshot = await getDocs(q);
+  // Render
+  cleanupList();
+  renderList(querySnapshot);
+  // checkbox contorol
+  recallCheckbox();
+  checkControl();
+});
+
+// Delete search
+btnSerachDelete.addEventListener("click", (e) => {
+  e.preventDefault();
+  // Render
+  cleanupList();
+  renderList(snapShot);
+  // checkbox contorol
+  recallCheckbox();
+  checkControl();
+});
+
+// Filtering
+filter.addEventListener("change", async (e) => {
+  e.preventDefault();
+  cleanupList();
+  const conditionValue = filter.value;
   if (conditionValue === "all") {
-    // just render all
+    // Render all
     renderList(snapShot);
     // checkbox contorol
     recallCheckbox();
