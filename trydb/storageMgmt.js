@@ -139,7 +139,7 @@ btnSearch.addEventListener("click", (e) => {
   e.preventDefault();
   // Filter based on search
   const searchItemsIDArr = itemsIDArr.filter((el) => {
-    return el[1].itemName.includes(search.value);
+    return el[1].itemName.toLowerCase().includes(search.value.toLowerCase());
   });
   console.log(searchItemsIDArr);
   // Rendering (hard-code for now, as rendering funcition cannot be used)
