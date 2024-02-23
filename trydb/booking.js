@@ -1,6 +1,8 @@
 "use strict";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import {
   getFirestore,
   collection,
@@ -87,12 +89,13 @@ const renderListFor = function (doc) {
       const itemID = doc[i].id;
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li'><img src='${
-          item.picture ? item.picture : ""
-        }' class=placeholder-pic alt=${itemID}><p>${
-          item.itemName
-        }</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+        `<li class='item-list-li'><img src='${item.picture ? item.picture : ""}' class='placeholder-pic' alt='${itemID}'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
       );
+
+      const iconElement = document.getElementById(`picitem_${itemID}`);
+      iconElement.addEventListener('click', function (e) {
+        modalOpen(e, item);
+      });
     }
   }
 };
@@ -141,48 +144,80 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
 
 //camera
 
-document.getElementById("itemName").addEventListener("input", function () {
-  const itemNameValue = document.getElementById("itemName").value.trim();
+document.getElementById("newItemName").addEventListener("input", function () {
+  const itemNameValue = document.getElementById("newItemName").value.trim();
   document.getElementById("save").disabled = itemNameValue === "";
 });
 
 // Function to enable the camera
-cameraIcon.addEventListener("click", function (e) {
-  e.preventDefault();
-  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices
-      .getUserMedia({ video: true })
-      .then(function (localStream) {
-        stream = localStream;
-        video.srcObject = stream;
-        video.hidden = false;
-        captureBtn.disabled = false;
-        captureBtn.style.display = "inline-block";
-        uploadButton.style.display = "inline-block";
-        saveBtn.style.display = "inline-block";
-      })
-      .catch(function (err) {
-        console.log("An error occurred: " + err);
-      });
-  }
-});
+// cameraIcon.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+//     navigator.mediaDevices
+//       .getUserMedia({ video: true })
+//       .then(function (localStream) {
+//         stream = localStream;
+//         video.srcObject = stream;
+//         video.hidden = false;
+//         captureBtn.disabled = false;
+//         captureBtn.style.display = "inline-block";
+//         uploadButton.style.display = "inline-block";
+//         saveBtn.style.display = "inline-block";
+//       })
+//       .catch(function (err) {
+//         console.log("An error occurred: " + err);
+//       });
+//   }
+// });
+
+
 // Function to capture the image
+// captureBtn.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   canvas.width = video.videoWidth;
+//   canvas.height = video.videoHeight;
+//   context.drawImage(video, 0, 0, canvas.width, canvas.height);
+//   captureBtn.hidden = true;
+//   retakeBtn.disabled = false;
+//   retakeBtn.style.display = "inline-block";
+//   saveBtn.disabled = false;
+//   video.hidden = true;
+//   canvas.hidden = false;
+//   uploadButton.style.display = "none";
+//   // Stop the camera after capturing the image
+//   if (stream) {
+//     stream.getTracks().forEach((track) => track.stop());
+//   }
+// });
 captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight;
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const fixedWidth = 300; 
+  const fixedHeight = 150; // 
+  canvas.width = fixedWidth;
+  canvas.height = fixedHeight;
+
+  const scale = Math.min(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
+  const scaledWidth = video.videoWidth * scale;
+  const scaledHeight = video.videoHeight * scale;
+
+  const xOffset = (canvas.width - scaledWidth) / 2;
+  const yOffset = (canvas.height - scaledHeight) / 2;
+
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.drawImage(video, xOffset, yOffset, scaledWidth, scaledHeight);
+  canvas.hidden = false;
   captureBtn.hidden = true;
   retakeBtn.disabled = false;
   retakeBtn.style.display = "inline-block";
   saveBtn.disabled = false;
   video.hidden = true;
-  canvas.hidden = false;
-  // Stop the camera after capturing the image
+  uploadButton.style.display = "none";
+
   if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
+    stream.getTracks().forEach(track => track.stop());
   }
 });
+
 
 retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
@@ -195,7 +230,9 @@ retakeBtn.addEventListener("click", function (e) {
   // Restart the camera stream
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({
+        video: true
+      })
       .then(function (localStream) {
         stream = localStream;
         video.srcObject = stream;
@@ -206,26 +243,65 @@ retakeBtn.addEventListener("click", function (e) {
   }
 });
 
+// uploadButton.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   imageUpload.click();
+//   canvas.hidden = true;
+//   video.hidden = true;
+// });
+
+// imageUpload.addEventListener("change", function (e) {
+//   e.preventDefault();
+//   const file = event.target.files[0];
+//   if (file) {
+//     const reader = new FileReader();
+//     reader.onload = function (e) {
+//       const img = new Image();
+//       img.onload = function () {
+//         canvas.width = img.width;
+//         canvas.height = img.height;
+//         context.drawImage(img, 0, 0);
+//         canvas.hidden = false;
+//         deleteIcon.style.display = "inline-block";
+//         saveBtn.disabled = false;
+//       };
+//       img.src = e.target.result;
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// });
+
 uploadButton.addEventListener("click", function (e) {
-  e.preventDefault(); // Prevent the form from submitting if the button is part of a form
-  imageUpload.click(); // Trigger file input click on button click
+  e.preventDefault();
+  imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 imageUpload.addEventListener("change", function (e) {
   e.preventDefault();
-  const file = event.target.files[0];
+  const file = e.target.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
       const img = new Image();
       img.onload = function () {
-        canvas.width = img.width;
-        canvas.height = img.height;
-        context.drawImage(img, 0, 0);
+        const fixedWidth = 300; 
+        const fixedHeight = 150; 
+        canvas.width = fixedWidth;
+        canvas.height = fixedHeight;
+
+        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+        const scaledWidth = img.width * scale;
+        const scaledHeight = img.height * scale;
+
+        const xOffset = (canvas.width - scaledWidth) / 2;
+        const yOffset = (canvas.height - scaledHeight) / 2;
+
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.drawImage(img, xOffset, yOffset, scaledWidth, scaledHeight);
         canvas.hidden = false;
-        deleteIcon.style.display = "inline-block"; // Show delete icon
+        // deleteIcon.style.display = "inline-block";
         saveBtn.disabled = false;
       };
       img.src = e.target.result;
@@ -234,20 +310,20 @@ imageUpload.addEventListener("change", function (e) {
   }
 });
 
-deleteIcon.addEventListener("click", function (e) {
-  e.preventDefault();
-  context.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-  canvas.hidden = true;
-  deleteIcon.style.display = "none"; // Hide delete icon
-  saveBtn.disabled = true; // Disable save button until another image is uploaded or captured
-  imageUpload.value = ""; // Reset file input
-});
+
+// deleteIcon.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   context.clearRect(0, 0, canvas.width, canvas.height); 
+//   canvas.hidden = true;
+//   deleteIcon.style.display = "none";
+//   saveBtn.disabled = true; 
+//   imageUpload.value = ""; 
+// });
 
 saveBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  const itemName = document.getElementById("itemName").value;
+  const itemName = document.getElementById("newItemName").value;
 
-  // Only proceed if item name is provided
   if (itemName.trim() !== "") {
     canvas.toBlob(function (blob) {
       image = blob;
@@ -265,22 +341,16 @@ saveBtn.addEventListener("click", function (e) {
   // deleteIcon.style.display = 'none';
   // canvas.hidden=true;
   // video.hidden=true;
-  // Clear the itemName input field after initiating the save logic
   // document.getElementById('itemName').value = '';
 });
 
 async function handleBlob(blob, itemName) {
-  // Get a reference to the storage service
   const storageRef = firebase.storage().ref();
-  // Create a reference to the img file
   const imageRef = storageRef.child("photos/photo_" + Date.now() + ".jpg");
   try {
-    // Upload the file to the path 'photos/photo_(timestamp).jpg'
     const snapshot = await imageRef.put(blob);
-    // Get the URL of the uploaded file
     const imageUrl = await snapshot.ref.getDownloadURL();
 
-    // After uploading the image, save the item with the image URL
     addNewItemWithImage(itemName, imageUrl);
   } catch (error) {
     console.error("Error uploading image: ", error);
@@ -290,7 +360,9 @@ async function handleBlob(blob, itemName) {
 
 function addNewItemWithImage(itemName, imageUrl) {
   const db = firebase.firestore();
-  const itemData = { name: itemName };
+  const itemData = {
+    name: itemName
+  };
   if (imageUrl) {
     itemData.image = imageUrl;
   }
@@ -310,16 +382,14 @@ function addNewItemWithImage(itemName, imageUrl) {
 const showItemsBtn = document.getElementById("showItems");
 const itemsContainer = document.getElementById("itemsContainer");
 
-showItemsBtn.addEventListener("click", function (e) {
-  e.preventDefault();
-  fetchAndDisplayItems();
-});
+// showItemsBtn.addEventListener("click", function (e) {
+//   e.preventDefault();
+//   fetchAndDisplayItems();
+// });
 
 function fetchAndDisplayItems() {
-  // Clear previous items
   itemsContainer.innerHTML = "";
 
-  // Fetch items from Firestore
   firebase
     .firestore()
     .collection("items")
@@ -332,9 +402,7 @@ function fetchAndDisplayItems() {
         const name = document.createElement("h2");
         name.textContent = item.name;
 
-        // Create an image element
         const image = new Image();
-        // Set source to the base64 image string
         image.src = item.image;
 
         itemElement.appendChild(name);
@@ -361,7 +429,7 @@ btnSave.addEventListener("click", async function (e) {
     const snapshot = await imageRef.put(image);
     imageReference = await snapshot.ref.getDownloadURL();
   }
-  debugger;
+
   // store data
   await addDoc(collection(db, "users", `${userId}`, "inStorage"), {
     itemName: inputItemName,
@@ -470,7 +538,9 @@ btnSubmit.addEventListener("click", async (e) => {
     );
     const snapShot = await getDoc(queryUpdatedItem);
     const itemData = snapShot.data();
-    const idAndData = { [id]: itemData };
+    const idAndData = {
+      [id]: itemData
+    };
     orderedArrItem.push(idAndData);
   });
   console.log(orderedArrItem);
@@ -505,7 +575,7 @@ btnSubmit.addEventListener("click", async (e) => {
 // const listupPic = item.value != '' ? document.getElementById("listup-pic") : alert("Please enter Item Name");
 const modal = document.getElementById("easyModal");
 const buttonClose = document.getElementsByClassName("modalClose")[0];
-const itemName = document.getElementById("itemName");
+const newItemName = document.getElementById("newItemName");
 
 function setupEventListener() {
   const listupPic = document.getElementById("listup-pic");
@@ -521,40 +591,138 @@ function setupEventListener() {
 
 setupEventListener();
 
-// // pic icon is clicked
 // listupPic.addEventListener("click", function(e) {
-//   // Call modalOpen function with event object
 //   modalOpen(e);
 // });
 
 // Adjusted modalOpen function
-function modalOpen(e) {
-  e.preventDefault(); // Prevent default action
+function modalOpen(e, itemData = "") {
+  const option1 = document.getElementById('option1');
+  //e.preventDefault(); 
   // Check if item.value is not empty
-  if (item && item.value !== "") {
-    itemName.value = item.value; // Set the value of the modal input to the value of the item input
-    modal.style.display = "block";
+  if ((item && item.value !== "") || itemData) {
+    if (itemData) {
+      clearModal();
+      document.getElementById("newItemName").value = itemData.itemName;
+      modal.style.display = "block";
+
+      if (itemData.picture && itemData.picture !== "") {
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+        const img = new Image();
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx.drawImage(img, 0, 0);
+          canvas.hidden = false;
+        };
+        img.src = itemData.picture;
+      }
+    } else {
+      newItemName.value = item.value;
+      modal.style.display = "block";
+    }
   } else {
     alert("Please enter Item Name");
+    return;
   }
+  if (option1.checked) {
+    openCamera();
+  }
+}
+
+function clearModal() {
+  debugger
+  document.getElementById("newItemName").value = "";
+
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  const radioButtons = document.querySelectorAll('input[type="radio"][name="options"]');
+  radioButtons.forEach(radio => {
+    radio.checked = false;
+  });
+
+  document.getElementById("capture").style.display = "none";
+  document.getElementById("retake").style.display = "none";
+  document.getElementById("uploadButton").style.display = "none";
+  document.getElementById("save").style.display = "none";
 }
 
 // close sign is clicked
 buttonClose.addEventListener("click", modalClose);
+
 function modalClose() {
-  item.value = itemName.value;
+  item.value = newItemName.value;
   modal.style.display = "none";
 }
 
 // you can close modal by clicking any place.
 addEventListener("click", outsideClose);
+
 function outsideClose(e) {
   if (e.target == modal) {
-    item.value = itemName.value;
+    item.value = newItemName.value;
     modal.style.display = "none";
   }
 }
 
+function openCamera() {
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true
+      })
+      .then(function (localStream) {
+        stream = localStream;
+        video.srcObject = stream;
+        video.hidden = false;
+        captureBtn.disabled = false;
+        captureBtn.style.display = "inline-block";
+        uploadButton.style.display = "none";
+        saveBtn.style.display = "inline-block";
+      })
+      .catch(function (err) {
+        console.log("An error occurred: " + err);
+      });
+  }
+}
+
+function handleCaptureImageSelected() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.hidden = true;
+  imageUpload.value = "";
+  openCamera();
+}
+
+function handleUploadImageSelected() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  canvas.hidden = true;
+  imageUpload.value = "";
+  imageUpload.click();
+  canvas.hidden = true;
+  captureBtn.disabled = true;
+  video.hidden = true;
+  captureBtn.style.display = "none";
+  uploadButton.style.display = "inline-block";
+  retakeBtn.disabled = true;
+  retakeBtn.style.display = "none";
+  saveBtn.style.display = "inline-block";
+
+}
+
+document.getElementById('option1').addEventListener('change', function () {
+  if (this.checked) {
+    handleCaptureImageSelected();
+  }
+});
+
+document.getElementById('option2').addEventListener('change', function () {
+  if (this.checked) {
+    handleUploadImageSelected();
+  }
+});
 // ----------------------------------------
 
 // Another way of getting data from Subcollection --------------------

@@ -1,185 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test DB</title>
-    <!-- <script src="trydb.js" type="module"></script> -->
-    <script src="booking.js" type="module" defer></script>
-    <script
-      src="https://kit.fontawesome.com/8611811e56.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <link rel="stylesheet" href="style2.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <header>
-      <h1>Test DB_Handling</h1>
 
-      <div class="a-wrapper">
-        <!-- <a href="booking.html">Basic booking</a> -->
-        <a href="storageMgmt.html">Storage mgmt</a>
-      </div>
-    </header>
-    <main>
-      <form id="form_list">
-        <div class="name-wrapper">
-          <div class="fname">
-            <label>Firstname</label>
-            <input type="text" id="firstname" />
-          </div>
-          <div class="lname">
-            <label>Lastname</label>
-            <input type="text" id="lastname" />
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test DB</title>
+  <!-- <script src="trydb.js" type="module"></script> -->
+  <script src="booking.js" type="module" defer></script>
+  <script src="https://kit.fontawesome.com/8611811e56.js" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <link rel="stylesheet" href="style2.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <h1>Test DB_Handling</h1>
+
+    <div class="a-wrapper">
+      <!-- <a href="booking.html">Basic booking</a> -->
+      <a href="storageMgmt.html">Storage mgmt</a>
+    </div>
+  </header>
+  <main>
+    <form id="form_list">
+      <div class="name-wrapper">
+        <div class="fname">
+          <label>Firstname</label>
+          <input type="text" id="firstname" />
         </div>
-        <div class="item-wrapper">
-          <label>Write an item to store</label>
-          <input type="text" id="item" /><i
-            class="fa-regular fa-image icon"
-            id="listup-pic"
-          ></i>
-          <!-- MODAL -->
-          <div id="easyModal" class="modal">
-            <div class="modal-content">
-              <!-- <div class="modal-header">
+        <div class="lname">
+          <label>Lastname</label>
+          <input type="text" id="lastname" />
+        </div>
+      </div>
+      <div class="item-wrapper">
+        <label>Write an item to store</label>
+        <input type="text" id="item" /><i class="fa-regular fa-image icon" id="listup-pic"></i>
+        <!-- MODAL -->
+        <div id="easyModal" class="modal">
+          <div class="modal-content">
+            <!-- <div class="modal-header">
                 <h1>Great job 🎉</h1>
                 <span class="modalClose">×</span>
               </div> -->
-              <div class="modal-body">
-                <!-- HTML from Prathibha -->
+            <div class="modal-body">
+              <!-- HTML from Prathibha -->
+              <div>
                 <div>
-                  <label for="itemName">Item:</label>
-                  <input type="text" id="itemName" placeholder="Enter item name">
-                  <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i>
+                  <label for="itemName">Item Name*</label>
+                  <input type="text" id="newItemName" placeholder="Enter item name">
+                </div>
+                <div>
+                  <label for="imageOption">Capture Image or Upload Image (Optional)</label>
+                  <div id="radioContainer">
+                    <input type="radio" id="option1" name="options" value="option1">
+                    <label for="option1">Capture Image</label>
+                    <input type="radio" id="option2" name="options" value="option2">
+                    <label for="option2">Upload Image</label>
+                  </div>
+                </div>
+                <!-- <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i> -->
               </div>
-              <video id="video" width="320" height="240" autoplay hidden></video>
-              <button id="capture" type="button" style="display: none;" disabled>Capture Image</button>
-              <canvas id="canvas" width="320" height="240" hidden></canvas>
-              <button id="retake" style="display: none;" disabled>Retake Image</button>
-              <input type="file" id="imageUpload" accept="image/*" hidden>
-              <button id="uploadButton" class="button" style="display: none;">Upload Image</button>
-              <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i>
-              
-              
-              
-              <button id="save" style="display: none;" disabled>+ Add Image</button>
-              <div id="itemsContainer"></div>
-              
-              <button id="showItems">Show Items</button>
-              <div id="itemsContainer"></div>
-                <!-- end -->
+              <div>
+                <div>
+                  <video id="video" width="320" height="240" autoplay hidden></video>
+                </div>
+                <div>
+                  <canvas id="canvas" width="320" height="240" hidden></canvas>
+                  <input type="file" id="imageUpload" accept="image/*" hidden>
+                  <!-- <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i> -->
+                </div>
+                <div class="button-row">
+                  <button id="capture" type="button" style="display: none;" disabled>Capture Image</button>
+                  <button id="retake" style="display: none;" disabled>Retake Image</button>
+                  <button id="uploadButton" class="button" style="display: none;">Upload Image</button>
+                  <button id="save" style="display: none;" disabled>+ Add Image</button>
+                </div>
               </div>
-              <span class="modalClose">×</span>
-            </div>
-          </div>
+              <div id="itemsContainer"></div>
 
-          <!-- <button type="submit" class="btn-delete">delete</button> -->
+              <!-- <button id="showItems">Show Items</button> -->
+              <div id="itemsContainer"></div>
+              <!-- end -->
+            </div>
+            <span class="modalClose">×</span>
+          </div>
         </div>
 
-        <button id="btnSave" type="submit">
-          <i class="fa-regular fa-floppy-disk"></i> Save
-        </button>
-        <!-- <button id="btnLoad" type="submit">
+        <!-- <button type="submit" class="btn-delete">delete</button> -->
+      </div>
+
+      <button id="btnSave" type="submit">
+        <i class="fa-regular fa-floppy-disk"></i> Save
+      </button>
+      <!-- <button id="btnLoad" type="submit">
           <i class="fa-solid fa-rotate-right"></i> Load saved data
         </button> -->
 
-        <div class="item-list-wrapper">
-          <h3>Current item list_on going</h3>
-          <ul id="item-list">
-            <p>You item list...</p>
-          </ul>
+      <div class="item-list-wrapper">
+        <h3>Current item list_on going</h3>
+        <ul id="item-list">
+          <p>You item list...</p>
+        </ul>
+      </div>
+
+      <div class="delivery">
+        <h3>Pick up information</h3>
+        <div class="detail">
+          <label>Detail address</label>
+          <input type="text" id="detail" />
         </div>
-
-        <div class="delivery">
-          <h3>Pick up information</h3>
-          <div class="detail">
-            <label>Detail address</label>
-            <input type="text" id="detail" />
-          </div>
-          <div class="city">
-            <label>City</label>
-            <input type="text" id="city" />
-          </div>
-          <div class="province">
-            <label>Province</label>
-            <input type="text" id="province" />
-          </div>
-          <div class="zip">
-            <label>Zip Code</label>
-            <input type="text" id="zip" />
-          </div>
+        <div class="city">
+          <label>City</label>
+          <input type="text" id="city" />
         </div>
-
-        <div class="plan">
-          <h3>Choose your plan</h3>
-          <div class="size">
-            <label>Your storage size</label>
-            <select id="size-plan">
-              <option id="size-option" value="none">
-                --please choose your plan--
-              </option>
-            </select>
-          </div>
-          <div class="term">
-            <label>Term Length</label>
-            <select id="term-plan">
-              <option id="term-option" value="none">
-                --please choose your plan--
-              </option>
-            </select>
-          </div>
-          <div class="priceBox">
-            <p>Your price</p>
-            <p id="price"></p>
-          </div>
+        <div class="province">
+          <label>Province</label>
+          <input type="text" id="province" />
         </div>
-
-        <div>
-          <button id="btnSubmit" type="submit">
-            <i class="fa-solid fa-suitcase"></i> Submit
-          </button>
+        <div class="zip">
+          <label>Zip Code</label>
+          <input type="text" id="zip" />
         </div>
+      </div>
 
-        <div><button id="btnSet">Set</button></div>
+      <div class="plan">
+        <h3>Choose your plan</h3>
+        <div class="size">
+          <label>Your storage size</label>
+          <select id="size-plan">
+            <option id="size-option" value="none">
+              --please choose your plan--
+            </option>
+          </select>
+        </div>
+        <div class="term">
+          <label>Term Length</label>
+          <select id="term-plan">
+            <option id="term-option" value="none">
+              --please choose your plan--
+            </option>
+          </select>
+        </div>
+        <div class="priceBox">
+          <p>Your price</p>
+          <p id="price"></p>
+        </div>
+      </div>
 
-        <!-- USED only in data registration -->
-        <!-- <div><button id="x">Set</button></div> -->
-      </form>
-    </main>
-  </body>
+      <div>
+        <button id="btnSubmit" type="submit">
+          <i class="fa-solid fa-suitcase"></i> Submit
+        </button>
+      </div>
 
-  <!-- FROM Prathibha configs-->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-  />
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-      authDomain: "fir-jan24.firebaseapp.com",
-      projectId: "fir-jan24",
-      storageBucket: "fir-jan24.appspot.com",
-      messagingSenderId: "831417179844",
-      appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-      measurementId: "G-DSYKEF99M1",
-    };
+      <div><button id="btnSet">Set</button></div>
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+      <!-- USED only in data registration -->
+      <!-- <div><button id="x">Set</button></div> -->
+    </form>
+  </main>
+</body>
 
-    // Access Firebase services using the compat API
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-  </script>
+<!-- FROM Prathibha configs-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
+    authDomain: "fir-jan24.firebaseapp.com",
+    projectId: "fir-jan24",
+    storageBucket: "fir-jan24.appspot.com",
+    messagingSenderId: "831417179844",
+    appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
+    measurementId: "G-DSYKEF99M1",
+  };
+
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // Access Firebase services using the compat API
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+</script>
+
 </html>
