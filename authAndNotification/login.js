@@ -216,6 +216,7 @@ btnSignup.onclick = (e) => {
                     firstName: fname,
                     lastName: lname,
                   },
+                  firstVisit: true,
                 });
 
                 window.location.href = "after-login.html";
