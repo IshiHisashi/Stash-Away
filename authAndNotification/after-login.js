@@ -6,6 +6,8 @@ import {
   onSnapshot,
   query,
   db,
+  getDoc,
+  updateDoc,
 } from "./firebase_firestore.js";
 
 let uid = null;
@@ -30,19 +32,38 @@ onAuthStateChanged(auth, (user) => {
     // notification test ////////////////////////////
 
     // check if the visitor can use notifications.
-    // FIX LATER - this introduction notification should happen only when the user first visits this page.
     if (!("Notification" in window)) {
       alert("This browser does not support desktop notification.");
     } else if (Notification.permission === "granted") {
-      new Notification("StashAway", {
-        body: "Hi there! We will utilize notifications to let you know your order status updates!",
-      });
+      (async () => {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.data().firstVisit) {
+          new Notification("StashAway", {
+            body: "Hi there! We will utilize notifications to let you know your order status updates!",
+          });
+          await updateDoc(docRef, {
+            firstVisit: false,
+          });
+        }
+      })();
     } else {
       Notification.requestPermission().then((permission) => {
         if (permission === "granted") {
-          new Notification("StashAway", {
-            body: "Hi there! Thank you for granting our notifications! You will get realtime order status updates!",
-          });
+          (async () => {
+            const docRef = doc(db, "users", uid);
+            const docSnap = await getDoc(docRef);
+
+            if (docSnap.data().firstVisit) {
+              new Notification("StashAway", {
+                body: "Hi there! Thank you for granting our notifications! You will get realtime order status updates!",
+              });
+              await updateDoc(docRef, {
+                firstVisit: false,
+              });
+            }
+          })();
         }
       });
     }

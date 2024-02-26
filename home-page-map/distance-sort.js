@@ -17,7 +17,7 @@ class City {
 }
 const cityArray = [];
 
-// 🚨🚨🚨 Get data from database as an array and use loop to make city objects and store them right away
+// Get data from database as an array and use loop to make city objects and store them right away
 
 for (let i in geo.storageLocationArr) {
   let stName = geo.storageLocationArr[i][1].name;
@@ -30,10 +30,12 @@ for (let i in geo.storageLocationArr) {
   cityArray.push(cityObj);
 }
 
-// 🚨 DUE TO QPS (QUOTA PER SECOND, WHICH IS 5 QUOTAS PER SECOND) OF ROUTING API FOR FREE ACOUNT, I LIMITED THE NUMBER OF LOCATIONS ONLY 5. AFTER ASKING AMANDEEP, WE MAY BE ABLE TO ADD THE LAST THREE CITIES AGAIN　🚨
+// DUE TO QPS (QUOTA PER SECOND, WHICH IS 5 QUOTAS PER SECOND) OF ROUTING API FOR FREE ACOUNT, I LIMITED THE NUMBER OF LOCATIONS ONLY 5.
 
 console.log("👇 A list of cities in an array");
 console.log(cityArray);
+
+const body = document.querySelector("body");
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -74,11 +76,12 @@ if (navigator.geolocation) {
 
       waitforpromises();
 
-      // This function waits until all the calculation promises are done. And once all of them are done, it fires sort function below
+      // This function waits until all the calculation promises are done. And once all of them are done, it fires sort
       async function waitforpromises() {
         await Promise.all(promises);
         console.log("All calc distance Resolved");
         sortAndShow();
+        changeIcon();
       }
 
       // SORT AND SHOW IN THE BAR ================================
@@ -94,13 +97,39 @@ if (navigator.geolocation) {
           document.getElementById(idName).value = cityArray[i].name;
           document.querySelector(
             `[for="${idName}"]`
-          ).innerHTML = `Location: ${cityArray[i].name}<br>Distance: ${cityArray[i].distance} mtrs`;
+          ).innerHTML = `Location: ${cityArray[i].name}<br>Distance: ${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs`;
         }
       }
 
       // FUNCTION FOR SORTING =========================================
       function compare(a, b) {
         return a.distance - b.distance;
+      }
+
+      // ICON CHANGE ============================================
+      function changeIcon() {
+        const inputRadioBtns = document.querySelectorAll("input");
+        for (let i = 0; i < inputRadioBtns.length - 1; i++) {
+          inputRadioBtns[i].addEventListener("click", () => {
+            body.id = `${inputRadioBtns[i].value}`;
+          });
+        }
+
+        // 🚨 FIX THISSSSS!!!!!
+        const markers = document.querySelectorAll(".loc-marker");
+        for (let i = 0; i < markers.length; i++) {
+          markers[i].addEventListener("click", () => {
+            let bodyId = markers[i].id.slice(7);
+            body.id = bodyId;
+            let cityOption = document.querySelector(`input[value="${bodyId}"]`)
+            // for (let j = 0; j < inputRadioBtns.length - 1; j++) {
+            //   inputRadioBtns[j].checked = false;
+            //   console.log(inputRadioBtns[j]);
+            // }
+            cityOption.setAttribute("checked", "")
+            console.log(cityOption);
+          });
+        }
       }
 
       // SELECTED CITY'S VALUE IS STORED HERE=======================
@@ -121,7 +150,7 @@ if (navigator.geolocation) {
         geo.updateStorageLocation(selectedCityObj);
 
         alert(
-          `Location: ${selectedCity} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`
+          `Location: ${selectedCityObj.name} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`
         );
       });
 
@@ -146,6 +175,7 @@ if (navigator.geolocation) {
       for (let i in cityArray) {
         var element = document.createElement("div");
         element.className = "loc-marker";
+        element.id = `marker-${cityArray[i].name}`;
         var newMarker = new tt.Marker({ element: element })
           .setLngLat(cityArray[i].geoLoc)
           .addTo(map);

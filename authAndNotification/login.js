@@ -165,7 +165,7 @@ btnSignup.onclick = (e) => {
           // !!!! SMS daily quota for a free account is 10/day !!!!
           // You can use fictional phone numbers for testing: https://firebase.google.com/docs/auth/web/phone-auth?hl=en&authuser=1&_gl=1*9gny7c*_up*MQ..*_ga*MjA1ODE1NjUyNy4xNzA4MzU4MzYy*_ga_CW55HF8NVT*MTcwODM1ODM2MS4xLjAuMTcwODM1ODM2MS4wLjAuMA..#test-with-fictional-phone-numbers
 
-          // FIX LATER - SMS is sent when using a fictional phone number, but when using an actual phone number, SMS is not sent and I get this error: FirebaseError: Firebase: Hostname match not found (auth/captcha-check-failed).
+          // SMS sending issue fixed - be aware of authorized domains!
 
           auth.useDeviceLanguage();
           window.recaptchaVerifier = new RecaptchaVerifier(auth, "signup", {
@@ -216,6 +216,7 @@ btnSignup.onclick = (e) => {
                     firstName: fname,
                     lastName: lname,
                   },
+                  firstVisit: true,
                 });
 
                 window.location.href = "after-login.html";
