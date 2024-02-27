@@ -108,8 +108,8 @@ if (navigator.geolocation) {
 
       // ICON CHANGE ============================================
       function changeIcon() {
-        const inputRadioBtns = document.querySelectorAll("input");
-        for (let i = 0; i < inputRadioBtns.length - 1; i++) {
+        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        for (let i = 0; i < inputRadioBtns.length; i++) {
           inputRadioBtns[i].addEventListener("click", () => {
             body.id = `${inputRadioBtns[i].value}`;
           });
@@ -121,13 +121,13 @@ if (navigator.geolocation) {
           markers[i].addEventListener("click", () => {
             let bodyId = markers[i].id.slice(7);
             body.id = bodyId;
+            for (let j = 0; j < inputRadioBtns.length; j++) {
+              if (inputRadioBtns[j].checked) {
+                inputRadioBtns[j].removeAttribute("checked");
+              }
+            }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`)
-            // for (let j = 0; j < inputRadioBtns.length - 1; j++) {
-            //   inputRadioBtns[j].checked = false;
-            //   console.log(inputRadioBtns[j]);
-            // }
             cityOption.setAttribute("checked", "")
-            console.log(cityOption);
           });
         }
       }
