@@ -69,18 +69,20 @@ if (navigator.geolocation) {
         let response = await fetch(url);
         let data = await response.json();
         console.log(data);
-        document.getElementById("signupaddressdetail").value =
+        if (data.addresses[0].address.streetNameAndNumber){
+          document.getElementById("signupaddressdetail").value =
           data.addresses[0].address.streetNameAndNumber;
-        document.getElementById("signupcity").value =
+        }
+        if (data.addresses[0].address.municipality){
+          document.getElementById("signupcity").value =
           data.addresses[0].address.municipality;
-        document.getElementById("signuppostalcode").value =
+        }
+        if (data.addresses[0].address.extendedPostalCode){
+          document.getElementById("signuppostalcode").value =
           data.addresses[0].address.extendedPostalCode;
-        var myA = data.addresses[0].address.streetNameAndNumber.split(/(\d+)/g);
-        console.log(myA[1]);
+        }
         return data;
       }
-
-      // 🚨🚨🚨 Store the data into the DB!!!
 
       let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`;
 
