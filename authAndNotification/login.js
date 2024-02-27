@@ -128,28 +128,20 @@ btnSignup.onclick = (e) => {
   const password = document.querySelector("#signuppassword").value;
 
   // GEOCODING ADDRESS AND STORE
-  let cutAddress = addressdetail.split(" ");
-  let houseNum = cutAddress[0];
-  let streetName = cutAddress[1];
-  for (var i = 2; i < cutAddress.length - 1; i++) {
-    streetName += " " + cutAddress[i];
-  }
   const geoCodeArray = [];
-
-  async function getGeoCode(url) {
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    geoCodeArray.push(data.results[0].position.lon);
-    geoCodeArray.push(data.results[0].position.lat);
+  let wholeAddress = `${addressdetail}, ${city}, Britich Columbia`
+  tt.services.geocode({
+    key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+    query: wholeAddress,
+  })
+  .then((response) => {
+    console.log(response);
+    let userLat = response.results[0].position.lat;
+    let userLon = response.results[0].position.lng;
+    geoCodeArray.push(userLon);
+    geoCodeArray.push(userLat);
     console.log(geoCodeArray);
-    return data;
-  }
-
-  let geocodeUrl = `https://api.tomtom.com/search/2/structuredGeocode.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&countryCode=CA&streetNumber=${houseNum}&streetName=${streetName}&municipality=${city}
-  &countrySubdivision=BC`;
-
-  getGeoCode(geocodeUrl);
+  })
 
   // create an account with Firebase auth
   createUserWithEmailAndPassword(auth, email, password)
