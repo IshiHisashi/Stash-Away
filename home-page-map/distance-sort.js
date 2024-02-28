@@ -81,7 +81,8 @@ if (navigator.geolocation) {
         await Promise.all(promises);
         console.log("All calc distance Resolved");
         sortAndShow();
-        changeIcon();
+        changeIconForDiv();
+        changeIconForLabel();
         clickMarker();
       }
 
@@ -108,14 +109,32 @@ if (navigator.geolocation) {
       }
 
       // ICON CHANGE ============================================
-      function changeIcon() {
+      function changeIconForDiv() {
         const inputDiv = document.querySelectorAll('fieldset div');
         const inputRadioBtns = document.querySelectorAll('input[name="location"]');
         for (let i = 0; i < inputRadioBtns.length; i++) {
           inputDiv[i].addEventListener("click", () => {
             body.id = `${inputRadioBtns[i].value}`;
             for (let p = 0; p < inputRadioBtns.length; p++) {
-                inputRadioBtns[p].removeAttribute("checked");
+              inputRadioBtns[p].removeAttribute("checked");
+              console.log(inputRadioBtns[p]);
+            }
+            let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
+            cityOption.setAttribute("checked", "")
+            console.log(cityOption);
+          });
+        }
+      }
+
+      function changeIconForLabel() {
+        const labels = document.querySelectorAll('fieldset div label');
+        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        for (let i = 0; i < inputRadioBtns.length; i++) {
+          labels[i].addEventListener("click", (e) => {
+            e.preventDefault();
+            body.id = `${inputRadioBtns[i].value}`;
+            for (let p = 0; p < inputRadioBtns.length; p++) {
+              inputRadioBtns[p].removeAttribute("checked");
               console.log(inputRadioBtns[p]);
             }
             let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
@@ -133,7 +152,7 @@ if (navigator.geolocation) {
             let bodyId = markers[i].id.slice(7);
             body.id = bodyId;
             for (let j = 0; j < inputRadioBtns.length; j++) {
-                inputRadioBtns[j].removeAttribute("checked");
+              inputRadioBtns[j].removeAttribute("checked");
               console.log(inputRadioBtns[j]);
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`)
