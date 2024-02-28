@@ -122,6 +122,7 @@ btnSignup.onclick = (e) => {
   const lname = document.querySelector("#signuplname").value;
   const phone = document.querySelector("#signupphone").value;
   const email = document.querySelector("#signupemail").value;
+  const roomNumEtc = document.querySelector("#signuproomnumberetc").value;
   const addressdetail = document.querySelector("#signupaddressdetail").value;
   const city = document.querySelector("#signupcity").value;
   const postalcode = document.querySelector("#signuppostalcode").value;
@@ -198,6 +199,7 @@ btnSignup.onclick = (e) => {
                     city: city,
                     country: "Canada",
                     detail: addressdetail,
+                    roomNumEtc: roomNumEtc,
                     province: "British Columbia",
                     zipCode: postalcode,
                     geoCode: geoCodeArray,

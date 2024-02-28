@@ -81,7 +81,9 @@ if (navigator.geolocation) {
         await Promise.all(promises);
         console.log("All calc distance Resolved");
         sortAndShow();
-        changeIcon();
+        changeIconForDiv();
+        changeIconForLabel();
+        clickMarker();
       }
 
       // SORT AND SHOW IN THE BAR ================================
@@ -107,30 +109,59 @@ if (navigator.geolocation) {
       }
 
       // ICON CHANGE ============================================
-      function changeIcon() {
+      function changeIconForDiv() {
+        const inputDiv = document.querySelectorAll('fieldset div');
         const inputRadioBtns = document.querySelectorAll('input[name="location"]');
         for (let i = 0; i < inputRadioBtns.length; i++) {
-          inputRadioBtns[i].addEventListener("click", () => {
+          inputDiv[i].addEventListener("click", () => {
             body.id = `${inputRadioBtns[i].value}`;
+            for (let p = 0; p < inputRadioBtns.length; p++) {
+              inputRadioBtns[p].removeAttribute("checked");
+              console.log(inputRadioBtns[p]);
+            }
+            let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
+            cityOption.setAttribute("checked", "")
+            console.log(cityOption);
           });
         }
+      }
 
-        // 🚨 FIX THISSSSS!!!!!
+      function changeIconForLabel() {
+        const labels = document.querySelectorAll('fieldset div label');
+        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        for (let i = 0; i < inputRadioBtns.length; i++) {
+          labels[i].addEventListener("click", (e) => {
+            e.preventDefault();
+            body.id = `${inputRadioBtns[i].value}`;
+            for (let p = 0; p < inputRadioBtns.length; p++) {
+              inputRadioBtns[p].removeAttribute("checked");
+              console.log(inputRadioBtns[p]);
+            }
+            let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
+            cityOption.setAttribute("checked", "")
+            console.log(cityOption);
+          });
+        }
+      }
+
+      function clickMarker() {
         const markers = document.querySelectorAll(".loc-marker");
+        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
         for (let i = 0; i < markers.length; i++) {
           markers[i].addEventListener("click", () => {
             let bodyId = markers[i].id.slice(7);
             body.id = bodyId;
             for (let j = 0; j < inputRadioBtns.length; j++) {
-              if (inputRadioBtns[j].checked) {
-                inputRadioBtns[j].removeAttribute("checked");
-              }
+              inputRadioBtns[j].removeAttribute("checked");
+              console.log(inputRadioBtns[j]);
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`)
+            console.log(cityOption);
             cityOption.setAttribute("checked", "")
           });
         }
       }
+
 
       // SELECTED CITY'S VALUE IS STORED HERE=======================
 
