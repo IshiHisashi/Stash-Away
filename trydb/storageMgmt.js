@@ -60,10 +60,10 @@ const renderList = function (snapShot) {
         `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-      <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
+      <p class="item-name">${item.itemName} ${
           item.status === "retrieved"
             ? "| retrieved"
-            : item.status === "requested"
+            : item.status === "retrieval requested"
             ? "| on request"
             : ""
         }</p> 
@@ -154,10 +154,10 @@ btnSearch.addEventListener("click", (e) => {
         `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">Box #${item.boxNumber} : ${item.itemName} ${
+    <p class="item-name">${item.itemName} ${
           item.status === "retrieved"
             ? "| retrieved"
-            : item.status === "requested"
+            : item.status === "retrieval requested"
             ? "| on request"
             : ""
         }</p>
@@ -268,7 +268,7 @@ btnRetrieve.addEventListener("click", async (e) => {
     itemKey: checkedArr,
     orderDate: "2024-01-31",
     orderType: "retrieval",
-    status: "retrieval requested",
+    status: "requested",
     address: {
       detail: `${detailAddress.value}`,
       city: `${city.value}`,
