@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Driver's End</title>
+
+    <!-- tomtom map services CDN -->
+    <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/services/services-web.min.js"></script>
+
+    <script src="script_driver.js" defer type="module"></script>
+    <!-- <script src="script_driver.js" defer></script> -->
+
+    <style>
+      form {
+        border: 1px solid grey;
+
+        opacity: 1;
+        transition: opacity 1s ease-in-out;
+      }
+
+      form.done {
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Driver's End</h1>
+
+    <section class="orders adding">
+      <h2>Pick Up Orders</h2>
+    </section>
+    <section class="orders retrieval">
+      <h2>Delivery Orders</h2>
+    </section>
+  </body>
+</html>
