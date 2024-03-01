@@ -72,7 +72,7 @@ const renderList = function (snapShot) {
       );
     }
     // Disable checkbox if the item is on retrieval request.
-    if (item.status === "requested" || item.status === "retrieved") {
+    if (item.status === "retrieval requested" || item.status === "retrieved") {
       document.getElementById(`check_${itemID}`).disabled = true;
     }
   });
@@ -166,7 +166,7 @@ btnSearch.addEventListener("click", (e) => {
       );
     }
     // Disable checkbox if the item is on retrieval request.
-    if (item.status === "requested" || item.status === "retrieved") {
+    if (item.status === "requested" || item.status === "retrieval retrieved") {
       document.getElementById(`check_${itemID}`).disabled = true;
     }
   });
@@ -232,7 +232,7 @@ const checkedDocs = [];
 btnRetrieve.addEventListener("click", async (e) => {
   e.preventDefault();
   // Process1 : extract checked items and compress them into arr.
-  checkboxes.forEach(async (el) => {
+  Array.from(checkboxes).forEach(async (el) => {
     if (el.checked) {
       // Extract option#1 : Simple Arr with IDs
       const checkedID = el.id.split("_")[1];
