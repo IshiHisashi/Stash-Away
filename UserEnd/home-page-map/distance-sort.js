@@ -1,11 +1,11 @@
 import * as geo from "./geo.js";
 
 // Company's location
-console.log(geo.storageLocationObj);
-console.log(geo.storageLocationArr);
+// console.log(geo.storageLocationObj);
+// console.log(geo.storageLocationArr);
 
 // user's data
-console.log(geo.userAddress);
+// console.log(geo.userAddress);
 
 class City {
   constructor(name, geoLoc, address) {
@@ -117,11 +117,9 @@ if (navigator.geolocation) {
             body.id = `${inputRadioBtns[i].value}`;
             for (let p = 0; p < inputRadioBtns.length; p++) {
               inputRadioBtns[p].removeAttribute("checked");
-              console.log(inputRadioBtns[p]);
             }
             let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
             cityOption.setAttribute("checked", "")
-            console.log(cityOption);
           });
         }
       }
@@ -135,11 +133,9 @@ if (navigator.geolocation) {
             body.id = `${inputRadioBtns[i].value}`;
             for (let p = 0; p < inputRadioBtns.length; p++) {
               inputRadioBtns[p].removeAttribute("checked");
-              console.log(inputRadioBtns[p]);
             }
             let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
             cityOption.setAttribute("checked", "")
-            console.log(cityOption);
           });
         }
       }
@@ -153,10 +149,8 @@ if (navigator.geolocation) {
             body.id = bodyId;
             for (let j = 0; j < inputRadioBtns.length; j++) {
               inputRadioBtns[j].removeAttribute("checked");
-              console.log(inputRadioBtns[j]);
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`)
-            console.log(cityOption);
             cityOption.setAttribute("checked", "")
           });
         }
@@ -167,8 +161,7 @@ if (navigator.geolocation) {
 
       var selectedCity = "";
       const submitBtn = document.getElementById("submit");
-      submitBtn.addEventListener("click", function (event) {
-        event.preventDefault();
+      submitBtn.addEventListener("click", function () {
         // ----Ishi revised & added----
         // Specify specific obj as a data pacaked to be sent
         selectedCity = document.querySelector(

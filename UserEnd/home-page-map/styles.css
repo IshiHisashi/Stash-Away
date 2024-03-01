@@ -34,6 +34,10 @@ main {
   height: 50px;
 }
 
+#Richmond fieldset div:has(input[value="Richmond"]), #North-Vancouver fieldset div:has(input[value="North-Vancouver"]), #Surrey fieldset div:has(input[value="Surrey"]), #Coquitlam fieldset div:has(input[value="Coquitlam"]), #Abbotsford fieldset div:has(input[value="Abbotsford"]) {
+  background-color: rgb(252, 140, 140);
+}
+
 fieldset div {
   width: 100%;
   min-height: 50px;

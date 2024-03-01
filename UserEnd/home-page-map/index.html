@@ -34,29 +34,30 @@
             <div>
               <!-- 🚨 ADD VISUALLY HIDDEN TO THE INPUT LATER 🚨 -->
               <!-- For some reason, if a user taps input(radio button) it messes up all the functionality to change markers, and select locations. And anyways in the alpha demo, we're not gonna show the radio button itself. It rather is gonna be if users select a location, the location item in the list is hilightted or something. So I'll just hide the radio button and style everything else. -->
-              <input type="radio" id="location-0" name="location" value="" />
+              <input type="radio" id="location-0" name="location" value="" class="visually-hidden" />
               <label for="location-0"></label>
             </div>
             <div>
-              <input type="radio" id="location-1" name="location" value="" />
+              <input type="radio" id="location-1" name="location" value="" class="visually-hidden" />
               <label for="location-1"></label>
             </div>
             <div>
-              <input type="radio" id="location-2" name="location" value="" />
+              <input type="radio" id="location-2" name="location" value="" class="visually-hidden" />
               <label for="location-2"></label>
             </div>
             <div>
-              <input type="radio" id="location-3" name="location" value="" />
+              <input type="radio" id="location-3" name="location" value="" class="visually-hidden" />
               <label for="location-3"></label>
             </div>
             <div>
-              <input type="radio" id="location-4" name="location" value="" />
+              <input type="radio" id="location-4" name="location" value="" class="visually-hidden" />
               <label for="location-4"></label>
             </div>
           </fieldset>
-          <input id="submit" type="submit" value="submit" />
+          <button id="submit" type="submit" value="submit">
+            <a href="../trydb/booking.html">Proceed</a>
+          </button>
         </form>
-        <a id="nextpage" href="../trydb/booking.html">next page</a>
       </div>
       <div class="map-container">
         <div id="map" class="map"></div>
