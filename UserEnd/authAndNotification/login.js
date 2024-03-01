@@ -69,17 +69,17 @@ if (navigator.geolocation) {
         let response = await fetch(url);
         let data = await response.json();
         console.log(data);
-        if (data.addresses[0].address.streetNameAndNumber){
+        if (data.addresses[0].address.streetName) {
           document.getElementById("signupaddressdetail").value =
-          data.addresses[0].address.streetNameAndNumber;
+            data.addresses[0].address.streetName;
         }
-        if (data.addresses[0].address.municipality){
+        if (data.addresses[0].address.municipality) {
           document.getElementById("signupcity").value =
-          data.addresses[0].address.municipality;
+            data.addresses[0].address.municipality;
         }
-        if (data.addresses[0].address.extendedPostalCode){
+        if (data.addresses[0].address.extendedPostalCode) {
           document.getElementById("signuppostalcode").value =
-          data.addresses[0].address.extendedPostalCode;
+            data.addresses[0].address.extendedPostalCode;
         }
         return data;
       }
@@ -130,19 +130,20 @@ btnSignup.onclick = (e) => {
 
   // GEOCODING ADDRESS AND STORE
   const geoCodeArray = [];
-  let wholeAddress = `${addressdetail}, ${city}, Britich Columbia`
-  tt.services.geocode({
-    key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-    query: wholeAddress,
-  })
-  .then((response) => {
-    console.log(response);
-    let userLat = response.results[0].position.lat;
-    let userLon = response.results[0].position.lng;
-    geoCodeArray.push(userLon);
-    geoCodeArray.push(userLat);
-    console.log(geoCodeArray);
-  })
+  let wholeAddress = `${addressdetail}, ${city}, Britich Columbia`;
+  tt.services
+    .geocode({
+      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      query: wholeAddress,
+    })
+    .then((response) => {
+      console.log(response);
+      let userLat = response.results[0].position.lat;
+      let userLon = response.results[0].position.lng;
+      geoCodeArray.push(userLon);
+      geoCodeArray.push(userLat);
+      console.log(geoCodeArray);
+    });
 
   // create an account with Firebase auth
   createUserWithEmailAndPassword(auth, email, password)
