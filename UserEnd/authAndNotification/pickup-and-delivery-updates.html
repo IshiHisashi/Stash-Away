@@ -11,6 +11,17 @@
     <script src="pickup-and-delivery-updates.js" type="module" defer></script>
 
     <style>
+      body {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        column-gap: 1rem;
+      }
+
+      h1,
+      body > p {
+        grid-column: 1/-1;
+      }
+
       section > div {
         border: 1px solid grey;
       }

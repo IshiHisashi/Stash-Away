@@ -10,6 +10,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -45,6 +46,7 @@ const update = async (uid, oid, eta, driver = null) => {
       driverId: `${driver.value}`,
       status: "on going",
       ETA: eta,
+      departTimestamp: serverTimestamp(),
     });
   } else {
     await updateDoc(query(doc(db, "users", `${uid}`, "order", `${oid}`)), {

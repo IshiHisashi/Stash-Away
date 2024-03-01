@@ -88,20 +88,20 @@ if (navigator.geolocation) {
 
       getAddress(addressUrl);
 
-      const map = tt.map({
-        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-        container: "map",
-        center: currentLoc,
-        zoom: 9,
-      });
+      // const map = tt.map({
+      //   key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      //   container: "map",
+      //   center: currentLoc,
+      //   zoom: 9,
+      // });
 
-      map.on("load", () => {
-        var curLocEl = document.createElement("div");
-        curLocEl.id = "current-location-marker";
-        var currentLocation = new tt.Marker({ element: curLocEl })
-          .setLngLat(currentLoc)
-          .addTo(map);
-      });
+      // map.on("load", () => {
+      //   var curLocEl = document.createElement("div");
+      //   curLocEl.id = "current-location-marker";
+      //   var currentLocation = new tt.Marker({ element: curLocEl })
+      //     .setLngLat(currentLoc)
+      //     .addTo(map);
+      // });
     },
     (error) => {
       console.log(error);
@@ -178,12 +178,12 @@ btnSignup.onclick = (e) => {
               console.log(confirmationResult);
               window.confirmationResult = confirmationResult;
 
+              document.querySelector("#signupForm").style.display = "none";
+              // document.querySelector(".map-container").style.display = "none";
+              document.querySelector("#loginForm").style.display = "none";
               document
                 .querySelector("#phoneVerificationForm")
                 .classList.add("show");
-              document.querySelector("#signupForm").style.display = "none";
-              document.querySelector(".map-container").style.display = "none";
-              document.querySelector("#loginForm").style.display = "none";
 
               const btnVerify = document.querySelector("#phoneVerification");
 

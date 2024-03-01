@@ -18,7 +18,6 @@ const createOrderDivElement = (type, textContent = null) => {
   return element;
 };
 
-// FIX LATER: If the order status is "on going", we need to show "DRIVER DEPARTED" and "ETA" as well. To do this, we might wanna store ETA on Firestore...?
 const showUpdate = (section, orderID, orderDate, itemKey) => {
   const containerDiv = createOrderDivElement("div");
   containerDiv.setAttribute("id", orderID);
@@ -27,7 +26,7 @@ const showUpdate = (section, orderID, orderDate, itemKey) => {
     { type: "p", textContent: `Order ID: ${orderID}` },
     { type: "p", textContent: `Order Date: ${orderDate}` },
     { type: "h3", textContent: `You have a scheduled pick up at:` },
-    { type: "p", textContent: `USER PREFFERD DATE & TIME?` },
+    { type: "p", textContent: `USER PREFFERED DATE & TIME?` },
     { type: "h3", textContent: `Updates` },
     { type: "h4", textContent: `ORDER ACCEPTED` },
     { type: "p", textContent: `---Time stamp would be here---` },
@@ -85,12 +84,22 @@ onAuthStateChanged(auth, (user) => {
 
           // If the data has ETA in the first place, show it at the same time.
           if (orderObj[orderID].ETA) {
-            const h4 = createOrderDivElement("h4", "DRIVER DEPARTED");
-            const p = createOrderDivElement(
-              "p",
-              "---Time stamp would be here---"
-              // FIX LATER: add time stamp (use firestore function?)
+            const rawTimestamp = new Date(
+              orderObj[orderID].departTimestamp.seconds * 1000 +
+                orderObj[orderID].departTimestamp.nanoseconds / 1000000
             );
+            const formattedTimestamp = rawTimestamp.toLocaleString("en-CA", {
+              timeZone: "America/Vancouver",
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              timeZoneName: "shortGeneric",
+            });
+            const h4 = createOrderDivElement("h4", "DRIVER DEPARTED");
+            const p = createOrderDivElement("p", formattedTimestamp);
             document.querySelector(`#${orderID}`).appendChild(h4);
             document.querySelector(`#${orderID}`).appendChild(p);
 
@@ -115,12 +124,23 @@ onAuthStateChanged(auth, (user) => {
             changedDoc.type === "modified" &&
             changedDoc.doc.data().status === "on going"
           ) {
-            const h4 = createOrderDivElement("h4", "DRIVER DEPARTED");
-            const p = createOrderDivElement(
-              "p",
-              "---Time stamp would be here---"
-              // FIX LATER: add time stamp (use firestore function?)
+            const rawTimestamp = new Date(
+              changedDoc.doc.data().departTimestamp.seconds * 1000 +
+                changedDoc.doc.data().departTimestamp.nanoseconds / 1000000
             );
+            const formattedTimestamp = rawTimestamp.toLocaleString("en-CA", {
+              timeZone: "America/Vancouver",
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              timeZoneName: "shortGeneric",
+            });
+
+            const h4 = createOrderDivElement("h4", "DRIVER DEPARTED");
+            const p = createOrderDivElement("p", formattedTimestamp);
             document.querySelector(`#${changedDoc.doc.id}`).appendChild(h4);
             document.querySelector(`#${changedDoc.doc.id}`).appendChild(p);
 

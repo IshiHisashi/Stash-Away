@@ -39,10 +39,10 @@ const showOrderForm = (
   const elements = [
     { type: "p", value: null, textContent: `Order ID: ${orderID}` },
     { type: "p", value: null, textContent: `Order Date: ${date}` },
-    { type: "p", value: null, textContent: `User ID: ${userID}` },
+    // { type: "p", value: null, textContent: `User ID: ${userID}` },
     { type: "p", value: null, textContent: `User Name: ${name}` },
     { type: "p", value: null, textContent: `Address: ${address}` },
-    { type: "p", value: null, textContent: `Items: ${items}` },
+    // { type: "p", value: null, textContent: `Items: ${items}` },
     { type: "p", value: null, textContent: `Current status: ${status}` },
     { type: "select", value: "" },
     { type: "button", value: null, textContent: "Update status to on going" },
@@ -172,7 +172,7 @@ const showOrderForm = (
                   console.log(order);
 
                   form.querySelector(
-                    "p:nth-of-type(7)"
+                    "p:nth-of-type(5)"
                   ).textContent = `Current status: ${order.status}`;
                   form.querySelector("select").value = order.driverId;
                   form.querySelector("select").disabled = true;
@@ -192,7 +192,7 @@ const showOrderForm = (
       const order = get.data();
       console.log(order);
       form.querySelector(
-        "p:nth-of-type(7)"
+        "p:nth-of-type(5)"
       ).textContent = `Current status: ${order.status}`;
       form.querySelector("button:nth-of-type(2)").disabled = true;
 
