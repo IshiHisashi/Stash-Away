@@ -34,35 +34,16 @@ const db = getFirestore(app);
 
 // define variable / fnc ------------
 // var_DoM
-const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
-// For 1. Booking_additem
-const item = document.getElementById("item");
-const itemList = document.getElementById("item-list");
-// For 2. Booking_pick-up
+const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
-const unitNumber = document.getElementById("unitnumber");
-const street = document.getElementById("street");
+const item = document.getElementById("item");
+const itemList = document.getElementById("item-list");
+const detailAddress = document.getElementById("detail");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
-const zipCode = document.getElementById("zipcode");
-const pikupDate = document.getElementById("pickup-date");
-const pilupTime = document.getElementById("pickup-time");
-const storageLocation = document.getElementById("storage-location");
-const btnSavePickup = document.getElementById("btn-save-pickup");
-
-// For 3. Booking_Size selection
-const smallPrice = document.getElementById("small-price");
-const mediumPrice = document.getElementById("medium-price");
-const largePrice = document.getElementById("large-price");
-const btnSelectSmall = document.getElementById("btn-small");
-const btnSelectMedium = document.getElementById("btn-medium");
-const btnSelectLarge = document.getElementById("btn-large");
-
-// For 4. Booking_TermPlan selection
-// to be placed here later
-
-// old
+const zip = document.getElementById("zip");
+const sizePlan = document.getElementById("size-plan");
 const termPlan = document.getElementById("term-plan");
 const price = document.getElementById("price");
 const btnSubmit = document.getElementById("btnSubmit");
@@ -84,13 +65,6 @@ let image;
 let currentEditingItemId;
 let itemData;
 
-// Firebase handling---------------
-// Get User document
-const docSnap = await getDoc(doc(db, "users", `${userId}`));
-const userDoc = docSnap.data();
-
-// --------------------------------
-// For Prathibha
 const renderListFor = function (doc) {
   for (let i = 0; i < doc.length; i++) {
     if (doc[i].data().status === "saved") {
@@ -114,6 +88,15 @@ const renderListFor = function (doc) {
     }
   }
 };
+
+// Firebase handling---------------
+// Get User document
+const docSnap = await getDoc(doc(db, "users", `${userId}`));
+const userDoc = docSnap.data();
+
+// Render name
+firstname.value = userDoc.userName.firstName;
+lastname.value = userDoc.userName.lastName;
 
 // Render list
 itemList.innerHTML = "";
@@ -314,224 +297,70 @@ saveBtn.addEventListener("click", async function (e) {
 });
 
 const itemsContainer = document.getElementById("itemsContainer");
-// Prathibha_end
 
-//-----------------------------------------
-// Ishi start
-// 2. Booking_Pickup
-// Rendering as default values
-firstname.value = userDoc.userName.firstName;
-lastname.value = userDoc.userName.lastName;
-unitNumber.value = userDoc.address.roomNumEtc;
-street.value = userDoc.address.detail;
+// Delivery info.
+detailAddress.value = userDoc.address.detail;
 city.value = userDoc.address.city;
 province.value = userDoc.address.province;
-zipCode.value = userDoc.address.zipCode;
-storageLocation.value = userDoc.storageLocation.name;
+zip.value = userDoc.address.zipCode;
 
-// Calendar
-// display control
-pikupDate.addEventListener("click", (e) => {
-  e.preventDefault();
-  let displayCalendar = document.getElementById("calendar-wrapper");
-  if (displayCalendar.style.display === "none") {
-    displayCalendar.style.display = "block";
-  } else {
-    displayCalendar.style.display = "none";
-  }
-});
-
-// calendar logic
-const weeks = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-const date = new Date();
-let year = date.getFullYear();
-let month = date.getMonth() + 1;
-const config = {
-  show: 1,
-};
-function showCalendar(year, month) {
-  for (let i = 0; i < config.show; i++) {
-    const calendarHtml = createCalendar(year, month);
-    const sec = document.createElement("section");
-    sec.innerHTML = calendarHtml;
-    document
-      .querySelector("#calendar")
-      .insertAdjacentHTML("afterbegin", "<h1>" + year + "/" + month + "</h1>");
-    document.querySelector("#calendar").appendChild(sec);
-
-    month++;
-    if (month > 12) {
-      year++;
-      month = 1;
-    }
-  }
-}
-
-function createCalendar(year, month) {
-  const startDate = new Date(year, month - 1, 1);
-  const endDate = new Date(year, month, 0);
-  const endDayCount = endDate.getDate();
-  const lastMonthEndDate = new Date(year, month - 2, 0);
-  const lastMonthendDayCount = lastMonthEndDate.getDate();
-  const startDay = startDate.getDay();
-  let dayCount = 1;
-  let calendarHtml = "";
-
-  // calendarHtml += "<h1>" + year + "/" + month + "</h1>";
-  calendarHtml += "<table>";
-  for (let i = 0; i < weeks.length; i++) {
-    calendarHtml += "<td>" + weeks[i] + "</td>";
-  }
-  for (let w = 0; w < 6; w++) {
-    calendarHtml += "<tr>";
-    for (let d = 0; d < 7; d++) {
-      if (w == 0 && d < startDay) {
-        let num = lastMonthendDayCount - startDay + d + 1;
-        calendarHtml += '<td class="is-disabled">' + num + "</td>";
-      } else if (dayCount > endDayCount) {
-        let num = dayCount - endDayCount;
-        calendarHtml += '<td class="is-disabled">' + num + "</td>";
-        dayCount++;
-      } else {
-        calendarHtml += `<td class="calendar_td" data-date="${year}/${month}/${dayCount}">${dayCount}</td>`;
-        dayCount++;
-      }
-    }
-    calendarHtml += "</tr>";
-  }
-  calendarHtml += "</table>";
-  return calendarHtml;
-}
-
-function moveCalendar(e) {
-  document.querySelector("#calendar").innerHTML = "";
-  if (e.target.id === "prev") {
-    month--;
-    if (month < 1) {
-      year--;
-      month = 12;
-    }
-  }
-  if (e.target.id === "next") {
-    month++;
-    if (month > 12) {
-      year++;
-      month = 1;
-    }
-  }
-
-  showCalendar(year, month);
-}
-
-document.querySelector("#prev").addEventListener("click", moveCalendar);
-document.querySelector("#next").addEventListener("click", moveCalendar);
-
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("calendar_td")) {
-    pikupDate.value = e.target.dataset.date;
-    document.getElementById("calendar-wrapper").style.display = "none";
-  }
-});
-
-showCalendar(year, month);
-// Event : Back
-
-// Event : Save & Proceed
-btnSavePickup.addEventListener("click", async (e) => {
-  e.preventDefault();
-  await updateDoc(doc(db, "users", `${userId}`), {
-    "userName.firstName": `${firstname.value}`,
-    "userName.lastName": `${lastname.value}`,
-    "address.city": `${city.value}`,
-    "address.province": `${province.value}`,
-    "address.detail": `${street.value}`,
-    "address.roomNumEtc": `${unitNumber.value}`,
-    "address.zipCode": `${zipCode.value}`,
-    "ongoing-order.date": `${pikupDate.value}`,
-    "ongoing-order.time": `${pikupDate.time}`,
-    "storageLocation.name": `${storageLocation.value}`,
-  });
-});
-
-// ------------------------------
-// 3. Storage Size
-// load plan data from 'Company' and render first
+// Plan : rendered once it's selected. => NOT WORKING NOW
+// load plan data and render first
 const docPlan = await getDoc(doc(db, "Company", "plan"));
 const docPlanSize = docPlan.data().size;
-// Render the price
-smallPrice.textContent = `$${docPlanSize.small.price}`;
-mediumPrice.textContent = `$${docPlanSize.medium.price}`;
-largePrice.textContent = `$${docPlanSize.large.price}`;
-
-// btn click
-const btnSelectClick = function (btn, size) {
-  btn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    await updateDoc(doc(db, "users", `${userId}`), {
-      "plan.size": size,
-    });
-  });
-};
-// execute
-btnSelectClick(btnSelectSmall, "small");
-btnSelectClick(btnSelectMedium, "medium");
-btnSelectClick(btnSelectLarge, "large");
-
-// ------------------------------
-// 4. Storage Plan
-// define variables
-const tripShort = document.getElementById("trip-short");
-const tripMid = document.getElementById("trip-mid");
-const tripLong = document.getElementById("trip-long");
-const monthShort = document.getElementById("month-short");
-const monthMid = document.getElementById("month-mid");
-const monthLong = document.getElementById("month-long");
-const priceShort = document.getElementById("price-short");
-const priceMid = document.getElementById("price-mid");
-const priceLong = document.getElementById("price-long");
-const btnShort = document.getElementById("btn-short");
-const btnMid = document.getElementById("btn-mid");
-const btnLong = document.getElementById("btn-long");
+// console.log(docPlanSize.small);
+Object.keys(docPlanSize).forEach((el) => {
+  document
+    .getElementById("size-option")
+    .insertAdjacentHTML("afterend", `<option value='${el}'>${el}</option>`);
+});
 const docPlanTerm = docPlan.data().term;
-// Read user's size for calc later
-const selectedSize = docSnap.data().plan.size;
-// calc function
-const calcTotalPrice = function (discount, size) {
-  return Math.trunc(discount * docPlanSize[size].price);
-};
-// Render it
-tripShort.textContent = `${docPlanTerm.short.numTrip}`;
-tripMid.textContent = `${docPlanTerm.mid.numTrip}`;
-tripLong.textContent = `${docPlanTerm.long.numTrip}`;
-monthShort.textContent = `${docPlanTerm.short.numMonth}`;
-monthMid.textContent = `${docPlanTerm.mid.numMonth}`;
-monthLong.textContent = `${docPlanTerm.long.numMonth}`;
-priceShort.textContent = `$${calcTotalPrice(
-  docPlanTerm.short.discount,
-  selectedSize
-)}`;
-priceMid.textContent = `$${calcTotalPrice(
-  docPlanTerm.mid.discount,
-  selectedSize
-)}`;
-priceLong.textContent = `$${calcTotalPrice(
-  docPlanTerm.long.discount,
-  selectedSize
-)}`;
-// btn click
-const btnTermClick = function (btn, term) {
-  btn.addEventListener("click", async (e) => {
-    e.preventDefault();
+Object.keys(docPlanTerm).forEach((el) => {
+  document
+    .getElementById("term-option")
+    .insertAdjacentHTML("afterend", `<option value='${el}'>${el}</option>`);
+});
+
+sizePlan.addEventListener("change", async (e) => {
+  const d = await getDoc(doc(db, "users", `${userId}`));
+  const user = d.data();
+  const selectedsize = e.target.value;
+  const termUser = user.plan.term;
+  if (selectedsize !== "none") {
+    // size = { [selectedsize]: docPlanSize[selectedsize] };
     await updateDoc(doc(db, "users", `${userId}`), {
-      "plan.term": term,
+      "plan.size": `${selectedsize}`,
     });
+    pricing(selectedsize, termUser);
+  }
+});
+
+// Plan_term
+termPlan.addEventListener("change", async (e) => {
+  const d = await getDoc(doc(db, "users", `${userId}`));
+  const user = d.data();
+  const selectedterm = e.target.value;
+  const sizeUser = user.plan.size;
+  if (selectedterm !== "none") {
+    // term = { [selectedterm]: docPlanTerm[selectedterm] };
+    await updateDoc(doc(db, "users", `${userId}`), {
+      "plan.term": `${selectedterm}`,
+    });
+    pricing(sizeUser, selectedterm);
+  }
+});
+
+// pricing
+const pricing = async (size, term) => {
+  let sizeUser = size;
+  let termUser = term;
+  let monthlyFee = docPlanSize[sizeUser].price * docPlanTerm[termUser].discount;
+  console.log(monthlyFee);
+  price.textContent = "$" + monthlyFee;
+  await updateDoc(doc(db, "users", `${userId}`), {
+    "plan.monthlyFee": `${monthlyFee}`,
   });
 };
-btnTermClick(btnShort, "short");
-btnTermClick(btnMid, "mid");
-btnTermClick(btnLong, "long");
-
-// Will be transferred to other display
 
 // Submit data
 btnSubmit.addEventListener("click", async (e) => {
