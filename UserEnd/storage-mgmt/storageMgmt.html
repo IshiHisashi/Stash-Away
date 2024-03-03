@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Storage management</title>
     <!-- <script src="db2.js" type="module" defer></script> -->
-    <link rel="stylesheet" href="../booking/style.css" />
     <link rel="stylesheet" href="storageMgmt.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -20,57 +19,49 @@
     ></script>
   </head>
   <body>
-    <header>
-      <h1>Test Storage management</h1>
-      <div class="a-wrapper">
-        <a href="booking.html">Booking</a>
-      </div>
-    </header>
+    <header></header>
     <main>
-      <section class="hello">
-        <h2>Hello <span id="userName"></span>, how are you today?</h2>
+      <img id="hero-img" src="./breakfast.jpg" alt="" />
+
+      <section class="filter-section">
+        <div class="storage-num-wrapper">
+          <p class="small-letter">Your Storage</p>
+          <p class="total-p">Total <span id="total-num">56</span> Items</p>
+        </div>
+        <div class="search-wrapper">
+          <label class="small-letter">Showing your items stored at:</label>
+          <select id="filter">
+            <option value="all">All</option>
+            <option value="stored">Stored</option>
+            <option value="retrieval requested">On retrival request</option>
+            <option value="retrieved">Retrieved</option>
+          </select>
+        </div>
       </section>
+
       <section class="item-list-section">
         <div class="section-header">
-          <h3>What's in your storage</h3>
           <form>
             <label>Search</label>
             <input id="search" type="search" />
-            <button id="btn-search">search</button>
-            <button id="btn-search-delete">delete search</button>
-            <label>Filter</label>
-            <select id="filter">
-              <option value="all">All</option>
-              <option value="stored">Stored</option>
-              <option value="retrieval requested">On retrival request</option>
-              <option value="retrieved">Retrieved</option>
-            </select>
+            <button id="btn-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button id="btn-search-delete">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
           </form>
         </div>
         <ul class="item-list"></ul>
       </section>
-      <section class="delivery">
-        <div class="detail">
-          <label>Detail address</label>
-          <input type="text" id="detail" />
-        </div>
-        <div class="city">
-          <label>City</label>
-          <input type="text" id="city" />
-        </div>
-        <div class="province">
-          <label>Province</label>
-          <input type="text" id="province" />
-        </div>
-        <div class="zip">
-          <label>Zip Code</label>
-          <input type="text" id="zip" />
-        </div>
+      <section class="request-return-section">
+        <a href="#"
+          >Request Return <span id="num-return-items">(0 item)</span></a
+        >
       </section>
 
       <section class="action">
         <button type="submit" id="btnRetrieve">Retrieve</button>
-        <button type="submit" id="btnTest">test</button>
       </section>
     </main>
   </body>

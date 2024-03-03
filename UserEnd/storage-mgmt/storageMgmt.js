@@ -32,19 +32,13 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // Define variables----------------
 const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
-const userName = document.getElementById("userName");
 const search = document.getElementById("search");
 const btnSearch = document.getElementById("btn-search");
 const btnSerachDelete = document.getElementById("btn-search-delete");
 const itemList = document.querySelector(".item-list");
-const itemName = document.querySelector(".item-name");
-const detailAddress = document.getElementById("detail");
-const city = document.getElementById("city");
-const province = document.getElementById("province");
-const zip = document.getElementById("zip");
 const filter = document.getElementById("filter");
+const numReturnItems = document.getElementById("num-return-items");
 const btnRetrieve = document.getElementById("btnRetrieve");
-const btnTest = document.getElementById("btnTest");
 
 const renderList = function (snapShot) {
   snapShot.forEach((doc) => {
@@ -57,16 +51,18 @@ const renderList = function (snapShot) {
     ) {
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
+        `<li  class='item-list-li'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-      <p class="item-name">${item.itemName} ${
+      <p class="item-name">${item.itemName}</p><p class='item-status'> ${
           item.status === "retrieved"
-            ? "| retrieved"
+            ? "retrieved"
             : item.status === "retrieval requested"
-            ? "| on request"
+            ? "on request"
+            : item.status === "stored"
+            ? "In storage"
             : ""
-        }</p> 
+        }</p> <input id=check_${itemID} class="checkbox" type="checkbox"/>
       <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
         </li>`
       );
@@ -84,8 +80,6 @@ const renderList = function (snapShot) {
 const docSnap = await getDoc(doc(db, "users", `${userId}`));
 const hp = docSnap.data();
 const id = docSnap.id;
-// Render name
-userName.textContent = `${hp.userName.firstName}`;
 
 // Item
 // get data
@@ -101,12 +95,19 @@ const cArr = [];
 const checkControl = function () {
   Array.from(checkboxes).forEach((el) => {
     el.addEventListener("change", (e) => {
+      e.preventDefault();
       if (cArr.includes(el.id)) {
         cArr.pop(el.id);
       } else {
         cArr.push(el.id);
       }
       console.log(cArr);
+      // update button
+      if (cArr.length < 2) {
+        numReturnItems.textContent = `(${cArr.length} item)`;
+      } else {
+        numReturnItems.textContent = `(${cArr.length} items)`;
+      }
     });
   });
 };
@@ -141,28 +142,28 @@ btnSearch.addEventListener("click", (e) => {
   const searchItemsIDArr = itemsIDArr.filter((el) => {
     return el[1].itemName.toLowerCase().includes(search.value.toLowerCase());
   });
-  console.log(searchItemsIDArr);
   // Rendering (hard-code for now, as rendering funcition cannot be used)
   cleanupList();
   searchItemsIDArr.forEach((el) => {
     const item = el[1];
     const itemID = el[0];
-    console.log(item, itemID);
     if (item.status !== "saved" && item.status !== "add requested") {
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li  class='item-list-li'><input id=check_${itemID} class="checkbox" type="checkbox"/><img src='${
+        `<li  class='item-list-li'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">${item.itemName} ${
+      <p class="item-name">${item.itemName}</p><p class='item-status'> ${
           item.status === "retrieved"
-            ? "| retrieved"
+            ? "retrieved"
             : item.status === "retrieval requested"
-            ? "| on request"
+            ? "on request"
+            : item.status === "stored"
+            ? "In storage"
             : ""
-        }</p>
-    <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
-      </li>`
+        }</p> <input id=check_${itemID} class="checkbox" type="checkbox"/>
+      <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
+        </li>`
       );
     }
     // Disable checkbox if the item is on retrieval request.
@@ -219,12 +220,6 @@ elementsCamera.forEach((el) => {
     console.log(e.target.id);
   });
 });
-
-// Address
-detailAddress.value = hp.address.detail;
-city.value = hp.address.city;
-province.value = hp.address.province;
-zip.value = hp.address.zipCode;
 
 // Checkbox
 const checkedArr = [];
