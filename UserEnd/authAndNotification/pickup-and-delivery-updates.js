@@ -13,7 +13,7 @@ import {
   getCurrentUserObj,
   signOut,
   auth,
-} from "../../common_auth.js";
+} from "../../common.js";
 
 const createOrderDivElement = (type, textContent = null) => {
   const element = document.createElement(type);

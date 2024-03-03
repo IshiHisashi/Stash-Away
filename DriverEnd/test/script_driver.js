@@ -37,13 +37,13 @@ const showOrderForm = (
 
   // create elements which will belong to one form and append them
   const elements = [
-    { type: "p", value: null, textContent: `Order ID: ${orderID}` },
     { type: "p", value: null, textContent: `Order Date: ${date}` },
-    // { type: "p", value: null, textContent: `User ID: ${userID}` },
     { type: "p", value: null, textContent: `User Name: ${name}` },
-    { type: "p", value: null, textContent: `Address: ${address}` },
-    // { type: "p", value: null, textContent: `Items: ${items}` },
     { type: "p", value: null, textContent: `Current status: ${status}` },
+    { type: "p", value: null, textContent: `Order ID: ${orderID}` },
+    { type: "p", value: null, textContent: `Address: ${address}` },
+    // { type: "p", value: null, textContent: `User ID: ${userID}` },
+    // { type: "p", value: null, textContent: `Items: ${items}` },
     { type: "select", value: "" },
     { type: "button", value: null, textContent: "Update status to on going" },
     { type: "button", value: null, textContent: "Update status to done" },

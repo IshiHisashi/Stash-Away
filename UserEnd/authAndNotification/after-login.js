@@ -5,7 +5,7 @@ import {
   getCurrentUserObj,
   signOut,
   auth,
-} from "../../common_auth.js";
+} from "../../common.js";
 
 const loginStatusSpan = document.querySelector(".loginStatus");
 

@@ -1,14 +1,15 @@
 "use strict";
 
 import {
+  getCurrentUid,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  onAuthStateChanged,
   auth,
   sendEmailVerification,
   RecaptchaVerifier,
   linkWithPhoneNumber,
-} from "./firebase_auth.js";
+  applyActionCode,
+} from "../../common.js";
 
 import {
   collection,
@@ -32,21 +33,13 @@ window.onload = () => {
 
 //
 // check current log in status /////////////////////////////////
-// observe any change on authentication status - this is to get currently logged in user.
-onAuthStateChanged(auth, (user) => {
-  const loginStatusSpan = document.querySelector(".loginStatus");
-
-  if (user) {
-    // when any user is logged in
-    const uid = user.uid;
-    console.log(user);
-    loginStatusSpan.textContent = `Logged in (user ID: ${uid})`;
-  } else {
-    // when no user is logged in
-    console.log("no user logged in");
-    loginStatusSpan.textContent = `Logged out`;
-  }
-});
+const loginStatusSpan = document.querySelector(".loginStatus");
+const uid = await getCurrentUid();
+if (uid) {
+  loginStatusSpan.textContent = `Logged in (user ID: ${uid})`;
+} else {
+  loginStatusSpan.textContent = `Logged out`;
+}
 
 //
 // Sign-up new users //////////////////////////////////////
