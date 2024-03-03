@@ -1,3 +1,4 @@
+'use strict';
 import * as geo from "./geo.js";
 
 // Company's location
