@@ -1,6 +1,6 @@
 "use strict";
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
   getFirestore,
   collection,
@@ -15,7 +15,7 @@ import {
   writeBatch,
   query,
   where,
-} from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
@@ -27,6 +27,8 @@ const firebaseConfig = {
   measurementId: "G-DSYKEF99M1",
 };
 
+// import from common.js
+import { queryFunction, snapShot } from "../../common.js";
 // Initialize Firebase---------------
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -83,8 +85,6 @@ const id = docSnap.id;
 
 // Item
 // get data
-const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-const snapShot = await getDocs(queryStorage);
 renderList(snapShot);
 
 // Checkbox
@@ -200,11 +200,8 @@ filter.addEventListener("change", async (e) => {
     checkControl();
   } else {
     // retrieve data under a certain filter condition
-    const q = query(
-      collection(db, "users", `${userId}`, "inStorage"),
-      where("status", "==", conditionValue)
-    );
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await queryFunction(conditionValue);
+    // Then, render it
     renderList(querySnapshot);
     // checkbox contorol
     recallCheckbox();
@@ -212,14 +209,7 @@ filter.addEventListener("change", async (e) => {
   }
 });
 
-// Get camera id (on click the camera icon)
-const elementsCamera = document.querySelectorAll(".pic");
-elementsCamera.forEach((el) => {
-  el.addEventListener("click", (e) => {
-    e.preventDefault();
-    console.log(e.target.id);
-  });
-});
+// ----------Will update later---------
 
 // Checkbox
 const checkedArr = [];

@@ -75,3 +75,40 @@ export {
   linkWithPhoneNumber,
   applyActionCode,
 };
+
+// Database //////////////////////////////////////////////////////////////////////////
+import {
+  getFirestore,
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+  query,
+  where,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+const db = getFirestore(app);
+const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+
+// -----READ-----
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = collection(db, "users", `${userId}`, "inStorage");
+const snapShot = await getDocs(queryStorage);
+//
+// StorageMgmt : Filtering
+const queryFunction = async function (conditionValue) {
+  const q = query(
+    collection(db, "users", `${userId}`, "inStorage"),
+    where("status", "==", conditionValue)
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot;
+};
+
+// Exporring
+export { snapShot, queryFunction };
