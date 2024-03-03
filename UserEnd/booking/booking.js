@@ -1,4 +1,9 @@
 "use strict";
+// test auth
+import { getCurrentUid } from "../../common_auth.js";
+const uid = await getCurrentUid();
+console.log(uid);
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import {
@@ -35,6 +40,7 @@ const db = getFirestore(app);
 // define variable / fnc ------------
 // var_DoM
 const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+// const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
 const itemList = document.getElementById("item-list");
@@ -47,7 +53,7 @@ const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
 const pikupDate = document.getElementById("pickup-date");
-const pilupTime = document.getElementById("pickup-time");
+const pikupTime = document.getElementById("pickup-time");
 const storageLocation = document.getElementById("storage-location");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
@@ -61,12 +67,18 @@ const btnSelectLarge = document.getElementById("btn-large");
 
 // For 4. Booking_TermPlan selection
 // to be placed here later
-
-// old
-const termPlan = document.getElementById("term-plan");
-const price = document.getElementById("price");
-const btnSubmit = document.getElementById("btnSubmit");
-const btnSave = document.getElementById("btnSave");
+const tripShort = document.getElementById("trip-short");
+const tripMid = document.getElementById("trip-mid");
+const tripLong = document.getElementById("trip-long");
+const monthShort = document.getElementById("month-short");
+const monthMid = document.getElementById("month-mid");
+const monthLong = document.getElementById("month-long");
+const priceShort = document.getElementById("price-short");
+const priceMid = document.getElementById("price-mid");
+const priceLong = document.getElementById("price-long");
+const btnShort = document.getElementById("btn-short");
+const btnMid = document.getElementById("btn-mid");
+const btnLong = document.getElementById("btn-long");
 
 //using camera
 const cameraIcon = document.getElementById("cameraIcon");
@@ -432,8 +444,23 @@ document.addEventListener("click", function (e) {
     document.getElementById("calendar-wrapper").style.display = "none";
   }
 });
-
 showCalendar(year, month);
+
+// Time of pickup
+// time options
+var quarterHours = ["00", "30"];
+var times = [];
+for (var i = 9; i < 21; i++) {
+  for (var j = 0; j < 2; j++) {
+    times.push(i + ":" + quarterHours[j]);
+  }
+}
+console.log(times);
+// render
+times.forEach((el) => {
+  pikupTime.insertAdjacentHTML("beforeend", `<option>${el}</option>`);
+});
+
 // Event : Back
 
 // Event : Save & Proceed
@@ -448,7 +475,7 @@ btnSavePickup.addEventListener("click", async (e) => {
     "address.roomNumEtc": `${unitNumber.value}`,
     "address.zipCode": `${zipCode.value}`,
     "ongoing-order.date": `${pikupDate.value}`,
-    "ongoing-order.time": `${pikupDate.time}`,
+    "ongoing-order.time": `${pikupTime.value}`,
     "storageLocation.name": `${storageLocation.value}`,
   });
 });
@@ -480,18 +507,7 @@ btnSelectClick(btnSelectLarge, "large");
 // ------------------------------
 // 4. Storage Plan
 // define variables
-const tripShort = document.getElementById("trip-short");
-const tripMid = document.getElementById("trip-mid");
-const tripLong = document.getElementById("trip-long");
-const monthShort = document.getElementById("month-short");
-const monthMid = document.getElementById("month-mid");
-const monthLong = document.getElementById("month-long");
-const priceShort = document.getElementById("price-short");
-const priceMid = document.getElementById("price-mid");
-const priceLong = document.getElementById("price-long");
-const btnShort = document.getElementById("btn-short");
-const btnMid = document.getElementById("btn-mid");
-const btnLong = document.getElementById("btn-long");
+
 const docPlanTerm = docPlan.data().term;
 // Read user's size for calc later
 const selectedSize = docSnap.data().plan.size;
@@ -531,6 +547,7 @@ btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
 
+// -------------------------------
 // Will be transferred to other display
 
 // Submit data
@@ -599,7 +616,9 @@ btnSubmit.addEventListener("click", async (e) => {
     },
   });
 });
+// ---------------------------
 
+// ---------------------------
 // for modal
 const modal = document.getElementById("easyModal");
 const buttonClose = document.getElementsByClassName("modalClose")[0];
@@ -751,18 +770,3 @@ document.getElementById("option2").addEventListener("change", function () {
     handleUploadImageSelected();
   }
 });
-
-// ----------------------------------------
-
-// Another way of getting data from Subcollection --------------------
-// const queryStorage = query(collectionGroup(db, "inStorage"));
-// const storage = await getDocs(queryStorage);
-// // Render list
-// await storage.docs.forEach(async (doc) => {
-//   const itemInfo = doc._document.data.value.mapValue.fields;
-//   console.log(itemInfo);
-//   itemList.insertAdjacentHTML(
-//     "beforeend",
-//     `<li class='item-list-li'><p>Item #${itemInfo.boxNumber.integerValue} | ${itemInfo.itemName.stringValue}</p> <span class='icon-span'><i class="fa-regular fa-image icon"></i><i class="fa-solid fa-xmark icon"></i></span></li>`
-//   );
-// });
