@@ -1,0 +1,233 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #f4f4f4;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* HEADER ================================================= */
+
+header > div {
+  border: 1px solid black;
+  border-radius: 15px;
+}
+
+header nav ul {
+  padding: 0;
+  display: flex;
+}
+
+header nav ul li {
+  list-style-type: none;
+}
+
+header nav ul li img {
+  display: inline-block;
+}
+
+/* MAIN =================================================== */
+
+section.orders {
+  display: grid;
+  grid-template-columns: auto 1fr 40%;
+  gap: 1rem;
+}
+
+.order {
+  grid-column: 1/-1;
+
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: center;
+  justify-content: center;
+  column-gap: 1rem;
+  row-gap: 0;
+
+  padding: 1rem;
+  background-color: white;
+  border-radius: 14px;
+}
+
+.order img {
+  grid-column: 1/2;
+  grid-row: 1/2;
+  border-radius: 50%;
+}
+
+.order .time-and-name {
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+.order .orderStatus {
+  grid-column: 3/4;
+  grid-row: 1/2;
+
+  text-align: center;
+  padding: 1rem;
+  border-radius: 5px;
+}
+
+.order .orderStatus.ongoingTrip {
+  background-color: lightblue;
+  color: blue;
+}
+
+.order .orderStatus.newTrip {
+  background-color: #ccf8bd;
+  color: #429725;
+}
+
+.order .orderID {
+  grid-column: 2/4;
+  grid-row: 2/3;
+}
+
+.order .orderAddress {
+  grid-column: 2/4;
+  grid-row: 3/4;
+}
+
+.order .time-and-name p:nth-of-type(1),
+.order .orderID p:nth-of-type(1),
+.order .orderAddress p:nth-of-type(1) {
+  color: #585858;
+}
+
+.order .time-and-name p:nth-of-type(2),
+.order .orderID p:nth-of-type(2),
+.order .orderAddress p:nth-of-type(2) {
+  color: #103646;
+}
+
+.order button {
+  grid-column: 1/-1;
+  grid-row: 4/5;
+  padding: 1rem;
+  border-radius: 7px;
+  border: 1px solid grey;
+  background-color: white;
+}
+
+.order button.btnDriverAssigned {
+  color: #103646;
+}
+
+.order button.btnStartTrip {
+  cursor: pointer;
+  color: #e04462;
+}
+
+/* "Select Driver" Popup =============== */
+
+.popupBackground {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: #58585887;
+  display: grid;
+  align-items: center;
+
+  display: none;
+}
+
+.popup {
+  background-color: white;
+  margin: 1rem;
+  border-radius: 20px;
+  padding: 1rem;
+}
+
+.popup select {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+}
+
+.popup button.btnConfirmDriver {
+  background-color: #d72e4e;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  padding: 1rem;
+}
+
+/* Trip Details Page ================ */
+
+section.tripDetails {
+  display: none;
+}
+
+.orderDetail {
+  background-color: white;
+  padding: 1rem;
+  border-radius: 15px;
+}
+
+.orderDetail .orderDetailName {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.orderDetail .orderDetailAddress {
+  display: flex;
+  align-items: start;
+  gap: 1rem;
+}
+
+.orderDetail img {
+  border-radius: 50%;
+}
+
+.orderDetail .btnTripStarted {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: #dfdfdf;
+  color: white;
+  border-radius: 7px;
+  margin-bottom: 1rem;
+}
+
+.orderDetail .btnTripCompleted {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: #d72e4e;
+  color: white;
+  border-radius: 7px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+
+/* FOOTER ============================================= */
+
+footer {
+  background-color: #103646;
+}
+
+footer nav ul a {
+  color: white;
+}
+
+/* QUERIES ============================================= */
+
+@media screen and (min-width: 800px) {
+  element {
+  }
+}
