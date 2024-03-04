@@ -48,39 +48,105 @@ export {
   linkWithPhoneNumber,
   applyActionCode,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
 // Database //////////////////////////////////////////////////////////////////////////
-// import {
-//   getFirestore,
-//   collection,
-//   collectionGroup,
-//   doc,
-//   getDoc,
-//   getDocs,
-//   setDoc,
-//   addDoc,
-//   updateDoc,
-//   deleteDoc,
-//   writeBatch,
-//   query,
-//   where,
-// } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-// const db = getFirestore(app);
-// const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+import {
+  getFirestore,
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+  query,
+  where,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+const db = getFirestore(app);
+const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
 
-// // -----READ-----
-// // General : Get item (document) in 'inStorage' (subcollection):
-// const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-// const snapShot = await getDocs(queryStorage);
-// //
-// // StorageMgmt : Filtering
-// const queryFunction = async function (conditionValue) {
-//   const q = query(
-//     collection(db, "users", `${userId}`, "inStorage"),
-//     where("status", "==", conditionValue)
-//   );
-//   const querySnapshot = await getDocs(q);
-//   return querySnapshot;
-// };
+// -----READ-----
+// General : Get users in 'usersID'
+const userSnap = await getDoc(doc(db, "users", `${userId}`));
+export const userDoc = userSnap.data();
 
-// // Exporring
-// export { snapShot, queryFunction };
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = collection(db, "users", `${userId}`, "inStorage");
+export const snapShot = await getDocs(queryStorage);
+//
+
+// Booking : Order submitted
+export const orderSubmitFunction = async function (snapShot) {
+  const batch = writeBatch(db);
+  const orderedArrID = [];
+  snapShot.forEach((doc) => {
+    if (doc.data().status === "saved") {
+      let docid = doc.id;
+      // Update status
+      batch.update(doc.ref, {
+        status: "add requested",
+      });
+      // Push to arr
+      const updatedItem = docid;
+      orderedArrID.push(updatedItem);
+      console.log(orderedArrID);
+    }
+  });
+  await batch.commit();
+  // Get updated data and create an object array
+  const orderedArrItem = [];
+  orderedArrID.forEach(async (id) => {
+    const queryUpdatedItem = doc(
+      db,
+      "users",
+      `${userId}`,
+      "inStorage",
+      `${id}`
+    );
+    const snapShot = await getDoc(queryUpdatedItem);
+    const itemData = snapShot.data();
+    const idAndData = {
+      [id]: itemData,
+    };
+    orderedArrItem.push(idAndData);
+  });
+  console.log(orderedArrItem);
+
+  // Generate new ORDER
+  await addDoc(collection(db, "users", `${userId}`, "order"), {
+    userId: `${userId}`,
+    userName: {
+      firstName: `${userDoc.userName.firstName}`,
+      lastName: `${userDoc.userName.lastName}`,
+    },
+    driverId: "",
+    itemKey: orderedArrID,
+    orderDate: "2024-01-31",
+    orderType: "add",
+    status: "requested",
+    address: {
+      detail: `${detailAddress.value}`,
+      city: `${city.value}`,
+      province: `${province.value}`,
+      zipCode: `${zip.value}`,
+    },
+    storageLocation: {
+      latitude: `${userDoc.storageLocation.latitude}`,
+      longitude: `${userDoc.storageLocation.longitude}`,
+      name: `${userDoc.storageLocation.name}`,
+    },
+  });
+};
+
+// StorageMgmt : Filtering
+export const queryFunction = async function (conditionValue) {
+  const q = query(
+    collection(db, "users", `${userId}`, "inStorage"),
+    where("status", "==", conditionValue)
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot;
+};
