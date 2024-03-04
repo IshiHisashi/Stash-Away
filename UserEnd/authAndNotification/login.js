@@ -62,9 +62,15 @@ if (navigator.geolocation) {
         let response = await fetch(url);
         let data = await response.json();
         console.log(data);
-        if (data.addresses[0].address.streetName) {
+        if (data.addresses[0].address.streetNameAndNumber) {
+          document.getElementById("signupaddressdetail").value =
+            data.addresses[0].address.streetNameAndNumber;
+        } else if (data.addresses[0].address.streetName) {
           document.getElementById("signupaddressdetail").value =
             data.addresses[0].address.streetName;
+        } else if (data.addresses[0].address.street) {
+          document.getElementById("signupaddressdetail").value =
+            data.addresses[0].address.street;
         }
         if (data.addresses[0].address.municipality) {
           document.getElementById("signupcity").value =
@@ -73,6 +79,9 @@ if (navigator.geolocation) {
         if (data.addresses[0].address.extendedPostalCode) {
           document.getElementById("signuppostalcode").value =
             data.addresses[0].address.extendedPostalCode;
+        } else if (data.addresses[0].address.postalCode) {
+          document.getElementById("signuppostalcode").value =
+            data.addresses[0].address.postalCode;
         }
         return data;
       }
