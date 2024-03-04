@@ -69,6 +69,14 @@ const db = getFirestore(app);
 const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 
 // -----READ-----
+// General : Get company info
+const companyPlanSnap = await getDoc(doc(db, "Company", "plan"));
+const companyStorageLocationSnap = await getDoc(
+  doc(db, "Company", "storageLocation")
+);
+export const companyPlanDoc = companyPlanSnap.data();
+export const companyStorageLocationDoc = companyStorageLocationSnap.data();
+
 // General : Get users in 'usersID'
 const userSnap = await getDoc(doc(db, "users", `${userId}`));
 export const userDoc = userSnap.data();
