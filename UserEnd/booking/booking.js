@@ -1,8 +1,4 @@
 "use strict";
-// test auth
-import { getCurrentUid } from "../../common_auth.js";
-const uid = await getCurrentUid();
-console.log(uid);
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
@@ -474,8 +470,8 @@ btnSavePickup.addEventListener("click", async (e) => {
     "address.detail": `${street.value}`,
     "address.roomNumEtc": `${unitNumber.value}`,
     "address.zipCode": `${zipCode.value}`,
-    "ongoing-order.date": `${pikupDate.value}`,
-    "ongoing-order.time": `${pikupTime.value}`,
+    "ongoing_order.date": `${pikupDate.value}`,
+    "ongoing_order.time": `${pikupTime.value}`,
     "storageLocation.name": `${storageLocation.value}`,
   });
 });

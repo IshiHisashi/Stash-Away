@@ -28,7 +28,7 @@ const firebaseConfig = {
 };
 
 // import from common.js
-import { queryFunction, snapShot } from "../../common.js";
+import * as common from "../../common.js";
 // Initialize Firebase---------------
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -85,7 +85,7 @@ const id = docSnap.id;
 
 // Item
 // get data
-renderList(snapShot);
+renderList(common.snapShot);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
@@ -131,7 +131,7 @@ const cleanupList = function () {
 // Search_revision
 // Create arr
 const itemsIDArr = [];
-snapShot.forEach((el) => {
+common.snapShot.forEach((el) => {
   const itemArr = [el.id, el.data()];
   itemsIDArr.push(itemArr);
 });
@@ -181,7 +181,7 @@ btnSerachDelete.addEventListener("click", (e) => {
   e.preventDefault();
   // Render
   cleanupList();
-  renderList(snapShot);
+  renderList(common.snapShot);
   // checkbox contorol
   recallCheckbox();
   checkControl();
@@ -194,13 +194,13 @@ filter.addEventListener("change", async (e) => {
   const conditionValue = filter.value;
   if (conditionValue === "all") {
     // Render all
-    renderList(snapShot);
+    renderList(common.snapShot);
     // checkbox contorol
     recallCheckbox();
     checkControl();
   } else {
     // retrieve data under a certain filter condition
-    const querySnapshot = await queryFunction(conditionValue);
+    const querySnapshot = await common.queryFunction(conditionValue);
     // Then, render it
     renderList(querySnapshot);
     // checkbox contorol

@@ -19,62 +19,35 @@ const app = initializeApp(firebaseConfig);
 import {
   getAuth,
   onAuthStateChanged,
-  signOut,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendEmailVerification,
-  applyActionCode,
-  RecaptchaVerifier,
-  linkWithPhoneNumber,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
-let user;
-let uid;
-
-const uidPromise = new Promise((resolve, reject) => {
-  onAuthStateChanged(auth, (authUser) => {
-    if (authUser) {
-      uid = authUser.uid;
-    } else {
-      uid = null;
-    }
-    resolve(uid);
+export const getCurrentUid = () => {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (authUser) => {
+      resolve(authUser ? authUser.uid : null);
+    });
   });
-});
-
-const userObjPromise = new Promise((resolve, reject) => {
-  onAuthStateChanged(auth, (authUser) => {
-    if (authUser) {
-      user = authUser;
-    } else {
-      user = null;
-    }
-    resolve(user);
-  });
-});
-
-const getCurrentUid = () => {
-  return uidPromise;
 };
 
-const getCurrentUserObj = () => {
-  return userObjPromise;
+export const getCurrentUserObj = () => {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (authUser) => {
+      resolve(authUser ? authUser : null);
+    });
+  });
 };
 
 export {
-  getCurrentUid,
-  getCurrentUserObj,
   signOut,
-  auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
   RecaptchaVerifier,
   linkWithPhoneNumber,
   applyActionCode,
-};
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // Database //////////////////////////////////////////////////////////////////////////
 import {
@@ -93,15 +66,101 @@ import {
   where,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const db = getFirestore(app);
-const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 
 // -----READ-----
+// General : Get company info
+const companyPlanSnap = await getDoc(doc(db, "Company", "plan"));
+const companyStorageLocationSnap = await getDoc(
+  doc(db, "Company", "storageLocation")
+);
+export const companyPlanDoc = companyPlanSnap.data();
+export const companyStorageLocationDoc = companyStorageLocationSnap.data();
+
+// General : Get users in 'usersID'
+const userSnap = await getDoc(doc(db, "users", `${userId}`));
+export const userDoc = userSnap.data();
+
 // General : Get item (document) in 'inStorage' (subcollection):
 const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-const snapShot = await getDocs(queryStorage);
+export const snapShot = await getDocs(queryStorage);
 //
+
+// Booking : Order submitted
+export const addOrderSubmitFunction = async function (snapShot) {
+  const batch = writeBatch(db);
+  const orderedArrID = [];
+  snapShot.forEach((doc) => {
+    if (doc.data().status === "saved") {
+      let docid = doc.id;
+      // Update status
+      batch.update(doc.ref, {
+        status: "add requested",
+      });
+      // Push to arr
+      const updatedItem = docid;
+      orderedArrID.push(updatedItem);
+      console.log(orderedArrID);
+    }
+  });
+  await batch.commit();
+  // Get updated data and create an object array
+  const orderedArrItem = [];
+  orderedArrID.forEach(async (id) => {
+    const queryUpdatedItem = doc(
+      db,
+      "users",
+      `${userId}`,
+      "inStorage",
+      `${id}`
+    );
+    const snapShot = await getDoc(queryUpdatedItem);
+    const itemData = snapShot.data();
+    const idAndData = {
+      [id]: itemData,
+    };
+    orderedArrItem.push(idAndData);
+  });
+  console.log(orderedArrItem);
+
+  // Generate new ORDER
+  await addDoc(collection(db, "users", `${userId}`, "order"), {
+    userId: `${userId}`,
+    userName: {
+      firstName: `${userDoc.userName.firstName}`,
+      lastName: `${userDoc.userName.lastName}`,
+    },
+    driverId: "",
+    itemKey: orderedArrID,
+    orderDate: "2024-01-31",
+    orderType: "add",
+    status: "requested",
+    address: {
+      detail: `${userDoc.address.detail}`,
+      city: `${userDoc.address.city}`,
+      province: `${userDoc.address.province}`,
+      zipCode: `${userDoc.address.zipCode}`,
+    },
+    storageLocation: {
+      latitude: `${userDoc.storageLocation.latitude}`,
+      longitude: `${userDoc.storageLocation.longitude}`,
+      name: `${userDoc.storageLocation.name}`,
+    },
+    requestedDateTime: {
+      date: `${userDoc.ongoing_order.date}`,
+      time: `${userDoc.ongoing_order.time}`,
+    },
+  });
+
+  // Then, delete 'ongoing-order' from userDoc
+  await updateDoc(doc(db, "users", `${userId}`), {
+    "ongoing_order.date": "",
+    "ongoing_order.time": "",
+  });
+};
+
 // StorageMgmt : Filtering
-const queryFunction = async function (conditionValue) {
+export const queryFunction = async function (conditionValue) {
   const q = query(
     collection(db, "users", `${userId}`, "inStorage"),
     where("status", "==", conditionValue)
@@ -109,6 +168,3 @@ const queryFunction = async function (conditionValue) {
   const querySnapshot = await getDocs(q);
   return querySnapshot;
 };
-
-// Exporring
-export { snapShot, queryFunction };
