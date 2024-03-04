@@ -66,7 +66,7 @@ import {
   where,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const db = getFirestore(app);
-const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 
 // -----READ-----
 // General : Get users in 'usersID'
@@ -79,7 +79,7 @@ export const snapShot = await getDocs(queryStorage);
 //
 
 // Booking : Order submitted
-export const orderSubmitFunction = async function (snapShot) {
+export const addOrderSubmitFunction = async function (snapShot) {
   const batch = writeBatch(db);
   const orderedArrID = [];
   snapShot.forEach((doc) => {
@@ -128,16 +128,26 @@ export const orderSubmitFunction = async function (snapShot) {
     orderType: "add",
     status: "requested",
     address: {
-      detail: `${detailAddress.value}`,
-      city: `${city.value}`,
-      province: `${province.value}`,
-      zipCode: `${zip.value}`,
+      detail: `${userDoc.address.detail}`,
+      city: `${userDoc.address.city}`,
+      province: `${userDoc.address.province}`,
+      zipCode: `${userDoc.address.zipCode}`,
     },
     storageLocation: {
       latitude: `${userDoc.storageLocation.latitude}`,
       longitude: `${userDoc.storageLocation.longitude}`,
       name: `${userDoc.storageLocation.name}`,
     },
+    requestedDateTime: {
+      date: `${userDoc.ongoing_order.date}`,
+      time: `${userDoc.ongoing_order.time}`,
+    },
+  });
+
+  // Then, delete 'ongoing-order' from userDoc
+  await updateDoc(doc(db, "users", `${userId}`), {
+    "ongoing_order.date": "",
+    "ongoing_order.time": "",
   });
 };
 
