@@ -1,15 +1,18 @@
 "use strict";
 
-import {
-  getCurrentUid,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  auth,
-  sendEmailVerification,
-  RecaptchaVerifier,
-  linkWithPhoneNumber,
-  applyActionCode,
-} from "../../common.js";
+import * as common from "../../common.js";
+// import { common } from "../../common.js";
+
+// import {
+//   // getCurrentUid,
+//   createUserWithEmailAndPassword,
+//   signInWithEmailAndPassword,
+//   // auth,
+//   sendEmailVerification,
+//   RecaptchaVerifier,
+//   linkWithPhoneNumber,
+//   applyActionCode,
+// } from "../../common.js";
 
 import {
   collection,
@@ -34,7 +37,7 @@ window.onload = () => {
 //
 // check current log in status /////////////////////////////////
 const loginStatusSpan = document.querySelector(".loginStatus");
-const uid = await getCurrentUid();
+const uid = await common.getCurrentUid();
 if (uid) {
   loginStatusSpan.textContent = `Logged in (user ID: ${uid})`;
 } else {
@@ -139,7 +142,8 @@ btnSignup.onclick = (e) => {
     });
 
   // create an account with Firebase auth
-  createUserWithEmailAndPassword(auth, email, password)
+  common
+    .createUserWithEmailAndPassword(common.auth, email, password)
     .then((userCredential) => {
       console.log(userCredential);
       const user = userCredential.user;
@@ -148,7 +152,7 @@ btnSignup.onclick = (e) => {
         try {
           // email verification ///////////////
           const actionCodeSettings = null;
-          await sendEmailVerification(user, actionCodeSettings);
+          await common.sendEmailVerification(user, actionCodeSettings);
 
           // phone number verification ///////////////
           // !!!! SMS daily quota for a free account is 10/day !!!!
@@ -156,16 +160,21 @@ btnSignup.onclick = (e) => {
 
           // SMS sending issue fixed - be aware of authorized domains!
 
-          auth.useDeviceLanguage();
-          window.recaptchaVerifier = new RecaptchaVerifier(auth, "signup", {
-            size: "invisible",
-            callback: (response) => {
-              onSignInSubmit();
-            },
-          });
+          common.auth.useDeviceLanguage();
+          window.recaptchaVerifier = new common.RecaptchaVerifier(
+            common.auth,
+            "signup",
+            {
+              size: "invisible",
+              callback: (response) => {
+                onSignInSubmit();
+              },
+            }
+          );
 
           const appVerifier = window.recaptchaVerifier;
-          linkWithPhoneNumber(user, phone, appVerifier)
+          common
+            .linkWithPhoneNumber(user, phone, appVerifier)
             .then((confirmationResult) => {
               // SMS sent.
               console.log(confirmationResult);
@@ -251,7 +260,8 @@ btnLogin.onclick = (e) => {
   const password = inputPassword.value;
 
   // log in the user with Firebase auth
-  signInWithEmailAndPassword(auth, email, password)
+  common
+    .signInWithEmailAndPassword(common.auth, email, password)
     .then((userCredential) => {
       console.log(userCredential);
       const user = userCredential.user;

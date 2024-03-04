@@ -19,62 +19,35 @@ const app = initializeApp(firebaseConfig);
 import {
   getAuth,
   onAuthStateChanged,
-  signOut,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendEmailVerification,
-  applyActionCode,
-  RecaptchaVerifier,
-  linkWithPhoneNumber,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-const auth = getAuth(app);
+export const auth = getAuth(app);
 
-let user;
-let uid;
-
-const uidPromise = new Promise((resolve, reject) => {
-  onAuthStateChanged(auth, (authUser) => {
-    if (authUser) {
-      uid = authUser.uid;
-    } else {
-      uid = null;
-    }
-    resolve(uid);
+export const getCurrentUid = () => {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (authUser) => {
+      resolve(authUser ? authUser.uid : null);
+    });
   });
-});
-
-const userObjPromise = new Promise((resolve, reject) => {
-  onAuthStateChanged(auth, (authUser) => {
-    if (authUser) {
-      user = authUser;
-    } else {
-      user = null;
-    }
-    resolve(user);
-  });
-});
-
-const getCurrentUid = () => {
-  return uidPromise;
 };
 
-const getCurrentUserObj = () => {
-  return userObjPromise;
+export const getCurrentUserObj = () => {
+  return new Promise((resolve, reject) => {
+    onAuthStateChanged(auth, (authUser) => {
+      resolve(authUser ? authUser : null);
+    });
+  });
 };
 
 export {
-  getCurrentUid,
-  getCurrentUserObj,
   signOut,
-  auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendEmailVerification,
   RecaptchaVerifier,
   linkWithPhoneNumber,
   applyActionCode,
-};
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 // Database //////////////////////////////////////////////////////////////////////////
 import {
@@ -111,4 +84,6 @@ const queryFunction = async function (conditionValue) {
 };
 
 // Exporring
-export { snapShot, queryFunction };
+// export { snapShot, queryFunction };
+
+// export * as common from "./common.js";

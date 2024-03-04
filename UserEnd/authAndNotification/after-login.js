@@ -1,15 +1,17 @@
 import { doc, db, getDoc, updateDoc } from "./firebase_firestore.js";
 
-import {
-  getCurrentUid,
-  getCurrentUserObj,
-  signOut,
-  auth,
-} from "../../common.js";
+// import {
+//   getCurrentUid,
+//   getCurrentUserObj,
+//   signOut,
+//   auth,
+// } from "../../common.js";
+
+import * as common from "../../common.js";
 
 const loginStatusSpan = document.querySelector(".loginStatus");
 
-const user = await getCurrentUserObj();
+const user = await common.getCurrentUserObj();
 const uid = user.uid;
 console.log(user);
 
@@ -80,7 +82,8 @@ const btnLogout = document.querySelector("#logout");
 btnLogout.onclick = (e) => {
   e.preventDefault();
 
-  signOut(auth)
+  common
+    .signOut(common.auth)
     .then(() => {
       console.log("signed out");
       window.location.href = "login.html";
