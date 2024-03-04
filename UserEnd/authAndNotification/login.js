@@ -1,18 +1,6 @@
 "use strict";
 
 import * as common from "../../common.js";
-// import { common } from "../../common.js";
-
-// import {
-//   // getCurrentUid,
-//   createUserWithEmailAndPassword,
-//   signInWithEmailAndPassword,
-//   // auth,
-//   sendEmailVerification,
-//   RecaptchaVerifier,
-//   linkWithPhoneNumber,
-//   applyActionCode,
-// } from "../../common.js";
 
 import {
   collection,

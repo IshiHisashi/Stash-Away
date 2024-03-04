@@ -1,12 +1,5 @@
 import { doc, db, getDoc, updateDoc } from "./firebase_firestore.js";
 
-// import {
-//   getCurrentUid,
-//   getCurrentUserObj,
-//   signOut,
-//   auth,
-// } from "../../common.js";
-
 import * as common from "../../common.js";
 
 const loginStatusSpan = document.querySelector(".loginStatus");
