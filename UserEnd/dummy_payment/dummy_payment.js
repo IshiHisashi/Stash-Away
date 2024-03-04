@@ -1,9 +1,15 @@
 "use strict";
 import * as common from "../../common.js";
 
-const btnCheckOut = document.getElementById("btn-checkout");
+const btnAdd = document.getElementById("btn-add");
+const btnRetrieval = document.getElementById("btn-retrieval");
 
-btnCheckOut.addEventListener("click", (e) => {
+btnAdd.addEventListener("click", (e) => {
   e.preventDefault();
   common.addOrderSubmitFunction(common.snapShot);
+});
+
+btnRetrieval.addEventListener("click", (e) => {
+  e.preventDefault();
+  common.retrievalOrderSubmitFunction();
 });
