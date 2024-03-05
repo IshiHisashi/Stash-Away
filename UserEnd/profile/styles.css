@@ -1,0 +1,23 @@
+#plan {
+    display: flex;
+    justify-content: space-between;
+}
+
+#plan-name, #price {
+    display: flex;
+    gap: 1rem;
+}
+
+.each-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.each-card label {
+    display: flex;
+}
+
+#default-payment {
+    text-align: right;
+}
