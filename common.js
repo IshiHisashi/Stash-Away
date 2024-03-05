@@ -154,9 +154,15 @@ export const addOrderSubmitFunction = async function (snapShot) {
     },
   });
 
-  // Then, delete 'ongoing-order' from userDoc
+  console.log(companyPlanDoc);
+
   await updateDoc(doc(db, "users", `${userId}`), {
+    // Delete 'ongoing-order' from userDoc
     ongoing_order: deleteField(),
+    // Give ticket for free trip
+    RemainingFreeTrip: Number(
+      `${companyPlanDoc.term[userDoc.plan.term].numTrip}`
+    ),
   });
 };
 
@@ -261,8 +267,13 @@ export const retrievalOrderSubmitFunction = async function () {
       name: `${userDoc.storageLocation.name}`,
     },
   });
-  // Then, delete 'ongoingRetrievalItems' from userDoc
+  console.log(userDoc.RemainingFreeTrip);
   await updateDoc(doc(db, "users", `${userId}`), {
+    // Then, delete 'ongoingRetrievalItems' from userDoc
     ongoingRetrievalItems: deleteField(),
+    // Deduct number of free trip
+    RemainingFreeTrip: Number(
+      `${userDoc.RemainingFreeTrip > 0 ? userDoc.RemainingFreeTrip - 1 : 0}`
+    ),
   });
 };

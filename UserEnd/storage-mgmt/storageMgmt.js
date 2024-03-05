@@ -96,8 +96,20 @@ renderList(common.snapShot);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
-// Arr to register checked input id.
 const cArr = [];
+// Arr to register checked input id.
+const a = document.querySelectorAll("input[type='checkbox']");
+a.forEach((e) => {
+  if (e.checked) {
+    cArr.push(e.id);
+  }
+});
+// Then render it
+if (cArr.length < 2) {
+  numReturnItems.textContent = `(${cArr.length} item)`;
+} else {
+  numReturnItems.textContent = `(${cArr.length} items)`;
+}
 // Function1 : Check contorol
 const checkControl = function () {
   Array.from(checkboxes).forEach((el) => {
@@ -242,7 +254,9 @@ btnRequestReturn.addEventListener("click", async (e) => {
     }
   });
   // record it on database tentatively
-  common.recordCheckedFunction(checkedArr);
+  await common.recordCheckedFunction(checkedArr);
+  // move page
+  window.location.href = "../order-confirmation/order-confirmation.html";
 });
 
 // ----------Will update later---------
