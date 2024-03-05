@@ -62,16 +62,19 @@ header {
     opacity: 0;
     transform: translateY(-20px);
     transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 999;
 }
 
 .main-menu.active {
     visibility: visible;
     opacity: 1;
     transform: translateY(0);
+
 }
 
 .sub-menu {
     font-size: 14px;
+
 }
 
 .book-now {
@@ -79,6 +82,8 @@ header {
     background-color: #E04462;
     border-style: none;
     padding: 8px;
+    cursor: pointer;
+
 }
 
 #hero-image {
@@ -90,7 +95,8 @@ header {
     left: 25%;
     top: 75%;
     padding: 10px;
-    z-index: 1000;
+    z-index: 90;
+
 }
 
 .hero-img {
