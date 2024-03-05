@@ -69,8 +69,29 @@ import {
   serverTimestamp,
   Timestamp,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-const db = getFirestore(app);
-const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+
+export {
+  getFirestore,
+  collection,
+  collectionGroup,
+  doc,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  writeBatch,
+  query,
+  where,
+  deleteField,
+  onSnapshot,
+  serverTimestamp,
+  Timestamp,
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+export const db = getFirestore(app);
+export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 
 // -----READ-----
 // General : Get company info
@@ -100,6 +121,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
       // Update status
       batch.update(doc.ref, {
         status: "add requested",
+        storedDate: nowDate,
       });
       // Push to arr
       const updatedItem = docid;
@@ -189,7 +211,7 @@ export const recordCheckedFunction = async function (arr) {
 };
 
 // order-confirmation : Read checked items
-export const getcheckedItem = userDoc.ongoingRetrievalItems;
+export let getcheckedItem = userDoc.ongoingRetrievalItems;
 export const renderCheckedItem = function (element) {
   getcheckedItem.forEach(async (el) => {
     const getItem = await getDoc(
@@ -197,9 +219,9 @@ export const renderCheckedItem = function (element) {
     );
     const item = getItem.data();
     const itemID = getItem.id;
-    console.log(item, itemID);
+
     // render
-    element.insertAdjacentHTML(
+    await element.insertAdjacentHTML(
       "beforeend",
       `<li  class='item-list-li'><img src='${
         item.picture ? item.picture : ""
@@ -215,6 +237,47 @@ export const renderCheckedItem = function (element) {
       }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
       </li>`
     );
+  });
+};
+
+export const renderCheckedItem2 = async function (element) {
+  console.log(getcheckedItem);
+  for (let i = 0; i < getcheckedItem.length; i++) {
+    const getItem = await getDoc(
+      doc(db, "users", `${userId}`, "inStorage", getcheckedItem[i])
+    );
+    const item = getItem.data();
+    const itemID = getItem.id;
+    // render
+    await element.insertAdjacentHTML(
+      "beforeend",
+      `<li  class='item-list-li'><img src='${
+        item.picture ? item.picture : ""
+      }' class=placeholder-pic alt=${itemID}>
+    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+        item.status === "retrieved"
+          ? "retrieved"
+          : item.status === "retrieval requested"
+          ? "on request"
+          : item.status === "stored"
+          ? "In storage"
+          : ""
+      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      </li>`
+    );
+  }
+  const elementsDelete = document.querySelectorAll(".delete");
+  elementsDelete.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      console.log("x");
+      // delete
+      const deleteID = e.target.id.split("_")[1];
+      // await deleteDoc(
+      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      // );
+      console.log(`${e.target.id} is deleted`);
+    });
   });
 };
 
