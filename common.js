@@ -66,6 +66,8 @@ import {
   where,
   deleteField,
   onSnapshot,
+  serverTimestamp,
+  Timestamp,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const db = getFirestore(app);
 const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
@@ -134,7 +136,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
     },
     driverId: "",
     itemKey: orderedArrID,
-    orderDate: "2024-01-31",
+    orderDate: nowDate,
     orderType: "add",
     status: "requested",
     address: {
@@ -154,15 +156,18 @@ export const addOrderSubmitFunction = async function (snapShot) {
     },
   });
 
-  console.log(companyPlanDoc);
+  // Calc date
 
   await updateDoc(doc(db, "users", `${userId}`), {
     // Delete 'ongoing-order' from userDoc
     ongoing_order: deleteField(),
     // Give ticket for free trip
-    RemainingFreeTrip: Number(
+    "plan.remainingFreeTrip": Number(
       `${companyPlanDoc.term[userDoc.plan.term].numTrip}`
     ),
+    // set Date
+    "plan.startDate": nowDate,
+    "plan.expiryDate": expiryDate,
   });
 };
 
@@ -252,7 +257,7 @@ export const retrievalOrderSubmitFunction = async function () {
     },
     driverId: "",
     itemKey: getcheckedItem,
-    orderDate: "2024-01-31",
+    orderDate: nowDate,
     orderType: "retrieval",
     status: "requested",
     address: {
@@ -267,13 +272,37 @@ export const retrievalOrderSubmitFunction = async function () {
       name: `${userDoc.storageLocation.name}`,
     },
   });
-  console.log(userDoc.RemainingFreeTrip);
   await updateDoc(doc(db, "users", `${userId}`), {
     // Then, delete 'ongoingRetrievalItems' from userDoc
     ongoingRetrievalItems: deleteField(),
     // Deduct number of free trip
-    RemainingFreeTrip: Number(
-      `${userDoc.RemainingFreeTrip > 0 ? userDoc.RemainingFreeTrip - 1 : 0}`
+    "plan.remainingFreeTrip": Number(
+      `${
+        userDoc.plan.remainingFreeTrip > 0
+          ? userDoc.plan.remainingFreeTrip - 1
+          : 0
+      }`
     ),
   });
 };
+
+// Date handling
+// current time
+const ts = Timestamp.fromDate(new Date()).seconds;
+const nowFullDate = new Date(ts * 1000);
+const nowDate = `${nowFullDate.getFullYear()}/${
+  nowFullDate.getMonth() + 1
+}/${nowFullDate.getDate()}`;
+// future time
+Date.prototype.addDays = function (days) {
+  let date = new Date(ts * 1000);
+  date.setDate(date.getDate() + days);
+  return date;
+};
+const date = new Date();
+const contractDays =
+  userDoc.plan.term === "short" ? 30 : userDoc.plan.term === "mid" ? 120 : 360;
+const expiryFullDate = date.addDays(contractDays);
+const expiryDate = `${expiryFullDate.getFullYear()}/${
+  expiryFullDate.getMonth() + 1
+}/${expiryFullDate.getDate()}`;
