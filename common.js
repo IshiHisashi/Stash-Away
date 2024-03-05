@@ -1,4 +1,4 @@
-"use strice";
+"use strict";
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 
@@ -64,6 +64,8 @@ import {
   writeBatch,
   query,
   where,
+  deleteField,
+  onSnapshot,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 const db = getFirestore(app);
 const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
@@ -154,8 +156,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
 
   // Then, delete 'ongoing-order' from userDoc
   await updateDoc(doc(db, "users", `${userId}`), {
-    "ongoing_order.date": "",
-    "ongoing_order.time": "",
+    ongoing_order: deleteField(),
   });
 };
 
@@ -167,4 +168,101 @@ export const queryFunction = async function (conditionValue) {
   );
   const querySnapshot = await getDocs(q);
   return querySnapshot;
+};
+
+// StorageMtmt : record chacked item tentatively
+export const recordCheckedFunction = async function (arr) {
+  await updateDoc(doc(db, "users", `${userId}`), {
+    ongoingRetrievalItems: arr,
+  });
+};
+
+// order-confirmation : Read checked items
+export const getcheckedItem = userDoc.ongoingRetrievalItems;
+export const renderCheckedItem = function (element) {
+  getcheckedItem.forEach(async (el) => {
+    const getItem = await getDoc(
+      doc(db, "users", `${userId}`, "inStorage", `${el}`)
+    );
+    const item = getItem.data();
+    const itemID = getItem.id;
+    console.log(item, itemID);
+    // render
+    element.insertAdjacentHTML(
+      "beforeend",
+      `<li  class='item-list-li'><img src='${
+        item.picture ? item.picture : ""
+      }' class=placeholder-pic alt=${itemID}>
+    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+        item.status === "retrieved"
+          ? "retrieved"
+          : item.status === "retrieval requested"
+          ? "on request"
+          : item.status === "stored"
+          ? "In storage"
+          : ""
+      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      </li>`
+    );
+  });
+};
+
+// PENDING : order-confirmation : Delete checked item
+//Delete
+export const deleteChecked = function (elements) {
+  Array.from(elements).forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      console.log(el);
+      // delete
+      const deleteID = e.target.id.split("_")[1];
+      // await deleteDoc(
+      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      // );
+      console.log(`${e.target.id} is deleted`);
+    });
+  });
+};
+
+// Retrieval : Order submitted
+export const retrievalOrderSubmitFunction = async function () {
+  getcheckedItem.forEach(async (el) => {
+    const getItem = await getDoc(
+      doc(db, "users", `${userId}`, "inStorage", `${el}`)
+    );
+    const item = getItem.data();
+    const itemID = getItem.id;
+    // update item
+    await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${itemID}`), {
+      status: "retrieval requested",
+    });
+  });
+  // Generate order
+  await addDoc(collection(db, "users", `${userId}`, "order"), {
+    userId: `${userId}`,
+    userName: {
+      firstName: `${userDoc.userName.firstName}`,
+      lastName: `${userDoc.userName.lastName}`,
+    },
+    driverId: "",
+    itemKey: getcheckedItem,
+    orderDate: "2024-01-31",
+    orderType: "retrieval",
+    status: "requested",
+    address: {
+      detail: `${userDoc.address.detail}`,
+      city: `${userDoc.address.city}`,
+      province: `${userDoc.address.province}`,
+      zipCode: `${userDoc.address.zipCode}`,
+    },
+    storageLocation: {
+      latitude: `${userDoc.storageLocation.latitude}`,
+      longitude: `${userDoc.storageLocation.longitude}`,
+      name: `${userDoc.storageLocation.name}`,
+    },
+  });
+  // Then, delete 'ongoingRetrievalItems' from userDoc
+  await updateDoc(doc(db, "users", `${userId}`), {
+    ongoingRetrievalItems: deleteField(),
+  });
 };

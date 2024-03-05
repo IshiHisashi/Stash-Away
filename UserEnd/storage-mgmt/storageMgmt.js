@@ -40,6 +40,7 @@ const btnSerachDelete = document.getElementById("btn-search-delete");
 const itemList = document.querySelector(".item-list");
 const filter = document.getElementById("filter");
 const numReturnItems = document.getElementById("num-return-items");
+const btnRequestReturn = document.getElementById("btn-request-return");
 const btnRetrieve = document.getElementById("btnRetrieve");
 
 const renderList = function (snapShot) {
@@ -64,7 +65,13 @@ const renderList = function (snapShot) {
             : item.status === "stored"
             ? "In storage"
             : ""
-        }</p> <input id=check_${itemID} class="checkbox" type="checkbox"/>
+        }</p> <input id=check_${itemID} class="checkbox" type="checkbox" ${
+          common.getcheckedItem
+            ? common.getcheckedItem.includes(itemID)
+              ? "checked"
+              : ""
+            : ""
+        }/>
       <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
         </li>`
       );
@@ -209,11 +216,37 @@ filter.addEventListener("change", async (e) => {
   }
 });
 
-// ----------Will update later---------
-
 // Checkbox
 const checkedArr = [];
 const checkedDocs = [];
+
+// Save the checked items into arr
+btnRequestReturn.addEventListener("click", async (e) => {
+  e.preventDefault();
+
+  Array.from(checkboxes).forEach(async (el) => {
+    if (el.checked) {
+      // Extract option#1 : Simple Arr with IDs
+      const checkedID = el.id.split("_")[1];
+      console.log(checkedID);
+      checkedArr.push(checkedID);
+      // May transfer to the other page
+      // Extract option#2 : Whole document
+      const getItem = await getDoc(
+        doc(db, "users", `${userId}`, "inStorage", `${checkedID}`)
+      );
+      const itemObj = { [checkedID]: getItem.data() };
+      checkedDocs.push(itemObj);
+      console.log(checkedArr, checkedDocs);
+    } else {
+    }
+  });
+  // record it on database tentatively
+  common.recordCheckedFunction(checkedArr);
+});
+
+// ----------Will update later---------
+
 btnRetrieve.addEventListener("click", async (e) => {
   e.preventDefault();
   // Process1 : extract checked items and compress them into arr.
