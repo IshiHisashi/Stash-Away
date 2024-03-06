@@ -7,7 +7,23 @@ import {
   doc,
 } from "./forDriverEnd/load.js";
 
-const createHtmlElement = (type, value = null, textContent = null) => {
+document.querySelector(".popupBackground").onclick = (e) => {
+  e.preventDefault();
+  e.target.querySelector("form").remove();
+  e.target.style.display = "none";
+};
+
+document.querySelector(".popup").onclick = (e) => {
+  e.stopPropagation();
+};
+
+const createHtmlElement = (
+  type,
+  value = null,
+  textContent = null,
+  att = null,
+  attVallue = null
+) => {
   const element = document.createElement(type);
   if (value) {
     element.value = value;
@@ -15,7 +31,105 @@ const createHtmlElement = (type, value = null, textContent = null) => {
   if (textContent) {
     element.textContent = textContent;
   }
+  if (att) {
+    element.setAttribute(att, attVallue);
+  }
   return element;
+};
+
+const tripCompletedBehaviour = async (uid, oid) => {
+  await update(uid, oid);
+  const get = await getOrder(uid, oid);
+  const order = get.data();
+  if (order.status === "done") {
+    alert("Trip successfully ended! Great work buddy! Take some rest:)");
+  }
+};
+
+const renderTripDetails = (userID, orderID, address, name) => {
+  document.querySelector(".orders").style.display = "none";
+  document.querySelector(".popupBackground").style.display = "none";
+  document.querySelector(".tripDetails").style.display = "block";
+
+  // get form container (already exists in HTML)
+  const formOrderDetail = document.querySelector(".orderDetail");
+  formOrderDetail.setAttribute("id", `${userID}_${orderID}`);
+
+  // address
+  const divOrderDetailAddress = createHtmlElement(
+    "div",
+    null,
+    null,
+    "class",
+    "orderDetailAddress"
+  );
+  const imgAddress = createHtmlElement(
+    "img",
+    null,
+    null,
+    "src",
+    "https://picsum.photos/45/45"
+  );
+  const pAddress = createHtmlElement("p", null, address);
+  divOrderDetailAddress.appendChild(imgAddress);
+  divOrderDetailAddress.appendChild(pAddress);
+  formOrderDetail.insertBefore(
+    divOrderDetailAddress,
+    formOrderDetail.firstChild
+  );
+
+  // name
+  const divOrderDetailName = createHtmlElement(
+    "div",
+    null,
+    null,
+    "class",
+    "orderDetailName"
+  );
+  const imgName = createHtmlElement(
+    "img",
+    null,
+    null,
+    "src",
+    "https://picsum.photos/45/45"
+  );
+  const pName = createHtmlElement("p", null, name);
+  divOrderDetailName.appendChild(imgName);
+  divOrderDetailName.appendChild(pName);
+  formOrderDetail.insertBefore(divOrderDetailName, formOrderDetail.firstChild);
+
+  // order ID
+  const orderDetailIDElements = [
+    {
+      type: "p",
+      value: null,
+      textContent: "Order ID",
+    },
+    {
+      type: "p",
+      value: null,
+      textContent: orderID,
+    },
+  ];
+  const divOrderDetailID = createHtmlElement(
+    "div",
+    null,
+    null,
+    "class",
+    "orderDetailID"
+  );
+  orderDetailIDElements.forEach(({ type, value, textContent }) => {
+    const element = createHtmlElement(type, value, textContent);
+    divOrderDetailID.appendChild(element);
+  });
+  formOrderDetail.insertBefore(divOrderDetailID, formOrderDetail.firstChild);
+
+  // EVENT BEHAVIOUR: "Trip Completed" button (form submission) behaviour
+  formOrderDetail.onsubmit = async (e) => {
+    e.preventDefault();
+
+    await tripCompletedBehaviour(userID, orderID);
+  };
 };
 
 const renderOrders = (
@@ -27,81 +141,103 @@ const renderOrders = (
   address,
   driverID
 ) => {
-  const divOrder = createHtmlElement("div");
-  divOrder.setAttribute("class", "order");
+  // order container
+  const divOrder = createHtmlElement("div", null, null, "class", "order");
 
-  const img = createHtmlElement("img");
-  img.setAttribute("src", "https://picsum.photos/43/43");
+  // user icon
+  const img = createHtmlElement(
+    "img",
+    null,
+    null,
+    "src",
+    "https://picsum.photos/43/43"
+  );
   divOrder.appendChild(img);
 
+  // order date and name
   const timeAndNameElements = [
     { type: "p", value: null, textContent: date },
     { type: "p", value: null, textContent: name },
   ];
-  const divTimeAndName = createHtmlElement("div");
-  divTimeAndName.setAttribute("class", "time-and-name");
+  const divTimeAndName = createHtmlElement(
+    "div",
+    null,
+    null,
+    "class",
+    "time-and-name"
+  );
   timeAndNameElements.forEach(({ type, value, textContent }) => {
     const element = createHtmlElement(type, value, textContent);
     divTimeAndName.appendChild(element);
   });
   divOrder.appendChild(divTimeAndName);
 
+  // order status chip
   const divOrderStatus = createHtmlElement(
     "div",
     null,
-    status === "requested" ? "New Trip" : "Ongoing Trip"
-  );
-  divOrderStatus.setAttribute(
+    status === "requested" ? "New Trip" : "Ongoing Trip",
     "class",
     status === "requested" ? "orderStatus newTrip" : "orderStatus ongoingTrip"
   );
   divOrder.appendChild(divOrderStatus);
 
+  // order ID
   const orderIDElements = [
-    { type: "p", className: null, value: null, textContent: "Order ID" },
-    { type: "p", className: null, value: null, textContent: orderID },
+    { type: "p", value: null, textContent: "Order ID" },
+    { type: "p", value: null, textContent: orderID },
   ];
-  const divOrderID = createHtmlElement("div");
-  divOrderID.setAttribute("class", "orderID");
+  const divOrderID = createHtmlElement("div", null, null, "class", "orderID");
   orderIDElements.forEach(({ type, value, textContent }) => {
     const element = createHtmlElement(type, value, textContent);
     divOrderID.appendChild(element);
   });
   divOrder.appendChild(divOrderID);
 
+  // address
   const orderAddressElements = [
-    { type: "div", className: "orderAddress", value: null, textContent: null },
-    { type: "p", className: null, value: null, textContent: "Address" },
-    { type: "p", className: null, value: null, textContent: address },
+    { type: "div", value: null, textContent: null },
+    { type: "p", value: null, textContent: "Address" },
+    { type: "p", value: null, textContent: address },
   ];
-  const divOrderAddress = createHtmlElement("div");
-  divOrderAddress.setAttribute("class", "orderAddress");
+  const divOrderAddress = createHtmlElement(
+    "div",
+    null,
+    null,
+    "class",
+    "orderAddress"
+  );
   orderAddressElements.forEach(({ type, value, textContent }) => {
     const element = createHtmlElement(type, value, textContent);
     divOrderAddress.appendChild(element);
   });
   divOrder.appendChild(divOrderAddress);
 
+  // button ("Assigned to driver#" or "Start Trip")
   const btn = createHtmlElement(
     "button",
     null,
-    status === "requested" ? "Start Trip" : `Assigned to ${driverID}`
-  );
-  btn.setAttribute(
+    status === "requested" ? "Start Trip" : `Assigned to ${driverID}`,
     "class",
     status === "requested" ? "btnStartTrip" : "btnDriverAssigned"
   );
+
+  // EVENT BEHAVIOUR: "Start Trip" button behaviour (show popup)
   if (btn.classList[0] === "btnStartTrip") {
-    console.log(btn.classList[0]);
     btn.onclick = (e) => {
       e.preventDefault();
       document.querySelector(".popupBackground").style.display = "grid";
 
-      const form = createHtmlElement("form");
-      form.setAttribute("id", `${userID}_${orderID}`);
+      const form = createHtmlElement(
+        "form",
+        null,
+        null,
+        "id",
+        `${userID}_${orderID}`
+      );
 
-      const select = createHtmlElement("select");
-      form.appendChild(select);
+      const driverSelect = createHtmlElement("select");
+      form.appendChild(driverSelect);
 
       const options = [
         { type: "option", value: "Driver 1", textContent: "Driver 1" },
@@ -110,70 +246,75 @@ const renderOrders = (
       ];
       options.forEach(({ type, value, textContent }) => {
         const element = createHtmlElement(type, value, textContent);
-        select.add(element);
+        driverSelect.add(element);
       });
 
       const btnConfirmDriver = createHtmlElement(
         "button",
         null,
-        "Confirm and Proceed"
+        "Confirm and Proceed",
+        "class",
+        "btnConfirmDriver"
       );
-      btnConfirmDriver.setAttribute("class", "btnConfirmDriver");
       form.appendChild(btnConfirmDriver);
 
+      // EVENT BEHAVIOUR: "Confirm and Proceed" button (form submission) behaviour
       form.onsubmit = (e) => {
         e.preventDefault();
+        console.log(e);
 
-        document.querySelector(".orders").style.display = "none";
-        document.querySelector(".popupBackground").style.display = "none";
-        document.querySelector(".tripDetails").style.display = "block";
+        //  Destructure form id into userid and orderid
+        const ids = e.target.id;
+        const uid = ids.split("_")[0];
+        const oid = ids.split("_")[1];
 
-        const formOrderDetail = document.querySelector(".orderDetail");
-        formOrderDetail.setAttribute("id", `${userID}_${orderID}`);
+        (async () => {
+          // ETA ///////////////
+          // get arrival location (geocode from the order's address)
+          const responseUserGeo = await tt.services.geocode({
+            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+            query: address,
+          });
+          const userLat = responseUserGeo.results[0].position.lat;
+          const userLon = responseUserGeo.results[0].position.lng;
 
-        const divOrderDetailAddress = createHtmlElement("div");
-        divOrderDetailAddress.setAttribute("class", "orderDetailAddress");
-        const imgAddress = createHtmlElement("img");
-        imgAddress.setAttribute("src", "https://picsum.photos/45/45");
-        const pAddress = createHtmlElement("p", null, address);
-        divOrderDetailAddress.appendChild(imgAddress);
-        divOrderDetailAddress.appendChild(pAddress);
-        formOrderDetail.insertBefore(
-          divOrderDetailAddress,
-          formOrderDetail.firstChild
-        );
+          // get driver's departure location (= storage location)
+          const docSnap = await getDoc(doc(db, "users", uid));
+          console.log(docSnap);
+          const driverLat = docSnap.data().storageLocation.latitude;
+          const driverLon = docSnap.data().storageLocation.longitude;
 
-        const divOrderDetailName = createHtmlElement("div");
-        divOrderDetailName.setAttribute("class", "orderDetailName");
-        const imgName = createHtmlElement("img");
-        imgName.setAttribute("src", "https://picsum.photos/45/45");
-        const pName = createHtmlElement("p", null, name);
-        divOrderDetailName.appendChild(imgName);
-        divOrderDetailName.appendChild(pName);
-        formOrderDetail.insertBefore(
-          divOrderDetailName,
-          formOrderDetail.firstChild
-        );
+          // calculate ETA
+          const responseETA = await tt.services.calculateRoute({
+            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+            locations: [
+              [driverLat, driverLon],
+              [userLat, userLon],
+            ],
+          });
+          const rawETA = new Date(responseETA.routes[0].summary.arrivalTime);
+          const formattedETA = rawETA.toLocaleString("en-CA", {
+            timeZone: "America/Vancouver",
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            timeZoneName: "shortGeneric",
+          });
 
-        const orderDetailIDElements = [
-          { type: "p", className: null, value: null, textContent: "Order ID" },
-          { type: "p", className: null, value: null, textContent: orderID },
-        ];
-        const divOrderDetailID = createHtmlElement("div");
-        divOrderDetailID.setAttribute("class", "orderDetailID");
-        orderDetailIDElements.forEach(({ type, value, textContent }) => {
-          const element = createHtmlElement(type, value, textContent);
-          divOrderDetailID.appendChild(element);
-        });
-        formOrderDetail.insertBefore(
-          divOrderDetailID,
-          formOrderDetail.firstChild
-        );
+          // update DB, get updated info back, and show trip details page
+          // --UPDATE DB--
+          // Update driverid and status
+          await update(uid, oid, formattedETA, driverSelect);
+          // Get the updated order info.
+          const get = await getOrder(uid, oid);
+          const order = get.data();
 
-        formOrderDetail.onsubmit = (e) => {
-          e.preventDefault();
-          console.log("order doneee");
-        };
+          // get trip details page ready
+          renderTripDetails(userID, orderID, address, name);
+        })();
       };
 
       document.querySelector(".popup").appendChild(form);
@@ -182,6 +323,15 @@ const renderOrders = (
   divOrder.appendChild(btn);
 
   document.querySelector(".orders").appendChild(divOrder);
+
+  // EVENT BEHAVIOUR: show trip details page directly from the order cards (only for the ongoing trip cards behaviour)
+  if (divOrder.querySelector(".btnDriverAssigned")) {
+    divOrder.onclick = (e) => {
+      e.preventDefault();
+
+      renderTripDetails(userID, orderID, address, name);
+    };
+  }
 };
 
 objArr.forEach((orderObj) => {

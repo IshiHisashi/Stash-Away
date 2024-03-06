@@ -125,7 +125,15 @@ section.orders {
   color: #e04462;
 }
 
+.order:has(button.btnDriverAssigned) {
+  cursor: pointer;
+}
+
 /* "Select Driver" Popup =============== */
+
+body:has(.popupBackground form) {
+  overflow: hidden;
+}
 
 .popupBackground {
   position: fixed;
