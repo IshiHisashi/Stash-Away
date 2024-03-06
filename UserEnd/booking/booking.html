@@ -1,151 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test DB</title>
-    <!-- <script src="trydb.js" type="module"></script> -->
-    <script src="booking.js" type="module" defer></script>
-    <script
-      src="https://kit.fontawesome.com/8611811e56.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- <link rel="stylesheet" href="style.css" /> -->
-    <link rel="stylesheet" href="booking.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
-      rel="stylesheet"
-    />
-  </head>
 
-  <body>
-    <!-- HEADER -->
-    <header></header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Test DB</title>
+  <!-- <script src="trydb.js" type="module"></script> -->
+  <script src="booking.js" type="module" defer></script>
+  <script src="https://kit.fontawesome.com/8611811e56.js" crossorigin="anonymous"></script>
+  <!-- <link rel="stylesheet" href="style.css" /> -->
+  <link rel="stylesheet" href="booking.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet" />
+</head>
 
-    <!-- Main -->
-    <main>
-      <form id="form_list">
-        <!-- Prathibha start : 1.Booking_addItem-->
-        <section class="addItem">
-          <h3><span>1</span> List Your Items.</h3>
-          <p>
-            Jumpstart your Stashaway storage by listing and photographing items
-            for easy identification during their stay.
-          </p>
-          <div class="item-wrapper">
-            <!-- <label>Write an item to store</label>
-          <input type="text" id="item" /><i class="fa-regular fa-image icon" id="listup-pic"></i> -->
-            <!-- MODAL -->
-            <div id="easyModal" class="modal">
-              <div class="modal-content">
-                <!-- <div class="modal-header">
-                  <h1>Great job 🎉</h1>
-                  <span class="modalClose">×</span>
-                </div> -->
-                <div class="modal-body">
-                  <!-- HTML from Prathibha -->
+<body>
+  <!-- HEADER -->
+  <header></header>
+
+  <!-- Main -->
+  <main>
+    <form id="form_list">
+      <!-- Prathibha start : 1.Booking_addItem-->
+      <section class="addItem">
+        <h3><span>1</span> List Your Items.</h3>
+        <p>
+          Jumpstart your Stashaway storage by listing and photographing items
+          for easy identification during their stay.
+        </p>
+        <div class="item-wrapper">
+          <label>Write an item to store</label>
+          <input type="text" id="newItemName" /><i class="fa-regular fa-image icon" id="listup-pic"></i>
+          <!-- MODAL -->
+          <div id="easyModal" class="modal">
+            <div class="modal-content">
+              <!-- <div class="modal-header">
+                    <h1>Great job 🎉</h1>
+                    <span class="modalClose">×</span>
+                  </div> -->
+              <div class="modal-body">
+                <!-- HTML from Prathibha -->
+                <div>
                   <div>
-                    <div>
-                      <label for="itemName">Item Name*</label>
-                      <input
-                        type="text"
-                        id="newItemName"
-                        placeholder="Enter item name"
-                      />
-                    </div>
-                    <div>
-                      <label for="imageOption"
-                        >Capture Image or Upload Image (Optional)</label
-                      >
+                    <div class="btn-div"> 
+                      <label for="itemName">Take a Picture of Your Item</label>
+                      <a id="backButton" class="btn-back" type="button">Back</a>
+                    </div>                    
+                    <span id="displayItemName"></span>
+                  </div>
+                  <!-- <div>
+                      <label for="imageOption">Capture Image or Upload Image (Optional)</label>
                       <div id="radioContainer">
-                        <input
-                          type="radio"
-                          id="option1"
-                          name="options"
-                          value="option1"
-                        />
+                        <input type="radio" id="option1" name="options" value="option1">
                         <label for="option1">Capture Image</label>
-                        <input
-                          type="radio"
-                          id="option2"
-                          name="options"
-                          value="option2"
-                        />
+                        <input type="radio" id="option2" name="options" value="option2">
                         <label for="option2">Upload Image</label>
                       </div>
-                    </div>
-                    <!-- <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i> -->
+                    </div> -->
+                  <!-- <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i> -->
+                </div>
+                <div>
+                  <div>
+                    <video id="video" width="320" height="240" autoplay hidden></video>
                   </div>
                   <div>
-                    <div>
-                      <video
-                        id="video"
-                        width="320"
-                        height="240"
-                        autoplay
-                        hidden
-                      ></video>
-                    </div>
-                    <div>
-                      <canvas
-                        id="canvas"
-                        width="320"
-                        height="240"
-                        hidden
-                      ></canvas>
-                      <input
-                        type="file"
-                        id="imageUpload"
-                        accept="image/*"
-                        hidden
-                      />
-                      <!-- <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i> -->
-                    </div>
-                    <div class="button-row">
-                      <button
-                        id="capture"
-                        type="button"
-                        style="display: none"
-                        disabled
-                      >
-                        Capture Image
-                      </button>
-                      <button id="retake" style="display: none" disabled>
-                        Retake Image
-                      </button>
-                      <button
-                        id="uploadButton"
-                        class="button"
-                        style="display: none"
-                      >
-                        Upload Image
-                      </button>
-                      <button id="saveItem" type="button">Save Item</button>
-                    </div>
+                    <canvas id="canvas" width="320" height="240" hidden></canvas>
+                    <input type="file" id="imageUpload" accept="image/*" hidden>
+                    <!-- <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i> -->
                   </div>
-                  <div id="itemsContainer"></div>
-                  <!-- <button id="showItems">Show Items</button> -->
-                  <div id="itemsContainer"></div>
-                  <!-- end -->
+                  <div class="btn-div">
+                    <a id="capture" class="btn-next" type="button" style="display: none;" disabled>Capture Image</a>
+                    <a id="retake" class="btn-next" style="display: none;" disabled>Retake Image</a>
+                    <a id="reupload" class="btn-next" style="display: none;" disabled>Reupload Image</a>
+                    <a id="uploadButton" class="btn-next" style="display: none;">Upload Image</a>
+                    <a id="saveImage" class="btn-next" type="button">Save Image</a>
+                  </div>
                 </div>
-                <span class="modalClose">×</span>
+                <div id="itemsContainer"></div>
+
+                <!-- <button id="showItems">Show Items</button> -->
+                <div id="itemsContainer"></div>
+                <!-- end -->
               </div>
+              <span class="modalClose">×</span>
             </div>
-            <!-- <button type="submit" class="btn-delete">delete</button> -->
           </div>
-          <button id="listup-pic" type="button">+ Add Item</button>
-          <!-- <button id="btnLoad" type="submit">
-            <i class="fa-solid fa-rotate-right"></i> Load saved data
-          </button> -->
-          <div class="item-list-wrapper">
-            <h3>Current item list_on going</h3>
-            <ul id="item-list">
-              <p>You item list...</p>
-            </ul>
-          </div>
-        </section>
+
+          <!-- <button type="submit" class="btn-delete">delete</button> -->
+        </div>
+
+        <div class="btn-div">
+            <a id="saveItem" class="btn-next" type="button">+ Add</a>
+        </div>
+        <!-- <button id="btnLoad" type="submit">
+              <i class="fa-solid fa-rotate-right"></i> Load saved data
+            </button> -->
+
+        <div class="item-list-wrapper">
+          <h3>Current item list_on going</h3>
+          <ul id="item-list">
+            <p>You item list...</p>
+          </ul>
+        </div>
         <!-- Prathibha end -->
 
         <!-- Ishi start : 2.Bokking_pickup-Info -->
@@ -190,15 +147,16 @@
             <!-- Calendar trial -->
             <div id="calendar-wrapper">
               <div id="calendar-header">
-                <button id="prev" type="button"><</button>
-                <button id="next" type="button">></button>
+                <button id="prev" type="button">
+                  << /button>
+                    <button id="next" type="button">></button>
               </div>
               <div id="calendar"></div>
             </div>
           </div>
           <div class="PickupTime-div">
             <label>Time of Pick-Up</label>
-            <select name="" id="pickup-time" ></select>
+            <select name="" id="pickup-time"></select>
           </div>
           <div class="storageLocation-div">
             <label>Choose Storage Location</label>
@@ -214,7 +172,7 @@
           <!-- btn -->
           <div class="btn-div">
             <a class="btn-back">Back</a>
-            <a class="btn-save" id="btn-save-pickup" >Next</a>
+            <a class="btn-save" id="btn-save-pickup">Next</a>
           </div>
         </section>
 
@@ -322,34 +280,32 @@
 
         <!-- USED only in data registration -->
         <!-- <div><button id="x">Set</button></div> -->
-      </form>
-    </main>
-  </body>
+    </form>
+  </main>
+</body>
 
-  <!-- FROM Prathibha configs-->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
-  />
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-      authDomain: "fir-jan24.firebaseapp.com",
-      projectId: "fir-jan24",
-      storageBucket: "fir-jan24.appspot.com",
-      messagingSenderId: "831417179844",
-      appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-      measurementId: "G-DSYKEF99M1",
-    };
+<!-- FROM Prathibha configs-->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.2/firebase-storage-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
+    authDomain: "fir-jan24.firebaseapp.com",
+    projectId: "fir-jan24",
+    storageBucket: "fir-jan24.appspot.com",
+    messagingSenderId: "831417179844",
+    appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
+    measurementId: "G-DSYKEF99M1",
+  };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
 
-    // Access Firebase services using the compat API
-    const db = firebase.firestore();
-    const storage = firebase.storage();
-  </script>
+  // Access Firebase services using the compat API
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+</script>
+
 </html>
