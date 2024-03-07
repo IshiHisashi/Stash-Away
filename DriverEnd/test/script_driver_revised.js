@@ -17,6 +17,7 @@ document.querySelector(".popup").onclick = (e) => {
   e.stopPropagation();
 };
 
+// common
 const createHtmlElement = (
   type,
   value = null,
@@ -35,101 +36,6 @@ const createHtmlElement = (
     element.setAttribute(att, attVallue);
   }
   return element;
-};
-
-const tripCompletedBehaviour = async (uid, oid) => {
-  await update(uid, oid);
-  const get = await getOrder(uid, oid);
-  const order = get.data();
-  if (order.status === "done") {
-    alert("Trip successfully ended! Great work buddy! Take some rest:)");
-  }
-};
-
-const renderTripDetails = (userID, orderID, address, name) => {
-  document.querySelector(".orders").style.display = "none";
-  document.querySelector(".popupBackground").style.display = "none";
-  document.querySelector(".tripDetails").style.display = "block";
-
-  // get form container (already exists in HTML)
-  const formOrderDetail = document.querySelector(".orderDetail");
-  formOrderDetail.setAttribute("id", `${userID}_${orderID}`);
-
-  // address
-  const divOrderDetailAddress = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailAddress"
-  );
-  const imgAddress = createHtmlElement(
-    "img",
-    null,
-    null,
-    "src",
-    "https://picsum.photos/45/45"
-  );
-  const pAddress = createHtmlElement("p", null, address);
-  divOrderDetailAddress.appendChild(imgAddress);
-  divOrderDetailAddress.appendChild(pAddress);
-  formOrderDetail.insertBefore(
-    divOrderDetailAddress,
-    formOrderDetail.firstChild
-  );
-
-  // name
-  const divOrderDetailName = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailName"
-  );
-  const imgName = createHtmlElement(
-    "img",
-    null,
-    null,
-    "src",
-    "https://picsum.photos/45/45"
-  );
-  const pName = createHtmlElement("p", null, name);
-  divOrderDetailName.appendChild(imgName);
-  divOrderDetailName.appendChild(pName);
-  formOrderDetail.insertBefore(divOrderDetailName, formOrderDetail.firstChild);
-
-  // order ID
-  const orderDetailIDElements = [
-    {
-      type: "p",
-      value: null,
-      textContent: "Order ID",
-    },
-    {
-      type: "p",
-      value: null,
-      textContent: orderID,
-    },
-  ];
-  const divOrderDetailID = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailID"
-  );
-  orderDetailIDElements.forEach(({ type, value, textContent }) => {
-    const element = createHtmlElement(type, value, textContent);
-    divOrderDetailID.appendChild(element);
-  });
-  formOrderDetail.insertBefore(divOrderDetailID, formOrderDetail.firstChild);
-
-  // EVENT BEHAVIOUR: "Trip Completed" button (form submission) behaviour
-  formOrderDetail.onsubmit = async (e) => {
-    e.preventDefault();
-
-    await tripCompletedBehaviour(userID, orderID);
-  };
 };
 
 const renderOrders = (
@@ -313,7 +219,8 @@ const renderOrders = (
           const order = get.data();
 
           // get trip details page ready
-          renderTripDetails(userID, orderID, address, name);
+          // renderTripDetails(userID, orderID, address, name);
+          window.location.href = `driver_tripDetail.html?uid=${userID}&oid=${orderID}`;
         })();
       };
 
@@ -329,7 +236,9 @@ const renderOrders = (
     divOrder.onclick = (e) => {
       e.preventDefault();
 
-      renderTripDetails(userID, orderID, address, name);
+      // renderTripDetails(userID, orderID, address, name);
+
+      window.location.href = `driver_tripDetail.html?uid=${userID}&oid=${orderID}`;
     };
   }
 };

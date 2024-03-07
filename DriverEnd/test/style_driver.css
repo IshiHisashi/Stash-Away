@@ -76,8 +76,8 @@ section.orders {
 }
 
 .order .orderStatus.ongoingTrip {
-  background-color: lightblue;
-  color: blue;
+  background-color: #c7d9e3;
+  color: #244655;
 }
 
 .order .orderStatus.newTrip {
@@ -173,10 +173,6 @@ body:has(.popupBackground form) {
 }
 
 /* Trip Details Page ================ */
-
-section.tripDetails {
-  display: none;
-}
 
 .orderDetail {
   background-color: white;
