@@ -17,7 +17,7 @@ document.querySelector(".popup").onclick = (e) => {
   e.stopPropagation();
 };
 
-// common
+// common with tripDetail.js
 const createHtmlElement = (
   type,
   value = null,
@@ -333,6 +333,10 @@ if (sessionStorage.getItem("currentPage")) {
 } else {
   controlCarousel("allTrips");
 }
+
+const footerBegin = document.querySelector(".orders.allTrips").clientHeight;
+console.log(footerBegin);
+document.querySelector("footer").style.marginTop = `${footerBegin + 32}px`;
 
 // TAB BEHAVIOUR
 document.querySelectorAll("header li").forEach((el) => {

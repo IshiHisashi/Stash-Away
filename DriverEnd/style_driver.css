@@ -4,6 +4,7 @@
 
 body {
   background-color: #f4f4f4;
+  margin: 0;
 }
 
 img {
@@ -15,8 +16,11 @@ img {
 /* HEADER ================================================= */
 
 header > div {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   border-radius: 15px;
+  background-image: url("images/hero.png");
+  background-size: cover;
+  color: white;
 }
 
 header nav ul {
