@@ -365,3 +365,24 @@ input {
   border: none;
   border-radius: 5px;
 }
+
+.item-wrapper{
+  display: flex;
+
+  .btn-add{
+    border: 1px solid black;
+        background-color: white;
+        color: var(--color-primary);
+        padding:0.5rem;
+  }
+  
+}
+
+  .hidden {
+    display: none !important;
+  }
+  
+  .margin{
+    margin-right:10px !important;
+  }
+
