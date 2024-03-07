@@ -26,6 +26,15 @@ header nav ul {
 
 header nav ul li {
   list-style-type: none;
+  cursor: pointer;
+}
+
+header nav ul li:hover {
+  background-color: #dfdfdf;
+}
+
+header nav ul li.current {
+  background-color: #dfdfdf;
 }
 
 header nav ul li img {

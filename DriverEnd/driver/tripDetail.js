@@ -7,13 +7,12 @@ import {
   getOrder,
   getDoc,
   doc,
-} from "./forDriverEnd/load.js";
+} from "../forDriverEnd/load.js";
 
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const uid = urlParams.get("uid");
 const oid = urlParams.get("oid");
-console.log(uid, oid);
 
 const get = await getOrder(uid, oid);
 const order = get.data();
@@ -46,7 +45,7 @@ const tripCompletedBehaviour = async (uid, oid) => {
   const order = get.data();
   if (order.status === "done") {
     alert("Trip successfully ended! Great work buddy! Take some rest:)");
-    window.location.href = "driver.html";
+    window.location.href = "../driver.html";
   }
 };
 

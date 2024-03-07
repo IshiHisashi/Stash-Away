@@ -220,7 +220,7 @@ const renderOrders = (
 
           // get trip details page ready
           // renderTripDetails(userID, orderID, address, name);
-          window.location.href = `driver_tripDetail.html?uid=${userID}&oid=${orderID}`;
+          window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
         })();
       };
 
@@ -238,32 +238,46 @@ const renderOrders = (
 
       // renderTripDetails(userID, orderID, address, name);
 
-      window.location.href = `driver_tripDetail.html?uid=${userID}&oid=${orderID}`;
+      window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
     };
   }
 };
 
-objArr.forEach((orderObj) => {
-  const orderID = Object.keys(orderObj)[0];
-  const status = orderObj[orderID].status;
+const renderAllTrips = (objArr) => {
+  objArr.forEach((orderObj) => {
+    const orderID = Object.keys(orderObj)[0];
+    const status = orderObj[orderID].status;
 
-  // don't show 'done' status order
-  if (status !== "done") {
-    const orderDate = orderObj[orderID].orderDate;
+    const orderDate = orderObj[orderID].orderTimestamp;
     const userID = orderObj[orderID].userId;
     const fullName = `${orderObj[orderID].userName.firstName} ${orderObj[orderID].userName.lastName}`;
     const addressFull = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
     const addressShort = `${orderObj[orderID].address.detail} ${orderObj[orderID].address.zipCode}`;
     const driverID = orderObj[orderID].driverId;
 
-    renderOrders(
-      userID,
-      orderDate,
-      fullName,
-      status,
-      orderID,
-      addressShort,
-      driverID
-    );
-  }
-});
+    // don't show 'done' status order
+    if (status !== "done") {
+      renderOrders(
+        userID,
+        orderDate,
+        fullName,
+        status,
+        orderID,
+        addressShort,
+        driverID
+      );
+    }
+  });
+};
+
+const renderNewTrips = () => {
+  const objNewOrdersArr = objArr.filter((obj) => {
+    return Object.values(obj)[0].status === "requested";
+  });
+  renderAllTrips(objNewOrdersArr);
+};
+
+// render all trips on load
+renderAllTrips(objArr);
+
+//

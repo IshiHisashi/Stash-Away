@@ -39,15 +39,17 @@ order.forEach((el) => {
   objArrNotSorted.push(obj);
 });
 
-const objArr = objArrNotSorted.sort(
-  (obj1, obj2) =>
-    Object.values(obj2)[0].orderDate - Object.values(obj1)[0].orderDate
-);
+const objArr = objArrNotSorted.sort((obj1, obj2) => {
+  return (
+    Object.values(obj2)[0].orderTimestamp -
+    Object.values(obj1)[0].orderTimestamp
+  );
+});
 
 objArr.forEach((obj) => {
   const rawTimestamp = new Date(
-    Object.values(obj)[0].orderDate.seconds * 1000 +
-      Object.values(obj)[0].orderDate.nanoseconds / 1000000
+    Object.values(obj)[0].orderTimestamp.seconds * 1000 +
+      Object.values(obj)[0].orderTimestamp.nanoseconds / 1000000
   );
   const formattedTimestamp = rawTimestamp.toLocaleString("en-CA", {
     timeZone: "America/Vancouver",
@@ -60,7 +62,7 @@ objArr.forEach((obj) => {
     timeZoneName: "shortGeneric",
   });
 
-  Object.values(obj)[0].orderDate = formattedTimestamp;
+  Object.values(obj)[0].orderTimestamp = formattedTimestamp;
 });
 
 // Update driver's id and its status. Also, update each item's status inStorage when order status is "done".
