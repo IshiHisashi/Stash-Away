@@ -45,7 +45,8 @@ const renderOrders = (
   status,
   orderID,
   address,
-  driverID
+  driverID,
+  currentPage
 ) => {
   // order container
   const divOrder = createHtmlElement("div", null, null, "class", "order");
@@ -229,7 +230,7 @@ const renderOrders = (
   }
   divOrder.appendChild(btn);
 
-  document.querySelector(".orders").appendChild(divOrder);
+  document.querySelector(`.orders.${currentPage}`).appendChild(divOrder);
 
   // EVENT BEHAVIOUR: show trip details page directly from the order cards (only for the ongoing trip cards behaviour)
   if (divOrder.querySelector(".btnDriverAssigned")) {
@@ -243,7 +244,7 @@ const renderOrders = (
   }
 };
 
-const renderAllTrips = (objArr) => {
+const renderAllTrips = (objArr, currentPage) => {
   objArr.forEach((orderObj) => {
     const orderID = Object.keys(orderObj)[0];
     const status = orderObj[orderID].status;
@@ -264,20 +265,89 @@ const renderAllTrips = (objArr) => {
         status,
         orderID,
         addressShort,
-        driverID
+        driverID,
+        currentPage
       );
     }
   });
 };
 
-const renderNewTrips = () => {
+const renderNewTrips = (objArr, currentPage) => {
   const objNewOrdersArr = objArr.filter((obj) => {
     return Object.values(obj)[0].status === "requested";
   });
-  renderAllTrips(objNewOrdersArr);
+  renderAllTrips(objNewOrdersArr, currentPage);
 };
 
-// render all trips on load
-renderAllTrips(objArr);
+const renderOngoingTrips = (objArr, currentPage) => {
+  const objOngoingOrdersArr = objArr.filter((obj) => {
+    return Object.values(obj)[0].status === "on going";
+  });
+  renderAllTrips(objOngoingOrdersArr, currentPage);
+};
 
-//
+// render trips on load
+const sectionNewTrips = document.querySelector(".orders.newTrips");
+const sectionOngoingTrips = document.querySelector(".orders.ongoingTrips");
+const sectionAllTrips = document.querySelector(".orders.allTrips");
+
+sectionNewTrips.style.transform = "translateX(-100%)";
+sectionOngoingTrips.style.transform = "translateX(-100%)";
+sectionAllTrips.style.transform = "translateX(0)";
+
+const controlCarousel = (currentPage) => {
+  document
+    .querySelector(`.orders.${currentPage}`)
+    .querySelectorAll(".order")
+    .forEach((el) => {
+      el.remove();
+    });
+  switch (currentPage) {
+    case "newTrips":
+      document.querySelector("li.newTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(0)";
+      sectionOngoingTrips.style.transform = "translateX(200%)";
+      sectionAllTrips.style.transform = "translateX(300%)";
+      renderNewTrips(objArr, currentPage);
+      break;
+    case "ongoingTrips":
+      document.querySelector("li.ongoingTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(-100%)";
+      sectionOngoingTrips.style.transform = "translateX(0)";
+      sectionAllTrips.style.transform = "translateX(200%)";
+      renderOngoingTrips(objArr, currentPage);
+      break;
+    case "allTrips":
+      document.querySelector("li.allTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(-200%)";
+      sectionOngoingTrips.style.transform = "translateX(-100%)";
+      sectionAllTrips.style.transform = "translateX(0)";
+      renderAllTrips(objArr, currentPage);
+      break;
+  }
+};
+
+if (sessionStorage.getItem("currentPage")) {
+  const currentPage = sessionStorage.getItem("currentPage");
+  controlCarousel(currentPage);
+} else {
+  controlCarousel("allTrips");
+}
+
+// TAB BEHAVIOUR
+document.querySelectorAll("header li").forEach((el) => {
+  el.onclick = (e) => {
+    e.preventDefault();
+    const currentPageClass = e.target.classList[0];
+    sessionStorage.setItem("currentPage", currentPageClass);
+    const currentPage = sessionStorage.getItem("currentPage");
+
+    document.querySelectorAll("header li").forEach((el) => {
+      el.classList.remove("current");
+    });
+    document.querySelector(`li.${currentPage}`).classList.add("current");
+    console.log(document.querySelector(`.${currentPage}`).classList);
+
+    controlCarousel(currentPage);
+  };
+});

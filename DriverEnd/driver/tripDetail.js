@@ -132,3 +132,13 @@ const renderTripDetails = (userID, orderID, address, name) => {
 };
 
 renderTripDetails(uid, oid, address, name);
+
+// TAB BEHAVIOUR
+document.querySelectorAll("header li").forEach((el) => {
+  el.onclick = (e) => {
+    e.preventDefault();
+    const currentPageClass = e.target.classList[0];
+    sessionStorage.setItem("currentPage", currentPageClass);
+    window.location.href = "../driver.html";
+  };
+});
