@@ -6,8 +6,6 @@ const itemList = document.getElementById("item-list");
 const numRetrievalItems = document.getElementById("num-retrieval-items");
 console.log(common.getcheckedItem);
 // Rendering
-// await common.renderCheckedItem2(itemList);
-// numRetrievalItems.textContent = `${common.getcheckedItem.length}`;
 
 // -----------------EXP
 for (let i = 0; i < common.getcheckedItem.length; i++) {
@@ -51,6 +49,8 @@ elementsDelete.forEach((el) => {
     const index = common.getcheckedItem.indexOf(deleteID);
     common.getcheckedItem.splice(index, 1);
     // Update the Database
-    common.recordCheckedFunction(common.getcheckedItem);
+    await common.recordCheckedFunction(common.getcheckedItem);
+    //
+    window.location.reload();
   });
 });

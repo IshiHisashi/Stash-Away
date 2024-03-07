@@ -265,3 +265,103 @@ main {
     }
   }
 }
+/* for modal */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+
+  .modal-content {
+    background-color: #f4f4f4;
+    margin: 20% auto;
+    width: 85%;
+    height: 40rem;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+    position: relative;
+  }
+
+  .modalClose {
+    font-size: 2rem;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+  }
+
+  .modalClose:hover {
+    cursor: pointer;
+  }
+
+  .modal-body {
+    padding: 10px 20px;
+    color: black;
+  }
+
+  #radioContainer {
+    display: flex;
+    align-items: center;
+  }
+
+  #radioContainer > label {
+    margin-right: 0;
+  }
+
+  #radioContainer > input {
+    width: 50px;
+  }
+
+  .button-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  #itemsContainer {
+    width: 100px;
+    height: 100px;
+  }
+
+  
+}
+
+.btn-div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  a {
+    border-radius: 10px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .btn-back {
+    border: 1px solid black;
+    background-color: white;
+    color: var(--color-primary);
+  }
+  .btn-next {
+    border: none;
+    background-color: var(--color-primary);
+    color: white;
+  }
+}
+
+div {
+  margin-bottom: 0.75rem;
+}
+
+input {
+  display: block;
+  background-color: var(--color-input);
+  width: 90%;
+  height: 25px;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 5px;
+}

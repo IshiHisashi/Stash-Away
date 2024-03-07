@@ -210,94 +210,6 @@ export const recordCheckedFunction = async function (arr) {
   });
 };
 
-// order-confirmation : Read checked items
-export let getcheckedItem = userDoc.ongoingRetrievalItems;
-export const renderCheckedItem = function (element) {
-  getcheckedItem.forEach(async (el) => {
-    const getItem = await getDoc(
-      doc(db, "users", `${userId}`, "inStorage", `${el}`)
-    );
-    const item = getItem.data();
-    const itemID = getItem.id;
-
-    // render
-    await element.insertAdjacentHTML(
-      "beforeend",
-      `<li  class='item-list-li'><img src='${
-        item.picture ? item.picture : ""
-      }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
-        item.status === "retrieved"
-          ? "retrieved"
-          : item.status === "retrieval requested"
-          ? "on request"
-          : item.status === "stored"
-          ? "In storage"
-          : ""
-      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
-      </li>`
-    );
-  });
-};
-
-export const renderCheckedItem2 = async function (element) {
-  console.log(getcheckedItem);
-  for (let i = 0; i < getcheckedItem.length; i++) {
-    const getItem = await getDoc(
-      doc(db, "users", `${userId}`, "inStorage", getcheckedItem[i])
-    );
-    const item = getItem.data();
-    const itemID = getItem.id;
-    // render
-    await element.insertAdjacentHTML(
-      "beforeend",
-      `<li  class='item-list-li'><img src='${
-        item.picture ? item.picture : ""
-      }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
-        item.status === "retrieved"
-          ? "retrieved"
-          : item.status === "retrieval requested"
-          ? "on request"
-          : item.status === "stored"
-          ? "In storage"
-          : ""
-      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
-      </li>`
-    );
-  }
-  const elementsDelete = document.querySelectorAll(".delete");
-  elementsDelete.forEach((el) => {
-    el.addEventListener("click", async (e) => {
-      e.preventDefault();
-      console.log("x");
-      // delete
-      const deleteID = e.target.id.split("_")[1];
-      // await deleteDoc(
-      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
-      // );
-      console.log(`${e.target.id} is deleted`);
-    });
-  });
-};
-
-// PENDING : order-confirmation : Delete checked item
-//Delete
-export const deleteChecked = function (elements) {
-  Array.from(elements).forEach((el) => {
-    el.addEventListener("click", async (e) => {
-      e.preventDefault();
-      console.log(el);
-      // delete
-      const deleteID = e.target.id.split("_")[1];
-      // await deleteDoc(
-      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
-      // );
-      console.log(`${e.target.id} is deleted`);
-    });
-  });
-};
-
 // Retrieval : Order submitted
 export const retrievalOrderSubmitFunction = async function () {
   getcheckedItem.forEach(async (el) => {
@@ -369,3 +281,75 @@ const expiryFullDate = date.addDays(contractDays);
 const expiryDate = `${expiryFullDate.getFullYear()}/${
   expiryFullDate.getMonth() + 1
 }/${expiryFullDate.getDate()}`;
+
+// Archives_NOT in use
+// order-confirmation : Read checked items
+export let getcheckedItem = userDoc.ongoingRetrievalItems;
+export const renderCheckedItem = function (element) {
+  getcheckedItem.forEach(async (el) => {
+    const getItem = await getDoc(
+      doc(db, "users", `${userId}`, "inStorage", `${el}`)
+    );
+    const item = getItem.data();
+    const itemID = getItem.id;
+
+    // render
+    await element.insertAdjacentHTML(
+      "beforeend",
+      `<li  class='item-list-li'><img src='${
+        item.picture ? item.picture : ""
+      }' class=placeholder-pic alt=${itemID}>
+    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+        item.status === "retrieved"
+          ? "retrieved"
+          : item.status === "retrieval requested"
+          ? "on request"
+          : item.status === "stored"
+          ? "In storage"
+          : ""
+      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      </li>`
+    );
+  });
+};
+
+export const renderCheckedItem2 = async function (element) {
+  console.log(getcheckedItem);
+  for (let i = 0; i < getcheckedItem.length; i++) {
+    const getItem = await getDoc(
+      doc(db, "users", `${userId}`, "inStorage", getcheckedItem[i])
+    );
+    const item = getItem.data();
+    const itemID = getItem.id;
+    // render
+    await element.insertAdjacentHTML(
+      "beforeend",
+      `<li  class='item-list-li'><img src='${
+        item.picture ? item.picture : ""
+      }' class=placeholder-pic alt=${itemID}>
+    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+        item.status === "retrieved"
+          ? "retrieved"
+          : item.status === "retrieval requested"
+          ? "on request"
+          : item.status === "stored"
+          ? "In storage"
+          : ""
+      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      </li>`
+    );
+  }
+  const elementsDelete = document.querySelectorAll(".delete");
+  elementsDelete.forEach((el) => {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      console.log("x");
+      // delete
+      const deleteID = e.target.id.split("_")[1];
+      // await deleteDoc(
+      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      // );
+      console.log(`${e.target.id} is deleted`);
+    });
+  });
+};

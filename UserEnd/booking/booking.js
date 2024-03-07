@@ -39,6 +39,10 @@ const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 // const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
+const newItemName = document.getElementById("newItemName");
+const displayItemName = document.getElementById("displayItemName");
+const displayItemNameElement = document.getElementById("displayItemName");
+const btnSave = document.getElementById("btnSave");
 const itemList = document.getElementById("item-list");
 // For 2. Booking_pick-up
 const firstname = document.getElementById("firstname");
@@ -80,7 +84,9 @@ const btnLong = document.getElementById("btn-long");
 const cameraIcon = document.getElementById("cameraIcon");
 const captureBtn = document.getElementById("capture");
 const retakeBtn = document.getElementById("retake");
+const reuploadBtn = document.getElementById("reupload");
 const saveBtn = document.getElementById("saveItem");
+const saveImageBtn = document.getElementById("saveImage");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -157,23 +163,18 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
 });
 
 //camera
-
-document.getElementById("newItemName").addEventListener("input", function () {
-  const itemNameValue = document.getElementById("newItemName").value.trim();
-  document.getElementById("saveItem").disabled = itemNameValue === "";
-});
-
 captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
+  
+  // document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
+  displayItemNameElement.textContent = document.getElementById("newItemName").value;
+
   const fixedWidth = 300;
-  const fixedHeight = 150; //
+  const fixedHeight = 150;
   canvas.width = fixedWidth;
   canvas.height = fixedHeight;
 
-  const scale = Math.min(
-    canvas.width / video.videoWidth,
-    canvas.height / video.videoHeight
-  );
+  const scale = Math.min(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
   const scaledWidth = video.videoWidth * scale;
   const scaledHeight = video.videoHeight * scale;
 
@@ -183,10 +184,11 @@ captureBtn.addEventListener("click", function (e) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.drawImage(video, xOffset, yOffset, scaledWidth, scaledHeight);
   canvas.hidden = false;
-  captureBtn.hidden = true;
   retakeBtn.disabled = false;
-  retakeBtn.style.display = "inline-block";
-  saveBtn.disabled = false;
+  document.getElementById("capture").style.display = "none";
+  document.getElementById("retake").style.display = "inline-block";
+  document.getElementById("saveImage").style.display = "inline-block";
+  saveImageBtn.disabled = false;
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -197,9 +199,10 @@ captureBtn.addEventListener("click", function (e) {
   }, "image/jpeg");
 
   if (stream) {
-    stream.getTracks().forEach((track) => track.stop());
+    stream.getTracks().forEach(track => track.stop());
   }
 });
+
 
 retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
@@ -207,13 +210,17 @@ retakeBtn.addEventListener("click", function (e) {
   video.hidden = false;
   captureBtn.disabled = false;
   retakeBtn.style.display = "none";
-  saveBtn.disabled = true;
+  saveImageBtn.disabled = true;
+  document.getElementById("capture").style.display = "inline-block";
+  document.getElementById("uploadButton").style.display = "inline-block";
+  document.getElementById("saveImage").style.display = "none";
+  document.getElementById("displayItemName").style.display = "none";
+  document.getElementById("reupload").style.display = "none";
 
-  // Restart the camera stream
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: true
       })
       .then(function (localStream) {
         stream = localStream;
@@ -227,14 +234,35 @@ retakeBtn.addEventListener("click", function (e) {
 
 uploadButton.addEventListener("click", function (e) {
   e.preventDefault();
-  imageUpload.click();
+  imageUpload.value = ""; // Clear the previous selection
+  imageUpload.click(); 
+  canvas.hidden = true;
+  video.hidden = true;
+});
+
+reuploadBtn.addEventListener("click", function (e) {
+  e.preventDefault();
+  imageUpload.onchange();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 imageUpload.addEventListener("change", function (e) {
-  e.preventDefault();
-  const file = e.target.files[0];
+  if (e.target.files.length > 0) {
+    // File has been selected
+    const file = e.target.files[0];
+    processFile(file); // Call a function to handle the file
+  } else {
+    // This block will not be executed for a cancel operation since
+    // the change event is not fired if the user cancels the dialog.
+    console.log("No file selected or upload cancelled.");
+  }
+});
+
+function processFile(file) {
+  document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
+  displayItemNameElement.textContent = document.getElementById("newItemName").value;;
+
   if (file) {
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -245,10 +273,7 @@ imageUpload.addEventListener("change", function (e) {
         canvas.width = fixedWidth;
         canvas.height = fixedHeight;
 
-        const scale = Math.min(
-          canvas.width / img.width,
-          canvas.height / img.height
-        );
+        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
         const scaledWidth = img.width * scale;
         const scaledHeight = img.height * scale;
 
@@ -268,7 +293,25 @@ imageUpload.addEventListener("change", function (e) {
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
+
+    reuploadBtn.disabled = false;
+    document.getElementById("capture").style.display = "none";
+    document.getElementById("uploadButton").style.display = "none";
+    document.getElementById("retake").style.display = "none";
+    document.getElementById("reupload").style.display = "inline-block";
+    document.getElementById("saveImage").style.display = "inline-block";
+  } else {    
+    openCamera();
+    document.getElementById("reupload").style.display = "none";
+    document.getElementById("saveImage").style.display = "none";
+    document.getElementById("capture").style.display = "inline-block";
+    document.getElementById("uploadButton").style.display = "inline-block";
+    document.getElementById("displayItemName").style.display = "none";
   }
+}
+
+saveImageBtn.addEventListener("click", async function (e) {
+  modalClose();
 });
 
 saveBtn.addEventListener("click", async function (e) {
@@ -280,36 +323,24 @@ saveBtn.addEventListener("click", async function (e) {
     return;
   }
 
-  // Handle image upload first
   let imageReference = null;
   if (image) {
     const storageRef = firebase.storage().ref();
-    const imageRef = storageRef.child(
-      `photos/${itemName.replace(/\s+/g, "_").toLowerCase()}_${Date.now()}.jpg`
-    );
+    const imageRef = storageRef.child(`photos/${itemName.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.jpg`);
     const snapshot = await imageRef.put(image);
     imageReference = await snapshot.ref.getDownloadURL();
   }
 
-  //update or add the item
   if (currentEditingItemId) {
-    // Update existing item
-    await updateDoc(
-      doc(db, "users", userId, "inStorage", currentEditingItemId),
-      {
-        itemName,
-        picture: imageReference || itemData.picture,
-      }
-    );
+    await updateDoc(doc(db, "users", userId, "inStorage", currentEditingItemId), {
+      itemName,
+      picture: imageReference || itemData.picture,
+    });
     alert("Item updated successfully!");
   } else {
-    // Add a new item
     await addDoc(collection(db, "users", userId, "inStorage"), {
       itemName,
-      boxNumber:
-        (
-          await getDocs(query(collection(db, "users", userId, "inStorage")))
-        ).docs.length + 1,
+      boxNumber: (await getDocs(query(collection(db, "users", userId, "inStorage")))).docs.length + 1,
       picture: imageReference || "",
       storedDate: "2024-01-31",
       status: "saved",
@@ -543,82 +574,10 @@ btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
 
-// -------------------------------
-// Will be transferred to other display
-
-// Submit data
-btnSubmit.addEventListener("click", async (e) => {
-  e.preventDefault();
-  const batch = writeBatch(db);
-  const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-  const snapShot = await getDocs(queryStorage);
-  const orderedArrID = [];
-
-  snapShot.forEach((doc) => {
-    if (doc.data().status === "saved") {
-      let docid = doc.id;
-      // Update status
-      batch.update(doc.ref, {
-        status: "add requested",
-      });
-      // Push to arr
-      const updatedItem = docid;
-      orderedArrID.push(updatedItem);
-      console.log(orderedArrID);
-    }
-  });
-  await batch.commit();
-  // Get updated data and create an object array
-  const orderedArrItem = [];
-  orderedArrID.forEach(async (id) => {
-    const queryUpdatedItem = doc(
-      db,
-      "users",
-      `${userId}`,
-      "inStorage",
-      `${id}`
-    );
-    const snapShot = await getDoc(queryUpdatedItem);
-    const itemData = snapShot.data();
-    const idAndData = {
-      [id]: itemData,
-    };
-    orderedArrItem.push(idAndData);
-  });
-  console.log(orderedArrItem);
-
-  // Generate new ORDER
-  await addDoc(collection(db, "users", `${userId}`, "order"), {
-    userId: `${userId}`,
-    userName: {
-      firstName: `${userDoc.userName.firstName}`,
-      lastName: `${userDoc.userName.lastName}`,
-    },
-    driverId: "",
-    itemKey: orderedArrID,
-    orderDate: "2024-01-31",
-    orderType: "add",
-    status: "requested",
-    address: {
-      detail: `${detailAddress.value}`,
-      city: `${city.value}`,
-      province: `${province.value}`,
-      zipCode: `${zip.value}`,
-    },
-    storageLocation: {
-      latitude: `${userDoc.storageLocation.latitude}`,
-      longitude: `${userDoc.storageLocation.longitude}`,
-      name: `${userDoc.storageLocation.name}`,
-    },
-  });
-});
-// ---------------------------
-
 // ---------------------------
 // for modal
 const modal = document.getElementById("easyModal");
 const buttonClose = document.getElementsByClassName("modalClose")[0];
-const newItemName = document.getElementById("newItemName");
 
 function setupEventListener() {
   const listupPic = document.getElementById("listup-pic");
@@ -632,16 +591,20 @@ function setupEventListener() {
 
 setupEventListener();
 
-// Adjusted modalOpen function
 function modalOpen(e, itemData = "", itemId = "") {
-  const option1 = document.getElementById("option1");
-  clearModelData();
+  
+  initiateModel();
 
+  document.getElementById("imageUpload").style.display = "none";
+  
   if (itemData) {
+    onEditModel(itemData.picture);
     if (itemId != "") {
       currentEditingItemId = itemId;
     }
     document.getElementById("newItemName").value = itemData.itemName;
+    document.getElementById("displayItemName").style.display = "block";
+    displayItemNameElement.textContent = itemData.itemName;
     modal.style.display = "block";
 
     if (itemData.picture && itemData.picture !== "") {
@@ -657,64 +620,87 @@ function modalOpen(e, itemData = "", itemId = "") {
       img.src = itemData.picture;
     }
   } else {
-    modal.style.display = "block";
+    if (document.getElementById("newItemName").value != '') {
+      modal.style.display = "block";
+      if (image == null || image == undefined) {
+        openCamera();
+      }
+    } else {
+      alert("Please enter a item name.");
+    }
   }
 
-  saveItem.style.display = "inline-block";
-
-  if (option1.checked) {
-    openCamera();
-  }
+  // saveItem.style.display = "inline-block";
 }
 
-// close sign is clicked
 buttonClose.addEventListener("click", modalClose);
 
 function modalClose() {
+  
   modal.style.display = "none";
-
-  clearModelData();
+  if (image == undefined || image == null) {
+    clearModelData()
+  }
+  if (currentEditingItemId > 0) {
+    editSaveItem();
+  }
 }
 
-// you can close modal by clicking any place.
 addEventListener("click", outsideClose);
 
 function outsideClose(e) {
   if (e.target == modal) {
     modal.style.display = "none";
 
-    clearModelData();
+    if (image == undefined || image == null) {
+      clearModelData()
+    }
   }
 }
 
 function clearModelData() {
-  // Reset input fields
-  currentEditingItemId = 0;
   document.getElementById("newItemName").value = "";
-
-  // Reset radio buttons
-  const radioButtons = document.querySelectorAll(
-    'input[type="radio"][name="options"]'
-  );
-  radioButtons.forEach((radio) => (radio.checked = false));
-
-  // Clear canvas
+  document.getElementById("displayItemName").value = "";
   const canvas = document.getElementById("canvas");
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
   canvas.hidden = true;
+}
 
-  document.getElementById("capture").style.display = "none";
+function initiateModel() {
+  currentEditingItemId = 0;
+  retakeBtn.disabled = false;
+  reuploadBtn.disabled = false;
+  document.getElementById("capture").style.display = "inline-block";
   document.getElementById("retake").style.display = "none";
-  document.getElementById("uploadButton").style.display = "none";
-  document.getElementById("saveItem").style.display = "none";
+  document.getElementById("reupload").style.display = "none";
+  document.getElementById("uploadButton").style.display = "inline-block";
+  document.getElementById("saveImage").style.display = "none";
+}
+
+function onEditModel(picture) {
+  currentEditingItemId = 0;
+
+  if (picture && picture !== "") {
+    document.getElementById("capture").style.display = "none";
+    document.getElementById("retake").style.display = "inline-block";
+    document.getElementById("reupload").style.display = "inline-block";
+    document.getElementById("uploadButton").style.display = "none";
+  } else {
+    openCamera();
+    document.getElementById("capture").style.display = "inline-block";
+    document.getElementById("retake").style.display = "none";
+    document.getElementById("reupload").style.display = "none";
+    document.getElementById("uploadButton").style.display = "inline-block";
+  }
+  document.getElementById("saveImage").style.display = "none";
 }
 
 function openCamera() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true,
+        video: true
       })
       .then(function (localStream) {
         stream = localStream;
@@ -723,46 +709,12 @@ function openCamera() {
         video.height = 150;
         video.width = 300;
         captureBtn.disabled = false;
-        captureBtn.style.display = "inline-block";
-        uploadButton.style.display = "none";
-        saveBtn.style.display = "inline-block";
+        // captureBtn.style.display = "inline-block";
+        // uploadButton.style.display = "none";
+        // saveBtn.style.display = "inline-block";
       })
       .catch(function (err) {
         console.log("An error occurred: " + err);
       });
   }
 }
-
-function handleCaptureImageSelected() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  canvas.hidden = true;
-  imageUpload.value = "";
-  openCamera();
-}
-
-function handleUploadImageSelected() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  canvas.hidden = true;
-  imageUpload.value = "";
-  imageUpload.click();
-  canvas.hidden = true;
-  captureBtn.disabled = true;
-  video.hidden = true;
-  captureBtn.style.display = "none";
-  uploadButton.style.display = "inline-block";
-  retakeBtn.disabled = true;
-  retakeBtn.style.display = "none";
-  saveBtn.style.display = "inline-block";
-}
-
-document.getElementById("option1").addEventListener("change", function () {
-  if (this.checked) {
-    handleCaptureImageSelected();
-  }
-});
-
-document.getElementById("option2").addEventListener("change", function () {
-  if (this.checked) {
-    handleUploadImageSelected();
-  }
-});
