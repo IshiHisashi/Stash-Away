@@ -110,15 +110,44 @@ const renderListFor = function (doc) {
     if (doc[i].data().status === "saved") {
       const item = doc[i].data();
       const itemID = doc[i].id;
-      // Use the item's image if available; otherwise, use the default image from the 'images' folder
-      const itemImageSrc = item.picture
-        ? item.picture
-        : "/images/default-image.jpg";
+      const itemImageSrc = item.picture ? item.picture : "../images/img_no-pic.png";
 
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li'><img src='${itemImageSrc}' class='placeholder-pic' alt='Item Image'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+        `<li class='item-list-li' style="display: flex">
+            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:10px; width: 10%;" alt='Item Image'>
+            <div style="display: flex; align-items: center;">
+              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px" id='nameitem_${itemID}'>${item.itemName}</div>
+              <i class="fa-solid fa-check icon save hidden margin" id="saveitem_${itemID}"></i>
+              <i class="fa-solid fa-camera icon pic margin" id="picitem_${itemID}"></i>
+              <i class="fa-solid fa-trash icon delete margin" id="deleteitem_${itemID}"></i>
+            </div>
+          </li>`
       );
+
+      const editableNameElement = document.getElementById(`nameitem_${itemID}`);
+      let originalContent = item.itemName; // Store the original content here
+
+      editableNameElement.addEventListener("focus", function () {
+        const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+        saveIconElement.classList.remove("hidden"); // Show the save icon
+        originalContent = editableNameElement.innerText; // Update original content on focus
+      });
+
+      editableNameElement.addEventListener("blur", function () {
+        const currentContent = editableNameElement.innerText;
+        if (currentContent === originalContent) {
+          const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+          saveIconElement.classList.add("hidden"); // Hide the save icon if content hasn't changed
+        }
+      });
+
+      const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+      saveIconElement.addEventListener("click", async function () {
+        const newName = document.getElementById(`nameitem_${itemID}`).innerText;
+        await saveItemNameEdit(itemID, newName);
+        saveIconElement.classList.add("hidden"); // Hide the save icon after saving
+      });
 
       const iconElement = document.getElementById(`picitem_${itemID}`);
       iconElement.addEventListener("click", function (e) {
@@ -128,6 +157,23 @@ const renderListFor = function (doc) {
     }
   }
 };
+
+async function saveItemNameEdit(itemId, newName) {
+  if (!newName.trim()) {
+    alert("Please provide an item name.");
+    return;
+  }
+
+  try {
+    await updateDoc(doc(db, "users", userId, "inStorage", itemId), {
+      itemName: newName.trim(),
+    });
+    alert("Item name updated successfully!");
+  } catch (error) {
+    console.error("Error updating document: ", error);
+    alert("Failed to update item.");
+  }
+}
 
 // Render list
 itemList.innerHTML = "";
@@ -165,7 +211,7 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
 //camera
 captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  
+
   // document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
   displayItemNameElement.textContent = document.getElementById("newItemName").value;
 
@@ -184,11 +230,9 @@ captureBtn.addEventListener("click", function (e) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.drawImage(video, xOffset, yOffset, scaledWidth, scaledHeight);
   canvas.hidden = false;
-  retakeBtn.disabled = false;
   document.getElementById("capture").style.display = "none";
   document.getElementById("retake").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "inline-block";
-  saveImageBtn.disabled = false;
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -208,9 +252,7 @@ retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
   canvas.hidden = true;
   video.hidden = false;
-  captureBtn.disabled = false;
   retakeBtn.style.display = "none";
-  saveImageBtn.disabled = true;
   document.getElementById("capture").style.display = "inline-block";
   document.getElementById("uploadButton").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "none";
@@ -235,26 +277,24 @@ retakeBtn.addEventListener("click", function (e) {
 uploadButton.addEventListener("click", function (e) {
   e.preventDefault();
   imageUpload.value = ""; // Clear the previous selection
-  imageUpload.click(); 
+  imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 reuploadBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  imageUpload.onchange();
+  imageUpload.value = "";
+  imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 imageUpload.addEventListener("change", function (e) {
   if (e.target.files.length > 0) {
-    // File has been selected
     const file = e.target.files[0];
-    processFile(file); // Call a function to handle the file
+    processFile(file);
   } else {
-    // This block will not be executed for a cancel operation since
-    // the change event is not fired if the user cancels the dialog.
     console.log("No file selected or upload cancelled.");
   }
 });
@@ -294,13 +334,12 @@ function processFile(file) {
     };
     reader.readAsDataURL(file);
 
-    reuploadBtn.disabled = false;
     document.getElementById("capture").style.display = "none";
     document.getElementById("uploadButton").style.display = "none";
     document.getElementById("retake").style.display = "none";
     document.getElementById("reupload").style.display = "inline-block";
     document.getElementById("saveImage").style.display = "inline-block";
-  } else {    
+  } else {
     openCamera();
     document.getElementById("reupload").style.display = "none";
     document.getElementById("saveImage").style.display = "none";
@@ -311,12 +350,20 @@ function processFile(file) {
 }
 
 saveImageBtn.addEventListener("click", async function (e) {
+  e.preventDefault();
   modalClose();
+
+  if (currentEditingItemId) {
+    await saveItem();
+  }
 });
 
 saveBtn.addEventListener("click", async function (e) {
   e.preventDefault();
+  await saveItem();
+});
 
+async function saveItem() {
   const itemName = document.getElementById("newItemName").value;
   if (!itemName.trim()) {
     alert("Please provide an item name.");
@@ -348,9 +395,11 @@ saveBtn.addEventListener("click", async function (e) {
     alert("Item added successfully!");
   }
 
+  document.getElementById("newItemName").value = "";
+
   modalClose();
   clearModelData();
-});
+}
 
 const itemsContainer = document.getElementById("itemsContainer");
 // Prathibha_end
@@ -592,17 +641,18 @@ function setupEventListener() {
 setupEventListener();
 
 function modalOpen(e, itemData = "", itemId = "") {
-  
+
   initiateModel();
 
   document.getElementById("imageUpload").style.display = "none";
-  
+
+  debugger
   if (itemData) {
     onEditModel(itemData.picture);
     if (itemId != "") {
       currentEditingItemId = itemId;
     }
-    document.getElementById("newItemName").value = itemData.itemName;
+    // document.getElementById("newItemName").value = itemData.itemName;
     document.getElementById("displayItemName").style.display = "block";
     displayItemNameElement.textContent = itemData.itemName;
     modal.style.display = "block";
@@ -636,7 +686,7 @@ function modalOpen(e, itemData = "", itemId = "") {
 buttonClose.addEventListener("click", modalClose);
 
 function modalClose() {
-  
+
   modal.style.display = "none";
   if (image == undefined || image == null) {
     clearModelData()
@@ -659,7 +709,6 @@ function outsideClose(e) {
 }
 
 function clearModelData() {
-  document.getElementById("newItemName").value = "";
   document.getElementById("displayItemName").value = "";
   const canvas = document.getElementById("canvas");
   const context = canvas.getContext("2d");
@@ -669,8 +718,7 @@ function clearModelData() {
 
 function initiateModel() {
   currentEditingItemId = 0;
-  retakeBtn.disabled = false;
-  reuploadBtn.disabled = false;
+  displayItemNameElement.textContent = '';
   document.getElementById("capture").style.display = "inline-block";
   document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
@@ -681,7 +729,10 @@ function initiateModel() {
 function onEditModel(picture) {
   currentEditingItemId = 0;
 
+  clearModelData();
+
   if (picture && picture !== "") {
+    closeCamera();
     document.getElementById("capture").style.display = "none";
     document.getElementById("retake").style.display = "inline-block";
     document.getElementById("reupload").style.display = "inline-block";
@@ -708,7 +759,6 @@ function openCamera() {
         video.hidden = false;
         video.height = 150;
         video.width = 300;
-        captureBtn.disabled = false;
         // captureBtn.style.display = "inline-block";
         // uploadButton.style.display = "none";
         // saveBtn.style.display = "inline-block";
@@ -716,5 +766,16 @@ function openCamera() {
       .catch(function (err) {
         console.log("An error occurred: " + err);
       });
+  }
+}
+
+function closeCamera() {
+  if (stream) {
+    stream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+
+    video.srcObject = null; // Disconnect the stream from the video element
+    video.hidden = true; // Optionally hide the video element
   }
 }
