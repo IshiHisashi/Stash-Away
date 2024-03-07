@@ -158,7 +158,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
     },
     driverId: "",
     itemKey: orderedArrID,
-    orderDate: nowDate,
+    orderTimestamp: nowFullDate,
     orderType: "add",
     status: "requested",
     address: {
@@ -232,7 +232,7 @@ export const retrievalOrderSubmitFunction = async function () {
     },
     driverId: "",
     itemKey: getcheckedItem,
-    orderDate: nowDate,
+    orderTimestamp: nowFullDate,
     orderType: "retrieval",
     status: "requested",
     address: {
@@ -263,8 +263,8 @@ export const retrievalOrderSubmitFunction = async function () {
 
 // Date handling
 // current time
-const ts = Timestamp.fromDate(new Date()).seconds;
-const nowFullDate = new Date(ts * 1000);
+export const ts = Timestamp.fromDate(new Date()).seconds;
+export const nowFullDate = new Date(ts * 1000);
 const nowDate = `${nowFullDate.getFullYear()}/${
   nowFullDate.getMonth() + 1
 }/${nowFullDate.getDate()}`;

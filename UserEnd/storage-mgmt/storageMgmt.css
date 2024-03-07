@@ -10,7 +10,9 @@
 }
 #hero-img {
   width: 100%;
-  /* filter: grayscale(0.7); */
+  height: 400px;
+  object-fit: cover;
+  display: block;
 }
 
 section {

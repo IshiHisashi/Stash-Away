@@ -17,6 +17,7 @@ document.querySelector(".popup").onclick = (e) => {
   e.stopPropagation();
 };
 
+// common with tripDetail.js
 const createHtmlElement = (
   type,
   value = null,
@@ -37,101 +38,6 @@ const createHtmlElement = (
   return element;
 };
 
-const tripCompletedBehaviour = async (uid, oid) => {
-  await update(uid, oid);
-  const get = await getOrder(uid, oid);
-  const order = get.data();
-  if (order.status === "done") {
-    alert("Trip successfully ended! Great work buddy! Take some rest:)");
-  }
-};
-
-const renderTripDetails = (userID, orderID, address, name) => {
-  document.querySelector(".orders").style.display = "none";
-  document.querySelector(".popupBackground").style.display = "none";
-  document.querySelector(".tripDetails").style.display = "block";
-
-  // get form container (already exists in HTML)
-  const formOrderDetail = document.querySelector(".orderDetail");
-  formOrderDetail.setAttribute("id", `${userID}_${orderID}`);
-
-  // address
-  const divOrderDetailAddress = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailAddress"
-  );
-  const imgAddress = createHtmlElement(
-    "img",
-    null,
-    null,
-    "src",
-    "https://picsum.photos/45/45"
-  );
-  const pAddress = createHtmlElement("p", null, address);
-  divOrderDetailAddress.appendChild(imgAddress);
-  divOrderDetailAddress.appendChild(pAddress);
-  formOrderDetail.insertBefore(
-    divOrderDetailAddress,
-    formOrderDetail.firstChild
-  );
-
-  // name
-  const divOrderDetailName = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailName"
-  );
-  const imgName = createHtmlElement(
-    "img",
-    null,
-    null,
-    "src",
-    "https://picsum.photos/45/45"
-  );
-  const pName = createHtmlElement("p", null, name);
-  divOrderDetailName.appendChild(imgName);
-  divOrderDetailName.appendChild(pName);
-  formOrderDetail.insertBefore(divOrderDetailName, formOrderDetail.firstChild);
-
-  // order ID
-  const orderDetailIDElements = [
-    {
-      type: "p",
-      value: null,
-      textContent: "Order ID",
-    },
-    {
-      type: "p",
-      value: null,
-      textContent: orderID,
-    },
-  ];
-  const divOrderDetailID = createHtmlElement(
-    "div",
-    null,
-    null,
-    "class",
-    "orderDetailID"
-  );
-  orderDetailIDElements.forEach(({ type, value, textContent }) => {
-    const element = createHtmlElement(type, value, textContent);
-    divOrderDetailID.appendChild(element);
-  });
-  formOrderDetail.insertBefore(divOrderDetailID, formOrderDetail.firstChild);
-
-  // EVENT BEHAVIOUR: "Trip Completed" button (form submission) behaviour
-  formOrderDetail.onsubmit = async (e) => {
-    e.preventDefault();
-
-    await tripCompletedBehaviour(userID, orderID);
-  };
-};
-
 const renderOrders = (
   userID,
   date,
@@ -139,7 +45,8 @@ const renderOrders = (
   status,
   orderID,
   address,
-  driverID
+  driverID,
+  currentPage
 ) => {
   // order container
   const divOrder = createHtmlElement("div", null, null, "class", "order");
@@ -313,7 +220,8 @@ const renderOrders = (
           const order = get.data();
 
           // get trip details page ready
-          renderTripDetails(userID, orderID, address, name);
+          // renderTripDetails(userID, orderID, address, name);
+          window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
         })();
       };
 
@@ -322,39 +230,128 @@ const renderOrders = (
   }
   divOrder.appendChild(btn);
 
-  document.querySelector(".orders").appendChild(divOrder);
+  document.querySelector(`.orders.${currentPage}`).appendChild(divOrder);
 
   // EVENT BEHAVIOUR: show trip details page directly from the order cards (only for the ongoing trip cards behaviour)
   if (divOrder.querySelector(".btnDriverAssigned")) {
     divOrder.onclick = (e) => {
       e.preventDefault();
 
-      renderTripDetails(userID, orderID, address, name);
+      // renderTripDetails(userID, orderID, address, name);
+
+      window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
     };
   }
 };
 
-objArr.forEach((orderObj) => {
-  const orderID = Object.keys(orderObj)[0];
-  const status = orderObj[orderID].status;
+const renderAllTrips = (objArr, currentPage) => {
+  objArr.forEach((orderObj) => {
+    const orderID = Object.keys(orderObj)[0];
+    const status = orderObj[orderID].status;
 
-  // don't show 'done' status order
-  if (status !== "done") {
-    const orderDate = orderObj[orderID].orderDate;
+    const orderDate = orderObj[orderID].orderTimestamp;
     const userID = orderObj[orderID].userId;
     const fullName = `${orderObj[orderID].userName.firstName} ${orderObj[orderID].userName.lastName}`;
     const addressFull = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
     const addressShort = `${orderObj[orderID].address.detail} ${orderObj[orderID].address.zipCode}`;
     const driverID = orderObj[orderID].driverId;
 
-    renderOrders(
-      userID,
-      orderDate,
-      fullName,
-      status,
-      orderID,
-      addressShort,
-      driverID
-    );
+    // don't show 'done' status order
+    if (status !== "done") {
+      renderOrders(
+        userID,
+        orderDate,
+        fullName,
+        status,
+        orderID,
+        addressShort,
+        driverID,
+        currentPage
+      );
+    }
+  });
+};
+
+const renderNewTrips = (objArr, currentPage) => {
+  const objNewOrdersArr = objArr.filter((obj) => {
+    return Object.values(obj)[0].status === "requested";
+  });
+  renderAllTrips(objNewOrdersArr, currentPage);
+};
+
+const renderOngoingTrips = (objArr, currentPage) => {
+  const objOngoingOrdersArr = objArr.filter((obj) => {
+    return Object.values(obj)[0].status === "on going";
+  });
+  renderAllTrips(objOngoingOrdersArr, currentPage);
+};
+
+// render trips on load
+const sectionNewTrips = document.querySelector(".orders.newTrips");
+const sectionOngoingTrips = document.querySelector(".orders.ongoingTrips");
+const sectionAllTrips = document.querySelector(".orders.allTrips");
+
+sectionNewTrips.style.transform = "translateX(-100%)";
+sectionOngoingTrips.style.transform = "translateX(-100%)";
+sectionAllTrips.style.transform = "translateX(0)";
+
+const controlCarousel = (currentPage) => {
+  document
+    .querySelector(`.orders.${currentPage}`)
+    .querySelectorAll(".order")
+    .forEach((el) => {
+      el.remove();
+    });
+  switch (currentPage) {
+    case "newTrips":
+      document.querySelector("li.newTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(0)";
+      sectionOngoingTrips.style.transform = "translateX(200%)";
+      sectionAllTrips.style.transform = "translateX(300%)";
+      renderNewTrips(objArr, currentPage);
+      break;
+    case "ongoingTrips":
+      document.querySelector("li.ongoingTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(-100%)";
+      sectionOngoingTrips.style.transform = "translateX(0)";
+      sectionAllTrips.style.transform = "translateX(200%)";
+      renderOngoingTrips(objArr, currentPage);
+      break;
+    case "allTrips":
+      document.querySelector("li.allTrips").classList.add("current");
+      sectionNewTrips.style.transform = "translateX(-200%)";
+      sectionOngoingTrips.style.transform = "translateX(-100%)";
+      sectionAllTrips.style.transform = "translateX(0)";
+      renderAllTrips(objArr, currentPage);
+      break;
   }
+};
+
+if (sessionStorage.getItem("currentPage")) {
+  const currentPage = sessionStorage.getItem("currentPage");
+  controlCarousel(currentPage);
+} else {
+  controlCarousel("allTrips");
+}
+
+const footerBegin = document.querySelector(".orders.allTrips").clientHeight;
+console.log(footerBegin);
+document.querySelector("footer").style.marginTop = `${footerBegin + 32}px`;
+
+// TAB BEHAVIOUR
+document.querySelectorAll("header li").forEach((el) => {
+  el.onclick = (e) => {
+    e.preventDefault();
+    const currentPageClass = e.target.classList[0];
+    sessionStorage.setItem("currentPage", currentPageClass);
+    const currentPage = sessionStorage.getItem("currentPage");
+
+    document.querySelectorAll("header li").forEach((el) => {
+      el.classList.remove("current");
+    });
+    document.querySelector(`li.${currentPage}`).classList.add("current");
+    console.log(document.querySelector(`.${currentPage}`).classList);
+
+    controlCarousel(currentPage);
+  };
 });
