@@ -87,6 +87,7 @@ const retakeBtn = document.getElementById("retake");
 const reuploadBtn = document.getElementById("reupload");
 const saveBtn = document.getElementById("saveItem");
 const saveImageBtn = document.getElementById("saveImage");
+const backBtn = document.getElementById("backButton");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -114,10 +115,10 @@ const renderListFor = function (doc) {
 
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li' style="display: flex">
-            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:10px; width: 10%;" alt='Item Image'>
-            <div style="display: flex; align-items: center;">
-              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px" id='nameitem_${itemID}'>${item.itemName}</div>
+        `<li class='item-list-li' style="display: flex; gap: 1rem;">
+            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:100px;  width: 10%;" alt='Item Image'>
+            <div style="display: grid; grid-template-columns: 1fr 10% 10%; grid-gap: 5px; width:30%;">
+              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px;" id='nameitem_${itemID}'>${item.itemName}</div>
               <i class="fa-solid fa-check icon save hidden margin" id="saveitem_${itemID}"></i>
               <i class="fa-solid fa-camera icon pic margin" id="picitem_${itemID}"></i>
               <i class="fa-solid fa-trash icon delete margin" id="deleteitem_${itemID}"></i>
@@ -233,6 +234,7 @@ captureBtn.addEventListener("click", function (e) {
   document.getElementById("capture").style.display = "none";
   document.getElementById("retake").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "inline-block";
+  document.getElementById("backButton") .style.display = "inline-block";
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -338,7 +340,8 @@ function processFile(file) {
     document.getElementById("uploadButton").style.display = "none";
     document.getElementById("retake").style.display = "none";
     document.getElementById("reupload").style.display = "inline-block";
-    document.getElementById("saveImage").style.display = "inline-block";
+    document.getElementById("saveImage").style.display = "inline-block";    
+  document.getElementById("backButton") .style.display = "inline-block";
   } else {
     openCamera();
     document.getElementById("reupload").style.display = "none";
@@ -365,7 +368,8 @@ saveBtn.addEventListener("click", async function (e) {
 
 async function saveItem() {
   const itemName = document.getElementById("newItemName").value;
-  if (!itemName.trim()) {
+  debugger
+  if (!itemName.trim() && !currentEditingItemId) {
     alert("Please provide an item name.");
     return;
   }
@@ -380,10 +384,9 @@ async function saveItem() {
 
   if (currentEditingItemId) {
     await updateDoc(doc(db, "users", userId, "inStorage", currentEditingItemId), {
-      itemName,
       picture: imageReference || itemData.picture,
     });
-    alert("Item updated successfully!");
+    alert("Item image updated successfully!");
   } else {
     await addDoc(collection(db, "users", userId, "inStorage"), {
       itemName,
@@ -708,8 +711,12 @@ function outsideClose(e) {
   }
 }
 
-function clearModelData() {
-  document.getElementById("displayItemName").value = "";
+function clearModelData(isBack = false) {
+  debugger
+  if(!isBack){
+    document.getElementById("displayItemName").value = "";
+  }
+  image = null;
   const canvas = document.getElementById("canvas");
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -724,6 +731,7 @@ function initiateModel() {
   document.getElementById("reupload").style.display = "none";
   document.getElementById("uploadButton").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton") .style.display = "none";
 }
 
 function onEditModel(picture) {
@@ -779,3 +787,16 @@ function closeCamera() {
     video.hidden = true; // Optionally hide the video element
   }
 }
+
+backButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  clearModelData(true);
+  openCamera();
+    document.getElementById("capture").style.display = "inline-block";
+    document.getElementById("displayItemName").style.display = "none";
+    document.getElementById("retake").style.display = "none";
+    document.getElementById("reupload").style.display = "none";
+    document.getElementById("saveImage").style.display = "none";
+    document.getElementById("backButton").style.display = "none";
+    document.getElementById("uploadButton").style.display = "inline-block";
+});

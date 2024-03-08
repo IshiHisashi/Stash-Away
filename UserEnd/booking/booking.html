@@ -33,8 +33,10 @@
       </div>
         <div class="item-wrapper">
           <!-- <label>Write an item to store</label> -->
-          <input type="text" id="newItemName" placeholder="Enter Item Name"/><i class="fa-solid fa-camera" id="listup-pic"></i>
-
+          <div class="input-icon-wrapper">
+            <input type="text" id="newItemName" placeholder="Enter Item Name"/>
+            <i class="fa-solid fa-camera" id="listup-pic"></i>
+        </div>
                    <!-- <button type="submit" class="btn-delete">delete</button> -->
         <div class="btn-div">
           <a id="saveItem" class="btn-add" type="button">Add+</a>
@@ -52,10 +54,11 @@
               <div>
                 <div>
                   <div class="btn-div">
+                    <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i></a>
                     <label for="itemName">Take a Picture of Your Item</label>
-                    <a id="backButton" class="btn-back" type="button">Back</a>
+                    <span id="displayItemName"></span>
+
                   </div>
-                  <span id="displayItemName"></span>
                 </div>
                 <!-- <div>
                     <label for="imageOption">Capture Image or Upload Image (Optional)</label>
@@ -99,15 +102,17 @@
             </button> -->
 
         <div class="item-list-wrapper">
-          <h3>Current item list_on going</h3>
+          <!-- <h3>Current item list_on going</h3> -->
           <ul id="item-list">
             <p>You item list...</p>
           </ul>
+          <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+
         </div>
         <!-- Prathibha end -->
 
         <!-- Ishi start : 2.Bokking_pickup-Info -->
-        <section class="pickup-info">
+        <section class="pickup-info" id="pickup-info">
           <h3><span>2</span> Pick-Up Address</h3>
           <p>
             Provide your address and enjoy hassle-free pick up of your items
