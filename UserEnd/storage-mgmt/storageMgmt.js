@@ -96,7 +96,7 @@ renderList(common.snapShot);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
-const cArr = [];
+let cArr = [];
 // Arr to register checked input id.
 const a = document.querySelectorAll("input[type='checkbox']");
 a.forEach((e) => {
@@ -115,8 +115,11 @@ const checkControl = function () {
   Array.from(checkboxes).forEach((el) => {
     el.addEventListener("change", (e) => {
       e.preventDefault();
+      console.log(cArr, el.id);
+      console.log(cArr.includes(el.id));
       if (cArr.includes(el.id)) {
-        cArr.pop(el.id);
+        const i = cArr.indexOf(el.id);
+        cArr.splice(i, 1);
       } else {
         cArr.push(el.id);
       }
