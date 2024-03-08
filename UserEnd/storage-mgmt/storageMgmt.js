@@ -291,5 +291,10 @@ btnRequestReturn.addEventListener("click", async (e) => {
   // record it on database tentatively
   await common.recordCheckedFunction(checkedArr);
   // move page
-  window.location.href = "../order-confirmation/order-confirmation.html";
+  if (cArr.length === 0) {
+    alert("You have not choosen any of stored item");
+  }
+  if (cArr.length > 0) {
+    window.location.href = "../order-confirmation/order-confirmation.html";
+  }
 });
