@@ -41,7 +41,6 @@ const itemList = document.querySelector(".item-list");
 const filter = document.getElementById("filter");
 const numReturnItems = document.getElementById("num-return-items");
 const btnRequestReturn = document.getElementById("btn-request-return");
-const btnRetrieve = document.getElementById("btnRetrieve");
 
 const renderList = function (snapShot) {
   snapShot.forEach((doc) => {
@@ -113,15 +112,12 @@ const checkControl = function () {
   Array.from(checkboxes).forEach((el) => {
     el.addEventListener("change", (e) => {
       e.preventDefault();
-      console.log(cArr, el.id);
-      console.log(cArr.includes(el.id));
       if (cArr.includes(el.id)) {
         const i = cArr.indexOf(el.id);
         cArr.splice(i, 1);
       } else {
         cArr.push(el.id);
       }
-      console.log(cArr);
       // update button
       if (cArr.length < 2) {
         numReturnItems.textContent = `(${cArr.length} item)`;
@@ -162,7 +158,6 @@ btnSearch.addEventListener("click", (e) => {
   const searchItemsIDArr = itemsIDArr.filter((el) => {
     return el[1].itemName.toLowerCase().includes(search.value.toLowerCase());
   });
-  console.log(searchItemsIDArr);
   // cleanup the html
   cleanupList();
   const numCheckedInSearch = [];
@@ -219,7 +214,6 @@ btnSearch.addEventListener("click", (e) => {
         cArr.push(el.id);
         numCheckedInSearch.push(el.id);
       }
-      console.log(cArr);
       // update button
       if (numCheckedInSearch.length < 2) {
         numReturnItems.textContent = `(${numCheckedInSearch.length} item)`;
@@ -275,7 +269,6 @@ btnRequestReturn.addEventListener("click", async (e) => {
     if (el.checked) {
       // Extract option#1 : Simple Arr with IDs
       const checkedID = el.id.split("_")[1];
-      console.log(checkedID);
       checkedArr.push(checkedID);
       // May transfer to the other page
       // Extract option#2 : Whole document
@@ -284,7 +277,6 @@ btnRequestReturn.addEventListener("click", async (e) => {
       );
       const itemObj = { [checkedID]: getItem.data() };
       checkedDocs.push(itemObj);
-      console.log(checkedArr, checkedDocs);
     } else {
     }
   });
