@@ -87,8 +87,6 @@ const renderList = function (snapShot) {
 // Name
 // get data
 const docSnap = await getDoc(doc(db, "users", `${userId}`));
-const hp = docSnap.data();
-const id = docSnap.id;
 
 // Item
 // get data
@@ -150,7 +148,7 @@ const cleanupList = function () {
   }
 };
 
-// Search_revision
+// Search
 // Create arr
 const itemsIDArr = [];
 common.snapShot.forEach((el) => {
@@ -164,11 +162,18 @@ btnSearch.addEventListener("click", (e) => {
   const searchItemsIDArr = itemsIDArr.filter((el) => {
     return el[1].itemName.toLowerCase().includes(search.value.toLowerCase());
   });
-  // Rendering (hard-code for now, as rendering funcition cannot be used)
+  console.log(searchItemsIDArr);
+  // cleanup the html
   cleanupList();
+  const numCheckedInSearch = [];
+  // Loop over for rendering
   searchItemsIDArr.forEach((el) => {
     const item = el[1];
     const itemID = el[0];
+    // Count # of items that fulfill 'searched' and 'checked'.
+    cArr.includes(`check_${itemID}`) &&
+      numCheckedInSearch.push(`check_${itemID}`);
+    // Rendering
     if (item.status !== "saved" && item.status !== "add requested") {
       itemList.insertAdjacentHTML(
         "beforeend",
@@ -193,9 +198,36 @@ btnSearch.addEventListener("click", (e) => {
       document.getElementById(`check_${itemID}`).disabled = true;
     }
   });
+  console.log(numCheckedInSearch);
+  // Update UI for # of checked items as per search results
+  if (numCheckedInSearch.length < 2) {
+    numReturnItems.textContent = `(${numCheckedInSearch.length} item)`;
+  } else {
+    numReturnItems.textContent = `(${numCheckedInSearch.length} items)`;
+  }
   // checkbox contorol
   recallCheckbox();
-  checkControl();
+  Array.from(checkboxes).forEach((el) => {
+    el.addEventListener("change", (e) => {
+      e.preventDefault();
+      if (cArr.includes(el.id)) {
+        const i = cArr.indexOf(el.id);
+        const ii = numCheckedInSearch.indexOf(el.id);
+        cArr.splice(i, 1);
+        numCheckedInSearch.splice(ii, 1);
+      } else {
+        cArr.push(el.id);
+        numCheckedInSearch.push(el.id);
+      }
+      console.log(cArr);
+      // update button
+      if (numCheckedInSearch.length < 2) {
+        numReturnItems.textContent = `(${numCheckedInSearch.length} item)`;
+      } else {
+        numReturnItems.textContent = `(${numCheckedInSearch.length} items)`;
+      }
+    });
+  });
 });
 
 // Delete search
