@@ -107,10 +107,11 @@ const userSnap = await getDoc(doc(db, "users", `${userId}`));
 export const userDoc = userSnap.data();
 
 // General : Get item (document) in 'inStorage' (subcollection):
-const queryStorage = collection(db, "users", `${userId}`, "inStorage");
+export const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 export const snapShot = await getDocs(queryStorage);
 //
 
+// Update and Create
 // Booking : Order submitted
 export const addOrderSubmitFunction = async function (snapShot) {
   const batch = writeBatch(db);

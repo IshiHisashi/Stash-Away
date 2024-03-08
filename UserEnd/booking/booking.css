@@ -12,6 +12,7 @@ body {
   --color-primary: #e04462;
   --color-secondary: #103646;
   --color-input: #f4f4f4;
+  --color-lightnpink: #fce4e7;
 }
 
 /* Main */
@@ -59,7 +60,8 @@ main {
       margin: 20% auto;
       width: 85%;
       height: 40rem;
-      box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+      box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2),
+        0 7px 20px 0 rgba(0, 0, 0, 0.17);
       position: relative;
     }
 
@@ -84,11 +86,11 @@ main {
       align-items: center;
     }
 
-    #radioContainer>label {
+    #radioContainer > label {
       margin-right: 0;
     }
 
-    #radioContainer>input {
+    #radioContainer > input {
       width: 50px;
     }
 
@@ -168,11 +170,9 @@ main {
       color: var(--color-primary);
       padding: 0.5rem;
     }
-
   }
 
   .item-list-wrapper {
-
     overflow: hidden;
 
     .btn-proceed {
@@ -181,7 +181,6 @@ main {
       color: white;
       float: right;
       width: 50%;
-
     }
 
     a {
@@ -192,20 +191,17 @@ main {
       cursor: pointer;
       text-align: center;
       text-decoration: none;
-      ;
     }
 
     li.item-list-li {
       margin-bottom: 20px;
       align-items: center;
     }
-
   }
 
   .input-icon-wrapper {
     position: relative;
     display: inline-block;
-
 
     #newItemName {
       padding-right: 30px;
@@ -227,8 +223,6 @@ main {
   .margin {
     margin-right: 10px !important;
   }
-
-
 
   /* For Ishi */
   /* 2. Pick-Up Address*/
@@ -333,7 +327,7 @@ main {
 
   /* 3. Storage Size */
   .storage-size {
-    >div {
+    > div {
       display: flex;
       flex-direction: column;
       gap: 1rem;
@@ -345,6 +339,14 @@ main {
       border: 0.5px solid black;
       border-radius: 10px;
       padding: 1rem;
+      pointer-events: none;
+    }
+
+    .small-size:hover,
+    .medium-size:hover,
+    .large-size:hover {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
     }
 
     h3 {
@@ -354,7 +356,7 @@ main {
     .price-num {
       font-size: 3rem;
       font-weight: 600;
-      color: var(--color-secondary);
+      color: var();
     }
 
     ul {
@@ -374,6 +376,12 @@ main {
       border: 1px solid black;
       background-color: white;
       color: var(--color-primary);
+      pointer-events: auto;
+    }
+
+    .btn-select:hover {
+      background-color: var(--color-lightnpink);
+      border: 2px solid var(--color-primary);
     }
 
     .btn-div {
@@ -402,20 +410,42 @@ main {
         color: white;
       }
     }
+    .selected {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+      .btn-select {
+        background-color: var(--color-lightnpink);
+        border: 2px solid var(--color-primary);
+      }
+    }
   }
 
   /* 4. Storage Plan */
   .select-plan {
-    >div {
+    > div {
       display: flex;
       flex-direction: column;
       gap: 1rem;
     }
 
-    div div {
+    .short,
+    .mid,
+    .long {
       border: 0.5px solid black;
       border-radius: 20px;
       padding: 0 1rem 1rem 0;
+      pointer-events: none;
+    }
+
+    .short:hover,
+    .mid:hover,
+    .long:hover {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+      .plan-title {
+        background-color: var(--color-secondary);
+        color: var(--color-input);
+      }
     }
 
     .plan-title {
@@ -426,10 +456,12 @@ main {
       color: var(--color-secondary);
       padding: 1rem;
       border-radius: 20px 0 20px 0;
+      pointer-events: none;
     }
 
     .term-inner-container {
       border: none;
+      box-sizing: border-box;
     }
 
     p {
@@ -450,18 +482,27 @@ main {
     .term-price {
       font-size: 1.2rem;
       color: var(--color-secondary);
+      font-weight: bold;
     }
 
     .btn-select {
       border-radius: 10px;
       font-size: 1rem;
       padding: 1rem;
-      margin-left: 1rem;
+      margin: 0 1rem;
       width: 100%;
+      display: block;
+      box-sizing: border-box;
       cursor: pointer;
       border: 1px solid black;
       background-color: white;
       color: var(--color-primary);
+      pointer-events: auto;
+    }
+
+    .btn-select:hover {
+      background-color: var(--color-lightnpink);
+      border: 2px solid var(--color-primary);
     }
 
     .btn-div {
@@ -490,6 +531,18 @@ main {
         border: none;
         background-color: var(--color-primary);
         color: white;
+      }
+    }
+    .selected {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+      .plan-title {
+        background-color: var(--color-secondary);
+        color: var(--color-input);
+      }
+      .btn-select {
+        background-color: var(--color-lightnpink);
+        border: 2px solid var(--color-primary);
       }
     }
   }
