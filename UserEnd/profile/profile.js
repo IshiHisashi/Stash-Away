@@ -26,6 +26,7 @@ const storageInfo = await common.companyStorageLocationDoc;
 console.log("Company data downloaded");
 console.log(plansInfo);
 console.log(storageInfo);
+const paymentMethodsArray = [];
 
 // ASYNC FUNCTION TO FILL IN INPUT FIELD
 
@@ -83,15 +84,16 @@ function getProfileInfo() {
 
     // PAYMENT METHOD SECTION ================================
     class Card {
-        constructor (cardnum, expDate, defaultBoolean) {
-            this.cardnum = cardnum;
+        constructor (cardNum, expDate, defaultBoolean, number) {
+            this.cardNum = cardNum;
             this.expDate = expDate;
             this.defaultBoolean = defaultBoolean;
-            if (firstDigit(cardnum) == 2 || firstDigit(cardnum) == 5) {
+            this.number = number
+            if (firstDigit(cardNum) == 2 || firstDigit(cardNum) == 5) {
                 this.cardBrandUrl = "masterImageUrl"
-            } else if (firstDigit(cardnum) == 4) {
+            } else if (firstDigit(cardNum) == 4) {
                 this.cardBrandUrl = "visaImageUrl"
-            } else if (firstDigit(cardnum) == 3) {
+            } else if (firstDigit(cardNum) == 3) {
                 this.cardBrandUrl = "amexImageUrl"
             }  
         }
@@ -104,7 +106,7 @@ function getProfileInfo() {
             image.setAttribute("class", "card-brand-img");
             let cardNumPara = document.createElement("p");
             cardNumPara.setAttribute("class", "card-num");
-            let node = document.createTextNode(`${this.cardnum}`);
+            let node = document.createTextNode(`${this.cardNum}`);
             cardNumPara.appendChild(node);
             let expiration = document.createElement("p");
             expiration.setAttribute("class", "exp-date");
@@ -114,7 +116,7 @@ function getProfileInfo() {
             cardRadioBtn.setAttribute("type", "radio");
             cardRadioBtn.setAttribute("id", `card-${this.number}`);
             cardRadioBtn.setAttribute("name", "card-number");
-            cardRadioBtn.setAttribute("value", `${this.cardnum}`);
+            cardRadioBtn.setAttribute("value", `${this.cardNum}`);
             if (this.defaultBoolean == true) {
                 cardRadioBtn.setAttribute("checked", "");
             }
@@ -141,9 +143,8 @@ function getProfileInfo() {
     const fieldSetArea = document.querySelector("#payment-method fieldset");
     console.log(fieldSetArea);
     const paymentMethods = profileInfo.payment_method;
-    const paymentMethodsArray = [];
     for (let i in paymentMethods) {
-        const newCard = new Card(paymentMethods[i]['card-number'], paymentMethods[i]['exp-date'], paymentMethods[i]['default'])
+        const newCard = new Card(paymentMethods[i]['cardNum'], paymentMethods[i]['expDate'], paymentMethods[i]['defaultBoolean'], i)
         console.log(newCard);
         paymentMethodsArray.push(newCard);
         console.log(paymentMethodsArray);
@@ -158,6 +159,7 @@ function getProfileInfo() {
 if (uid) {
     console.log("Found user id on DB");
     getProfileInfo();
+    radioBtnWork();
 }
 
 function firstDigit(num) {
@@ -205,28 +207,31 @@ const updateProfileInfo = async function (fName, lName, email, phone, etc, detai
 
 // 🚨 FIX THIS LATERRRRRRR.  🚨
 
-const radioBtns = document.querySelectorAll('input[name="card-number"]');
-console.log(radioBtns);
-for (let i = 0; i <= radioBtns.length - 1; i++) {
-    radioBtns[i].addEventListener("click", (e) => {
-        for (let j = 0; j <= radioBtns.length - 1; j++) {
-            if (j == i) {
-                updateDefaultTrue(j);
-            } else {
-                updateDefaultFalse(j);
+function radioBtnWork() {
+    const radioBtns = document.querySelectorAll('input[name="card-number"]');
+    console.log(radioBtns);
+    for (let i = 0; i <= radioBtns.length - 1; i++) {
+        radioBtns[i].addEventListener("click", (e) => {
+            for (let j = 0; j <= radioBtns.length - 1; j++) {
+                let paymentMethodItem = paymentMethodsArray[j];
+                if (j == i) {
+                    paymentMethodItem.defaultToTrue();
+                    console.log(paymentMethodItem);
+                } else {
+                    paymentMethodItem.defaultToFalse();
+                    console.log(paymentMethodItem);
+                }
             }
-        }
-        alert(`You chose a card with number: ${radioBtns[i].value}`);
-    })
+            const newArray = paymentMethodsArray.map(({cardBrand, cardNum, defaultBoolean, expDate, number}) => ({cardNum, defaultBoolean, expDate}));
+            console.log(newArray);
+            updateDefaultBoolean(newArray);
+            alert(`You chose a card with number: ${radioBtns[i].value}`);
+        })
+    }
 }
 
-// const updateDefaultTrue = async function (arrayNum) {
-//     await common.updateDoc(common.doc(db, "users", `${uid}`), {
-//         payment_method: common.arrayRemove(arrayNum.default),
-//         });
-// };
-
-// const updateDefaultFalse = async function (arrayNum) {
-//     await common.updateDoc(common.doc(db, "users", `${uid}`), {  
-
-// };
+const updateDefaultBoolean = async function (array) {
+    await common.updateDoc(common.doc(db, "users", `${uid}`), {
+        payment_method: array,
+    });
+};
