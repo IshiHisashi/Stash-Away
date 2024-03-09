@@ -189,7 +189,7 @@ saveProfileBtn.addEventListener("click", (event) => {
 
 const updateProfileInfo = async function (fName, lName, email, phone, etc, detail, city, province, zip) {
     await common.updateDoc(common.doc(db, "users", `${uid}`), {
-        "address.cit": city,
+        "address.city": city,
         "address.detail": detail,
         "address.roomNumEtc": etc,
         "address.province": province,
