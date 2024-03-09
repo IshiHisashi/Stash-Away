@@ -34,6 +34,10 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // Define variables----------------
 const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+const numTotal = document.getElementById("total-num");
+const numStored = document.getElementById("stored-num");
+const numOnRequest = document.getElementById("on-request-num");
+const numRetrieved = document.getElementById("retrieved-num");
 const search = document.getElementById("search");
 const btnSearch = document.getElementById("btn-search");
 const btnSerachDelete = document.getElementById("btn-search-delete");
@@ -56,7 +60,19 @@ const renderList = function (snapShot) {
         `<li  class='item-list-li'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-      <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+      <p class="item-name">${
+        item.itemName
+      }</p><div class='desc-wrapper'><p class='date'>Date ${
+          item.status === "retrieved" ? "retrieved" : "stored"
+        } : ${item.storedDate}</p><p class='item-status ${
+          item.status === "stored"
+            ? "green"
+            : item.status === "retrieval requested"
+            ? "red"
+            : item.status === "retrieved"
+            ? "gray"
+            : ""
+        }'>  ${
           item.status === "retrieved"
             ? "retrieved"
             : item.status === "retrieval requested"
@@ -64,7 +80,7 @@ const renderList = function (snapShot) {
             : item.status === "stored"
             ? "In storage"
             : ""
-        }</p> <input id=check_${itemID} class="checkbox" type="checkbox" ${
+        }</p></div> <input id=check_${itemID} class="checkbox" type="checkbox" ${
           common.getcheckedItem
             ? common.getcheckedItem.includes(itemID)
               ? "checked"
@@ -81,14 +97,34 @@ const renderList = function (snapShot) {
     }
   });
 };
-
-// Firebase handling---------------
-// Name
-// get data
-const docSnap = await getDoc(doc(db, "users", `${userId}`));
-
 // Item
-// get data
+// Render the number
+// count # of items
+const numItemTotalArr = [];
+const numItemStoredArr = [];
+const numItemOnRequestArr = [];
+const numItemRetrievedArr = [];
+common.snapShot.forEach((el) => {
+  if (el.data().status !== "saved" && "adding request") {
+    numItemTotalArr.push(el.data());
+  }
+  if (el.data().status === "stored") {
+    numItemStoredArr.push(el.data());
+  }
+  if (el.data().status === "retrieval requested") {
+    numItemOnRequestArr.push(el.data());
+  }
+  if (el.data().status === "retrieved") {
+    numItemRetrievedArr.push(el.data());
+  }
+});
+// Then, render it
+numTotal.textContent = numItemTotalArr.length;
+numStored.textContent = numItemStoredArr.length;
+numOnRequest.textContent = numItemOnRequestArr.length;
+numRetrieved.textContent = numItemRetrievedArr.length;
+
+// Render the main list
 renderList(common.snapShot);
 
 // Checkbox
@@ -175,7 +211,19 @@ btnSearch.addEventListener("click", (e) => {
         `<li  class='item-list-li'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
-      <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+      <p class="item-name">${
+        item.itemName
+      }</p><div class='desc-wrapper'><p class='date'>Date stored : ${
+          item.storedDate
+        }</p><p class='item-status ${
+          item.status === "stored"
+            ? "green"
+            : item.status === "retrieval requested"
+            ? "red"
+            : item.status === "retrieved"
+            ? "gray"
+            : ""
+        }'> ${
           item.status === "retrieved"
             ? "retrieved"
             : item.status === "retrieval requested"
@@ -183,13 +231,17 @@ btnSearch.addEventListener("click", (e) => {
             : item.status === "stored"
             ? "In storage"
             : ""
-        }</p> <input id=check_${itemID} class="checkbox" type="checkbox"/>
+        }</p></div><input id=check_${itemID} class="checkbox" type="checkbox"/>
       <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
         </li>`
       );
     }
     // Disable checkbox if the item is on retrieval request.
-    if (item.status === "requested" || item.status === "retrieval retrieved") {
+    if (
+      item.status === "requested" ||
+      item.status === "retrieval retrieved" ||
+      item.status === "retrieved"
+    ) {
       document.getElementById(`check_${itemID}`).disabled = true;
     }
   });
