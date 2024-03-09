@@ -33,8 +33,10 @@
       </div>
         <div class="item-wrapper">
           <!-- <label>Write an item to store</label> -->
-          <input type="text" id="newItemName" placeholder="Enter Item Name"/><i class="fa-solid fa-camera" id="listup-pic"></i>
-
+          <div class="input-icon-wrapper">
+            <input type="text" id="newItemName" placeholder="Enter Item Name"/>
+            <i class="fa-solid fa-camera" id="listup-pic"></i>
+        </div>
                    <!-- <button type="submit" class="btn-delete">delete</button> -->
         <div class="btn-div">
           <a id="saveItem" class="btn-add" type="button">Add+</a>
@@ -52,10 +54,11 @@
               <div>
                 <div>
                   <div class="btn-div">
+                    <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i></a>
                     <label for="itemName">Take a Picture of Your Item</label>
-                    <a id="backButton" class="btn-back" type="button">Back</a>
+                    <span id="displayItemName"></span>
+
                   </div>
-                  <span id="displayItemName"></span>
                 </div>
                 <!-- <div>
                     <label for="imageOption">Capture Image or Upload Image (Optional)</label>
@@ -99,15 +102,17 @@
             </button> -->
 
         <div class="item-list-wrapper">
-          <h3>Current item list_on going</h3>
+          <!-- <h3>Current item list_on going</h3> -->
           <ul id="item-list">
             <p>You item list...</p>
           </ul>
+          <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+
         </div>
         <!-- Prathibha end -->
 
         <!-- Ishi start : 2.Bokking_pickup-Info -->
-        <section class="pickup-info">
+        <section class="pickup-info" id="pickup-info">
           <h3><span>2</span> Pick-Up Address</h3>
           <p>
             Provide your address and enjoy hassle-free pick up of your items
@@ -185,7 +190,7 @@
             size for your items.
           </p>
           <div class="box-size-container">
-            <div class="small-size">
+            <div class="size-box small-size">
               <h3>Small box</h3>
               <p><span id="small-price" class="price-num"></span>/month</p>
               <p>Can store items such as:</p>
@@ -198,7 +203,7 @@
               <button class="btn-select" id="btn-small">select</button>
               <p>Check specifications</p>
             </div>
-            <div class="medium-size">
+            <div class="size-box medium-size">
               <h3>Medium box</h3>
               <p><span id="medium-price" class="price-num"></span>/month</p>
               <p>Can store items such as:</p>
@@ -211,7 +216,7 @@
               <button class="btn-select" id="btn-medium">select</button>
               <p>Check specifications</p>
             </div>
-            <div class="large-size">
+            <div class="size-box large-size">
               <h3>Large box</h3>
               <p><span id="large-price" class="price-num"></span>/month</p>
               <p>Can store items such as:</p>
@@ -242,7 +247,7 @@
             size for your items.
           </p>
           <div class="term-container">
-            <div class="short">
+            <div class="term-box short">
               <h3 class="plan-title">Single Month plan</h3>
               <div class="term-inner-container">
                 <p class="trip">+<span id="trip-short"></span> free trip<span class="total"> in total</span></p>
@@ -251,7 +256,7 @@
                 <button class="btn-select" id="btn-short">select</button>
               </div>
             </div>
-            <div class="medium">
+            <div class="term-box mid">
               <h3 class="plan-title">4 Months plan</h3>
               <div class="term-inner-container">
                 <p class="trip">+<span id="trip-mid"></span> free trip<span class="total"> in total</span></p>
@@ -260,7 +265,7 @@
                 <button class="btn-select" id="btn-mid">select</button>
               </div>
             </div>
-            <div class="small-size">
+            <div class="term-box long">
               <h3 class="plan-title">Yearly plan</h3>
               <div class="term-inner-container">
                 <p class="trip">+<span id="trip-long"></span> free trip<span class="total"> in total</span></p>

@@ -4,10 +4,9 @@ import * as common from "../../common.js";
 
 const itemList = document.getElementById("item-list");
 const numRetrievalItems = document.getElementById("num-retrieval-items");
-console.log(common.getcheckedItem);
 // Rendering
 
-// -----------------EXP
+// read checked items in the previous page
 for (let i = 0; i < common.getcheckedItem.length; i++) {
   const getItem = await common.getDoc(
     common.doc(
@@ -45,7 +44,6 @@ elementsDelete.forEach((el) => {
     e.preventDefault();
     // delete
     const deleteID = e.target.id.split("_")[1];
-    console.log(deleteID);
     const index = common.getcheckedItem.indexOf(deleteID);
     common.getcheckedItem.splice(index, 1);
     // Update the Database
@@ -54,3 +52,10 @@ elementsDelete.forEach((el) => {
     window.location.reload();
   });
 });
+
+// render the number of checked items
+if (common.getcheckedItem.length < 2) {
+  numRetrievalItems.textContent = `${common.getcheckedItem.length} item`;
+} else {
+  numRetrievalItems.textContent = `${common.getcheckedItem.length} items`;
+}

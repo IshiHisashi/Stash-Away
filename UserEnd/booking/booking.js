@@ -1,5 +1,7 @@
 "use strict";
 
+import * as common from "../../common.js";
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import {
@@ -87,6 +89,7 @@ const retakeBtn = document.getElementById("retake");
 const reuploadBtn = document.getElementById("reupload");
 const saveBtn = document.getElementById("saveItem");
 const saveImageBtn = document.getElementById("saveImage");
+const backBtn = document.getElementById("backButton");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -98,11 +101,6 @@ let image;
 let currentEditingItemId;
 let itemData;
 
-// Firebase handling---------------
-// Get User document
-const docSnap = await getDoc(doc(db, "users", `${userId}`));
-const userDoc = docSnap.data();
-
 // --------------------------------
 // For Prathibha
 const renderListFor = function (doc) {
@@ -110,14 +108,16 @@ const renderListFor = function (doc) {
     if (doc[i].data().status === "saved") {
       const item = doc[i].data();
       const itemID = doc[i].id;
-      const itemImageSrc = item.picture ? item.picture : "../images/img_no-pic.png";
+      const itemImageSrc = item.picture
+        ? item.picture
+        : "../images/img_no-pic.png";
 
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li' style="display: flex">
-            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:10px; width: 10%;" alt='Item Image'>
-            <div style="display: flex; align-items: center;">
-              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px" id='nameitem_${itemID}'>${item.itemName}</div>
+        `<li class='item-list-li' style="display: flex; gap: 1rem;">
+            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:100px;  width: 10%;" alt='Item Image'>
+            <div style="display: grid; grid-template-columns: 1fr 10% 10%; grid-gap: 5px; width:30%;">
+              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px;" id='nameitem_${itemID}'>${item.itemName}</div>
               <i class="fa-solid fa-check icon save hidden margin" id="saveitem_${itemID}"></i>
               <i class="fa-solid fa-camera icon pic margin" id="picitem_${itemID}"></i>
               <i class="fa-solid fa-trash icon delete margin" id="deleteitem_${itemID}"></i>
@@ -177,10 +177,7 @@ async function saveItemNameEdit(itemId, newName) {
 
 // Render list
 itemList.innerHTML = "";
-const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-const snapShot = await getDocs(queryStorage);
-const snapDoc = snapShot.docs;
-const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
+const unsubscribe = common.onSnapshot(common.queryStorage, (querySnapshot) => {
   itemList.innerHTML = "";
   renderListFor(querySnapshot.docs);
 
@@ -200,10 +197,15 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
       e.preventDefault();
       // delete
       const deleteID = e.target.id.split("_")[1];
-      await deleteDoc(
-        doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      common.deleteDoc(
+        common.doc(
+          common.db,
+          "users",
+          `${common.userId}`,
+          "inStorage",
+          `${deleteID}`
+        )
       );
-      console.log(`${e.target.id} is deleted`);
     });
   });
 });
@@ -213,14 +215,18 @@ captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
 
   // document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
-  displayItemNameElement.textContent = document.getElementById("newItemName").value;
+  displayItemNameElement.textContent =
+    document.getElementById("newItemName").value;
 
   const fixedWidth = 300;
   const fixedHeight = 150;
   canvas.width = fixedWidth;
   canvas.height = fixedHeight;
 
-  const scale = Math.min(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
+  const scale = Math.min(
+    canvas.width / video.videoWidth,
+    canvas.height / video.videoHeight
+  );
   const scaledWidth = video.videoWidth * scale;
   const scaledHeight = video.videoHeight * scale;
 
@@ -233,6 +239,7 @@ captureBtn.addEventListener("click", function (e) {
   document.getElementById("capture").style.display = "none";
   document.getElementById("retake").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "inline-block";
+  document.getElementById("backButton").style.display = "inline-block";
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -243,10 +250,9 @@ captureBtn.addEventListener("click", function (e) {
   }, "image/jpeg");
 
   if (stream) {
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach((track) => track.stop());
   }
 });
-
 
 retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
@@ -262,7 +268,7 @@ retakeBtn.addEventListener("click", function (e) {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true
+        video: true,
       })
       .then(function (localStream) {
         stream = localStream;
@@ -301,7 +307,8 @@ imageUpload.addEventListener("change", function (e) {
 
 function processFile(file) {
   document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
-  displayItemNameElement.textContent = document.getElementById("newItemName").value;;
+  displayItemNameElement.textContent =
+    document.getElementById("newItemName").value;
 
   if (file) {
     const reader = new FileReader();
@@ -313,7 +320,10 @@ function processFile(file) {
         canvas.width = fixedWidth;
         canvas.height = fixedHeight;
 
-        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+        const scale = Math.min(
+          canvas.width / img.width,
+          canvas.height / img.height
+        );
         const scaledWidth = img.width * scale;
         const scaledHeight = img.height * scale;
 
@@ -339,6 +349,7 @@ function processFile(file) {
     document.getElementById("retake").style.display = "none";
     document.getElementById("reupload").style.display = "inline-block";
     document.getElementById("saveImage").style.display = "inline-block";
+    document.getElementById("backButton").style.display = "inline-block";
   } else {
     openCamera();
     document.getElementById("reupload").style.display = "none";
@@ -365,7 +376,8 @@ saveBtn.addEventListener("click", async function (e) {
 
 async function saveItem() {
   const itemName = document.getElementById("newItemName").value;
-  if (!itemName.trim()) {
+  debugger;
+  if (!itemName.trim() && !currentEditingItemId) {
     alert("Please provide an item name.");
     return;
   }
@@ -373,21 +385,28 @@ async function saveItem() {
   let imageReference = null;
   if (image) {
     const storageRef = firebase.storage().ref();
-    const imageRef = storageRef.child(`photos/${itemName.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.jpg`);
+    const imageRef = storageRef.child(
+      `photos/${itemName.replace(/\s+/g, "_").toLowerCase()}_${Date.now()}.jpg`
+    );
     const snapshot = await imageRef.put(image);
     imageReference = await snapshot.ref.getDownloadURL();
   }
 
   if (currentEditingItemId) {
-    await updateDoc(doc(db, "users", userId, "inStorage", currentEditingItemId), {
-      itemName,
-      picture: imageReference || itemData.picture,
-    });
-    alert("Item updated successfully!");
+    await updateDoc(
+      doc(db, "users", userId, "inStorage", currentEditingItemId),
+      {
+        picture: imageReference || itemData.picture,
+      }
+    );
+    alert("Item image updated successfully!");
   } else {
     await addDoc(collection(db, "users", userId, "inStorage"), {
       itemName,
-      boxNumber: (await getDocs(query(collection(db, "users", userId, "inStorage")))).docs.length + 1,
+      boxNumber:
+        (
+          await getDocs(query(collection(db, "users", userId, "inStorage")))
+        ).docs.length + 1,
       picture: imageReference || "",
       storedDate: "2024-01-31",
       status: "saved",
@@ -408,14 +427,14 @@ const itemsContainer = document.getElementById("itemsContainer");
 // Ishi start
 // 2. Booking_Pickup
 // Rendering as default values
-firstname.value = userDoc.userName.firstName;
-lastname.value = userDoc.userName.lastName;
-unitNumber.value = userDoc.address.roomNumEtc;
-street.value = userDoc.address.detail;
-city.value = userDoc.address.city;
-province.value = userDoc.address.province;
-zipCode.value = userDoc.address.zipCode;
-storageLocation.value = userDoc.storageLocation.name;
+firstname.value = common.userDoc.userName.firstName;
+lastname.value = common.userDoc.userName.lastName;
+unitNumber.value = common.userDoc.address.roomNumEtc;
+street.value = common.userDoc.address.detail;
+city.value = common.userDoc.address.city;
+province.value = common.userDoc.address.province;
+zipCode.value = common.userDoc.address.zipCode;
+storageLocation.value = common.userDoc.storageLocation.name;
 
 // Calendar
 // display control
@@ -542,7 +561,7 @@ times.forEach((el) => {
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
   e.preventDefault();
-  await updateDoc(doc(db, "users", `${userId}`), {
+  common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
     "userName.firstName": `${firstname.value}`,
     "userName.lastName": `${lastname.value}`,
     "address.city": `${city.value}`,
@@ -557,47 +576,83 @@ btnSavePickup.addEventListener("click", async (e) => {
 });
 
 // ------------------------------
+
 // 3. Storage Size
 // load plan data from 'Company' and render first
-const docPlan = await getDoc(doc(db, "Company", "plan"));
-const docPlanSize = docPlan.data().size;
+const docPlanSize = common.companyPlanDoc.size;
 // Render the price
 smallPrice.textContent = `$${docPlanSize.small.price}`;
 mediumPrice.textContent = `$${docPlanSize.medium.price}`;
 largePrice.textContent = `$${docPlanSize.large.price}`;
 
-// btn click
+// initial setting (if already selected)
+const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
+if (common.userDoc.plan.size) {
+  for (let i = 0; i < btnSelectSizeAll.length; i++) {
+    if (btnSelectSizeAll[i].id.includes(common.userDoc.plan.size)) {
+      document
+        .querySelector(`.${common.userDoc.plan.size}-size`)
+        .classList.add("selected");
+    }
+  }
+}
+
+// btn click to select size
 const btnSelectClick = function (btn, size) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await updateDoc(doc(db, "users", `${userId}`), {
+    // Update database
+    await common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
       "plan.size": size,
     });
+    // Style selected size
+    // delete default setting
+    document.querySelectorAll(".size-box").forEach((el) => {
+      el.classList.remove("selected");
+    });
+    // style newly selected one
+    for (let i = 0; i < btnSelectSizeAll.length; i++) {
+      if (btnSelectSizeAll[i].id.includes(size)) {
+        document.querySelector(`.${size}-size`).classList.add("selected");
+      }
+    }
+    // update section#4
+    priceShort.textContent = `$${calcTotalPrice(
+      docPlanTerm.short.discount,
+      size
+    )}`;
+    priceMid.textContent = `$${calcTotalPrice(docPlanTerm.mid.discount, size)}`;
+    priceLong.textContent = `$${calcTotalPrice(
+      docPlanTerm.long.discount,
+      size
+    )}`;
   });
 };
 // execute
 btnSelectClick(btnSelectSmall, "small");
 btnSelectClick(btnSelectMedium, "medium");
 btnSelectClick(btnSelectLarge, "large");
-
 // ------------------------------
 // 4. Storage Plan
 // define variables
 
-const docPlanTerm = docPlan.data().term;
+let docPlanTerm = common.companyPlanDoc.term;
 // Read user's size for calc later
-const selectedSize = docSnap.data().plan.size;
+let selectedSize = common.userDoc.plan.size;
 // calc function
 const calcTotalPrice = function (discount, size) {
-  return Math.trunc(discount * docPlanSize[size].price);
+  if (selectedSize) {
+    return Math.trunc(discount * docPlanSize[size].price);
+  }
 };
-// Render it
+// Render term
 tripShort.textContent = `${docPlanTerm.short.numTrip}`;
 tripMid.textContent = `${docPlanTerm.mid.numTrip}`;
 tripLong.textContent = `${docPlanTerm.long.numTrip}`;
 monthShort.textContent = `${docPlanTerm.short.numMonth}`;
 monthMid.textContent = `${docPlanTerm.mid.numMonth}`;
 monthLong.textContent = `${docPlanTerm.long.numMonth}`;
+// Render price, based on the selected size in the previous section(#3)
 priceShort.textContent = `$${calcTotalPrice(
   docPlanTerm.short.discount,
   selectedSize
@@ -610,15 +665,37 @@ priceLong.textContent = `$${calcTotalPrice(
   docPlanTerm.long.discount,
   selectedSize
 )}`;
-// btn click
+
+// initial setting (if already selected)
+const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
+if (common.userDoc.plan.term) {
+  for (let i = 0; i < btnSelectTermAll.length; i++) {
+    if (btnSelectTermAll[i].id.includes(common.userDoc.plan.term)) {
+      document
+        .querySelector(`.${common.userDoc.plan.term}`)
+        .classList.add("selected");
+    }
+  }
+}
+
+// btn click to select term
 const btnTermClick = function (btn, term) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await updateDoc(doc(db, "users", `${userId}`), {
+    common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
       "plan.term": term,
     });
+    document.querySelectorAll(".term-box").forEach((el) => {
+      el.classList.remove("selected");
+    });
+    for (let i = 0; i < btnSelectTermAll.length; i++) {
+      if (btnSelectTermAll[i].id.includes(term)) {
+        document.querySelector(`.${term}`).classList.add("selected");
+      }
+    }
   });
 };
+// Execute
 btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
@@ -641,12 +718,11 @@ function setupEventListener() {
 setupEventListener();
 
 function modalOpen(e, itemData = "", itemId = "") {
-
   initiateModel();
 
   document.getElementById("imageUpload").style.display = "none";
 
-  debugger
+  debugger;
   if (itemData) {
     onEditModel(itemData.picture);
     if (itemId != "") {
@@ -670,7 +746,7 @@ function modalOpen(e, itemData = "", itemId = "") {
       img.src = itemData.picture;
     }
   } else {
-    if (document.getElementById("newItemName").value != '') {
+    if (document.getElementById("newItemName").value != "") {
       modal.style.display = "block";
       if (image == null || image == undefined) {
         openCamera();
@@ -686,10 +762,9 @@ function modalOpen(e, itemData = "", itemId = "") {
 buttonClose.addEventListener("click", modalClose);
 
 function modalClose() {
-
   modal.style.display = "none";
   if (image == undefined || image == null) {
-    clearModelData()
+    clearModelData();
   }
   if (currentEditingItemId > 0) {
     editSaveItem();
@@ -703,13 +778,17 @@ function outsideClose(e) {
     modal.style.display = "none";
 
     if (image == undefined || image == null) {
-      clearModelData()
+      clearModelData();
     }
   }
 }
 
-function clearModelData() {
-  document.getElementById("displayItemName").value = "";
+function clearModelData(isBack = false) {
+  debugger;
+  if (!isBack) {
+    document.getElementById("displayItemName").value = "";
+  }
+  image = null;
   const canvas = document.getElementById("canvas");
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -718,12 +797,13 @@ function clearModelData() {
 
 function initiateModel() {
   currentEditingItemId = 0;
-  displayItemNameElement.textContent = '';
+  displayItemNameElement.textContent = "";
   document.getElementById("capture").style.display = "inline-block";
   document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
   document.getElementById("uploadButton").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
 }
 
 function onEditModel(picture) {
@@ -751,7 +831,7 @@ function openCamera() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true
+        video: true,
       })
       .then(function (localStream) {
         stream = localStream;
@@ -779,3 +859,16 @@ function closeCamera() {
     video.hidden = true; // Optionally hide the video element
   }
 }
+
+backButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  clearModelData(true);
+  openCamera();
+  document.getElementById("capture").style.display = "inline-block";
+  document.getElementById("displayItemName").style.display = "none";
+  document.getElementById("retake").style.display = "none";
+  document.getElementById("reupload").style.display = "none";
+  document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
+  document.getElementById("uploadButton").style.display = "inline-block";
+});
