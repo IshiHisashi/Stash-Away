@@ -27,7 +27,6 @@ console.log("Company data downloaded");
 console.log(plansInfo);
 console.log(storageInfo);
 
-
 // ASYNC FUNCTION TO FILL IN INPUT FIELD
 
 function getProfileInfo() {
@@ -84,11 +83,10 @@ function getProfileInfo() {
 
     // PAYMENT METHOD SECTION ================================
     class Card {
-        constructor (cardnum, expDate, defaultBoolean, number) {
+        constructor (cardnum, expDate, defaultBoolean) {
             this.cardnum = cardnum;
             this.expDate = expDate;
             this.defaultBoolean = defaultBoolean;
-            this.number = number
             if (firstDigit(cardnum) == 2 || firstDigit(cardnum) == 5) {
                 this.cardBrandUrl = "masterImageUrl"
             } else if (firstDigit(cardnum) == 4) {
@@ -130,14 +128,25 @@ function getProfileInfo() {
             fieldSetArea.appendChild(eachCard);
             
         }
+
+        defaultToTrue() {
+            this.defaultBoolean = true;
+        }
+
+        defaultToFalse() {
+            this.defaultBoolean = false;
+        }
     }
 
     const fieldSetArea = document.querySelector("#payment-method fieldset");
     console.log(fieldSetArea);
     const paymentMethods = profileInfo.payment_method;
+    const paymentMethodsArray = [];
     for (let i in paymentMethods) {
-        const newCard = new Card(paymentMethods[i]['card-number'], paymentMethods[i]['exp-date'], paymentMethods[i]['default'], i)
+        const newCard = new Card(paymentMethods[i]['card-number'], paymentMethods[i]['exp-date'], paymentMethods[i]['default'])
         console.log(newCard);
+        paymentMethodsArray.push(newCard);
+        console.log(paymentMethodsArray);
         newCard.createInnerHtml();
     }
     
@@ -194,6 +203,8 @@ const updateProfileInfo = async function (fName, lName, email, phone, etc, detai
 
 // RADIO BUTTON ONCHANGED EVENT ============================
 
+// 🚨 FIX THIS LATERRRRRRR.  🚨
+
 const radioBtns = document.querySelectorAll('input[name="card-number"]');
 console.log(radioBtns);
 for (let i = 0; i <= radioBtns.length - 1; i++) {
@@ -209,15 +220,13 @@ for (let i = 0; i <= radioBtns.length - 1; i++) {
     })
 }
 
-const updateDefaultTrue = async function (arrayNum) {
-    await common.updateDoc(common.doc(db, "users", `${uid}`, `payment_method`, `[${arrayNum}]`), {
-        
-        "default": true,
-    });
-};
+// const updateDefaultTrue = async function (arrayNum) {
+//     await common.updateDoc(common.doc(db, "users", `${uid}`), {
+//         payment_method: common.arrayRemove(arrayNum.default),
+//         });
+// };
 
-const updateDefaultFalse = async function (arrayNum) {
-    await common.updateDoc(common.doc(db, "users", `${uid}`, `payment_method`, `[${arrayNum}]`), {  
-        // "default": false,
-    });
-};
+// const updateDefaultFalse = async function (arrayNum) {
+//     await common.updateDoc(common.doc(db, "users", `${uid}`), {  
+
+// };
