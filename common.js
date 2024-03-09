@@ -174,8 +174,8 @@ export const addOrderSubmitFunction = async function (snapShot) {
       name: `${userDoc.storageLocation.name}`,
     },
     requestedDateTime: {
-      date: `${userDoc.ongoing_order.date}`,
-      time: `${userDoc.ongoing_order.time}`,
+      date: `${new Date(userDoc.ongoing_order.date)}`,
+      time: `${userDoc.ongoing_order.time} hrs`,
     },
   });
 

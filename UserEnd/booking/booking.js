@@ -54,8 +54,8 @@ const street = document.getElementById("street");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
-const pikupDate = document.getElementById("pickup-date");
-const pikupTime = document.getElementById("pickup-time");
+const pickupDate = document.getElementById("pickup-date");
+const pickupTime = document.getElementById("pickup-time");
 const storageLocation = document.getElementById("storage-location");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
@@ -434,11 +434,13 @@ street.value = common.userDoc.address.detail;
 city.value = common.userDoc.address.city;
 province.value = common.userDoc.address.province;
 zipCode.value = common.userDoc.address.zipCode;
+pickupDate.value = common.userDoc.ongoing_order.date;
+// pickup-time is separately controled by the function generating the option tags.
 storageLocation.value = common.userDoc.storageLocation.name;
 
 // Calendar
 // display control
-pikupDate.addEventListener("click", (e) => {
+pickupDate.addEventListener("click", (e) => {
   e.preventDefault();
   let displayCalendar = document.getElementById("calendar-wrapper");
   if (displayCalendar.style.display === "none") {
@@ -535,7 +537,7 @@ document.querySelector("#next").addEventListener("click", moveCalendar);
 
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("calendar_td")) {
-    pikupDate.value = e.target.dataset.date;
+    pickupDate.value = e.target.dataset.date;
     document.getElementById("calendar-wrapper").style.display = "none";
   }
 });
@@ -550,10 +552,14 @@ for (var i = 9; i < 21; i++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
-console.log(times);
 // render
 times.forEach((el) => {
-  pikupTime.insertAdjacentHTML("beforeend", `<option>${el}</option>`);
+  pickupTime.insertAdjacentHTML(
+    "beforeend",
+    `<option value=${el} ${
+      el === common.userDoc.ongoing_order.time ? "selected" : ""
+    }>${el}</option>`
+  );
 });
 
 // Event : Back
@@ -569,8 +575,8 @@ btnSavePickup.addEventListener("click", async (e) => {
     "address.detail": `${street.value}`,
     "address.roomNumEtc": `${unitNumber.value}`,
     "address.zipCode": `${zipCode.value}`,
-    "ongoing_order.date": `${pikupDate.value}`,
-    "ongoing_order.time": `${pikupTime.value}`,
+    "ongoing_order.date": `${pickupDate.value}`,
+    "ongoing_order.time": `${pickupTime.value}`,
     "storageLocation.name": `${storageLocation.value}`,
   });
 });
