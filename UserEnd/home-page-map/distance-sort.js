@@ -163,9 +163,14 @@ if (navigator.geolocation) {
       const submitBtn = document.getElementById("submit");
       submitBtn.addEventListener("click", function (e) {
         e.preventDefault();
+        
+        if (document.querySelector(`input[checked]`) == null) {
+          alert("You can select your own storage location by clicking a location icon on the map!");
+        } else {
+          fireNewLocation();
+        }
         // ----Ishi revised & added----
         // Specify specific obj as a data pacaked to be sent
-        fireNewLocation();
       });
 
       const fireNewLocation = async function() {
@@ -178,7 +183,7 @@ if (navigator.geolocation) {
         await alert(
           `Location: ${selectedCityObj.name} was saved. If you want to change your storage location preference, you can choose a defferent location in a pick-up address section in the next page.`
         );
-        
+
         document.getElementById("proceedLink").click();
       }
 
