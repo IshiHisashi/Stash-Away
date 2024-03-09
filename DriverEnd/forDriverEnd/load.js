@@ -82,13 +82,25 @@ const update = async (uid, oid, eta, driver = null) => {
     const get = await getDoc(doc(db, "users", `${uid}`, "order", `${oid}`));
     get.data().itemKey.forEach((el) => {
       (async () => {
-        await updateDoc(
-          query(doc(db, "users", `${uid}`, "inStorage", `${el}`)),
-          {
-            status:
-              get.data().orderType === "retrieval" ? "retrieved" : "stored",
-          }
-        );
+        if (get.data().orderType === "retrieval") {
+          await updateDoc(
+            query(doc(db, "users", `${uid}`, "inStorage", `${el}`)),
+            {
+              status:
+                get.data().orderType === "retrieval" ? "retrieved" : "stored",
+              retrievedDate: serverTimestamp(),
+            }
+          );
+        } else {
+          await updateDoc(
+            query(doc(db, "users", `${uid}`, "inStorage", `${el}`)),
+            {
+              status:
+                get.data().orderType === "retrieval" ? "retrieved" : "stored",
+              storedDate: serverTimestamp(),
+            }
+          );
+        }
       })();
     });
   }
