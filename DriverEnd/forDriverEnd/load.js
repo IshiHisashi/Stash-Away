@@ -86,8 +86,7 @@ const update = async (uid, oid, eta, driver = null) => {
           await updateDoc(
             query(doc(db, "users", `${uid}`, "inStorage", `${el}`)),
             {
-              status:
-                get.data().orderType === "retrieval" ? "retrieved" : "stored",
+              status: "retrieved",
               retrievedDate: serverTimestamp(),
             }
           );
@@ -95,8 +94,7 @@ const update = async (uid, oid, eta, driver = null) => {
           await updateDoc(
             query(doc(db, "users", `${uid}`, "inStorage", `${el}`)),
             {
-              status:
-                get.data().orderType === "retrieval" ? "retrieved" : "stored",
+              status: "stored",
               storedDate: serverTimestamp(),
             }
           );
