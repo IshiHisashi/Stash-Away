@@ -11,6 +11,7 @@ import {
   getDocs,
   updateDoc,
 } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
+import * as common from "../../common.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
@@ -26,7 +27,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // Define variables----------------
-const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+const userId = await common.getCurrentUid();
 
 // Firebase handling---------------
 // Get storage data from company collection

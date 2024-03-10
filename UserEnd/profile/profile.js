@@ -51,8 +51,6 @@ function getProfileInfo() {
     let sizeCapped = firstLetterUppercase + remainingLetters;
     document.getElementById("storage-size").innerHTML = `${sizeCapped} Storage`;
 
-    // 🚨 ONCE CHANGE TERM INTO ARRAY, OPTIMIZE THE CODE 🚨
-
     let duration = profileInfo.plan.term;
     let planDetailsByDuraton;
     if (duration == "long") {
@@ -72,9 +70,12 @@ function getProfileInfo() {
     } else if (size == "small") {
         originalPrice = plansInfo.size.small.price;
     }
-    document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
+
     if (duration !== "short") {
+        document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
         document.getElementById("plan-price").style.textDecoration = "line-through";
+    } else {
+        document.getElementById("plan-price").innerHTML = "You might want to get great discount by changing your plan!";
     }
 
     let discountedPrice = Math.round(originalPrice * planDetailsByDuraton.discount * 10 ) / 10;
@@ -189,7 +190,7 @@ saveProfileBtn.addEventListener("click", (event) => {
 
 const updateProfileInfo = async function (fName, lName, email, phone, etc, detail, city, province, zip) {
     await common.updateDoc(common.doc(db, "users", `${uid}`), {
-        "address.cit": city,
+        "address.city": city,
         "address.detail": detail,
         "address.roomNumEtc": etc,
         "address.province": province,
