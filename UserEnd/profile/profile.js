@@ -51,8 +51,6 @@ function getProfileInfo() {
     let sizeCapped = firstLetterUppercase + remainingLetters;
     document.getElementById("storage-size").innerHTML = `${sizeCapped} Storage`;
 
-    // 🚨 ONCE CHANGE TERM INTO ARRAY, OPTIMIZE THE CODE 🚨
-
     let duration = profileInfo.plan.term;
     let planDetailsByDuraton;
     if (duration == "long") {
