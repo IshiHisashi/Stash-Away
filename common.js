@@ -95,7 +95,11 @@ export {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export const db = getFirestore(app);
-export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+// Fixex user
+// export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+// Authed user
+export const userId = await getCurrentUid();
+console.log(userId);
 
 // -----READ-----
 // General : Get company info
@@ -152,7 +156,6 @@ export const addOrderSubmitFunction = async function (snapShot) {
     };
     orderedArrItem.push(idAndData);
   });
-  console.log(orderedArrItem);
 
   // Generate new ORDER
   await addDoc(collection(db, "users", `${userId}`, "order"), {
@@ -281,7 +284,11 @@ Date.prototype.addDays = function (days) {
 };
 const date = new Date();
 const contractDays =
-  userDoc.plan.term === "short" ? 30 : userDoc.plan.term === "mid" ? 120 : 360;
+  userDoc.plan?.term === "short"
+    ? 30
+    : userDoc.plan?.term === "mid"
+    ? 120
+    : 360;
 const expiryFullDate = date.addDays(contractDays);
 const expiryDate = `${expiryFullDate.getFullYear()}/${
   expiryFullDate.getMonth() + 1
