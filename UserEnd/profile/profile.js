@@ -72,9 +72,12 @@ function getProfileInfo() {
     } else if (size == "small") {
         originalPrice = plansInfo.size.small.price;
     }
-    document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
+
     if (duration !== "short") {
+        document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
         document.getElementById("plan-price").style.textDecoration = "line-through";
+    } else {
+        document.getElementById("plan-price").innerHTML = "You might want to get great discount by changing your plan!";
     }
 
     let discountedPrice = Math.round(originalPrice * planDetailsByDuraton.discount * 10 ) / 10;
