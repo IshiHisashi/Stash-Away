@@ -91,11 +91,11 @@ function getProfileInfo() {
             this.defaultBoolean = defaultBoolean;
             this.number = number
             if (firstDigit(cardNum) == 2 || firstDigit(cardNum) == 5) {
-                this.cardBrandUrl = "masterImageUrl"
+                this.cardBrandUrl = "../images/master-logo.png"
             } else if (firstDigit(cardNum) == 4) {
-                this.cardBrandUrl = "visaImageUrl"
+                this.cardBrandUrl = "../images/visa-logo.png"
             } else if (firstDigit(cardNum) == 3) {
-                this.cardBrandUrl = "amexImageUrl"
+                this.cardBrandUrl = "../images/amex-logo.png"
             }  
         }
     
@@ -103,7 +103,7 @@ function getProfileInfo() {
             let label = document.createElement("label");
             label.setAttribute("for", `card-${this.number}`);
             let image = document.createElement("img");
-            // image.setAttribute("src", `${this.cardBrandUrl}`);
+            image.setAttribute("src", `${this.cardBrandUrl}`);
             image.setAttribute("class", "card-brand-img");
             let cardNumPara = document.createElement("p");
             cardNumPara.setAttribute("class", "card-num");

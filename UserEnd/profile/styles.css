@@ -32,3 +32,8 @@
 #account-profile fieldset button {
     width: 25%;
 }
+
+.card-brand-img {
+    width: 30px;
+    height: auto;
+}
