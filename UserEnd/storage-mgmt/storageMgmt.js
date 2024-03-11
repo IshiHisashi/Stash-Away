@@ -105,7 +105,7 @@ const numItemStoredArr = [];
 const numItemOnRequestArr = [];
 const numItemRetrievedArr = [];
 common.snapShot.forEach((el) => {
-  if (el.data().status !== "saved" && "adding request") {
+  if (el.data().status !== "saved" && el.data().status !== "add requested") {
     numItemTotalArr.push(el.data());
   }
   if (el.data().status === "stored") {
@@ -118,6 +118,7 @@ common.snapShot.forEach((el) => {
     numItemRetrievedArr.push(el.data());
   }
 });
+
 // Then, render it
 numTotal.textContent = numItemTotalArr.length;
 numStored.textContent = numItemStoredArr.length;

@@ -96,9 +96,9 @@ export {
 
 export const db = getFirestore(app);
 // Fixex user
-// export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
 // Authed user
-export const userId = await getCurrentUid();
+// export const userId = await getCurrentUid();
 console.log(userId);
 
 // -----READ-----
@@ -273,7 +273,7 @@ export const retrievalOrderSubmitFunction = async function () {
 // current time
 export const ts = Timestamp.fromDate(new Date()).seconds;
 export const nowFullDate = new Date(ts * 1000);
-const nowDate = `${nowFullDate.getFullYear()}/${
+export const nowDate = `${nowFullDate.getFullYear()}/${
   nowFullDate.getMonth() + 1
 }/${nowFullDate.getDate()}`;
 // future time
