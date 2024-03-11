@@ -96,7 +96,7 @@ export {
 
 export const db = getFirestore(app);
 // Fixex user
-export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+export const userId = "3ZGNxHC1avOoTevnctvkhBMwH962";
 // Authed user
 // export const userId = await getCurrentUid();
 console.log(userId);
