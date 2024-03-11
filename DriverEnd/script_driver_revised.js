@@ -52,13 +52,7 @@ const renderOrders = (
   const divOrder = createHtmlElement("div", null, null, "class", "order");
 
   // user icon
-  const img = createHtmlElement(
-    "img",
-    null,
-    null,
-    "src",
-    "https://picsum.photos/43/43"
-  );
+  const img = createHtmlElement("img", null, null, "src", "icons/user.svg");
   divOrder.appendChild(img);
 
   // order date and name
@@ -133,6 +127,7 @@ const renderOrders = (
   if (btn.classList[0] === "btnStartTrip") {
     btn.onclick = (e) => {
       e.preventDefault();
+      e.stopPropagation();
       document.querySelector(".popupBackground").style.display = "grid";
 
       const form = createHtmlElement(
@@ -232,16 +227,16 @@ const renderOrders = (
 
   document.querySelector(`.orders.${currentPage}`).appendChild(divOrder);
 
-  // EVENT BEHAVIOUR: show trip details page directly from the order cards (only for the ongoing trip cards behaviour)
-  if (divOrder.querySelector(".btnDriverAssigned")) {
-    divOrder.onclick = (e) => {
-      e.preventDefault();
+  // EVENT BEHAVIOUR: show trip details page directly from the order cards
+  // if (divOrder.querySelector(".btnDriverAssigned")) {
+  divOrder.onclick = (e) => {
+    e.preventDefault();
 
-      // renderTripDetails(userID, orderID, address, name);
+    // renderTripDetails(userID, orderID, address, name);
 
-      window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
-    };
-  }
+    window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
+  };
+  // }
 };
 
 const renderAllTrips = (objArr, currentPage) => {
@@ -305,20 +300,38 @@ const controlCarousel = (currentPage) => {
   switch (currentPage) {
     case "newTrips":
       document.querySelector("li.newTrips").classList.add("current");
+      document.querySelector("li.newTrips img").src =
+        "icons/book-pick-up_blue.svg";
+      document.querySelector("li.ongoingTrips img").src =
+        "icons/pick-up-item_grey.svg";
+      document.querySelector("li.allTrips img").src =
+        "icons/items-stored_grey.svg";
       sectionNewTrips.style.transform = "translateX(0)";
-      sectionOngoingTrips.style.transform = "translateX(200%)";
-      sectionAllTrips.style.transform = "translateX(300%)";
+      sectionOngoingTrips.style.transform = "translateX(100%)";
+      sectionAllTrips.style.transform = "translateX(200%)";
       renderNewTrips(objArr, currentPage);
       break;
     case "ongoingTrips":
       document.querySelector("li.ongoingTrips").classList.add("current");
+      document.querySelector("li.newTrips img").src =
+        "icons/book-pick-up_grey.svg";
+      document.querySelector("li.ongoingTrips img").src =
+        "icons/pick-up-item_blue.svg";
+      document.querySelector("li.allTrips img").src =
+        "icons/items-stored_grey.svg";
       sectionNewTrips.style.transform = "translateX(-100%)";
       sectionOngoingTrips.style.transform = "translateX(0)";
-      sectionAllTrips.style.transform = "translateX(200%)";
+      sectionAllTrips.style.transform = "translateX(100%)";
       renderOngoingTrips(objArr, currentPage);
       break;
     case "allTrips":
       document.querySelector("li.allTrips").classList.add("current");
+      document.querySelector("li.newTrips img").src =
+        "icons/book-pick-up_grey.svg";
+      document.querySelector("li.ongoingTrips img").src =
+        "icons/pick-up-item_grey.svg";
+      document.querySelector("li.allTrips img").src =
+        "icons/items-stored_blue.svg";
       sectionNewTrips.style.transform = "translateX(-200%)";
       sectionOngoingTrips.style.transform = "translateX(-100%)";
       sectionAllTrips.style.transform = "translateX(0)";
@@ -334,9 +347,49 @@ if (sessionStorage.getItem("currentPage")) {
   controlCarousel("allTrips");
 }
 
-const footerBegin = document.querySelector(".orders.allTrips").clientHeight;
-console.log(footerBegin);
-document.querySelector("footer").style.marginTop = `${footerBegin + 32}px`;
+//
+//
+
+// Function to execute when all divOrder elements are rendered
+const executeAfterRender = () => {
+  const footerBegin = document.querySelector(
+    `.orders.${sessionStorage.getItem("currentPage")}`
+  ).scrollHeight;
+  console.log(footerBegin);
+  document.querySelector("footer").style.marginTop = `${footerBegin + 150}px`;
+};
+
+// Create a new MutationObserver
+const observer = new MutationObserver((mutationsList, observer) => {
+  // Check if any mutation added nodes
+  for (let mutation of mutationsList) {
+    if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
+      // If added nodes include divOrder elements, execute the code
+      if (
+        Array.from(mutation.addedNodes).some(
+          (node) => node.classList && node.classList.contains("order")
+        )
+      ) {
+        executeAfterRender();
+        // Disconnect the observer as we don't need it anymore once the code is executed
+        observer.disconnect();
+        return;
+      }
+    }
+  }
+});
+
+// Start observing changes in the parent node of divOrder elements
+observer.observe(document.querySelector(".orders.allTrips"), {
+  childList: true,
+});
+
+// Call the function to ensure that if no mutations occur, the code is executed
+executeAfterRender();
+
+// const footerBegin = document.querySelector(".orders.allTrips").clientHeight;
+// console.log(footerBegin);
+// document.querySelector("footer").style.marginTop = `${footerBegin + 32}px`;
 
 // TAB BEHAVIOUR
 document.querySelectorAll("header li").forEach((el) => {

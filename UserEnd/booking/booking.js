@@ -37,7 +37,7 @@ const db = getFirestore(app);
 
 // define variable / fnc ------------
 // var_DoM
-const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+const userId = common.userId;
 // const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
@@ -434,7 +434,9 @@ street.value = common.userDoc.address.detail;
 city.value = common.userDoc.address.city;
 province.value = common.userDoc.address.province;
 zipCode.value = common.userDoc.address.zipCode;
-pickupDate.value = common.userDoc.ongoing_order.date;
+pickupDate.value = common.userDoc.ongoing_order
+  ? common.userDoc.ongoing_order.date
+  : "";
 // pickup-time is separately controled by the function generating the option tags.
 storageLocation.value = common.userDoc.storageLocation.name;
 
@@ -557,7 +559,7 @@ times.forEach((el) => {
   pickupTime.insertAdjacentHTML(
     "beforeend",
     `<option value=${el} ${
-      el === common.userDoc.ongoing_order.time ? "selected" : ""
+      el === common.userDoc.ongoing_order?.time ? "selected" : ""
     }>${el}</option>`
   );
 });
@@ -593,7 +595,7 @@ largePrice.textContent = `$${docPlanSize.large.price}`;
 
 // initial setting (if already selected)
 const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
-if (common.userDoc.plan.size) {
+if (common.userDoc.plan?.size) {
   for (let i = 0; i < btnSelectSizeAll.length; i++) {
     if (btnSelectSizeAll[i].id.includes(common.userDoc.plan.size)) {
       document
@@ -644,7 +646,7 @@ btnSelectClick(btnSelectLarge, "large");
 
 let docPlanTerm = common.companyPlanDoc.term;
 // Read user's size for calc later
-let selectedSize = common.userDoc.plan.size;
+let selectedSize = common.userDoc.plan?.size;
 // calc function
 const calcTotalPrice = function (discount, size) {
   if (selectedSize) {
@@ -674,7 +676,7 @@ priceLong.textContent = `$${calcTotalPrice(
 
 // initial setting (if already selected)
 const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
-if (common.userDoc.plan.term) {
+if (common.userDoc.plan?.term) {
   for (let i = 0; i < btnSelectTermAll.length; i++) {
     if (btnSelectTermAll[i].id.includes(common.userDoc.plan.term)) {
       document

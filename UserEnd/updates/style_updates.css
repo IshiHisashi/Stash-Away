@@ -1,0 +1,285 @@
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  background-color: #f4f4f4;
+  margin: 0;
+}
+
+header {
+  background-color: white;
+}
+
+* {
+  color: #103646;
+}
+
+/* MAIN ============================================= */
+
+main nav ul {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+main nav ul li {
+  cursor: pointer;
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  gap: 0.5rem;
+}
+
+main nav ul li img {
+  justify-self: end;
+}
+
+main nav ul li:hover {
+  background-color: white;
+}
+
+main nav ul li.current {
+  background-color: white;
+}
+
+main nav ul li.current p {
+  color: #e04462;
+}
+
+main h2 {
+  margin-top: 3rem;
+}
+
+main section > p {
+  margin-bottom: 3rem;
+  color: #585858;
+}
+
+section.adding,
+section.retrieval {
+  position: absolute;
+  display: none;
+  background-color: white;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+section:has(.noOrder) {
+  height: 100%;
+}
+
+.detail {
+  max-width: 950px;
+  margin-bottom: 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.detail .preferred-date-and-time {
+  background-color: #f4f4f4;
+  border-radius: 21px;
+  padding: 1rem;
+}
+
+.detail .currentStatus-and-updates,
+.detail .orderDetails {
+  border: 1px solid #dfdfdf;
+  border-radius: 21px;
+  padding: 1rem;
+}
+
+.currentStatus-and-updates .updates,
+.orderDetails {
+  display: grid;
+  grid-template-columns: 30px 1fr;
+}
+
+.currentStatus-and-updates .updates .milestone {
+  justify-self: center;
+  z-index: 10;
+}
+
+.currentStatus-and-updates .updates svg.check {
+  background-color: #103646;
+  border-radius: 50%;
+  padding: 6px;
+}
+.currentStatus-and-updates .updates svg.grey,
+.currentStatus-and-updates .updates svg.yellow {
+  justify-self: center;
+  z-index: 10;
+  background-color: unset;
+}
+
+.orderDetails img {
+  justify-self: center;
+  z-index: 10;
+}
+
+.currentStatus-and-updates .currentStatus p:nth-of-type(1) {
+  color: #e04462;
+}
+
+.currentStatus-and-updates .updates h3,
+.orderDetails h3 {
+  grid-column: 1/-1;
+}
+
+.currentStatus-and-updates .updates div:nth-of-type(even) {
+  padding-left: 2rem;
+  padding-bottom: 3rem;
+  transform: translateX(-15.5px);
+}
+
+.currentStatus-and-updates .updates div p:nth-of-type(2) {
+  color: #585858;
+}
+
+.orderDetails div {
+  padding-left: 2rem;
+  padding-bottom: 1rem;
+  transform: translateX(-15px);
+}
+
+.currentStatus-and-updates .updates p,
+.orderDetails p {
+  margin-top: 0;
+}
+
+/* MEDIA QUERIES ============================================= */
+
+@media screen and (min-width: 500px) {
+  .detail .preferred-date-and-time {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: stretch;
+  }
+
+  .detail .preferred-date-and-time > p {
+    grid-column: span 2;
+  }
+
+  .detail .preferred-date-and-time .preferredTime {
+    padding-left: 2rem;
+    border-left: 1px solid #dfdfdf;
+  }
+
+  .currentStatus-and-updates .currentStatus {
+    padding-bottom: 1rem;
+  }
+  .currentStatus-and-updates .updates {
+    grid-template-columns: auto 30px 1fr;
+  }
+
+  .currentStatus-and-updates .updates > h3 {
+    grid-column: unset;
+    margin: 0;
+    padding-right: 2rem;
+  }
+
+  .currentStatus-and-updates .updates .milestone {
+    grid-column: 2/3;
+  }
+}
+
+@media screen and (min-width: 650px) {
+  main nav,
+  section.adding,
+  section.retrieval {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  section {
+    left: 0;
+    right: 0;
+  }
+
+  main nav ul {
+    display: flex;
+    gap: 0;
+  }
+
+  main nav ul li {
+    flex-basis: 185px;
+  }
+
+  .detail {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .detail .currentStatus-and-updates {
+    grid-row: span 2;
+  }
+
+  /* basically clear mq 500px */
+  .detail .preferred-date-and-time {
+    display: unset;
+  }
+
+  .detail .preferred-date-and-time .preferredTime {
+    padding-left: unset;
+    border-left: unset;
+  }
+
+  .currentStatus-and-updates .currentStatus {
+    padding-bottom: unset;
+  }
+  .currentStatus-and-updates .updates {
+    grid-template-columns: 30px 1fr;
+  }
+
+  .currentStatus-and-updates .updates > h3 {
+    grid-column: 1/-1;
+    margin: 1rem 0;
+    padding-right: unset;
+  }
+
+  .currentStatus-and-updates .updates .milestone {
+    grid-column: unset;
+  }
+}
+
+@media screen and (min-width: 900px) {
+  /* exactly the same as mq 500px */
+  .detail .preferred-date-and-time {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: stretch;
+  }
+
+  .detail .preferred-date-and-time > p {
+    grid-column: span 2;
+  }
+
+  .detail .preferred-date-and-time .preferredTime {
+    padding-left: 2rem;
+    border-left: 1px solid #dfdfdf;
+  }
+
+  .currentStatus-and-updates .currentStatus {
+    padding-bottom: 1rem;
+  }
+  .currentStatus-and-updates .updates {
+    grid-template-columns: auto 30px 1fr;
+  }
+
+  .currentStatus-and-updates .updates > h3 {
+    grid-column: unset;
+    margin: 0;
+    padding-right: 2rem;
+  }
+
+  .currentStatus-and-updates .updates .milestone {
+    grid-column: 2/3;
+  }
+}

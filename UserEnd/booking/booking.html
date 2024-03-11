@@ -23,7 +23,7 @@
   <main>
     <form id="form_list">
       <!-- Prathibha start : 1.Booking_addItem-->
-      <section class="addItem">
+      <section class="addItem" id="addItem">
         <div class="item-description-wrapper">
         <h3><span>1</span> List Your Items.</h3>
         <p>
@@ -177,13 +177,13 @@
 
           <!-- btn -->
           <div class="btn-div">
-            <a class="btn-back">Back</a>
-            <a class="btn-save" id="btn-save-pickup">Next</a>
+            <a class="btn-back" href="#addItem">Back</a>
+            <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
           </div>
         </section>
 
         <!-- 3.Booking_Storage size selection -->
-        <section class="storage-size" id="section3">
+        <section class="storage-size" id="storage-size">
           <h3><span>3</span> Storage Size</h3>
           <p>
             Maximize efficiency and security by choosing the perfect storage box
@@ -232,15 +232,15 @@
 
             <!-- btn -->
             <div class="btn-div">
-              <a class="btn-back">Back</a>
-              <a class="btn-save" id="btn-save-size">Next</a>
+              <a class="btn-back" href="#pickup-info">Back</a>
+              <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
             </div class='term-container'>
 
           </div>
         </section>
 
         <!-- 4.Booking_Plan selection -->
-        <section class="select-plan">
+        <section class="select-plan" id="select-plan">
           <h3><span>4</span> Select Your Plan</h3>
           <p>
             Maximize efficiency and security by choosing the perfect storage box
@@ -276,7 +276,7 @@
             </div>
             <!-- btn -->
             <div class="btn-div">
-              <a class="btn-back">Back</a>
+              <a class="btn-back" href="#storage-size">Back</a>
               <a class="btn-save" id="btn-save-plan" href="../dummy_payment/dummy_payment.html">Proceed to Payment</a>
             </div class='term-container'>
 

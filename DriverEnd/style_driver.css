@@ -15,22 +15,44 @@ img {
 
 /* HEADER ================================================= */
 
-header > div {
-  /* border: 1px solid black; */
+header .logo {
+  background-color: white;
+}
+
+header > .hero {
+  position: relative;
+  margin: 1rem;
+}
+
+header > .hero img {
   border-radius: 15px;
-  background-image: url("images/hero.png");
-  background-size: cover;
+  width: 100%;
+}
+
+header > .hero > div {
   color: white;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-60%);
+  padding-left: 1rem;
 }
 
 header nav ul {
   padding: 0;
   display: flex;
+  gap: 1rem;
 }
 
 header nav ul li {
   list-style-type: none;
   cursor: pointer;
+  border-radius: 10px;
+  padding: 1rem;
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  align-items: center;
+  gap: 0.5rem;
 }
 
 header nav ul li:hover {
@@ -41,19 +63,29 @@ header nav ul li.current {
   background-color: #dfdfdf;
 }
 
-header nav ul li img {
-  display: inline-block;
+header nav ul li p {
+  margin: 0;
 }
 
 /* MAIN =================================================== */
+
+body {
+  overflow-x: hidden;
+}
+
+main {
+  position: relative;
+  width: 100%;
+}
 
 section.orders {
   display: grid;
   grid-template-columns: auto 1fr 40%;
   gap: 1rem;
   position: absolute;
-  left: 0.5rem;
-  right: 0.5rem;
+  width: 100%;
+  /* left: 0.5rem;
+  right: 0.5rem; */
   transition: all 0.3s;
 }
 
@@ -70,6 +102,8 @@ section.orders {
   padding: 1rem;
   background-color: white;
   border-radius: 14px;
+
+  cursor: pointer;
 }
 
 .order img {
@@ -93,13 +127,13 @@ section.orders {
 }
 
 .order .orderStatus.ongoingTrip {
-  background-color: #c7d9e3;
-  color: #244655;
+  background-color: #c7e9bb;
+  color: #429725;
 }
 
 .order .orderStatus.newTrip {
-  background-color: #ccf8bd;
-  color: #429725;
+  background-color: #fce4e7;
+  color: #e04462;
 }
 
 .order .orderID {
@@ -135,6 +169,7 @@ section.orders {
 
 .order button.btnDriverAssigned {
   color: #103646;
+  cursor: pointer;
 }
 
 .order button.btnStartTrip {
@@ -142,9 +177,9 @@ section.orders {
   color: #e04462;
 }
 
-.order:has(button.btnDriverAssigned) {
+/* .order:has(button.btnDriverAssigned) {
   cursor: pointer;
-}
+} */
 
 /* "Select Driver" Popup =============== */
 
@@ -195,22 +230,42 @@ body:has(.popupBackground form) {
   background-color: white;
   padding: 1rem;
   border-radius: 15px;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+.orderDetail .orderDetailID {
+  grid-column: 1/-1;
 }
 
 .orderDetail .orderDetailName {
-  display: flex;
   align-items: center;
+  grid-column: 1/-1;
+
+  display: grid;
+  grid-template-columns: subgrid;
   gap: 1rem;
 }
 
 .orderDetail .orderDetailAddress {
-  display: flex;
-  align-items: start;
+  align-items: center;
+  grid-column: 1/-1;
+
+  display: grid;
+  grid-template-columns: subgrid;
   gap: 1rem;
 }
 
-.orderDetail img {
-  border-radius: 50%;
+.orderDetail .orderDetailName img,
+.orderDetail .orderDetailAddress img {
+  justify-self: center;
+}
+
+.orderDetail h3,
+.orderDetail .btnTripStarted,
+.orderDetail .btnTripCompleted {
+  grid-column: 1/-1;
 }
 
 .orderDetail .btnTripStarted {
@@ -218,7 +273,7 @@ body:has(.popupBackground form) {
   width: 100%;
   padding: 1rem;
   border: none;
-  background-color: #dfdfdf;
+  /* background-color: #dfdfdf; */
   color: white;
   border-radius: 7px;
   margin-bottom: 1rem;
@@ -229,11 +284,11 @@ body:has(.popupBackground form) {
   width: 100%;
   padding: 1rem;
   border: none;
-  background-color: #d72e4e;
+  /* background-color: #d72e4e; */
   color: white;
   border-radius: 7px;
   margin-bottom: 1rem;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 /* FOOTER ============================================= */
