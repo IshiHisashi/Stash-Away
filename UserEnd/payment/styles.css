@@ -20,6 +20,7 @@ h1 {
     flex-flow: row nowrap;
     justify-content: center;
     gap: 2rem;
+    margin-bottom: 5rem;
 }
 
 a {
@@ -65,4 +66,8 @@ li p {
     flex-flow: row nowrap;
     justify-content: start;
     gap: 2rem;
+}
+
+#proceedLink {
+    display: none;
 }
