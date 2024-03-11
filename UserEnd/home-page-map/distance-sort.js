@@ -160,24 +160,32 @@ if (navigator.geolocation) {
 
       // SELECTED CITY'S VALUE IS STORED HERE=======================
 
-      var selectedCity = "";
       const submitBtn = document.getElementById("submit");
-      submitBtn.addEventListener("click", function () {
+      submitBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        if (document.querySelector(`input[checked]`) == null) {
+          alert("You can select your own storage location by clicking a location icon on the map!");
+        } else {
+          fireNewLocation();
+        }
         // ----Ishi revised & added----
         // Specify specific obj as a data pacaked to be sent
-        selectedCity = document.querySelector(
-          `input[name="location"]:checked`
-        ).id;
-        const selectedCityID = selectedCity.split("-")[1];
-        const selectedCityObj = cityArray[selectedCityID];
-
-        // send data to DB
-        geo.updateStorageLocation(selectedCityObj);
-
-        alert(
-          `Location: ${selectedCityObj.name} was saved. If you want to change your storage location preference, you can choose a defferent location and press submit putton.`
-        );
       });
+
+      const fireNewLocation = async function() {
+        const selectedCity = await document.querySelector(`input[checked]`);
+        const selectedCityID = await selectedCity.id.split("-")[1];
+        const selectedCityObj = await cityArray[selectedCityID];
+
+        await geo.updateStorageLocation(selectedCityObj);
+
+        await alert(
+          `Location: ${selectedCityObj.name} was saved. If you want to change your storage location preference, you can choose a defferent location in a pick-up address section in the next page.`
+        );
+
+        document.getElementById("proceedLink").click();
+      }
 
       // SET MAP =======================================================
       const map = tt.map({

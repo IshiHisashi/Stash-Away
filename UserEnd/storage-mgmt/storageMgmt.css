@@ -10,7 +10,9 @@
 }
 #hero-img {
   width: 100%;
-  /* filter: grayscale(0.7); */
+  height: 400px;
+  object-fit: cover;
+  display: block;
 }
 
 section {
@@ -28,6 +30,15 @@ section {
     font-size: 1.5rem;
     font-weight: bold;
     color: var(--color-secondary);
+  }
+  .num-breakdown {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    p {
+      border-right: 1px solid var(--color-secondary);
+      padding-right: 0.7rem;
+    }
   }
   select {
     border-radius: 10px;
@@ -66,7 +77,7 @@ section {
       font-size: 1.1rem;
       display: grid;
       grid-template-columns: auto 1fr auto;
-      grid-template-rows: 60% 1fr;
+      grid-template-rows: 1.5fr 2fr;
       gap: 0.3rem 2rem;
     }
     .placeholder-pic {
@@ -83,10 +94,37 @@ section {
       font-weight: bold;
       align-self: end;
     }
-    .item-status {
-      font-size: 0.8rem;
+    .desc-wrapper {
       grid-row: 2/3;
       align-self: start;
+    }
+    .date {
+      font-size: 0.8rem;
+    }
+    .item-status {
+      font-size: 0.7rem;
+      display: inline;
+    }
+    .green {
+      padding: 0.2rem 0.5rem;
+      background-color: rgb(163, 231, 163);
+      color: green;
+      font-weight: bold;
+      border-radius: 10px;
+    }
+    .red {
+      padding: 0.2rem 0.5rem;
+      background-color: lightpink;
+      color: var(--color-primary);
+      font-weight: bold;
+      border-radius: 10px;
+    }
+    .gray {
+      padding: 0.2rem 0.5rem;
+      background-color: #ccc;
+      color: black;
+      font-weight: bold;
+      border-radius: 10px;
     }
     .checkbox {
       grid-row: 1/-1;

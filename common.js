@@ -68,6 +68,8 @@ import {
   onSnapshot,
   serverTimestamp,
   Timestamp,
+  arrayUnion,
+  arrayRemove,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export {
@@ -88,10 +90,16 @@ export {
   onSnapshot,
   serverTimestamp,
   Timestamp,
+  arrayUnion,
+  arrayRemove,
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 export const db = getFirestore(app);
+// Fixex user
 export const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+// Authed user
+// export const userId = await getCurrentUid();
+console.log(userId);
 
 // -----READ-----
 // General : Get company info
@@ -107,10 +115,11 @@ const userSnap = await getDoc(doc(db, "users", `${userId}`));
 export const userDoc = userSnap.data();
 
 // General : Get item (document) in 'inStorage' (subcollection):
-const queryStorage = collection(db, "users", `${userId}`, "inStorage");
+export const queryStorage = collection(db, "users", `${userId}`, "inStorage");
 export const snapShot = await getDocs(queryStorage);
 //
 
+// Update and Create
 // Booking : Order submitted
 export const addOrderSubmitFunction = async function (snapShot) {
   const batch = writeBatch(db);
@@ -147,7 +156,6 @@ export const addOrderSubmitFunction = async function (snapShot) {
     };
     orderedArrItem.push(idAndData);
   });
-  console.log(orderedArrItem);
 
   // Generate new ORDER
   await addDoc(collection(db, "users", `${userId}`, "order"), {
@@ -158,7 +166,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
     },
     driverId: "",
     itemKey: orderedArrID,
-    orderDate: nowDate,
+    orderTimestamp: nowFullDate,
     orderType: "add",
     status: "requested",
     address: {
@@ -173,8 +181,8 @@ export const addOrderSubmitFunction = async function (snapShot) {
       name: `${userDoc.storageLocation.name}`,
     },
     requestedDateTime: {
-      date: `${userDoc.ongoing_order.date}`,
-      time: `${userDoc.ongoing_order.time}`,
+      date: `${new Date(userDoc.ongoing_order.date)}`,
+      time: `${userDoc.ongoing_order.time} hrs`,
     },
   });
 
@@ -232,7 +240,7 @@ export const retrievalOrderSubmitFunction = async function () {
     },
     driverId: "",
     itemKey: getcheckedItem,
-    orderDate: nowDate,
+    orderTimestamp: nowFullDate,
     orderType: "retrieval",
     status: "requested",
     address: {
@@ -263,9 +271,9 @@ export const retrievalOrderSubmitFunction = async function () {
 
 // Date handling
 // current time
-const ts = Timestamp.fromDate(new Date()).seconds;
-const nowFullDate = new Date(ts * 1000);
-const nowDate = `${nowFullDate.getFullYear()}/${
+export const ts = Timestamp.fromDate(new Date()).seconds;
+export const nowFullDate = new Date(ts * 1000);
+export const nowDate = `${nowFullDate.getFullYear()}/${
   nowFullDate.getMonth() + 1
 }/${nowFullDate.getDate()}`;
 // future time
@@ -276,7 +284,11 @@ Date.prototype.addDays = function (days) {
 };
 const date = new Date();
 const contractDays =
-  userDoc.plan.term === "short" ? 30 : userDoc.plan.term === "mid" ? 120 : 360;
+  userDoc.plan?.term === "short"
+    ? 30
+    : userDoc.plan?.term === "mid"
+    ? 120
+    : 360;
 const expiryFullDate = date.addDays(contractDays);
 const expiryDate = `${expiryFullDate.getFullYear()}/${
   expiryFullDate.getMonth() + 1

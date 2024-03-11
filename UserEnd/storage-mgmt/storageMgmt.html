@@ -21,12 +21,17 @@
   <body>
     <header></header>
     <main>
-      <img id="hero-img" src="./breakfast.jpg" alt="" />
+      <img id="hero-img" src="../images/hero-image.png" alt="" />
 
       <section class="filter-section">
         <div class="storage-num-wrapper">
           <p class="small-letter">Your Storage</p>
-          <p class="total-p">Total <span id="total-num">56</span> Items</p>
+          <p class="total-p">Total <span id="total-num"></span> Items</p>
+          <div class="num-breakdown">
+            <p>In storage : <span id="stored-num"></span></p>
+            <p>On request : <span id="on-request-num"></span></p>
+            <p>Retrieved : <span id="retrieved-num"></span></p>
+          </div>
         </div>
         <div class="search-wrapper">
           <label class="small-letter">Showing your items stored at:</label>

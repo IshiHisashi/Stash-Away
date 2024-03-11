@@ -1,5 +1,7 @@
 "use strict";
 
+import * as common from "../../common.js";
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
 import {
@@ -35,7 +37,7 @@ const db = getFirestore(app);
 
 // define variable / fnc ------------
 // var_DoM
-const userId = "1Rhsvb5eYgebqaRSnS7moZCE4za2";
+const userId = common.userId;
 // const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
@@ -52,8 +54,8 @@ const street = document.getElementById("street");
 const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
-const pikupDate = document.getElementById("pickup-date");
-const pikupTime = document.getElementById("pickup-time");
+const pickupDate = document.getElementById("pickup-date");
+const pickupTime = document.getElementById("pickup-time");
 const storageLocation = document.getElementById("storage-location");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
@@ -87,6 +89,7 @@ const retakeBtn = document.getElementById("retake");
 const reuploadBtn = document.getElementById("reupload");
 const saveBtn = document.getElementById("saveItem");
 const saveImageBtn = document.getElementById("saveImage");
+const backBtn = document.getElementById("backButton");
 const video = document.getElementById("video");
 const canvas = document.getElementById("canvas");
 const context = canvas.getContext("2d");
@@ -98,11 +101,6 @@ let image;
 let currentEditingItemId;
 let itemData;
 
-// Firebase handling---------------
-// Get User document
-const docSnap = await getDoc(doc(db, "users", `${userId}`));
-const userDoc = docSnap.data();
-
 // --------------------------------
 // For Prathibha
 const renderListFor = function (doc) {
@@ -110,15 +108,46 @@ const renderListFor = function (doc) {
     if (doc[i].data().status === "saved") {
       const item = doc[i].data();
       const itemID = doc[i].id;
-      // Use the item's image if available; otherwise, use the default image from the 'images' folder
       const itemImageSrc = item.picture
         ? item.picture
-        : "/images/default-image.jpg";
+        : "../images/img_no-pic.png";
 
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li'><img src='${itemImageSrc}' class='placeholder-pic' alt='Item Image'><p>${item.itemName}</p> <span class='icon-span'><i class="fa-regular fa-image icon pic" id="picitem_${itemID}"></i><i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span></li>`
+        `<li class='item-list-li' style="display: flex; gap: 1rem;">
+            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:100px;  width: 10%;" alt='Item Image'>
+            <div style="display: grid; grid-template-columns: 1fr 10% 10%; grid-gap: 5px; width:30%;">
+              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px;" id='nameitem_${itemID}'>${item.itemName}</div>
+              <i class="fa-solid fa-check icon save hidden margin" id="saveitem_${itemID}"></i>
+              <i class="fa-solid fa-camera icon pic margin" id="picitem_${itemID}"></i>
+              <i class="fa-solid fa-trash icon delete margin" id="deleteitem_${itemID}"></i>
+            </div>
+          </li>`
       );
+
+      const editableNameElement = document.getElementById(`nameitem_${itemID}`);
+      let originalContent = item.itemName; // Store the original content here
+
+      editableNameElement.addEventListener("focus", function () {
+        const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+        saveIconElement.classList.remove("hidden"); // Show the save icon
+        originalContent = editableNameElement.innerText; // Update original content on focus
+      });
+
+      editableNameElement.addEventListener("blur", function () {
+        const currentContent = editableNameElement.innerText;
+        if (currentContent === originalContent) {
+          const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+          saveIconElement.classList.add("hidden"); // Hide the save icon if content hasn't changed
+        }
+      });
+
+      const saveIconElement = document.getElementById(`saveitem_${itemID}`);
+      saveIconElement.addEventListener("click", async function () {
+        const newName = document.getElementById(`nameitem_${itemID}`).innerText;
+        await saveItemNameEdit(itemID, newName);
+        saveIconElement.classList.add("hidden"); // Hide the save icon after saving
+      });
 
       const iconElement = document.getElementById(`picitem_${itemID}`);
       iconElement.addEventListener("click", function (e) {
@@ -129,12 +158,26 @@ const renderListFor = function (doc) {
   }
 };
 
+async function saveItemNameEdit(itemId, newName) {
+  if (!newName.trim()) {
+    alert("Please provide an item name.");
+    return;
+  }
+
+  try {
+    await updateDoc(doc(db, "users", userId, "inStorage", itemId), {
+      itemName: newName.trim(),
+    });
+    alert("Item name updated successfully!");
+  } catch (error) {
+    console.error("Error updating document: ", error);
+    alert("Failed to update item.");
+  }
+}
+
 // Render list
 itemList.innerHTML = "";
-const queryStorage = collection(db, "users", `${userId}`, "inStorage");
-const snapShot = await getDocs(queryStorage);
-const snapDoc = snapShot.docs;
-const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
+const unsubscribe = common.onSnapshot(common.queryStorage, (querySnapshot) => {
   itemList.innerHTML = "";
   renderListFor(querySnapshot.docs);
 
@@ -154,10 +197,15 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
       e.preventDefault();
       // delete
       const deleteID = e.target.id.split("_")[1];
-      await deleteDoc(
-        doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+      common.deleteDoc(
+        common.doc(
+          common.db,
+          "users",
+          `${common.userId}`,
+          "inStorage",
+          `${deleteID}`
+        )
       );
-      console.log(`${e.target.id} is deleted`);
     });
   });
 });
@@ -165,16 +213,20 @@ const unsubscribe = onSnapshot(queryStorage, (querySnapshot) => {
 //camera
 captureBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  
+
   // document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
-  displayItemNameElement.textContent = document.getElementById("newItemName").value;
+  displayItemNameElement.textContent =
+    document.getElementById("newItemName").value;
 
   const fixedWidth = 300;
   const fixedHeight = 150;
   canvas.width = fixedWidth;
   canvas.height = fixedHeight;
 
-  const scale = Math.min(canvas.width / video.videoWidth, canvas.height / video.videoHeight);
+  const scale = Math.min(
+    canvas.width / video.videoWidth,
+    canvas.height / video.videoHeight
+  );
   const scaledWidth = video.videoWidth * scale;
   const scaledHeight = video.videoHeight * scale;
 
@@ -184,11 +236,10 @@ captureBtn.addEventListener("click", function (e) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.drawImage(video, xOffset, yOffset, scaledWidth, scaledHeight);
   canvas.hidden = false;
-  retakeBtn.disabled = false;
   document.getElementById("capture").style.display = "none";
   document.getElementById("retake").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "inline-block";
-  saveImageBtn.disabled = false;
+  document.getElementById("backButton").style.display = "inline-block";
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -199,18 +250,15 @@ captureBtn.addEventListener("click", function (e) {
   }, "image/jpeg");
 
   if (stream) {
-    stream.getTracks().forEach(track => track.stop());
+    stream.getTracks().forEach((track) => track.stop());
   }
 });
-
 
 retakeBtn.addEventListener("click", function (e) {
   e.preventDefault();
   canvas.hidden = true;
   video.hidden = false;
-  captureBtn.disabled = false;
   retakeBtn.style.display = "none";
-  saveImageBtn.disabled = true;
   document.getElementById("capture").style.display = "inline-block";
   document.getElementById("uploadButton").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "none";
@@ -220,7 +268,7 @@ retakeBtn.addEventListener("click", function (e) {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true
+        video: true,
       })
       .then(function (localStream) {
         stream = localStream;
@@ -235,33 +283,32 @@ retakeBtn.addEventListener("click", function (e) {
 uploadButton.addEventListener("click", function (e) {
   e.preventDefault();
   imageUpload.value = ""; // Clear the previous selection
-  imageUpload.click(); 
+  imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 reuploadBtn.addEventListener("click", function (e) {
   e.preventDefault();
-  imageUpload.onchange();
+  imageUpload.value = "";
+  imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
 });
 
 imageUpload.addEventListener("change", function (e) {
   if (e.target.files.length > 0) {
-    // File has been selected
     const file = e.target.files[0];
-    processFile(file); // Call a function to handle the file
+    processFile(file);
   } else {
-    // This block will not be executed for a cancel operation since
-    // the change event is not fired if the user cancels the dialog.
     console.log("No file selected or upload cancelled.");
   }
 });
 
 function processFile(file) {
   document.getElementById("displayItemName").style.display = "block"; // Show input after image capture
-  displayItemNameElement.textContent = document.getElementById("newItemName").value;;
+  displayItemNameElement.textContent =
+    document.getElementById("newItemName").value;
 
   if (file) {
     const reader = new FileReader();
@@ -273,7 +320,10 @@ function processFile(file) {
         canvas.width = fixedWidth;
         canvas.height = fixedHeight;
 
-        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
+        const scale = Math.min(
+          canvas.width / img.width,
+          canvas.height / img.height
+        );
         const scaledWidth = img.width * scale;
         const scaledHeight = img.height * scale;
 
@@ -294,13 +344,13 @@ function processFile(file) {
     };
     reader.readAsDataURL(file);
 
-    reuploadBtn.disabled = false;
     document.getElementById("capture").style.display = "none";
     document.getElementById("uploadButton").style.display = "none";
     document.getElementById("retake").style.display = "none";
     document.getElementById("reupload").style.display = "inline-block";
     document.getElementById("saveImage").style.display = "inline-block";
-  } else {    
+    document.getElementById("backButton").style.display = "inline-block";
+  } else {
     openCamera();
     document.getElementById("reupload").style.display = "none";
     document.getElementById("saveImage").style.display = "none";
@@ -311,14 +361,23 @@ function processFile(file) {
 }
 
 saveImageBtn.addEventListener("click", async function (e) {
+  e.preventDefault();
   modalClose();
+
+  if (currentEditingItemId) {
+    await saveItem();
+  }
 });
 
 saveBtn.addEventListener("click", async function (e) {
   e.preventDefault();
+  await saveItem();
+});
 
+async function saveItem() {
   const itemName = document.getElementById("newItemName").value;
-  if (!itemName.trim()) {
+  debugger;
+  if (!itemName.trim() && !currentEditingItemId) {
     alert("Please provide an item name.");
     return;
   }
@@ -326,21 +385,28 @@ saveBtn.addEventListener("click", async function (e) {
   let imageReference = null;
   if (image) {
     const storageRef = firebase.storage().ref();
-    const imageRef = storageRef.child(`photos/${itemName.replace(/\s+/g, '_').toLowerCase()}_${Date.now()}.jpg`);
+    const imageRef = storageRef.child(
+      `photos/${itemName.replace(/\s+/g, "_").toLowerCase()}_${Date.now()}.jpg`
+    );
     const snapshot = await imageRef.put(image);
     imageReference = await snapshot.ref.getDownloadURL();
   }
 
   if (currentEditingItemId) {
-    await updateDoc(doc(db, "users", userId, "inStorage", currentEditingItemId), {
-      itemName,
-      picture: imageReference || itemData.picture,
-    });
-    alert("Item updated successfully!");
+    await updateDoc(
+      doc(db, "users", userId, "inStorage", currentEditingItemId),
+      {
+        picture: imageReference || itemData.picture,
+      }
+    );
+    alert("Item image updated successfully!");
   } else {
     await addDoc(collection(db, "users", userId, "inStorage"), {
       itemName,
-      boxNumber: (await getDocs(query(collection(db, "users", userId, "inStorage")))).docs.length + 1,
+      boxNumber:
+        (
+          await getDocs(query(collection(db, "users", userId, "inStorage")))
+        ).docs.length + 1,
       picture: imageReference || "",
       storedDate: "2024-01-31",
       status: "saved",
@@ -348,9 +414,11 @@ saveBtn.addEventListener("click", async function (e) {
     alert("Item added successfully!");
   }
 
+  document.getElementById("newItemName").value = "";
+
   modalClose();
   clearModelData();
-});
+}
 
 const itemsContainer = document.getElementById("itemsContainer");
 // Prathibha_end
@@ -359,18 +427,22 @@ const itemsContainer = document.getElementById("itemsContainer");
 // Ishi start
 // 2. Booking_Pickup
 // Rendering as default values
-firstname.value = userDoc.userName.firstName;
-lastname.value = userDoc.userName.lastName;
-unitNumber.value = userDoc.address.roomNumEtc;
-street.value = userDoc.address.detail;
-city.value = userDoc.address.city;
-province.value = userDoc.address.province;
-zipCode.value = userDoc.address.zipCode;
-storageLocation.value = userDoc.storageLocation.name;
+firstname.value = common.userDoc.userName.firstName;
+lastname.value = common.userDoc.userName.lastName;
+unitNumber.value = common.userDoc.address.roomNumEtc;
+street.value = common.userDoc.address.detail;
+city.value = common.userDoc.address.city;
+province.value = common.userDoc.address.province;
+zipCode.value = common.userDoc.address.zipCode;
+pickupDate.value = common.userDoc.ongoing_order
+  ? common.userDoc.ongoing_order.date
+  : "";
+// pickup-time is separately controled by the function generating the option tags.
+storageLocation.value = common.userDoc.storageLocation.name;
 
 // Calendar
 // display control
-pikupDate.addEventListener("click", (e) => {
+pickupDate.addEventListener("click", (e) => {
   e.preventDefault();
   let displayCalendar = document.getElementById("calendar-wrapper");
   if (displayCalendar.style.display === "none") {
@@ -467,7 +539,7 @@ document.querySelector("#next").addEventListener("click", moveCalendar);
 
 document.addEventListener("click", function (e) {
   if (e.target.classList.contains("calendar_td")) {
-    pikupDate.value = e.target.dataset.date;
+    pickupDate.value = e.target.dataset.date;
     document.getElementById("calendar-wrapper").style.display = "none";
   }
 });
@@ -482,10 +554,14 @@ for (var i = 9; i < 21; i++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
-console.log(times);
 // render
 times.forEach((el) => {
-  pikupTime.insertAdjacentHTML("beforeend", `<option>${el}</option>`);
+  pickupTime.insertAdjacentHTML(
+    "beforeend",
+    `<option value=${el} ${
+      el === common.userDoc.ongoing_order?.time ? "selected" : ""
+    }>${el}</option>`
+  );
 });
 
 // Event : Back
@@ -493,7 +569,7 @@ times.forEach((el) => {
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
   e.preventDefault();
-  await updateDoc(doc(db, "users", `${userId}`), {
+  common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
     "userName.firstName": `${firstname.value}`,
     "userName.lastName": `${lastname.value}`,
     "address.city": `${city.value}`,
@@ -501,54 +577,90 @@ btnSavePickup.addEventListener("click", async (e) => {
     "address.detail": `${street.value}`,
     "address.roomNumEtc": `${unitNumber.value}`,
     "address.zipCode": `${zipCode.value}`,
-    "ongoing_order.date": `${pikupDate.value}`,
-    "ongoing_order.time": `${pikupTime.value}`,
+    "ongoing_order.date": `${pickupDate.value}`,
+    "ongoing_order.time": `${pickupTime.value}`,
     "storageLocation.name": `${storageLocation.value}`,
   });
 });
 
 // ------------------------------
+
 // 3. Storage Size
 // load plan data from 'Company' and render first
-const docPlan = await getDoc(doc(db, "Company", "plan"));
-const docPlanSize = docPlan.data().size;
+const docPlanSize = common.companyPlanDoc.size;
 // Render the price
 smallPrice.textContent = `$${docPlanSize.small.price}`;
 mediumPrice.textContent = `$${docPlanSize.medium.price}`;
 largePrice.textContent = `$${docPlanSize.large.price}`;
 
-// btn click
+// initial setting (if already selected)
+const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
+if (common.userDoc.plan?.size) {
+  for (let i = 0; i < btnSelectSizeAll.length; i++) {
+    if (btnSelectSizeAll[i].id.includes(common.userDoc.plan.size)) {
+      document
+        .querySelector(`.${common.userDoc.plan.size}-size`)
+        .classList.add("selected");
+    }
+  }
+}
+
+// btn click to select size
 const btnSelectClick = function (btn, size) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await updateDoc(doc(db, "users", `${userId}`), {
+    // Update database
+    await common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
       "plan.size": size,
     });
+    // Style selected size
+    // delete default setting
+    document.querySelectorAll(".size-box").forEach((el) => {
+      el.classList.remove("selected");
+    });
+    // style newly selected one
+    for (let i = 0; i < btnSelectSizeAll.length; i++) {
+      if (btnSelectSizeAll[i].id.includes(size)) {
+        document.querySelector(`.${size}-size`).classList.add("selected");
+      }
+    }
+    // update section#4
+    priceShort.textContent = `$${calcTotalPrice(
+      docPlanTerm.short.discount,
+      size
+    )}`;
+    priceMid.textContent = `$${calcTotalPrice(docPlanTerm.mid.discount, size)}`;
+    priceLong.textContent = `$${calcTotalPrice(
+      docPlanTerm.long.discount,
+      size
+    )}`;
   });
 };
 // execute
 btnSelectClick(btnSelectSmall, "small");
 btnSelectClick(btnSelectMedium, "medium");
 btnSelectClick(btnSelectLarge, "large");
-
 // ------------------------------
 // 4. Storage Plan
 // define variables
 
-const docPlanTerm = docPlan.data().term;
+let docPlanTerm = common.companyPlanDoc.term;
 // Read user's size for calc later
-const selectedSize = docSnap.data().plan.size;
+let selectedSize = common.userDoc.plan?.size;
 // calc function
 const calcTotalPrice = function (discount, size) {
-  return Math.trunc(discount * docPlanSize[size].price);
+  if (selectedSize) {
+    return Math.trunc(discount * docPlanSize[size].price);
+  }
 };
-// Render it
+// Render term
 tripShort.textContent = `${docPlanTerm.short.numTrip}`;
 tripMid.textContent = `${docPlanTerm.mid.numTrip}`;
 tripLong.textContent = `${docPlanTerm.long.numTrip}`;
 monthShort.textContent = `${docPlanTerm.short.numMonth}`;
 monthMid.textContent = `${docPlanTerm.mid.numMonth}`;
 monthLong.textContent = `${docPlanTerm.long.numMonth}`;
+// Render price, based on the selected size in the previous section(#3)
 priceShort.textContent = `$${calcTotalPrice(
   docPlanTerm.short.discount,
   selectedSize
@@ -561,15 +673,37 @@ priceLong.textContent = `$${calcTotalPrice(
   docPlanTerm.long.discount,
   selectedSize
 )}`;
-// btn click
+
+// initial setting (if already selected)
+const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
+if (common.userDoc.plan?.term) {
+  for (let i = 0; i < btnSelectTermAll.length; i++) {
+    if (btnSelectTermAll[i].id.includes(common.userDoc.plan.term)) {
+      document
+        .querySelector(`.${common.userDoc.plan.term}`)
+        .classList.add("selected");
+    }
+  }
+}
+
+// btn click to select term
 const btnTermClick = function (btn, term) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    await updateDoc(doc(db, "users", `${userId}`), {
+    common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
       "plan.term": term,
     });
+    document.querySelectorAll(".term-box").forEach((el) => {
+      el.classList.remove("selected");
+    });
+    for (let i = 0; i < btnSelectTermAll.length; i++) {
+      if (btnSelectTermAll[i].id.includes(term)) {
+        document.querySelector(`.${term}`).classList.add("selected");
+      }
+    }
   });
 };
+// Execute
 btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
@@ -592,17 +726,17 @@ function setupEventListener() {
 setupEventListener();
 
 function modalOpen(e, itemData = "", itemId = "") {
-  
   initiateModel();
 
   document.getElementById("imageUpload").style.display = "none";
-  
+
+  debugger;
   if (itemData) {
     onEditModel(itemData.picture);
     if (itemId != "") {
       currentEditingItemId = itemId;
     }
-    document.getElementById("newItemName").value = itemData.itemName;
+    // document.getElementById("newItemName").value = itemData.itemName;
     document.getElementById("displayItemName").style.display = "block";
     displayItemNameElement.textContent = itemData.itemName;
     modal.style.display = "block";
@@ -620,7 +754,7 @@ function modalOpen(e, itemData = "", itemId = "") {
       img.src = itemData.picture;
     }
   } else {
-    if (document.getElementById("newItemName").value != '') {
+    if (document.getElementById("newItemName").value != "") {
       modal.style.display = "block";
       if (image == null || image == undefined) {
         openCamera();
@@ -636,10 +770,9 @@ function modalOpen(e, itemData = "", itemId = "") {
 buttonClose.addEventListener("click", modalClose);
 
 function modalClose() {
-  
   modal.style.display = "none";
   if (image == undefined || image == null) {
-    clearModelData()
+    clearModelData();
   }
   if (currentEditingItemId > 0) {
     editSaveItem();
@@ -653,14 +786,17 @@ function outsideClose(e) {
     modal.style.display = "none";
 
     if (image == undefined || image == null) {
-      clearModelData()
+      clearModelData();
     }
   }
 }
 
-function clearModelData() {
-  document.getElementById("newItemName").value = "";
-  document.getElementById("displayItemName").value = "";
+function clearModelData(isBack = false) {
+  debugger;
+  if (!isBack) {
+    document.getElementById("displayItemName").value = "";
+  }
+  image = null;
   const canvas = document.getElementById("canvas");
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
@@ -669,19 +805,22 @@ function clearModelData() {
 
 function initiateModel() {
   currentEditingItemId = 0;
-  retakeBtn.disabled = false;
-  reuploadBtn.disabled = false;
+  displayItemNameElement.textContent = "";
   document.getElementById("capture").style.display = "inline-block";
   document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
   document.getElementById("uploadButton").style.display = "inline-block";
   document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
 }
 
 function onEditModel(picture) {
   currentEditingItemId = 0;
 
+  clearModelData();
+
   if (picture && picture !== "") {
+    closeCamera();
     document.getElementById("capture").style.display = "none";
     document.getElementById("retake").style.display = "inline-block";
     document.getElementById("reupload").style.display = "inline-block";
@@ -700,7 +839,7 @@ function openCamera() {
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
-        video: true
+        video: true,
       })
       .then(function (localStream) {
         stream = localStream;
@@ -708,7 +847,6 @@ function openCamera() {
         video.hidden = false;
         video.height = 150;
         video.width = 300;
-        captureBtn.disabled = false;
         // captureBtn.style.display = "inline-block";
         // uploadButton.style.display = "none";
         // saveBtn.style.display = "inline-block";
@@ -718,3 +856,27 @@ function openCamera() {
       });
   }
 }
+
+function closeCamera() {
+  if (stream) {
+    stream.getTracks().forEach(function (track) {
+      track.stop();
+    });
+
+    video.srcObject = null; // Disconnect the stream from the video element
+    video.hidden = true; // Optionally hide the video element
+  }
+}
+
+backButton.addEventListener("click", function (e) {
+  e.preventDefault();
+  clearModelData(true);
+  openCamera();
+  document.getElementById("capture").style.display = "inline-block";
+  document.getElementById("displayItemName").style.display = "none";
+  document.getElementById("retake").style.display = "none";
+  document.getElementById("reupload").style.display = "none";
+  document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
+  document.getElementById("uploadButton").style.display = "inline-block";
+});

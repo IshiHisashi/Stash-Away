@@ -16,8 +16,19 @@
 
 .each-card label {
     display: flex;
+    gap: 2rem;
 }
 
 #default-payment {
     text-align: right;
+}
+
+#account-profile fieldset {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: .5rem;
+}
+
+#account-profile fieldset button {
+    width: 25%;
 }
