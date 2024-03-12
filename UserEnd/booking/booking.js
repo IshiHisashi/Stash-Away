@@ -37,7 +37,8 @@ const db = getFirestore(app);
 
 // define variable / fnc ------------
 // var_DoM
-const userId = common.userId;
+const userId = await common.getCurrentUid();
+console.log(userId);
 // const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
@@ -198,13 +199,7 @@ const unsubscribe = common.onSnapshot(common.queryStorage, (querySnapshot) => {
       // delete
       const deleteID = e.target.id.split("_")[1];
       common.deleteDoc(
-        common.doc(
-          common.db,
-          "users",
-          `${common.userId}`,
-          "inStorage",
-          `${deleteID}`
-        )
+        common.doc(common.db, "users", `${userId}`, "inStorage", `${deleteID}`)
       );
     });
   });
@@ -358,7 +353,6 @@ function processFile(file) {
     document.getElementById("uploadButton").style.display = "inline-block";
     document.getElementById("displayItemName").style.display = "none";
     document.getElementById("backButton").style.display = "none";
-
   }
 }
 
@@ -571,7 +565,7 @@ times.forEach((el) => {
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
   e.preventDefault();
-  common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
+  common.updateDoc(common.doc(common.db, "users", `${userId}`), {
     "userName.firstName": `${firstname.value}`,
     "userName.lastName": `${lastname.value}`,
     "address.city": `${city.value}`,
@@ -612,7 +606,7 @@ const btnSelectClick = function (btn, size) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
     // Update database
-    await common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
+    await common.updateDoc(common.doc(common.db, "users", `${userId}`), {
       "plan.size": size,
     });
     // Style selected size
@@ -692,7 +686,7 @@ if (common.userDoc.plan?.term) {
 const btnTermClick = function (btn, term) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    common.updateDoc(common.doc(common.db, "users", `${common.userId}`), {
+    common.updateDoc(common.doc(common.db, "users", `${userId}`), {
       "plan.term": term,
     });
     document.querySelectorAll(".term-box").forEach((el) => {
