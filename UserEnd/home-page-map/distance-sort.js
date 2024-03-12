@@ -1,24 +1,20 @@
-'use strict';
+"use strict";
 import * as geo from "./geo.js";
 import * as common from "./../../common.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-  authDomain: "fir-jan24.firebaseapp.com",
-  projectId: "fir-jan24",
-  storageBucket: "fir-jan24.appspot.com",
-  messagingSenderId: "831417179844",
-  appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-  measurementId: "G-DSYKEF99M1",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = common.getFirestore(app);
+// Initialize Firebase---------------
+const db = common.db;
 const uid = await common.getCurrentUid();
-console.log("User id downloaded")
+// Get userDoc
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+// ----------------------------
+
+// const app = initializeApp(firebaseConfig);
+// const db = common.getFirestore(app);
+console.log("User id downloaded");
 console.log(uid);
-const profileInfo = await common.userDoc;
+const profileInfo = userDoc;
 console.log("Profile data downloaded");
 console.log(profileInfo);
 
@@ -113,9 +109,11 @@ if (navigator.geolocation) {
         for (let i in cityArray) {
           let idName = `location-${i}`;
           document.getElementById(idName).value = cityArray[i].name;
-          document.querySelector(
-            `[for="${idName}"]`
-          ).innerHTML = `Location: ${cityArray[i].name}<br>Distance: ${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs`;
+          document.querySelector(`[for="${idName}"]`).innerHTML = `Location: ${
+            cityArray[i].name
+          }<br>Distance: ${
+            Math.round(cityArray[i].distance / 100) / 10
+          } kilo mtrs`;
         }
       }
 
@@ -126,23 +124,29 @@ if (navigator.geolocation) {
 
       // ICON CHANGE ============================================
       function changeIconForDiv() {
-        const inputDiv = document.querySelectorAll('fieldset div');
-        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        const inputDiv = document.querySelectorAll("fieldset div");
+        const inputRadioBtns = document.querySelectorAll(
+          'input[name="location"]'
+        );
         for (let i = 0; i < inputRadioBtns.length; i++) {
           inputDiv[i].addEventListener("click", () => {
             body.id = `${inputRadioBtns[i].value}`;
             for (let p = 0; p < inputRadioBtns.length; p++) {
               inputRadioBtns[p].removeAttribute("checked");
             }
-            let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
-            cityOption.setAttribute("checked", "")
+            let cityOption = document.querySelector(
+              `input[value="${inputRadioBtns[i].value}"]`
+            );
+            cityOption.setAttribute("checked", "");
           });
         }
       }
 
       function changeIconForLabel() {
-        const labels = document.querySelectorAll('fieldset div label');
-        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        const labels = document.querySelectorAll("fieldset div label");
+        const inputRadioBtns = document.querySelectorAll(
+          'input[name="location"]'
+        );
         for (let i = 0; i < inputRadioBtns.length; i++) {
           labels[i].addEventListener("click", (e) => {
             e.preventDefault();
@@ -150,15 +154,19 @@ if (navigator.geolocation) {
             for (let p = 0; p < inputRadioBtns.length; p++) {
               inputRadioBtns[p].removeAttribute("checked");
             }
-            let cityOption = document.querySelector(`input[value="${inputRadioBtns[i].value}"]`)
-            cityOption.setAttribute("checked", "")
+            let cityOption = document.querySelector(
+              `input[value="${inputRadioBtns[i].value}"]`
+            );
+            cityOption.setAttribute("checked", "");
           });
         }
       }
 
       function clickMarker() {
         const markers = document.querySelectorAll(".loc-marker");
-        const inputRadioBtns = document.querySelectorAll('input[name="location"]');
+        const inputRadioBtns = document.querySelectorAll(
+          'input[name="location"]'
+        );
         for (let i = 0; i < markers.length; i++) {
           markers[i].addEventListener("click", () => {
             let bodyId = markers[i].id.slice(7);
@@ -166,21 +174,22 @@ if (navigator.geolocation) {
             for (let j = 0; j < inputRadioBtns.length; j++) {
               inputRadioBtns[j].removeAttribute("checked");
             }
-            let cityOption = document.querySelector(`input[value="${bodyId}"]`)
-            cityOption.setAttribute("checked", "")
+            let cityOption = document.querySelector(`input[value="${bodyId}"]`);
+            cityOption.setAttribute("checked", "");
           });
         }
       }
-
 
       // SELECTED CITY'S VALUE IS STORED HERE=======================
 
       const submitBtn = document.getElementById("submit");
       submitBtn.addEventListener("click", function (e) {
         e.preventDefault();
-        
+
         if (document.querySelector(`input[checked]`) == null) {
-          alert("You can select your own storage location by clicking a location icon on the map!");
+          alert(
+            "You can select your own storage location by clicking a location icon on the map!"
+          );
         } else {
           fireNewLocation();
         }
@@ -188,7 +197,7 @@ if (navigator.geolocation) {
         // Specify specific obj as a data pacaked to be sent
       });
 
-      const fireNewLocation = async function() {
+      const fireNewLocation = async function () {
         const selectedCity = await document.querySelector(`input[checked]`);
         const selectedCityID = await selectedCity.id.split("-")[1];
         const selectedCityObj = await cityArray[selectedCityID];
@@ -200,7 +209,7 @@ if (navigator.geolocation) {
         );
 
         document.getElementById("proceedLink").click();
-      }
+      };
 
       // SET MAP =======================================================
       const map = tt.map({
