@@ -1,45 +1,29 @@
 "use strict";
 
 import * as common from "../../common.js";
-
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  collectionGroup,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  writeBatch,
-  query,
-  where,
-  onSnapshot,
-} from "https://www.gstatic.com/firebasejs/10.7.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-  authDomain: "fir-jan24.firebaseapp.com",
-  projectId: "fir-jan24",
-  storageBucket: "fir-jan24.appspot.com",
-  messagingSenderId: "831417179844",
-  appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-  measurementId: "G-DSYKEF99M1",
-};
-
 // Initialize Firebase---------------
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = common.db;
+// General : Get company info
+const companyPlanSnap = await common.getDoc(common.doc(db, "Company", "plan"));
+const companyStorageLocationSnap = await common.getDoc(
+  common.doc(db, "Company", "storageLocation")
+);
+const companyPlanDoc = companyPlanSnap.data();
+const companyStorageLocationDoc = companyStorageLocationSnap.data();
+/// General : Get users in 'usersID'
+const uid = await common.getCurrentUid();
+// const uid = "3ZGNxHC1avOoTevnctvkhBMwH962";
+
+console.log(uid);
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
+const snapShot = await common.getDocs(queryStorage);
+// ----------------------------------
 
 // define variable / fnc ------------
 // var_DoM
-const userId = await common.getCurrentUid();
-console.log(userId);
-// const userId = uid;
 // For 1. Booking_additem
 const item = document.getElementById("item");
 const newItemName = document.getElementById("newItemName");
@@ -166,7 +150,7 @@ async function saveItemNameEdit(itemId, newName) {
   }
 
   try {
-    await updateDoc(doc(db, "users", userId, "inStorage", itemId), {
+    await common.updateDoc(common.doc(db, "users", uid, "inStorage", itemId), {
       itemName: newName.trim(),
     });
     alert("Item name updated successfully!");
@@ -178,7 +162,7 @@ async function saveItemNameEdit(itemId, newName) {
 
 // Render list
 itemList.innerHTML = "";
-const unsubscribe = common.onSnapshot(common.queryStorage, (querySnapshot) => {
+const unsubscribe = common.onSnapshot(queryStorage, (querySnapshot) => {
   itemList.innerHTML = "";
   renderListFor(querySnapshot.docs);
 
@@ -199,7 +183,7 @@ const unsubscribe = common.onSnapshot(common.queryStorage, (querySnapshot) => {
       // delete
       const deleteID = e.target.id.split("_")[1];
       common.deleteDoc(
-        common.doc(common.db, "users", `${userId}`, "inStorage", `${deleteID}`)
+        common.doc(common.db, "users", uid, "inStorage", `${deleteID}`)
       );
     });
   });
@@ -389,19 +373,21 @@ async function saveItem() {
   }
 
   if (currentEditingItemId) {
-    await updateDoc(
-      doc(db, "users", userId, "inStorage", currentEditingItemId),
+    await common.updateDoc(
+      common.doc(db, "users", uid, "inStorage", currentEditingItemId),
       {
         picture: imageReference || itemData.picture,
       }
     );
     alert("Item image updated successfully!");
   } else {
-    await addDoc(collection(db, "users", userId, "inStorage"), {
+    await common.addDoc(common.collection(db, "users", uid, "inStorage"), {
       itemName,
       boxNumber:
         (
-          await getDocs(query(collection(db, "users", userId, "inStorage")))
+          await common.getDocs(
+            common.query(common.collection(db, "users", uid, "inStorage"))
+          )
         ).docs.length + 1,
       picture: imageReference || "",
       storedDate: "2024-01-31",
@@ -423,18 +409,16 @@ const itemsContainer = document.getElementById("itemsContainer");
 // Ishi start
 // 2. Booking_Pickup
 // Rendering as default values
-firstname.value = common.userDoc.userName.firstName;
-lastname.value = common.userDoc.userName.lastName;
-unitNumber.value = common.userDoc.address.roomNumEtc;
-street.value = common.userDoc.address.detail;
-city.value = common.userDoc.address.city;
-province.value = common.userDoc.address.province;
-zipCode.value = common.userDoc.address.zipCode;
-pickupDate.value = common.userDoc.ongoing_order
-  ? common.userDoc.ongoing_order.date
-  : "";
+firstname.value = userDoc.userName.firstName;
+lastname.value = userDoc.userName.lastName;
+unitNumber.value = userDoc.address.roomNumEtc;
+street.value = userDoc.address.detail;
+city.value = userDoc.address.city;
+province.value = userDoc.address.province;
+zipCode.value = userDoc.address.zipCode;
+pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
 // pickup-time is separately controled by the function generating the option tags.
-storageLocation.value = common.userDoc.storageLocation.name;
+storageLocation.value = userDoc.storageLocation.name;
 
 // Calendar
 // display control
@@ -555,7 +539,7 @@ times.forEach((el) => {
   pickupTime.insertAdjacentHTML(
     "beforeend",
     `<option value=${el} ${
-      el === common.userDoc.ongoing_order?.time ? "selected" : ""
+      el === userDoc.ongoing_order?.time ? "selected" : ""
     }>${el}</option>`
   );
 });
@@ -565,7 +549,7 @@ times.forEach((el) => {
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
   e.preventDefault();
-  common.updateDoc(common.doc(common.db, "users", `${userId}`), {
+  common.updateDoc(common.doc(db, "users", uid), {
     "userName.firstName": `${firstname.value}`,
     "userName.lastName": `${lastname.value}`,
     "address.city": `${city.value}`,
@@ -583,7 +567,7 @@ btnSavePickup.addEventListener("click", async (e) => {
 
 // 3. Storage Size
 // load plan data from 'Company' and render first
-const docPlanSize = common.companyPlanDoc.size;
+const docPlanSize = companyPlanDoc.size;
 // Render the price
 smallPrice.textContent = `$${docPlanSize.small.price}`;
 mediumPrice.textContent = `$${docPlanSize.medium.price}`;
@@ -591,11 +575,11 @@ largePrice.textContent = `$${docPlanSize.large.price}`;
 
 // initial setting (if already selected)
 const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
-if (common.userDoc.plan?.size) {
+if (userDoc.plan?.size) {
   for (let i = 0; i < btnSelectSizeAll.length; i++) {
-    if (btnSelectSizeAll[i].id.includes(common.userDoc.plan.size)) {
+    if (btnSelectSizeAll[i].id.includes(userDoc.plan.size)) {
       document
-        .querySelector(`.${common.userDoc.plan.size}-size`)
+        .querySelector(`.${userDoc.plan.size}-size`)
         .classList.add("selected");
     }
   }
@@ -606,7 +590,7 @@ const btnSelectClick = function (btn, size) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
     // Update database
-    await common.updateDoc(common.doc(common.db, "users", `${userId}`), {
+    await common.updateDoc(common.doc(db, "users"), {
       "plan.size": size,
     });
     // Style selected size
@@ -640,9 +624,9 @@ btnSelectClick(btnSelectLarge, "large");
 // 4. Storage Plan
 // define variables
 
-let docPlanTerm = common.companyPlanDoc.term;
+let docPlanTerm = companyPlanDoc.term;
 // Read user's size for calc later
-let selectedSize = common.userDoc.plan?.size;
+let selectedSize = userDoc.plan?.size;
 // calc function
 const calcTotalPrice = function (discount, size) {
   if (selectedSize) {
@@ -672,12 +656,10 @@ priceLong.textContent = `$${calcTotalPrice(
 
 // initial setting (if already selected)
 const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
-if (common.userDoc.plan?.term) {
+if (userDoc.plan?.term) {
   for (let i = 0; i < btnSelectTermAll.length; i++) {
-    if (btnSelectTermAll[i].id.includes(common.userDoc.plan.term)) {
-      document
-        .querySelector(`.${common.userDoc.plan.term}`)
-        .classList.add("selected");
+    if (btnSelectTermAll[i].id.includes(userDoc.plan.term)) {
+      document.querySelector(`.${userDoc.plan.term}`).classList.add("selected");
     }
   }
 }
@@ -686,7 +668,7 @@ if (common.userDoc.plan?.term) {
 const btnTermClick = function (btn, term) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
-    common.updateDoc(common.doc(common.db, "users", `${userId}`), {
+    common.updateDoc(common.doc(db, "users", uid), {
       "plan.term": term,
     });
     document.querySelectorAll(".term-box").forEach((el) => {
