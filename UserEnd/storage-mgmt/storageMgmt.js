@@ -5,13 +5,12 @@ import * as common from "../../common.js";
 // Initialize Firebase---------------
 const db = common.db;
 // Define variables----------------
-// const uid = await common.getCurrentUid();
-const uid = "3ZGNxHC1avOoTevnctvkhBMwH962";
+const uid = await common.getCurrentUid();
 console.log(uid);
 /// General : Get users in 'usersID'
 const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
 const userDoc = userSnap.data();
-let getcheckedItem = userDoc?.ongoingRetrievalItems;
+let getcheckedItem = userDoc.ongoingRetrievalItems;
 
 console.log(getcheckedItem);
 
