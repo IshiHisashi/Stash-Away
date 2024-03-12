@@ -111,7 +111,7 @@ export const companyStorageLocationDoc = companyStorageLocationSnap.data();
 
 // General : Get users in 'usersID'
 const userSnap = await getDoc(doc(db, "users", `${userId}`));
-export const userDoc = userSnap.data();
+const uDoc = userSnap.data();
 
 // General : Get item (document) in 'inStorage' (subcollection):
 export const queryStorage = collection(db, "users", `${userId}`, "inStorage");
@@ -120,7 +120,12 @@ export const snapShot = await getDocs(queryStorage);
 
 // Update and Create
 // Booking : Order submitted
-export const addOrderSubmitFunction = async function (snapShot) {
+export const addOrderSubmitFunction = async function (
+  snapShot,
+  uid,
+  userDoc,
+  companyPlanDoc
+) {
   const batch = writeBatch(db);
   const orderedArrID = [];
   snapShot.forEach((doc) => {
@@ -141,13 +146,7 @@ export const addOrderSubmitFunction = async function (snapShot) {
   // Get updated data and create an object array
   const orderedArrItem = [];
   orderedArrID.forEach(async (id) => {
-    const queryUpdatedItem = doc(
-      db,
-      "users",
-      `${userId}`,
-      "inStorage",
-      `${id}`
-    );
+    const queryUpdatedItem = doc(db, "users", uid, "inStorage", `${id}`);
     const snapShot = await getDoc(queryUpdatedItem);
     const itemData = snapShot.data();
     const idAndData = {
@@ -157,8 +156,8 @@ export const addOrderSubmitFunction = async function (snapShot) {
   });
 
   // Generate new ORDER
-  await addDoc(collection(db, "users", `${userId}`, "order"), {
-    userId: `${userId}`,
+  await addDoc(collection(db, "users", uid, "order"), {
+    userId: uid,
     userName: {
       firstName: `${userDoc.userName.firstName}`,
       lastName: `${userDoc.userName.lastName}`,
@@ -186,8 +185,19 @@ export const addOrderSubmitFunction = async function (snapShot) {
   });
 
   // Calc date
+  const contractDays =
+    userDoc.plan?.term === "short"
+      ? 30
+      : userDoc.plan?.term === "mid"
+      ? 120
+      : 360;
+  const expiryFullDate = date.addDays(contractDays);
+  const expiryDate = `${expiryFullDate.getFullYear()}/${
+    expiryFullDate.getMonth() + 1
+  }/${expiryFullDate.getDate()}`;
 
-  await updateDoc(doc(db, "users", `${userId}`), {
+  // Update user doc
+  await updateDoc(doc(db, "users", uid), {
     // Delete 'ongoing-order' from userDoc
     ongoing_order: deleteField(),
     // Give ticket for free trip
@@ -278,6 +288,7 @@ export const retrievalOrderSubmitFunction = async function (
 // current time
 export const ts = Timestamp.fromDate(new Date()).seconds;
 export const nowFullDate = new Date(ts * 1000);
+console.log(ts, nowFullDate);
 export const nowDate = `${nowFullDate.getFullYear()}/${
   nowFullDate.getMonth() + 1
 }/${nowFullDate.getDate()}`;
@@ -288,16 +299,20 @@ Date.prototype.addDays = function (days) {
   return date;
 };
 const date = new Date();
-const contractDays =
-  userDoc.plan?.term === "short"
-    ? 30
-    : userDoc.plan?.term === "mid"
-    ? 120
-    : 360;
-const expiryFullDate = date.addDays(contractDays);
-const expiryDate = `${expiryFullDate.getFullYear()}/${
-  expiryFullDate.getMonth() + 1
-}/${expiryFullDate.getDate()}`;
+// Need to be on the driver's end
+const calcExpiryDate = function (userDoc) {
+  const contractDays =
+    userDoc.plan?.term === "short"
+      ? 30
+      : userDoc.plan?.term === "mid"
+      ? 120
+      : 360;
+  const expiryFullDate = date.addDays(contractDays);
+  const expiryDate = `${expiryFullDate.getFullYear()}/${
+    expiryFullDate.getMonth() + 1
+  }/${expiryFullDate.getDate()}`;
+  return expiryDate;
+};
 
 // Calc next day for retrieval delivery
 export const nextFullDate = nowFullDate.addDays(1);

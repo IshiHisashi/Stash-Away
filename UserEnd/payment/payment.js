@@ -1,34 +1,37 @@
 "use strict";
 
 import * as common from "../../common.js";
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-  authDomain: "fir-jan24.firebaseapp.com",
-  projectId: "fir-jan24",
-  storageBucket: "fir-jan24.appspot.com",
-  messagingSenderId: "831417179844",
-  appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-  measurementId: "G-DSYKEF99M1",
-};
-const app = initializeApp(firebaseConfig);
-const db = common.getFirestore(app);
+// Initialize Firebase---------------
+const db = common.db;
 const uid = await common.getCurrentUid();
+// General : Get company info
+const companyPlanSnap = await common.getDoc(common.doc(db, "Company", "plan"));
+const companyStorageLocationSnap = await common.getDoc(
+  common.doc(db, "Company", "storageLocation")
+);
+const companyPlanDoc = companyPlanSnap.data();
+const companyStorageLocationDoc = companyStorageLocationSnap.data();
+/// General : Get users in 'usersID'
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
+const snapShot = await common.getDocs(queryStorage);
+// ----------------------------
+
 console.log("User id downloaded");
 console.log(uid);
-const profileInfo = await common.userDoc;
+const profileInfo = userDoc;
 console.log("Profile data downloaded");
 console.log(profileInfo);
-const plansInfo = await common.companyPlanDoc;
-const storageInfo = await common.companyStorageLocationDoc;
+const plansInfo = companyPlanDoc;
+const storageInfo = companyStorageLocationDoc;
 console.log("Company data downloaded");
 console.log(plansInfo);
 console.log(storageInfo);
 const paymentMethodsArray = [];
 const savedItemsArr = [];
-const save = await common.queryFunction("saved");
+const save = await common.queryFunction("saved", uid);
 
 console.log(save);
 save.docs.forEach((el) => {
@@ -215,10 +218,10 @@ function getPaymentInfo() {
 }
 
 // BTN TREATMENT ====================================
-
 const btnAdd = document.getElementById("btn-add");
 btnAdd.addEventListener("click", async (e) => {
   e.preventDefault();
-  await common.addOrderSubmitFunction(common.snapShot);
+  await common.addOrderSubmitFunction(snapShot, uid, profileInfo, plansInfo);
+  // move to the order-update page
   window.location.href = "../updates/pickup-and-delivery-updates.html";
 });
