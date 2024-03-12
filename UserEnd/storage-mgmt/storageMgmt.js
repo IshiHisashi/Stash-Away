@@ -42,6 +42,19 @@ const renderList = function (snapShot) {
       doc.data().status !== "saved" &&
       doc.data().status !== "add requested"
     ) {
+      // define date
+      const tsStored = item.storedDate.seconds;
+      const tsRetrieved = item.retrievedDate?.seconds;
+      const storedFullDate = new Date(tsStored * 1000);
+      const retrievedFullDate = new Date(tsRetrieved * 1000);
+      const storedDate = `${storedFullDate.getFullYear()}/${
+        storedFullDate.getMonth() + 1
+      }/${storedFullDate.getDate()}`;
+      const retrievedDate = `${retrievedFullDate.getFullYear()}/${
+        retrievedFullDate.getMonth() + 1
+      }/${retrievedFullDate.getDate()}`;
+
+      // Render
       itemList.insertAdjacentHTML(
         "beforeend",
         `<li  class='item-list-li'><img src='${
@@ -51,7 +64,9 @@ const renderList = function (snapShot) {
         item.itemName
       }</p><div class='desc-wrapper'><p class='date'>Date ${
           item.status === "retrieved" ? "retrieved" : "stored"
-        } : ${item.storedDate}</p><p class='item-status ${
+        } : ${
+          item.status === "retrieved" ? retrievedDate : storedDate
+        }</p><p class='item-status ${
           item.status === "stored"
             ? "green"
             : item.status === "retrieval requested"
@@ -192,6 +207,17 @@ btnSearch.addEventListener("click", (e) => {
     // Count # of items that fulfill 'searched' and 'checked'.
     cArr.includes(`check_${itemID}`) &&
       numCheckedInSearch.push(`check_${itemID}`);
+    // define date
+    const tsStored = item.storedDate.seconds;
+    const tsRetrieved = item.retrievedDate?.seconds;
+    const storedFullDate = new Date(tsStored * 1000);
+    const retrievedFullDate = new Date(tsRetrieved * 1000);
+    const storedDate = `${storedFullDate.getFullYear()}/${
+      storedFullDate.getMonth() + 1
+    }/${storedFullDate.getDate()}`;
+    const retrievedDate = `${retrievedFullDate.getFullYear()}/${
+      retrievedFullDate.getMonth() + 1
+    }/${retrievedFullDate.getDate()}`;
     // Rendering
     if (item.status !== "saved" && item.status !== "add requested") {
       itemList.insertAdjacentHTML(
@@ -201,8 +227,10 @@ btnSearch.addEventListener("click", (e) => {
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
         item.itemName
-      }</p><div class='desc-wrapper'><p class='date'>Date stored : ${
-          item.storedDate
+      }</p><div class='desc-wrapper'><p class='date'>Date ${
+          item.status === "retrieved" ? "retrieved" : "stored"
+        } : ${
+          item.status === "retrieved" ? retrievedDate : storedDate
         }</p><p class='item-status ${
           item.status === "stored"
             ? "green"
