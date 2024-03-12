@@ -1,76 +1,36 @@
 "use strict";
+// import from common.js
 import * as common from "../../common.js";
+// Initialize Firebase---------------
+const db = common.db;
+// Define variables----------------
+// const uid = await common.getCurrentUid();
+const uid = "3ZGNxHC1avOoTevnctvkhBMwH962";
+
+console.log(uid);
+/// General : Get users in 'usersID'
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+let getcheckedItem = userDoc.ongoingRetrievalItems;
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
+const snapShot = await common.getDocs(queryStorage);
 
 const btnAdd = document.getElementById("btn-add");
 const btnRetrieval = document.getElementById("btn-retrieval");
 
-// add action
-btnAdd.addEventListener("click", async (e) => {
-  e.preventDefault();
-  await common.addOrderSubmitFunction(common.snapShot);
-  window.location.href = "../updates/pickup-and-delivery-updates.html";
-});
+// add action --DISABLED--
+// btnAdd.addEventListener("click", async (e) => {
+//   e.preventDefault();
+//   await common.addOrderSubmitFunction(common.snapShot);
+//   window.location.href = "../updates/pickup-and-delivery-updates.html";
+// });
 
 // retrieve action
 btnRetrieval.addEventListener("click", async (e) => {
   e.preventDefault();
-  // Old
-  // await common.retrievalOrderSubmitFunction();
-  // New
-  getcheckedItem.forEach(async (el) => {
-    const getItem = await getDoc(
-      doc(db, "users", `${userId}`, "inStorage", `${el}`)
-    );
-    const item = getItem.data();
-    const itemID = getItem.id;
-    // update item
-    await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${itemID}`), {
-      status: "retrieval requested",
-    });
-  });
-  // Generate order
-  await addDoc(collection(db, "users", `${userId}`, "order"), {
-    userId: `${userId}`,
-    userName: {
-      firstName: `${userDoc.userName.firstName}`,
-      lastName: `${userDoc.userName.lastName}`,
-    },
-    driverId: "",
-    itemKey: getcheckedItem,
-    orderTimestamp: nowFullDate,
-    orderType: "retrieval",
-    status: "requested",
-    address: {
-      detail: `${userDoc.address.detail}`,
-      city: `${userDoc.address.city}`,
-      province: `${userDoc.address.province}`,
-      zipCode: `${userDoc.address.zipCode}`,
-    },
-    storageLocation: {
-      latitude: `${userDoc.storageLocation.latitude}`,
-      longitude: `${userDoc.storageLocation.longitude}`,
-      name: `${userDoc.storageLocation.name}`,
-    },
-    requestedDateTime: {
-      date: `Mon Mar 18 2024 00:00:00 GMT-0700 (Pacific Daylight Time)`,
-      time: `17:00 hrs`,
-    },
-  });
-  await updateDoc(doc(db, "users", `${userId}`), {
-    // Then, delete 'ongoingRetrievalItems' from userDoc
-    ongoingRetrievalItems: deleteField(),
-    // Deduct number of free trip
-    "plan.remainingFreeTrip": Number(
-      `${
-        userDoc.plan.remainingFreeTrip > 0
-          ? userDoc.plan.remainingFreeTrip - 1
-          : 0
-      }`
-    ),
-  });
+  await common.retrievalOrderSubmitFunction(uid, getcheckedItem, userDoc);
 
   // Move to the next page
   window.location.href = "../updates/pickup-and-delivery-updates.html";
 });
-
-export const retrievalOrderSubmitFunction = async function () {};

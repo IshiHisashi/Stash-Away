@@ -1,39 +1,27 @@
 "use strict";
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  collectionGroup,
-  doc,
-  getDoc,
-  getDocs,
-  setDoc,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  writeBatch,
-  query,
-  where,
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA0Px8PkiCzyTrDcFCWh-mbER-YcWd9d-E",
-  authDomain: "fir-jan24.firebaseapp.com",
-  projectId: "fir-jan24",
-  storageBucket: "fir-jan24.appspot.com",
-  messagingSenderId: "831417179844",
-  appId: "1:831417179844:web:c3eb03b7fc9c6ef7b03391",
-  measurementId: "G-DSYKEF99M1",
-};
 
 // import from common.js
 import * as common from "../../common.js";
 // Initialize Firebase---------------
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = common.db;
 // Define variables----------------
-const userId = "qhH4gTkcc3Z1Q1bKdN0x6cGLoyB3";
+// const uid = await common.getCurrentUid();
+const uid = "3ZGNxHC1avOoTevnctvkhBMwH962";
+console.log(uid);
+/// General : Get users in 'usersID'
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+let getcheckedItem = userDoc?.ongoingRetrievalItems;
+
+console.log(getcheckedItem);
+
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
+const snapShot = await common.getDocs(queryStorage);
+
+// ---------------------------------
+
+// Related with HTML
 const numTotal = document.getElementById("total-num");
 const numStored = document.getElementById("stored-num");
 const numOnRequest = document.getElementById("on-request-num");
@@ -81,8 +69,8 @@ const renderList = function (snapShot) {
             ? "In storage"
             : ""
         }</p></div> <input id=check_${itemID} class="checkbox" type="checkbox" ${
-          common.getcheckedItem
-            ? common.getcheckedItem.includes(itemID)
+          getcheckedItem
+            ? getcheckedItem.includes(itemID)
               ? "checked"
               : ""
             : ""
@@ -104,7 +92,7 @@ const numItemTotalArr = [];
 const numItemStoredArr = [];
 const numItemOnRequestArr = [];
 const numItemRetrievedArr = [];
-common.snapShot.forEach((el) => {
+snapShot.forEach((el) => {
   if (el.data().status !== "saved" && el.data().status !== "add requested") {
     numItemTotalArr.push(el.data());
   }
@@ -126,7 +114,7 @@ numOnRequest.textContent = numItemOnRequestArr.length;
 numRetrieved.textContent = numItemRetrievedArr.length;
 
 // Render the main list
-renderList(common.snapShot);
+renderList(snapShot);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
@@ -184,7 +172,7 @@ const cleanupList = function () {
 // Search
 // Create arr
 const itemsIDArr = [];
-common.snapShot.forEach((el) => {
+snapShot.forEach((el) => {
   const itemArr = [el.id, el.data()];
   itemsIDArr.push(itemArr);
 });
@@ -245,9 +233,7 @@ btnSearch.addEventListener("click", (e) => {
     ) {
       document.getElementById(`check_${itemID}`).disabled = true;
     }
-  });
-  console.log(numCheckedInSearch);
-  // Update UI for # of checked items as per search results
+  }); // Update UI for # of checked items as per search results
   if (numCheckedInSearch.length < 2) {
     numReturnItems.textContent = `(${numCheckedInSearch.length} item)`;
   } else {
@@ -282,7 +268,7 @@ btnSerachDelete.addEventListener("click", (e) => {
   e.preventDefault();
   // Render
   cleanupList();
-  renderList(common.snapShot);
+  renderList(snapShot);
   // checkbox contorol
   recallCheckbox();
   checkControl();
@@ -295,13 +281,13 @@ filter.addEventListener("change", async (e) => {
   const conditionValue = filter.value;
   if (conditionValue === "all") {
     // Render all
-    renderList(common.snapShot);
+    renderList(snapShot);
     // checkbox contorol
     recallCheckbox();
     checkControl();
   } else {
     // retrieve data under a certain filter condition
-    const querySnapshot = await common.queryFunction(conditionValue);
+    const querySnapshot = await common.queryFunction(conditionValue, uid);
     // Then, render it
     renderList(querySnapshot);
     // checkbox contorol
@@ -325,8 +311,8 @@ btnRequestReturn.addEventListener("click", async (e) => {
       checkedArr.push(checkedID);
       // May transfer to the other page
       // Extract option#2 : Whole document
-      const getItem = await getDoc(
-        doc(db, "users", `${userId}`, "inStorage", `${checkedID}`)
+      const getItem = await common.getDoc(
+        common.doc(db, "users", `${uid}`, "inStorage", `${checkedID}`)
       );
       const itemObj = { [checkedID]: getItem.data() };
       checkedDocs.push(itemObj);
@@ -334,7 +320,7 @@ btnRequestReturn.addEventListener("click", async (e) => {
     }
   });
   // record it on database tentatively
-  await common.recordCheckedFunction(checkedArr);
+  await common.recordCheckedFunction(checkedArr, uid);
   // move page
   if (cArr.length === 0) {
     alert("You have not choosen any of stored item");

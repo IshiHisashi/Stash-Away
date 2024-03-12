@@ -201,9 +201,9 @@ export const addOrderSubmitFunction = async function (snapShot) {
 };
 
 // StorageMgmt : Filtering
-export const queryFunction = async function (conditionValue) {
+export const queryFunction = async function (conditionValue, uid) {
   const q = query(
-    collection(db, "users", `${userId}`, "inStorage"),
+    collection(db, "users", uid, "inStorage"),
     where("status", "==", conditionValue)
   );
   const querySnapshot = await getDocs(q);
@@ -211,66 +211,68 @@ export const queryFunction = async function (conditionValue) {
 };
 
 // StorageMtmt : record chacked item tentatively
-export const recordCheckedFunction = async function (arr) {
-  await updateDoc(doc(db, "users", `${userId}`), {
+export const recordCheckedFunction = async function (arr, uid) {
+  await updateDoc(doc(db, "users", uid), {
     ongoingRetrievalItems: arr,
   });
 };
 
 // Retrieval : Order submitted
-// export const retrievalOrderSubmitFunction = async function () {
-//   getcheckedItem.forEach(async (el) => {
-//     const getItem = await getDoc(
-//       doc(db, "users", `${userId}`, "inStorage", `${el}`)
-//     );
-//     const item = getItem.data();
-//     const itemID = getItem.id;
-//     // update item
-//     await updateDoc(doc(db, "users", `${userId}`, "inStorage", `${itemID}`), {
-//       status: "retrieval requested",
-//     });
-//   });
-//   // Generate order
-//   await addDoc(collection(db, "users", `${userId}`, "order"), {
-//     userId: `${userId}`,
-//     userName: {
-//       firstName: `${userDoc.userName.firstName}`,
-//       lastName: `${userDoc.userName.lastName}`,
-//     },
-//     driverId: "",
-//     itemKey: getcheckedItem,
-//     orderTimestamp: nowFullDate,
-//     orderType: "retrieval",
-//     status: "requested",
-//     address: {
-//       detail: `${userDoc.address.detail}`,
-//       city: `${userDoc.address.city}`,
-//       province: `${userDoc.address.province}`,
-//       zipCode: `${userDoc.address.zipCode}`,
-//     },
-//     storageLocation: {
-//       latitude: `${userDoc.storageLocation.latitude}`,
-//       longitude: `${userDoc.storageLocation.longitude}`,
-//       name: `${userDoc.storageLocation.name}`,
-//     },
-//     requestedDateTime: {
-//       date: `Mon Mar 18 2024 00:00:00 GMT-0700 (Pacific Daylight Time)`,
-//       time: `17:00 hrs`,
-//     },
-//   });
-//   await updateDoc(doc(db, "users", `${userId}`), {
-//     // Then, delete 'ongoingRetrievalItems' from userDoc
-//     ongoingRetrievalItems: deleteField(),
-//     // Deduct number of free trip
-//     "plan.remainingFreeTrip": Number(
-//       `${
-//         userDoc.plan.remainingFreeTrip > 0
-//           ? userDoc.plan.remainingFreeTrip - 1
-//           : 0
-//       }`
-//     ),
-//   });
-// };
+export const retrievalOrderSubmitFunction = async function (
+  uid,
+  getcheckedItem,
+  userDoc
+) {
+  getcheckedItem.forEach(async (el) => {
+    const getItem = await getDoc(doc(db, "users", uid, "inStorage", `${el}`));
+    const item = getItem.data();
+    const itemID = getItem.id;
+    // update item
+    await updateDoc(doc(db, "users", uid, "inStorage", `${itemID}`), {
+      status: "retrieval requested",
+    });
+  });
+  // Generate order
+  await addDoc(collection(db, "users", uid, "order"), {
+    userId: uid,
+    userName: {
+      firstName: `${userDoc.userName.firstName}`,
+      lastName: `${userDoc.userName.lastName}`,
+    },
+    driverId: "",
+    itemKey: getcheckedItem,
+    orderTimestamp: nowFullDate,
+    orderType: "retrieval",
+    status: "requested",
+    address: {
+      detail: `${userDoc.address.detail}`,
+      city: `${userDoc.address.city}`,
+      province: `${userDoc.address.province}`,
+      zipCode: `${userDoc.address.zipCode}`,
+    },
+    storageLocation: {
+      latitude: `${userDoc.storageLocation.latitude}`,
+      longitude: `${userDoc.storageLocation.longitude}`,
+      name: `${userDoc.storageLocation.name}`,
+    },
+    requestedDateTime: {
+      date: `${nextFullDate}`,
+      time: `17:00 hrs`,
+    },
+  });
+  await updateDoc(doc(db, "users", uid), {
+    // Then, delete 'ongoingRetrievalItems' from userDoc
+    ongoingRetrievalItems: deleteField(),
+    // Deduct number of free trip
+    "plan.remainingFreeTrip": Number(
+      `${
+        userDoc.plan.remainingFreeTrip > 0
+          ? userDoc.plan.remainingFreeTrip - 1
+          : 0
+      }`
+    ),
+  });
+};
 
 // Date handling
 // current time
@@ -297,74 +299,80 @@ const expiryDate = `${expiryFullDate.getFullYear()}/${
   expiryFullDate.getMonth() + 1
 }/${expiryFullDate.getDate()}`;
 
+// Calc next day for retrieval delivery
+export const nextFullDate = nowFullDate.addDays(1);
+export const nextDay = `${nextFullDate.getFullYear()}/${
+  nextFullDate.getMonth() + 1
+}/${nextFullDate.getDate()}`;
+
 // Archives_NOT in use
 // order-confirmation : Read checked items
-export let getcheckedItem = userDoc.ongoingRetrievalItems;
-export const renderCheckedItem = function (element) {
-  getcheckedItem.forEach(async (el) => {
-    const getItem = await getDoc(
-      doc(db, "users", `${userId}`, "inStorage", `${el}`)
-    );
-    const item = getItem.data();
-    const itemID = getItem.id;
+// export let getcheckedItem = userDoc.ongoingRetrievalItems;
+// export const renderCheckedItem = function (element) {
+//   getcheckedItem.forEach(async (el) => {
+//     const getItem = await getDoc(
+//       doc(db, "users", `${userId}`, "inStorage", `${el}`)
+//     );
+//     const item = getItem.data();
+//     const itemID = getItem.id;
 
-    // render
-    await element.insertAdjacentHTML(
-      "beforeend",
-      `<li  class='item-list-li'><img src='${
-        item.picture ? item.picture : ""
-      }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
-        item.status === "retrieved"
-          ? "retrieved"
-          : item.status === "retrieval requested"
-          ? "on request"
-          : item.status === "stored"
-          ? "In storage"
-          : ""
-      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
-      </li>`
-    );
-  });
-};
+//     // render
+//     await element.insertAdjacentHTML(
+//       "beforeend",
+//       `<li  class='item-list-li'><img src='${
+//         item.picture ? item.picture : ""
+//       }' class=placeholder-pic alt=${itemID}>
+//     <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+//         item.status === "retrieved"
+//           ? "retrieved"
+//           : item.status === "retrieval requested"
+//           ? "on request"
+//           : item.status === "stored"
+//           ? "In storage"
+//           : ""
+//       }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+//       </li>`
+//     );
+//   });
+// };
 
-export const renderCheckedItem2 = async function (element) {
-  console.log(getcheckedItem);
-  for (let i = 0; i < getcheckedItem.length; i++) {
-    const getItem = await getDoc(
-      doc(db, "users", `${userId}`, "inStorage", getcheckedItem[i])
-    );
-    const item = getItem.data();
-    const itemID = getItem.id;
-    // render
-    await element.insertAdjacentHTML(
-      "beforeend",
-      `<li  class='item-list-li'><img src='${
-        item.picture ? item.picture : ""
-      }' class=placeholder-pic alt=${itemID}>
-    <p class="item-name">${item.itemName}</p><p class='item-status'> ${
-        item.status === "retrieved"
-          ? "retrieved"
-          : item.status === "retrieval requested"
-          ? "on request"
-          : item.status === "stored"
-          ? "In storage"
-          : ""
-      }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
-      </li>`
-    );
-  }
-  const elementsDelete = document.querySelectorAll(".delete");
-  elementsDelete.forEach((el) => {
-    el.addEventListener("click", async (e) => {
-      e.preventDefault();
-      console.log("x");
-      // delete
-      const deleteID = e.target.id.split("_")[1];
-      // await deleteDoc(
-      //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
-      // );
-      console.log(`${e.target.id} is deleted`);
-    });
-  });
-};
+// export const renderCheckedItem2 = async function (element) {
+//   console.log(getcheckedItem);
+//   for (let i = 0; i < getcheckedItem.length; i++) {
+//     const getItem = await getDoc(
+//       doc(db, "users", `${userId}`, "inStorage", getcheckedItem[i])
+//     );
+//     const item = getItem.data();
+//     const itemID = getItem.id;
+//     // render
+//     await element.insertAdjacentHTML(
+//       "beforeend",
+//       `<li  class='item-list-li'><img src='${
+//         item.picture ? item.picture : ""
+//       }' class=placeholder-pic alt=${itemID}>
+//     <p class="item-name">${item.itemName}</p><p class='item-status'> ${
+//         item.status === "retrieved"
+//           ? "retrieved"
+//           : item.status === "retrieval requested"
+//           ? "on request"
+//           : item.status === "stored"
+//           ? "In storage"
+//           : ""
+//       }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+//       </li>`
+//     );
+//   }
+//   const elementsDelete = document.querySelectorAll(".delete");
+//   elementsDelete.forEach((el) => {
+//     el.addEventListener("click", async (e) => {
+//       e.preventDefault();
+//       console.log("x");
+//       // delete
+//       const deleteID = e.target.id.split("_")[1];
+//       // await deleteDoc(
+//       //   doc(db, "users", `${userId}`, "inStorage", `${deleteID}`)
+//       // );
+//       console.log(`${e.target.id} is deleted`);
+//     });
+//   });
+// };

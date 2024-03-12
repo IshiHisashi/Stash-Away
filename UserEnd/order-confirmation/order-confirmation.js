@@ -1,21 +1,32 @@
 "use strict";
 // import from common.js
 import * as common from "../../common.js";
+// Initialize Firebase---------------
+const db = common.db;
+// Define variables----------------
+// const uid = await common.getCurrentUid();
+const uid = "3ZGNxHC1avOoTevnctvkhBMwH962";
+
+console.log(uid);
+/// General : Get users in 'usersID'
+const userSnap = await common.getDoc(common.doc(db, "users", uid));
+const userDoc = userSnap.data();
+let getcheckedItem = userDoc.ongoingRetrievalItems;
+
+// General : Get item (document) in 'inStorage' (subcollection):
+const queryStorage = common.collection(db, "users", uid, "inStorage");
+const snapShot = await common.getDocs(queryStorage);
+
+// ----------------------
 
 const itemList = document.getElementById("item-list");
 const numRetrievalItems = document.getElementById("num-retrieval-items");
 // Rendering
 
 // read checked items in the previous page
-for (let i = 0; i < common.getcheckedItem.length; i++) {
+for (let i = 0; i < getcheckedItem.length; i++) {
   const getItem = await common.getDoc(
-    common.doc(
-      common.db,
-      "users",
-      `${common.userId}`,
-      "inStorage",
-      common.getcheckedItem[i]
-    )
+    common.doc(db, "users", `${uid}`, "inStorage", getcheckedItem[i])
   );
   const item = getItem.data();
   const itemID = getItem.id;
@@ -44,18 +55,18 @@ elementsDelete.forEach((el) => {
     e.preventDefault();
     // delete
     const deleteID = e.target.id.split("_")[1];
-    const index = common.getcheckedItem.indexOf(deleteID);
-    common.getcheckedItem.splice(index, 1);
+    const index = getcheckedItem.indexOf(deleteID);
+    getcheckedItem.splice(index, 1);
     // Update the Database
-    await common.recordCheckedFunction(common.getcheckedItem);
+    await common.recordCheckedFunction(getcheckedItem, uid);
     //
     window.location.reload();
   });
 });
 
 // render the number of checked items
-if (common.getcheckedItem.length < 2) {
-  numRetrievalItems.textContent = `${common.getcheckedItem.length} item`;
+if (getcheckedItem.length < 2) {
+  numRetrievalItems.textContent = `${getcheckedItem.length} item`;
 } else {
-  numRetrievalItems.textContent = `${common.getcheckedItem.length} items`;
+  numRetrievalItems.textContent = `${getcheckedItem.length} items`;
 }
