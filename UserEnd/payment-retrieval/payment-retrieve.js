@@ -1,6 +1,6 @@
 "use strict";
 
-import * as common from "./../../common.js";
+import * as common from "../../common.js";
 // Initialize Firebase---------------
 const db = common.db;
 const uid = await common.getCurrentUid();
@@ -14,6 +14,7 @@ const companyStorageLocationDoc = companyStorageLocationSnap.data();
 /// General : Get users in 'usersID'
 const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
 const userDoc = userSnap.data();
+console.log(userDoc);
 // General : Get item (document) in 'inStorage' (subcollection):
 const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
 const snapShot = await common.getDocs(queryStorage);
@@ -30,15 +31,17 @@ console.log("Company data downloaded");
 console.log(plansInfo);
 console.log(storageInfo);
 const paymentMethodsArray = [];
-const savedItemsArr = [];
-const save = await common.queryFunction("saved", uid);
-
-console.log(save);
-save.docs.forEach((el) => {
-  const saveItemObj = { id: el.id, item: el.data() };
-  savedItemsArr.push(saveItemObj);
-});
-console.log(savedItemsArr);
+const checkedItemArr = [];
+const getcheckedItem = userDoc.ongoingRetrievalItems;
+console.log(getcheckedItem);
+for (let i = 0; i < getcheckedItem.length; i++) {
+  const getItem = await common.getDoc(
+    common.doc(db, "users", `${uid}`, "inStorage", getcheckedItem[i])
+  );
+  const checkedItemObj = { id: getItem.id, item: getItem.data() };
+  checkedItemArr.push(checkedItemObj);
+}
+console.log(checkedItemArr);
 
 if (uid) {
   console.log("Found user id on DB");
@@ -80,10 +83,10 @@ function getItems() {
   }
 
   const itemListArea = document.getElementById("items-list");
-  for (let i in savedItemsArr) {
+  for (let i in checkedItemArr) {
     const newItem = new Item(
-      savedItemsArr[i].item.itemName,
-      savedItemsArr[i].item.picture
+      checkedItemArr[i].item.itemName,
+      checkedItemArr[i].item.picture
     );
     console.log(newItem);
     newItem.createInnerHtml();
@@ -92,64 +95,43 @@ function getItems() {
 
 function getPaymentInfo() {
   // FILL IN PAYMENT INFO =============================
-  let duration = profileInfo.plan.term;
   let size = profileInfo.plan.size;
-  let firstLetterUppercase = size.charAt(0).toUpperCase();
-  let remainingLetters = size.slice(1);
-  let sizeCapped = firstLetterUppercase + remainingLetters;
   document.querySelector(
     'div[id="box-size"] h3'
-  ).innerHTML = `${sizeCapped} box`;
+  ).innerHTML = `Delivery fee for ${size} box`;
 
-  let originalPrice;
+  let fee;
   if (size == "large") {
-    originalPrice = plansInfo.size.large.price;
+    fee = plansInfo.size.large.deliveryFee;
   } else if (size == "medium") {
-    originalPrice = plansInfo.size.medium.price;
+    fee = plansInfo.size.medium.deliveryFee;
   } else if (size == "small") {
-    originalPrice = plansInfo.size.small.price;
+    fee = plansInfo.size.small.deliveryFee;
   }
 
-  let planDetailsByDuraton;
-  if (duration == "long") {
-    planDetailsByDuraton = plansInfo.term.long;
-  } else if (duration == "mid") {
-    planDetailsByDuraton = plansInfo.term.mid;
-  } else if (duration == "short") {
-    planDetailsByDuraton = plansInfo.term.short;
-  }
+  let tripRemained = userDoc.plan.remainingFreeTrip;
   document.querySelector(
-    'div[id="duration"] h3'
-  ).innerHTML = `${planDetailsByDuraton.numMonth}-Months Plan`;
+    'div[id="free-trip-left"] h3'
+  ).innerHTML = `Free trip left: ${tripRemained}`;
 
   // Change all the p element innerHTML here
   let subtotal;
-  if (duration !== "short") {
-    document.querySelector(
-      'div[id="box-size"] p'
-    ).innerHTML = `$${originalPrice}/month`;
+  document.querySelector(
+    'div[id="box-size"] p'
+  ).innerHTML = `$${fee}`;
+  let freeTripDiscounted = 0;
+  if (tripRemained !== 0) {
     document.querySelector('div[id="box-size"] p').style.textDecoration =
-      "line-through";
-    let discountedPrice =
-      Math.round(originalPrice * planDetailsByDuraton.discount * 100) / 100;
-    document.querySelector(
-      'div[id="duration"] p'
-    ).innerHTML = `$${discountedPrice}/month`;
-    document.querySelector(
-      'div[id="subtotal"] p'
-    ).innerHTML = `$${discountedPrice}/month`;
-    subtotal = discountedPrice;
+    "line-through";
+    document.querySelector('div[id="free-trip-left"] p').innerHTML = `$${freeTripDiscounted}`;
+    subtotal = freeTripDiscounted;
   } else {
-    document.querySelector(
-      'div[id="box-size"] p'
-    ).innerHTML = `$${originalPrice}/month`;
-    document.querySelector('div[id="duration"] p').innerHTML =
-      "You might want to get great discount by changing your plan!";
-    document.querySelector(
-      'div[id="subtotal"] p'
-    ).innerHTML = `$${originalPrice}/month`;
-    subtotal = originalPrice;
+    document.querySelector('div[id="free-trip-left"] p').innerHTML = "Looks like you used up all the free trips 😭";
+    subtotal = fee;
   }
+  document.querySelector(
+    'div[id="subtotal"] p'
+  ).innerHTML = `$${subtotal}`;
   let gst = Math.round(subtotal * 5) / 100;
   let pst = Math.round(subtotal * 7) / 100;
   document.querySelector('div[id="gst"] p').innerHTML = `$${gst}/month`;
@@ -217,10 +199,11 @@ function getPaymentInfo() {
 }
 
 // BTN TREATMENT ====================================
-const btnAdd = document.getElementById("btn-add");
-btnAdd.addEventListener("click", async (e) => {
+const btnRetrieval = document.getElementById("btn-retrieval");
+btnRetrieval.addEventListener("click", async (e) => {
   e.preventDefault();
-  await common.addOrderSubmitFunction(snapShot, uid, profileInfo, plansInfo);
-  // move to the order-update page
+  await common.retrievalOrderSubmitFunction(uid, getcheckedItem, userDoc);
+
+  // Move to the next page
   window.location.href = "../updates/pickup-and-delivery-updates.html";
 });

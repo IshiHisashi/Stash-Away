@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <script src="payment.js" type="module"></script>
+    <script src="payment-retrieve.js" type="module"></script>
     <title>Payment</title>
 </head>
 <body>
@@ -20,13 +20,13 @@
         <div id="payment-detail">
             <div id="box-size" class="small-letters">
                 <h3>
-                    box size(should be overwritten by actual plan from DB)
+                    Delivery fee(should be overwritten by actual plan from DB)
                 </h3>
-                <p>Here is gonna be price based on plans</p>
+                <p>Here is gonna be delivery fee</p>
             </div>
-            <div id="duration" class="small-letters">
+            <div id="free-trip-left" class="small-letters">
                 <h3>
-                    plan duration(should be overwritten too)
+                    Free trip left(should be overwritten too)
                 </h3>
                 <p>maybe discounted price?</p>
             </div>
@@ -35,7 +35,7 @@
                     
                     Subtotal
                 </h3>
-                <p>same as the discounted or original price for 1month plan</p>
+                <p>Based on info above</p>
             </div>
             <div id="gst" class="small-letters">
                 <h3>
@@ -57,8 +57,8 @@
         </div>
     </section>
     <section id="btns">
-        <a href="../booking/booking.html">Back</a>
-        <a id="btn-add">Place Order</a>
+        <a href="../delivery-mode/delivery-mode.html">Back</a>
+        <a href="../updates/pickup-and-delivery-updates.html" id="btn-retrieval">Place Order</a>
         <!-- <a id="proceedLink" href="../order-confirmation/order-confirmation.html"></a> -->
     </section>
 </body>

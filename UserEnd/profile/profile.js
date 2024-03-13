@@ -1,8 +1,8 @@
 import * as common from "../../common.js";
 // Initialize Firebase---------------
 const db = common.db;
+// const uid = await common.getCurrentUid();
 const uid = await common.getCurrentUid();
-// General : Get company info
 const companyPlanSnap = await common.getDoc(common.doc(db, "Company", "plan"));
 const companyStorageLocationSnap = await common.getDoc(
   common.doc(db, "Company", "storageLocation")
