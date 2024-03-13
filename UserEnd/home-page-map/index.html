@@ -26,43 +26,43 @@
   </head>
   <body>
     <main>
-      <p id="login">Log in status: <span class="loginStatus"></span></p>
-      <div>
-        <h2>List of locations</h2>
-        <form>
-          <fieldset>
-            <legend>Choose a storage location</legend>
-            <div>
-              <!-- 🚨 ADD VISUALLY HIDDEN TO THE INPUT LATER 🚨 -->
-              <!-- For some reason, if a user taps input(radio button) it messes up all the functionality to change markers, and select locations. And anyways in the alpha demo, we're not gonna show the radio button itself. It rather is gonna be if users select a location, the location item in the list is hilightted or something. So I'll just hide the radio button and style everything else. -->
-              <input type="radio" id="location-0" name="location" value="" class="visually-hidden" />
-              <label for="location-0"></label>
-            </div>
-            <div>
-              <input type="radio" id="location-1" name="location" value="" class="visually-hidden" />
-              <label for="location-1"></label>
-            </div>
-            <div>
-              <input type="radio" id="location-2" name="location" value="" class="visually-hidden" />
-              <label for="location-2"></label>
-            </div>
-            <div>
-              <input type="radio" id="location-3" name="location" value="" class="visually-hidden" />
-              <label for="location-3"></label>
-            </div>
-            <div>
-              <input type="radio" id="location-4" name="location" value="" class="visually-hidden" />
-              <label for="location-4"></label>
-            </div>
-          </fieldset>
-          <button id="submit" type="submit" value="submit">
-            Proceed
-          </button>
-          <a style="display:none" id="proceedLink" href="../booking/booking.html"></a>
-        </form>
-      </div>
-      <div class="map-container">
-        <div id="map" class="map"></div>
+      <div id="map-area">
+        <h1>CHOOSE A LOCATION</h1>
+        <div>
+          <form>
+            <fieldset>
+              <div>
+                <!-- 🚨 ADD VISUALLY HIDDEN TO THE INPUT LATER 🚨 -->
+                <!-- For some reason, if a user taps input(radio button) it messes up all the functionality to change markers, and select locations. And anyways in the alpha demo, we're not gonna show the radio button itself. It rather is gonna be if users select a location, the location item in the list is hilightted or something. So I'll just hide the radio button and style everything else. -->
+                <input type="radio" id="location-0" name="location" value="" class="visually-hidden" />
+                <label for="location-0"></label>
+              </div>
+              <div>
+                <input type="radio" id="location-1" name="location" value="" class="visually-hidden" />
+                <label for="location-1"></label>
+              </div>
+              <div>
+                <input type="radio" id="location-2" name="location" value="" class="visually-hidden" />
+                <label for="location-2"></label>
+              </div>
+              <div>
+                <input type="radio" id="location-3" name="location" value="" class="visually-hidden" />
+                <label for="location-3"></label>
+              </div>
+              <div>
+                <input type="radio" id="location-4" name="location" value="" class="visually-hidden" />
+                <label for="location-4"></label>
+              </div>
+            </fieldset>
+            <button id="submit" type="submit" value="submit">
+              Next
+            </button>
+            <a style="display:none" id="proceedLink" href="../booking/booking.html"></a>
+          </form>
+        </div>
+        <div class="map-container">
+          <div id="map" class="map"></div>
+        </div>
       </div>
     </main>
   </body>
