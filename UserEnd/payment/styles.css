@@ -33,15 +33,13 @@ a {
 }
 
 ul {
-    display: flex;
-    flex-flow: row wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
 }
 
 li {
     list-style: none;
-    flex-grow: 1;
-    flex-basis: 20%;
     display: grid;
     grid-template-rows: 1fr auto;
 }

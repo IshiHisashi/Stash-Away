@@ -1,6 +1,6 @@
 "use strict";
 
-import * as common from "../../common.js";
+import * as common from "./../../common.js";
 // Initialize Firebase---------------
 const db = common.db;
 const uid = await common.getCurrentUid();
@@ -150,12 +150,11 @@ function getPaymentInfo() {
     ).innerHTML = `$${originalPrice}/month`;
     subtotal = originalPrice;
   }
-  Math.round(originalPrice * planDetailsByDuraton.discount * 10) / 10;
   let gst = Math.round(subtotal * 5) / 100;
   let pst = Math.round(subtotal * 7) / 100;
   document.querySelector('div[id="gst"] p').innerHTML = `$${gst}/month`;
   document.querySelector('div[id="pst"] p').innerHTML = `$${pst}/month`;
-  let total = subtotal + gst + pst;
+  let total = Math.round((subtotal + gst + pst) * 100) / 100;
   document.querySelector('div[id="total"] p').innerHTML = `$${total}/month`;
 
   // CARD INFO SECTION ================================

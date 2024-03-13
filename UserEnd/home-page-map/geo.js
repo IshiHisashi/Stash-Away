@@ -1,6 +1,6 @@
 "use strict";
 
-import * as common from "../../common.js";
+import * as common from "./../../common.js";
 // Initialize Firebase---------------
 // const app = initializeApp(firebaseConfig);
 // const db = getFirestore(app);
@@ -17,8 +17,9 @@ export const storageLocationObj = storageQuery.data();
 export const storageLocationArr = Object.entries(storageQuery.data());
 
 // Get address info from user's collection
-const userQuery = await common.getDoc(common.doc(db, "users", uid));
-export const userAddress = userQuery.data().address;
+const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
+const userDoc = userSnap.data();
+export const userAddress = userDoc.address;
 
 // Send selected geolocation
 export const updateStorageLocation = async function (obj) {
