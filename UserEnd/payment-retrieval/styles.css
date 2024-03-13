@@ -1,0 +1,71 @@
+h1 {
+    text-align: center;
+}
+
+#items, #payment {
+    width: 75%;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 2px solid lavender;
+    border-radius: 30px;
+}
+
+#payment-detail>* {
+    display: flex;
+    justify-content: space-between;
+}
+
+#btns {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 5rem;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    padding: 1rem;
+    background-color: gray;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+li {
+    list-style: none;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+li img {
+    width: 100%;
+}
+
+li p {
+    font-size: 2rem;
+    font-family: sans-serif;
+    color: rgb(66, 66, 66);
+}
+
+.card-brand-img {
+    width: 70px;
+    height: auto;
+}
+
+.each-card>* {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: start;
+    gap: 2rem;
+}
+
+#proceedLink {
+    display: none;
+}
