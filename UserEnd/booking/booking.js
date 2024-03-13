@@ -590,7 +590,7 @@ const btnSelectClick = function (btn, size) {
   btn.addEventListener("click", async (e) => {
     e.preventDefault();
     // Update database
-    await common.updateDoc(common.doc(db, "users"), {
+    await common.updateDoc(common.doc(db, "users", uid), {
       "plan.size": size,
     });
     // Style selected size
