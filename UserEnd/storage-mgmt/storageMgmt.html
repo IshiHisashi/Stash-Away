@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Storage management</title>
+    <!-- <script src="db2.js" type="module" defer></script> -->
+    <link rel="stylesheet" href="storageMgmt.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="storageMgmt.js" defer type="module"></script>
+    <script
+      src="https://kit.fontawesome.com/8611811e56.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <img id="hero-img" src="../images/hero-image.png" alt="" />
+
+      <section class="filter-section">
+        <div class="storage-num-wrapper">
+          <p class="small-letter">Your Storage</p>
+          <p class="total-p">Total <span id="total-num"></span> Items</p>
+          <div class="num-breakdown">
+            <p>In storage : <span id="stored-num"></span></p>
+            <p>On request : <span id="on-request-num"></span></p>
+            <p>Retrieved : <span id="retrieved-num"></span></p>
+          </div>
+        </div>
+        <div class="search-wrapper">
+          <label class="small-letter">Showing your items stored at:</label>
+          <select id="filter">
+            <option value="all">All</option>
+            <option value="stored">Stored</option>
+            <option value="retrieval requested">On retrival request</option>
+            <option value="retrieved">Retrieved</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="item-list-section">
+        <div class="section-header">
+          <form>
+            <label>Search</label>
+            <input id="search" type="search" />
+            <button id="btn-search">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <button id="btn-search-delete">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </form>
+        </div>
+        <ul class="item-list"></ul>
+      </section>
+      <section class="request-return-section">
+        <a
+          href="../order-confirmation/order-confirmation.html"
+          id="btn-request-return"
+          >Request Return <span id="num-return-items">(0 item)</span></a
+        >
+      </section>
+    </main>
+  </body>
+</html>

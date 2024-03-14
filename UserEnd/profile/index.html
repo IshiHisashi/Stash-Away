@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="profile.js" type="module"></script>
+    <title>Profile Page</title>
+</head>
+<body>
+    <header></header>
+
+    <main>
+        <section id="account-profile">
+            <h2>ACCOUNT PROFILE</h2>
+            <form action="">
+                <fieldset>
+                    <div class="input-filed">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" id="last-name" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="email">Email Address</label>
+                        <input type="text" id="email" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="room-num-etc">Room Number, Building Name, etc</label>
+                        <input type="text" id="room-num-etc" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="street">House Number and Street</label>
+                        <input type="text" id="street" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="province">Province</label>
+                        <input type="text" id="province" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <div class="input-filed">
+                        <label for="zip-code">Zip Code</label>
+                        <input type="text" id="zip-code" name="profile-input" value="">
+                        <br>
+                    </div>
+                    <button id="save-profile">Save Profile</button>
+                </fieldset>
+            </form>
+        </section>
+        <section id="membership">
+            <h2>STASHAWAY MEMBERSHIP</h2>
+            <button id="change-plan">Change plan</button>
+            <div id="membership-info">
+                <h3>CURRENT PLAN</h3>
+                <div id="plan">
+                    <div id="plan-name">
+                        <p id="storage-size"></p>
+                        <p id="duration"></p>
+                    </div>                    
+                    <div id="price">
+                        <p id="plan-price"></p>
+                        <p id="discounted"></p>
+                    </div>
+                </div>
+                <div id="details">
+                    <ul>
+                        <li id="free-trip"></li>
+                        <li>Secured belongings</li>
+                        <li>Insurance</li>
+                    </ul>
+                </div>
+            </div>
+            <button id="cancel-plan">Cancel</button>
+        </section>
+        <section id="payment-method">
+            <h2>PAYMENT METHOD</h2>
+            <form action="">
+                <fieldset>
+                    <p id="default-payment">DEFAULT PAYMENT METHOD</p>
+                </fieldset>
+                <button id="add-payment">Add New Payment Method</button>
+            </form>
+        </section>
+    </main>
+
+    <footer></footer>
+</body>
+</html>

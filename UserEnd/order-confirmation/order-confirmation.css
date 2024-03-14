@@ -1,0 +1,120 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+body {
+  color: var(--color-secondary);
+  margin: 0 1rem;
+}
+:root {
+  --color-primary: #e04462;
+  --color-secondary: #103646;
+  --color-input: #f4f4f4;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.progress-section {
+}
+
+.title-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  .underline {
+    width: 50px;
+    height: 10px;
+    border-radius: 10px;
+    background-color: #f9b035;
+  }
+}
+
+.retrieval-list-section {
+  .list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  p {
+    font-weight: bold;
+  }
+  button {
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    background-color: #f5c4ce;
+    cursor: pointer;
+  }
+  /* List styling */
+  ul {
+    list-style: none;
+    margin-top: 3rem;
+    li {
+      margin-top: 10px;
+      padding: 0.5rem 1.5rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      grid-template-rows: 60% 1fr;
+      gap: 0.3rem 2rem;
+    }
+    .placeholder-pic {
+      display: inline-block;
+      width: 75px;
+      height: 75px;
+      object-fit: cover;
+      border-radius: 10px;
+      grid-row: 1/-1;
+    }
+    .item-name {
+      color: var(--color-secondary);
+      font-size: 1.2rem;
+      font-weight: bold;
+      align-self: end;
+    }
+    .item-status {
+      font-size: 0.8rem;
+      grid-row: 2/3;
+      align-self: start;
+    }
+    .delete {
+      grid-row: 1/-1;
+      align-self: center;
+      cursor: pointer;
+    }
+    .icon-span {
+      display: none;
+    }
+  }
+}
+.btn-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  a {
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    padding: 0.5rem;
+    text-align: center;
+  }
+  #btn-next {
+    color: white;
+    background-color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+  }
+  #btn-back {
+    color: var(--color-primary);
+    background-color: white;
+    border: 1px solid var(--color-secondary);
+  }
+}

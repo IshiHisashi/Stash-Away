@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="payment-retrieve.js" type="module"></script>
+    <title>Payment</title>
+</head>
+<body>
+    <h1>PAYMENT</h1>
+    <section id="items">
+        <h2>Your Items</h2>
+        <div>
+            <ul id="items-list"></ul>
+        </div>
+    </section>
+    <section id="payment">
+        <h2>Your Total</h2>
+        <div id="payment-detail">
+            <div id="box-size" class="small-letters">
+                <h3>
+                    Delivery fee(should be overwritten by actual plan from DB)
+                </h3>
+                <p>Here is gonna be delivery fee</p>
+            </div>
+            <div id="free-trip-left" class="small-letters">
+                <h3>
+                    Free trip left(should be overwritten too)
+                </h3>
+                <p>maybe discounted price?</p>
+            </div>
+            <div id="subtotal" class="small-letters">
+                <h3>
+                    
+                    Subtotal
+                </h3>
+                <p>Based on info above</p>
+            </div>
+            <div id="gst" class="small-letters">
+                <h3>
+                    GST
+                </h3>
+                <p>subtotal * gst percentage</p>
+            </div>
+            <div id="pst" class="small-letters">
+                <h3>
+                    PST
+                </h3>
+                <p>subtotal * pst percentage</p>
+            </div>
+            <div id="total">
+                <h3>Total</h3>
+                <p>sum up three numbers above.</p>
+            </div>
+            <div id="payment-method"></div>
+        </div>
+    </section>
+    <section id="btns">
+        <a href="../delivery-mode/delivery-mode.html" id="back">Back</a>
+        <a href="../updates/pickup-and-delivery-updates.html" id="btn-retrieval">Place Order</a>
+        <!-- <a id="proceedLink" href="../order-confirmation/order-confirmation.html"></a> -->
+    </section>
+</body>
+</html>

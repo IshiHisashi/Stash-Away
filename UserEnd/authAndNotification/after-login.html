@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>After log in</title>
+    <script type="module" src="after-login.js" defer></script>
+
+    <style>
+      .toast {
+        border: 2px solid red;
+        background-color: white;
+        color: red;
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+
+        transform: translateX(110%);
+        transition: transform 0.5s;
+      }
+
+      .toast.show {
+        transform: translateX(0);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- toast -->
+    <div class="toast">
+      <p>
+        We've sent a verification email to your email address. <br />
+        Check it out, and tap the link to verify your email!
+      </p>
+    </div>
+
+    <h1>After log in screen</h1>
+    <p>Log in status: <span class="loginStatus"></span></p>
+    <p>You can test notifications on this page as well.</p>
+
+    <div>
+      <button id="updates">
+        <a href="pickup-and-delivery-updates.html"
+          >See Pickup and Delivery Updates Page</a
+        >
+      </button>
+    </div>
+
+    <button id="logout"><a href="login.html">Log out</a></button>
+  </body>
+</html>

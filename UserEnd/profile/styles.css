@@ -1,0 +1,39 @@
+#plan {
+    display: flex;
+    justify-content: space-between;
+}
+
+#plan-name, #price {
+    display: flex;
+    gap: 1rem;
+}
+
+.each-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.each-card label {
+    display: flex;
+    gap: 2rem;
+}
+
+#default-payment {
+    text-align: right;
+}
+
+#account-profile fieldset {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: .5rem;
+}
+
+#account-profile fieldset button {
+    width: 25%;
+}
+
+.card-brand-img {
+    width: 70px;
+    height: auto;
+}

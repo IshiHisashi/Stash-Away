@@ -1,0 +1,88 @@
+:root {
+    --color-primary-pink: #e04462;
+    --color-secondary: #103646;
+    --color-secondary-light: #777777;
+    --color-primary-orange: #f9b035;
+    --color-input: #f4f4f4;
+  }
+
+h1 {
+    text-align: center;
+}
+
+#items, #payment {
+    width: 75%;
+    margin: 2rem auto;
+    padding: 2rem;
+    border: 1px solid var(--color-secondary-light);
+    border-radius: 30px;
+}
+
+#payment-detail>* {
+    display: flex;
+    justify-content: space-between;
+}
+
+ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+li {
+    list-style: none;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+li img {
+    width: 100%;
+}
+
+li p {
+    font-size: 2rem;
+    font-family: sans-serif;
+    color: rgb(66, 66, 66);
+}
+
+.card-brand-img {
+    width: 70px;
+    height: auto;
+}
+
+.each-card>* {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: start;
+    gap: 2rem;
+}
+
+#proceedLink {
+    display: none;
+}
+
+#btns {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 5rem;
+}
+
+a {
+    text-decoration: none;
+    padding: .75rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#back {
+    border: 1px solid var(--color-secondary-light);
+    color: var(--color-primary-pink);
+}
+
+#btn-retrieval {
+    border: 1px solid var(--color-primary-pink);
+    color: var(--color-input);
+    background-color: var(--color-primary-pink);
+}

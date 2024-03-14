@@ -1,0 +1,93 @@
+:root {
+  --color-primary-pink: #e04462;
+  --color-secondary: #103646;
+  --color-primary-orange: #f9b035;
+  --color-input: #f4f4f4;
+}
+
+#map-area {
+  display: grid;
+  grid-template-columns: 3fr 7fr;
+  gap: 2rem;
+  width: 90%;
+  margin: 0 auto;
+}
+
+h1 {
+  grid-column: span 2;
+  text-align: center;
+}
+
+#map {
+  width: 100%;
+  height: 80vh;
+}
+
+.loc-marker {
+  background-image: url("images/location-inactive.png");
+  background-size: cover;
+  width: 50px;
+  height: 55px;
+}
+
+#Richmond #marker-Richmond, #North-Vancouver #marker-North-Vancouver, #Surrey #marker-Surrey, #Coquitlam #marker-Coquitlam, #Abbotsford #marker-Abbotsford {
+  background-image: url("images/location-active.png");
+  background-size: cover;
+  width: 50px;
+  height: 55px;
+}
+
+#current-location-marker {
+  background-image: url("images/you-are-here.png");
+  background-size: cover;
+  width: 38px;
+  height: 50px;
+}
+
+#Richmond fieldset div:has(input[value="Richmond"]), #North-Vancouver fieldset div:has(input[value="North-Vancouver"]), #Surrey fieldset div:has(input[value="Surrey"]), #Coquitlam fieldset div:has(input[value="Coquitlam"]), #Abbotsford fieldset div:has(input[value="Abbotsford"]) {
+  background-color: var(--color-primary-pink);
+}
+
+.visually-hidden {
+clip: rect(0 0 0 0);
+clip-path: inset(50%);
+height: 1px;
+overflow: hidden;
+position: absolute;
+white-space: nowrap;
+width: 1px;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+fieldset div {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 50px;
+  border: 2px solid var(--color-secondary);
+  border-radius: 5px;
+}
+
+#submit {
+  margin-top: 1rem;
+  display: inline-block;
+  text-decoration: none;
+  padding: .5rem 2rem;
+  background-color: var(--color-primary-pink);
+  border: none;
+  color: white;
+  font-size: 1.25rem;
+  border-radius: 5px;
+}
+
+
