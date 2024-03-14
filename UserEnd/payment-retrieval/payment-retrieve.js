@@ -134,10 +134,10 @@ function getPaymentInfo() {
   ).innerHTML = `$${subtotal}`;
   let gst = Math.round(subtotal * 5) / 100;
   let pst = Math.round(subtotal * 7) / 100;
-  document.querySelector('div[id="gst"] p').innerHTML = `$${gst}/month`;
-  document.querySelector('div[id="pst"] p').innerHTML = `$${pst}/month`;
+  document.querySelector('div[id="gst"] p').innerHTML = `$${gst}`;
+  document.querySelector('div[id="pst"] p').innerHTML = `$${pst}`;
   let total = Math.round((subtotal + gst + pst) * 100) / 100;
-  document.querySelector('div[id="total"] p').innerHTML = `$${total}/month`;
+  document.querySelector('div[id="total"] p').innerHTML = `$${total}`;
 
   // CARD INFO SECTION ================================
   class Card {
