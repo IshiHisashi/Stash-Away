@@ -1,0 +1,117 @@
+:root {
+
+    /* COLOR========== */
+    :root {
+        /* TYPE */
+        --h1-family: "Oswald";
+        --h1-size: 40px;
+        --h1-size-rem: 2.5rem;
+        --h1-weight: 600;
+        --h1-style: normal;
+        --h1-line-height: 125%;
+        --h2-family: "Oswald";
+        --h2-size: 32px;
+        --h2-size-rem: 2rem;
+        --h2-weight: 600;
+        --h2-style: normal;
+        --h2-line-height: 125%;
+        --h3-family: "Oswald";
+        --h3-size: 26px;
+        --h3-size-rem: 1.625rem;
+        --h3-weight: 500;
+        --h3-style: normal;
+        --h3-line-height: 130%;
+        --h4-family: "Oswald";
+        --h4-size: 20px;
+        --h4-size-rem: 1.25rem;
+        --h4-weight: 500;
+        --h4-style: normal;
+        --h4-line-height: 130%;
+        --h5-family: "Oswald";
+        --h5-size: 16px;
+        --h5-size-rem: 1rem;
+        --h5-weight: 400;
+        --h5-style: normal;
+        --h5-line-height: 130%;
+        --body-family: "Nunito Sans";
+        --body-size: 16px;
+        --body-size-rem: 1rem;
+        --body-weight: 400;
+        --body-style: normal;
+        --body-line-height: 125%;
+        --button-1-family: "Nunito Sans";
+        --button-1-size: 18px;
+        --button-1-size-rem: 1.125rem;
+        --button-1-weight: 700;
+        --button-1-style: normal;
+        --button-1-line-height: 125%;
+        --subtitle-family: "Nunito Sans";
+        --subtitle-size: 16px;
+        --subtitle-size-rem: 1rem;
+        --subtitle-weight: 600;
+        --subtitle-style: normal;
+        --subtitle-line-height: 130%;
+        --subtitle-2-family: "Nunito Sans";
+        --subtitle-2-size: 14px;
+        --subtitle-2-size-rem: 0.875rem;
+        --subtitle-2-weight: 600;
+        --subtitle-2-style: normal;
+        --subtitle-2-line-height: 130%;
+        --small-text-family: "Nunito Sans";
+        --small-text-size: 12px;
+        --small-text-size-rem: 0.75rem;
+        --small-text-weight: 400;
+        --small-text-style: normal;
+        --small-text-line-height: 130%;
+        --button-2-family: "Nunito Sans";
+        --button-2-size: 16px;
+        --button-2-size-rem: 1rem;
+        --button-2-weight: 700;
+        --button-2-style: normal;
+        --button-2-line-height: 125%;
+        --nav-menu-family: "Nunito Sans";
+        --nav-menu-size: 24px;
+        --nav-menu-size-rem: 1.5rem;
+        --nav-menu-weight: 700;
+        --nav-menu-style: normal;
+        --nav-menu-line-height: 130%;
+        --p18-family: "Nunito Sans";
+        --p18-size: 18px;
+        --p18-size-rem: 1.125rem;
+        --p18-weight: 400;
+        --p18-style: normal;
+        --p18-line-height: 130%;
+        --labels-tags-family: "Nunito Sans";
+        --labels-tags-size: 11px;
+        --labels-tags-size-rem: 0.6875rem;
+        --labels-tags-weight: 600;
+        --labels-tags-style: normal;
+        --labels-tags-line-height: 130%;
+      
+        /* COLORS */
+        --grey-3: rgb(17 17 17);
+        --grey-1: rgb(223 223 223);
+        --pink: rgb(224 68 98);
+        --light-pink: rgb(235 90 118);
+        --dark-pink: rgb(215 46 78);
+        --grey-2: rgb(119 119 119);
+        --light-pink-2: rgb(252 228 231);
+        --white: rgb(255 255 255);
+        --grey-4: rgb(244 244 244);
+        --yellow: rgb(249 176 53);
+        --alert: rgb(255 0 0);
+        --white: rgb(255 255 255);
+        --light-green: rgb(199 233 187);
+        --light-yellow: rgb(255 189 77);
+        --light-yellow-2: rgb(255 210 133);
+        --light-yellow-3: rgb(255 223 169);
+        --dark-blue-green: rgb(16 54 70);
+        --light-blue-2: rgb(115 155 179);
+        --blue-green: rgb(51 72 84);
+        --confirmed: rgb(66 151 37);
+        --grey-5: rgb(88 88 88);
+        --light-blue: rgb(243 248 251);
+      
+      }
+
+    }
