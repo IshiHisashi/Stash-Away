@@ -1,5 +1,7 @@
+@import url(../../common.css);
+
 :root {
-  --color-primary-pink: #e04462;
+  /* --pink: #e04462; */
   --color-secondary: #103646;
   --color-primary-orange: #f9b035;
   --color-input: #f4f4f4;
@@ -45,7 +47,7 @@ h1 {
 }
 
 #Richmond fieldset div:has(input[value="Richmond"]), #North-Vancouver fieldset div:has(input[value="North-Vancouver"]), #Surrey fieldset div:has(input[value="Surrey"]), #Coquitlam fieldset div:has(input[value="Coquitlam"]), #Abbotsford fieldset div:has(input[value="Abbotsford"]) {
-  background-color: var(--color-primary-pink);
+  background-color: var(--pink);
 }
 
 .visually-hidden {
@@ -83,7 +85,7 @@ fieldset div {
   display: inline-block;
   text-decoration: none;
   padding: .5rem 2rem;
-  background-color: var(--color-primary-pink);
+  background-color: var(--pink);
   border: none;
   color: white;
   font-size: 1.25rem;
@@ -95,7 +97,7 @@ fieldset div {
 
 #loading-screen {
   z-index: 100;
-  background-color: white;
+  background-color: var(--light-pink);
   position: absolute;
   top: 0;
   bottom: 0;
@@ -111,17 +113,17 @@ fieldset div {
   width:150px;
   height:150px;
   background:transparent;
-  border:3px solid #3c3c3c;
+  border:3px solid var(--light-pink);
   border-radius:50%;
   text-align:center;
   line-height:150px;
   font-family:sans-serif;
   font-size:20px;
-  color:#fff000;
+  color:var(--white);
   letter-spacing:4px;
   text-transform:uppercase;
-  text-shadow:0 0 10px #fff000;
-  box-shadow:0 0 20px rgba(0,0,0,.5);
+  /* text-shadow:0 0 10px var(--white);
+  box-shadow:0 0 20px var(--dark-pink); */
 }
 
 #loading::before
@@ -133,8 +135,8 @@ fieldset div {
   width:100%;
   height:100%;
   border:3px solid transparent;
-  border-top:3px solid #fff000;
-  border-right:3px solid #fff000;
+  border-top:3px solid var(--white);
+  border-right:3px solid var(--white);
   border-radius:50%;
   animation:animateC 2s linear infinite;
 }
@@ -157,10 +159,10 @@ span::before
   width:16px;
   height:16px;
   border-radius:50%;
-  background:#fff000;
+  background:var(--white);
   top:-6px;
   right:-8px;
-  box-shadow:0 0 20px #fff000;
+  /* box-shadow:0 0 20px var(--white); */
 }
 @keyframes animateC
 {
