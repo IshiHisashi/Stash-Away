@@ -187,18 +187,34 @@ function firstDigit(num) {
 // SAVE CHANGE ON PROFILE SECTION =================
 
 const saveProfileBtn = document.getElementById("save-profile");
-saveProfileBtn.addEventListener("click", (event) => {
+saveProfileBtn.addEventListener("click", async (event) => {
   event.preventDefault();
   const inputfields = document.querySelectorAll('input[name="profile-input"]');
-  let firstName = inputfields[0].value;
-  let lastName = inputfields[1].value;
-  let emailAddress = inputfields[2].value;
-  let phoneNum = inputfields[3].value;
-  let roomNumEtc = inputfields[4].value;
-  let addressDetail = inputfields[5].value;
-  let city = inputfields[6].value;
-  let province = inputfields[7].value;
-  let zipCode = inputfields[8].value;
+  const firstName = inputfields[0].value;
+  const lastName = inputfields[1].value;
+  const emailAddress = inputfields[2].value;
+  const phoneNum = inputfields[3].value;
+  const roomNumEtc = inputfields[4].value;
+  const street = inputfields[5].value;
+  const city = inputfields[6].value;
+  const province = inputfields[7].value;
+  const zipCode = inputfields[8].value;
+  const geoCodeArray = [];
+  const wholeAddress = await `${street}, ${city}, Britich Columbia`;
+  await tt.services
+    .geocode({
+      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      query: wholeAddress,
+    })
+    .then((response) => {
+      console.log(response);
+      const userLat = response.results[0].position.lat;
+      const userLon = response.results[0].position.lng;
+      geoCodeArray.push(userLon);
+      geoCodeArray.push(userLat);
+      console.log(geoCodeArray);
+    });
+  const geoCode = geoCodeArray;
 
   updateProfileInfo(
     firstName,
@@ -206,10 +222,11 @@ saveProfileBtn.addEventListener("click", (event) => {
     emailAddress,
     phoneNum,
     roomNumEtc,
-    addressDetail,
+    street,
     city,
     province,
-    zipCode
+    zipCode,
+    geoCode
   );
 });
 
@@ -222,7 +239,8 @@ const updateProfileInfo = async function (
   detail,
   city,
   province,
-  zip
+  zip,
+  gCode
 ) {
   await common.updateDoc(common.doc(db, "users", `${uid}`), {
     "address.city": city,
@@ -234,10 +252,11 @@ const updateProfileInfo = async function (
     "contact.phone": phone,
     "userName.firstName": fName,
     "userName.lastName": lName,
+    "address.geoCode": gCode,
   });
 
   console.log(
-    `${fName}, ${lName}, ${email}, ${phone}, ${etc}, ${detail}, ${city}, ${province}, ${zip}`
+    `${fName}, ${lName}, ${email}, ${phone}, ${etc}, ${detail}, ${city}, ${province}, ${zip}, ${gCode}`
   );
 };
 
