@@ -1,7 +1,6 @@
 import * as common from "../../common.js";
 // Initialize Firebase---------------
 const db = common.db;
-// const uid = await common.getCurrentUid();
 const uid = await common.getCurrentUid();
 const companyPlanSnap = await common.getDoc(common.doc(db, "Company", "plan"));
 const companyStorageLocationSnap = await common.getDoc(
@@ -166,8 +165,17 @@ function getProfileInfo() {
 
 if (uid) {
   console.log("Found user id on DB");
-  getProfileInfo();
-  radioBtnWork();
+
+  loadingAndShow();
+  async function loadingAndShow() {
+    await getProfileInfo();
+    await radioBtnWork();
+    console.log("all the data retrieved.")
+    const load = document.getElementById("loading-screen");
+    setTimeout(() => {
+      load.style.display = "none";
+    }, 500);
+  }
 }
 
 function firstDigit(num) {
