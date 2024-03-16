@@ -356,7 +356,7 @@ const executeAfterRender = () => {
     `.orders.${sessionStorage.getItem("currentPage")}`
   ).scrollHeight;
   console.log(footerBegin);
-  document.querySelector("footer").style.marginTop = `${footerBegin + 150}px`;
+  document.querySelector("footer").style.top = `${footerBegin + 80}px`;
 };
 
 // Create a new MutationObserver
