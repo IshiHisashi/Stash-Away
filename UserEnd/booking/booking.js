@@ -549,6 +549,21 @@ times.forEach((el) => {
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
   e.preventDefault();
+  const geoCodeArray = [];
+  let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
+  await tt.services
+    .geocode({
+      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      query: wholeAddress,
+    })
+    .then((response) => {
+      console.log(response);
+      let userLat = response.results[0].position.lat;
+      let userLon = response.results[0].position.lng;
+      geoCodeArray.push(userLon);
+      geoCodeArray.push(userLat);
+      console.log(geoCodeArray);
+    });
   common.updateDoc(common.doc(db, "users", uid), {
     "userName.firstName": `${firstname.value}`,
     "userName.lastName": `${lastname.value}`,
@@ -556,6 +571,7 @@ btnSavePickup.addEventListener("click", async (e) => {
     "address.province": `${province.value}`,
     "address.detail": `${street.value}`,
     "address.roomNumEtc": `${unitNumber.value}`,
+    "address.geoCode": geoCodeArray,
     "address.zipCode": `${zipCode.value}`,
     "ongoing_order.date": `${pickupDate.value}`,
     "ongoing_order.time": `${pickupTime.value}`,
@@ -858,3 +874,11 @@ backButton.addEventListener("click", function (e) {
   document.getElementById("backButton").style.display = "none";
   document.getElementById("uploadButton").style.display = "inline-block";
 });
+
+
+const load = document.getElementById("loading-screen");
+const body = document.querySelector("body");
+setTimeout(() => {
+  load.style.display = "none";
+  body.style.overflowY = "auto";
+}, 1000);

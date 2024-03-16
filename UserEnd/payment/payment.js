@@ -42,8 +42,19 @@ console.log(savedItemsArr);
 
 if (uid) {
   console.log("Found user id on DB");
-  getItems();
-  getPaymentInfo();
+
+  loadingAndShow();
+  async function loadingAndShow() {
+    await getItems();
+    await getPaymentInfo();
+    console.log("all the data retrieved.")
+    const load = document.getElementById("loading-screen");
+    const body = document.querySelector("body");
+    setTimeout(() => {
+      load.style.display = "none";
+      body.style.overflowY = "auto";
+    }, 1000);
+  }
 }
 
 function firstDigit(num) {

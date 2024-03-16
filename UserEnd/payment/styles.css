@@ -1,10 +1,8 @@
-:root {
-    --color-primary-pink: #e04462;
-    --color-secondary: #103646;
-    --color-secondary-light: #777777;
-    --color-primary-orange: #f9b035;
-    --color-input: #f4f4f4;
-  }
+@import url(../../common.css);
+
+body {
+  overflow-y: hidden;
+}
 
 h1 {
     text-align: center;
@@ -14,7 +12,7 @@ h1 {
     width: 75%;
     margin: 2rem auto;
     padding: 2rem;
-    border: 1px solid var(--color-secondary-light);
+    border: 1px solid var(--grey-2);
     border-radius: 30px;
 }
 
@@ -77,12 +75,109 @@ a {
 }
 
 #back {
-    border: 1px solid var(--color-secondary-light);
-    color: var(--color-primary-pink);
+    border: 1px solid var(--grey-2);
+    color: var(--pink);
 }
 
 #btn-add {
-    border: 1px solid var(--color-primary-pink);
-    color: var(--color-input);
-    background-color: var(--color-primary-pink);
+    border: 1px solid var(--pink);
+    color: var(--white);
+    background-color: var(--pink);
 }
+
+/* LOADING SCREEN ========================================== */
+/* Citation: https://blog.hubspot.com/website/css-loading-animation */
+
+#loading-screen {
+    z-index: 100;
+    background-color: var(--white);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+  
+  #loading {
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:150px;
+    height:150px;
+    background:transparent;
+    border:3px solid var(--white);
+    border-radius:50%;
+    text-align:center;
+    line-height:150px;
+    font-family:sans-serif;
+    font-size:20px;
+    color:var(--pink);
+    letter-spacing:4px;
+    text-transform:uppercase;
+    /* text-shadow:0 0 10px var(--white);
+    box-shadow:0 0 20px var(--dark-pink); */
+  }
+  
+  #loading::before
+  {
+    content:'';
+    position:absolute;
+    top:-3px;
+    left:-3px;
+    width:100%;
+    height:100%;
+    border:3px solid transparent;
+    border-top:3px solid var(--pink);
+    border-right:3px solid var(--pink);
+    border-radius:50%;
+    animation:animateC 2s linear infinite;
+  }
+  span
+  {
+    display:block;
+    position:absolute;
+    top:calc(50% - 2px);
+    left:50%;
+    width:50%;
+    height:4px;
+    background:transparent;
+    transform-origin:left;
+    animation:animate 2s linear infinite;
+  }
+  span::before
+  {
+    content:'';
+    position:absolute;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:var(--pink);
+    top:-6px;
+    right:-8px;
+    /* box-shadow:0 0 20px var(--white); */
+  }
+  @keyframes animateC
+  {
+    0%
+    {
+      transform:rotate(0deg);
+    }
+    100%
+    {
+      transform:rotate(360deg);
+    }
+  }
+  @keyframes animate
+  {
+    0%
+    {
+      transform:rotate(45deg);
+    }
+    100%
+    {
+      transform:rotate(405deg);
+    }
+  }
+  
+  

@@ -97,7 +97,11 @@ if (navigator.geolocation) {
         changeIconForLabel();
         clickMarker();
         const load = document.getElementById("loading-screen");
-        load.style.display = "none";
+        const body = document.querySelector("body");
+        setTimeout(() => {
+          load.style.display = "none";
+          body.style.overflowY = "auto";
+        }, 1000);
       }
 
       // SORT AND SHOW IN THE BAR ================================
