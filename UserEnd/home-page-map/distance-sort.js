@@ -97,8 +97,10 @@ if (navigator.geolocation) {
         changeIconForLabel();
         clickMarker();
         const load = document.getElementById("loading-screen");
+        const body = document.querySelector("body");
         setTimeout(() => {
           load.style.display = "none";
+          body.style.overflowY = "auto";
         }, 1000);
       }
 

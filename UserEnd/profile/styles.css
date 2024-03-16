@@ -1,5 +1,9 @@
 @import url(../../common.css);
 
+body {
+  overflow-y: hidden;
+}
+
 #plan {
     display: flex;
     justify-content: space-between;
@@ -46,7 +50,7 @@
 #loading-screen {
     z-index: 100;
     background-color: var(--white);
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     right: 0;

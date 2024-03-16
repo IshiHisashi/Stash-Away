@@ -136,23 +136,14 @@ const renderTripDetails = (userID, orderID, address, name, status) => {
   formOrderDetail.insertBefore(divOrderDetailID, formOrderDetail.firstChild);
 
   if (status === "requested") {
-    document.querySelector(".btnTripStarted").style.backgroundColor = "#d72e4e";
-    document.querySelector(".btnTripStarted").style.cursor = "pointer";
     document.querySelector(".btnTripStarted").disabled = false;
     document.querySelector(".btnTripStarted").textContent = "Start Trip";
-    document.querySelector(".btnTripCompleted").style.backgroundColor =
-      "#dfdfdf";
-    document.querySelector(".btnTripCompleted").style.cursor = "unset";
 
     document.querySelector(".btnTripCompleted").disabled = true;
   } else if (status === "on going") {
-    document.querySelector(".btnTripStarted").style.backgroundColor = "#dfdfdf";
-    document.querySelector(".btnTripStarted").style.cursor = "unset";
     document.querySelector(".btnTripStarted").disabled = true;
     document.querySelector(".btnTripStarted").textContent = "Trip Started";
-    document.querySelector(".btnTripCompleted").style.backgroundColor =
-      "#d72e4e";
-    document.querySelector(".btnTripCompleted").style.cursor = "pointer";
+
     document.querySelector(".btnTripCompleted").disabled = false;
   }
 

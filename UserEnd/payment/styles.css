@@ -1,5 +1,9 @@
 @import url(../../common.css);
 
+body {
+  overflow-y: hidden;
+}
+
 h1 {
     text-align: center;
 }
@@ -87,7 +91,7 @@ a {
 #loading-screen {
     z-index: 100;
     background-color: var(--white);
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
