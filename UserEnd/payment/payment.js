@@ -139,34 +139,33 @@ function getPaymentInfo() {
     document.querySelector(
       'div[id="box-size"] p'
     ).innerHTML = `$${originalPrice}/month`;
-    document.querySelector('div[id="box-size"] p').style.textDecoration =
-      "line-through";
+    document.querySelector('div[id="box-size"] p').style.textDecoration = "line-through";
     let discountedPrice =
       Math.round(originalPrice * planDetailsByDuraton.discount * 100) / 100;
     document.querySelector(
       'div[id="duration"] p'
-    ).innerHTML = `$${discountedPrice}/month`;
+    ).innerHTML = `$${discountedPrice}/month * ${planDetailsByDuraton.numMonth} months`;
     document.querySelector(
       'div[id="subtotal"] p'
-    ).innerHTML = `$${discountedPrice}/month`;
-    subtotal = discountedPrice;
+    ).innerHTML = `$${discountedPrice * planDetailsByDuraton.numMonth}`;
+    subtotal = discountedPrice * planDetailsByDuraton.numMonth;
   } else {
     document.querySelector(
       'div[id="box-size"] p'
-    ).innerHTML = `$${originalPrice}/month`;
+    ).innerHTML = `$${originalPrice} for 1 month`;
     document.querySelector('div[id="duration"] p').innerHTML =
       "You might want to get great discount by changing your plan!";
     document.querySelector(
       'div[id="subtotal"] p'
-    ).innerHTML = `$${originalPrice}/month`;
+    ).innerHTML = `$${originalPrice}`;
     subtotal = originalPrice;
   }
   let gst = Math.round(subtotal * 5) / 100;
   let pst = Math.round(subtotal * 7) / 100;
-  document.querySelector('div[id="gst"] p').innerHTML = `$${gst}/month`;
-  document.querySelector('div[id="pst"] p').innerHTML = `$${pst}/month`;
+  document.querySelector('div[id="gst"] p').innerHTML = `$${gst}`;
+  document.querySelector('div[id="pst"] p').innerHTML = `$${pst}`;
   let total = Math.round((subtotal + gst + pst) * 100) / 100;
-  document.querySelector('div[id="total"] p').innerHTML = `$${total}/month`;
+  document.querySelector('div[id="total"] p').innerHTML = `$${total}`;
 
   // CARD INFO SECTION ================================
   class Card {
