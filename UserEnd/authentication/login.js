@@ -215,7 +215,7 @@ btnSignup.onclick = (e) => {
                   firstVisit: true,
                 });
 
-                window.location.href = "after-login.html";
+                window.location.href = "../homepage/homepage.html";
 
                 return confirmation;
               };
@@ -244,7 +244,7 @@ btnSignup.onclick = (e) => {
 };
 
 //
-// Log-in users ////////////////////////////////////////////////
+// Log-in users
 
 const btnLogin = document.querySelector("#login");
 
@@ -264,7 +264,7 @@ btnLogin.onclick = (e) => {
       const user = userCredential.user;
 
       // window.open("after-login.html", "_self");
-      window.location.href = "after-login.html";
+      window.location.href = "../homepage/homepage.html";
     })
     .catch((error) => {
       const errorCode = error.code;
