@@ -57,7 +57,9 @@ const renderList = function (snapShot) {
       // Render
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li  class='item-list-li'><img src='${
+        `<li  class='item-list-li ${
+          item.status === "retrieved" ? "retrieved" : ""
+        }'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
