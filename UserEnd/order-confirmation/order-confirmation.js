@@ -30,21 +30,22 @@ for (let i = 0; i < getcheckedItem.length; i++) {
   );
   const item = getItem.data();
   const itemID = getItem.id;
+  // Date
+  const tsStored = item.storedDate.seconds;
+  const storedFullDate = new Date(tsStored * 1000);
+  const storedDate = `${storedFullDate.getFullYear()}/${
+    storedFullDate.getMonth() + 1
+  }/${storedFullDate.getDate()}`;
   // render
   itemList.insertAdjacentHTML(
     "beforeend",
     `<li  class='item-list-li'><img src='${
       item.picture ? item.picture : ""
     }' class=placeholder-pic alt=${itemID}>
-      <p class="item-name">${item.itemName}</p><p class='item-status'> ${
-      item.status === "retrieved"
-        ? "retrieved"
-        : item.status === "retrieval requested"
-        ? "on request"
-        : item.status === "stored"
-        ? "In storage"
-        : ""
-    }</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      <p class="item-name">${
+        item.itemName
+      }</p><p class='date'> Date stored : ${storedDate}</p> 
+      <img src="../icons/trash-01.svg" class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}" /></span>
         </li>`
   );
 }
