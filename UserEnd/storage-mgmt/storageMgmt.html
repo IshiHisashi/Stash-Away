@@ -35,35 +35,44 @@
             <p class="small-letter">Your Storage</p>
             <h4 class="total-p">Total: <span id="total-num"></span> Items</h4>
             <div class="num-breakdown">
-              <p>In storage : <span id="stored-num"></span></p>
+              <!-- <p>In storage : <span id="stored-num"></span></p>
               <p>On request : <span id="on-request-num"></span></p>
-              <p>Retrieved : <span id="retrieved-num"></span></p>
+              <p>Retrieved : <span id="retrieved-num"></span></p> -->
             </div>
           </div>
-          <div class="filter-wrapper">
-            <label class="small-letter">Fliter by status:</label>
-            <select id="filter">
-              <option value="all">All</option>
-              <option value="stored">Stored</option>
-              <option value="retrieval requested">On retrival request</option>
-              <option value="retrieved">Retrieved</option>
-            </select>
+          <div class="section-header">
+            <form>
+              <label>Search</label>
+              <div class="search-box">
+                <input id="search" type="text" />
+                <button id="btn-search">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+              <!-- <button id="btn-search-delete">
+                <i class="fa-solid fa-xmark"></i>
+              </button> -->
+            </form>
+            <div class="filter-wrapper">
+              <label>Fliter by status:</label>
+              <select id="filter">
+                <option value="all">All</option>
+                <option value="stored" id="stored-num"></option>
+                <option
+                  value="retrieval requested"
+                  id="on-request-num"
+                ></option>
+                <option value="retrieved" id="retrieved-num"></option>
+              </select>
+            </div>
           </div>
         </section>
       </div>
 
       <section class="item-list-section">
-        <div class="section-header">
-          <form>
-            <label>Search</label>
-            <input id="search" type="search" />
-            <button id="btn-search">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-            <button id="btn-search-delete">
-              <i class="fa-solid fa-xmark"></i>
-            </button>
-          </form>
+        <div class="check-all">
+          <input type="checkbox" id="check-all" />
+          <p class="check-all-text">Select All</p>
         </div>
         <ul class="item-list"></ul>
         <div class="request-return-section">
