@@ -44,7 +44,8 @@ for (let i = 0; i < getcheckedItem.length; i++) {
     }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
         item.itemName
-      }</p><p class='date'> Date stored : ${storedDate}</p> <i class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}"></i></span>
+      }</p><p class='date'> Date stored : ${storedDate}</p> 
+      <img src="../icons/trash-01.svg" class="fa-solid fa-trash icon delete" id="deleteitem_${itemID}" /></span>
         </li>`
   );
 }
