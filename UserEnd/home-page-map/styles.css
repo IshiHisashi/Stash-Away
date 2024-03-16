@@ -1,5 +1,9 @@
 @import url(../../common.css);
 
+body {
+  overflow-y: hidden;
+}
+
 #map-area {
   display: grid;
   grid-template-columns: 3fr 7fr;
@@ -91,7 +95,7 @@ fieldset div {
 #loading-screen {
   z-index: 100;
   background-color: var(--white);
-  position: absolute;
+  position: fixed;
   top: 0;
   bottom: 0;
   right: 0;
