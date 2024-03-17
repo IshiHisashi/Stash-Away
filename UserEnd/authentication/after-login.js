@@ -2,6 +2,8 @@ import { doc, db, getDoc, updateDoc } from "./firebase_firestore.js";
 
 import * as common from "../../common.js";
 
+sessionStorage.setItem("pageToReturn", window.location.href);
+
 const loginStatusSpan = document.querySelector(".loginStatus");
 
 const user = await common.getCurrentUserObj();

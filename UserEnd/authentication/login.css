@@ -1,0 +1,250 @@
+@import "../../common.css";
+
+* {
+  box-sizing: border-box;
+  font-family: var(--body-family);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  margin: 0;
+  background-color: var(--grey-4);
+}
+
+main {
+  background-image: url(../images/hero-image-login-cropped.jpg);
+  background-size: cover;
+  background-position: 60%;
+}
+main > div {
+  padding: 3rem 1rem;
+  backdrop-filter: brightness(0.8);
+  width: 100%;
+  height: 100%;
+}
+
+h1 {
+  font-family: var(--h2-family);
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line-height);
+  color: var(--dark-blue-green);
+  text-align: center;
+}
+
+.container {
+  margin: 1rem;
+  max-width: 1200px;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.hero-section {
+  overflow: hidden;
+  display: none;
+}
+
+.right-section {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  background-color: hsla(0, 0%, 100%, 0.9);
+  padding: 2.5rem;
+}
+
+form {
+  width: 100%;
+}
+
+form > div {
+  display: grid;
+}
+
+form > div:nth-of-type(2) {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+form > div > label {
+  font-family: var(--subtitle-2-family);
+  font-size: var(--subtitle-2-size);
+  font-weight: var(--subtitle-2-weight);
+  list-style: var(--subtitle-2-line-height);
+  color: var(--grey-3);
+}
+
+form > div > input {
+  padding: 1rem;
+  border: 1px solid var(--grey-2);
+  border-radius: 7px;
+  font-size: var(--body-size);
+  font-weight: var(--body-weight);
+  line-height: var(--body-line-height);
+  color: var(--grey-2);
+}
+
+form > div:last-of-type {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+form > div:last-of-type > div {
+  position: relative;
+}
+
+form > div:last-of-type > div input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+form > div:last-of-type > div span.checkmark {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid var(--grey-5);
+  border-radius: 2px;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+form > div:last-of-type > div:hover span.checkmark {
+  border: 1px solid var(--pink);
+}
+
+form > div:last-of-type > div input:checked + span.checkmark {
+  border: 1px solid var(--pink);
+}
+
+form > div:last-of-type > div label {
+  font-size: var(--small-text-size);
+  font-weight: var(--small-text-weight);
+  line-height: var(--small-text-line-height);
+  color: var(--grey-3);
+  padding-left: 25px;
+  cursor: pointer;
+  line-height: 20px;
+}
+
+form > div:last-of-type a {
+  font-size: var(--small-text-size);
+  font-weight: var(--subtitle-2-weight);
+  line-height: var(--subtitle-2-line-height);
+  color: var(--grey-3);
+  text-decoration: none;
+  line-height: 20px;
+}
+form > div:last-of-type a:hover {
+  color: var(--dark-pink);
+}
+form > div:last-of-type a:active {
+  color: var(--light-pink);
+}
+
+form button {
+  width: 100%;
+  height: 56px;
+  margin-top: 1.5rem;
+  border-radius: 7px;
+  border: none;
+  font-family: var(--button-1-family);
+  font-size: var(--button-1-size);
+  font-weight: var(--button-1-weight);
+  line-height: var(--button-1-line-height);
+  color: var(--white);
+  background-color: var(--pink);
+  cursor: pointer;
+}
+form button:hover {
+  background-color: var(--dark-pink);
+}
+form button:active {
+  background-color: var(--light-pink);
+}
+
+form > p {
+  text-align: center;
+  font-size: var(--subtitle-2-size);
+  font-weight: var(--subtitle-2-weight);
+  line-height: var(--subtitle-2-line-height);
+  color: var(--grey-3);
+}
+
+form > p a {
+  text-decoration: none;
+  color: var(--pink);
+}
+form > p a:hover {
+  color: var(--dark-pink);
+}
+form > p a:active {
+  color: var(--light-pink);
+}
+
+/* QUERIES ================================================= */
+
+@media screen and (min-width: 600px) {
+  main {
+    background-image: unset;
+  }
+
+  main > div {
+    backdrop-filter: unset;
+  }
+
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 2fr;
+  }
+
+  .hero-section {
+    display: block;
+  }
+
+  .hero-section img {
+    object-fit: cover;
+    height: 100%;
+    filter: brightness(80%);
+  }
+
+  .right-section {
+    background-color: var(--white);
+  }
+
+  form > p {
+    text-align: end;
+  }
+}
+
+@media screen and (min-width: 940px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hero-section img {
+    max-width: 100%;
+    transform: unset;
+  }
+
+  .right-section {
+    padding: 3rem;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .container {
+    margin: 1rem auto;
+  }
+}
