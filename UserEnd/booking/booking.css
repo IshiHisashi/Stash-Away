@@ -22,7 +22,7 @@ body {
 
 /* Main */
 main {
-  margin: 0 24.5px;
+  margin: 0 24.5px 226px 24.5px;
   #form_list {
     display: flex;
     flex-direction: column;
@@ -250,8 +250,45 @@ main {
   /* For Ishi */
   /* 2. Pick-Up Address*/
   .pickup-info {
-    div {
-      margin-bottom: 5px;
+    @media screen and (min-width: 900px) {
+      /* general border & spacing */
+      border: 1px solid black;
+      border-radius: 23px;
+      padding: 50px;
+
+      /* grid */
+      display: grid;
+      grid-template-columns: 0.5fr 1fr;
+    }
+    .section-title,
+    .section-desc {
+      @media screen and (min-width: 900px) {
+        max-width: 190px;
+      }
+    }
+    .section-title {
+      @media screen and (min-width: 900px) {
+        display: block;
+        font-size: var(--h3-size);
+        font-weight: var(--h3-weight);
+      }
+    }
+    .form-wrapper {
+      @media screen and (min-width: 900px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0 20px;
+        .unitnum-div,
+        .storageLocation-div {
+          grid-column: 1/-1;
+        }
+        .btn-div {
+          grid-column: 2/3;
+        }
+      }
+      > div {
+        margin-bottom: 8px;
+      }
     }
 
     label {
@@ -259,7 +296,6 @@ main {
       font-size: var(--subtitle-2-size);
       font-weight: var(--subtitle-2-weight);
       color: var(--grey-3);
-      margin-bottom: 5px;
     }
 
     input,
@@ -269,6 +305,7 @@ main {
       box-sizing: border-box;
       height: 48px;
       padding: 0.5rem;
+      margin-top: 5px;
       border: 0.5px solid black;
       border-radius: 7px;
       color: var(--grey-2);
@@ -278,39 +315,57 @@ main {
     }
 
     .btn-div {
+      margin-top: 35px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
 
       a {
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 800;
+        border-radius: 7px;
+        font-family: var(--button-1-family);
+        font-size: var(--button-1-size);
+        font-weight: var(--button-1-weight);
         padding: 1rem;
         cursor: pointer;
         text-align: center;
+        text-decoration: none;
       }
 
       .btn-back {
-        border: 1px solid black;
+        border: 0.5px solid black;
         background-color: white;
-        color: var(--color-primary);
+        color: var(--pink);
+      }
+
+      .btn-back:hover {
+        background-color: var(--light-pink-2);
+        border: 1px solid var(--light-pink);
       }
 
       .btn-save {
         border: none;
-        background-color: var(--color-primary);
+        background-color: var(--pink);
         color: white;
+      }
+      .btn-save:hover {
+        background-color: var(--dark-pink);
       }
     }
 
     /* Calendar trial */
+    .pickupDate-div {
+      position: relative;
+    }
+
     #calendar-wrapper {
       display: none;
+      width: 100%;
+      padding-top: 1rem;
+      padding-bottom: 2rem;
       background-color: white;
-      margin: 0 6rem;
-      position: fixed;
-      top: 50px;
+      box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+      position: absolute;
+      top: 75px;
       overflow: auto;
       z-index: 1;
     }
@@ -324,11 +379,17 @@ main {
     #prev {
       border: none;
       background-color: white;
+      color: var(--grey-2);
+      transform: scale(1.5);
+      cursor: pointer;
     }
 
     #next {
       border: none;
       background-color: white;
+      color: var(--grey-2);
+      transform: scale(1.5);
+      cursor: pointer;
     }
 
     section {
@@ -339,11 +400,14 @@ main {
     h1 {
       font-size: 18px;
       text-align: center;
+      margin-bottom: 1rem;
     }
 
     table {
       border-spacing: 0;
       border-collapse: collapse;
+      margin: 0 3rem;
+      width: 100%;
     }
 
     td {
@@ -355,14 +419,56 @@ main {
     td.is-disabled {
       color: #ccc;
     }
+    .calendar_td {
+      cursor: pointer;
+    }
+    .calendar_td:hover {
+      color: white;
+      border-radius: 30px;
+      background-color: #f04d23;
+    }
   }
 
   /* 3. Storage Size */
   .storage-size {
-    > div {
+    @media screen and (min-width: 900px) {
+      /* general border & spacing */
+      border: 1px solid black;
+      border-radius: 23px;
+      padding: 50px;
+    }
+    h3,
+    p {
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+    .section-title {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 13px;
+      @media screen and (min-width: 900px) {
+        display: block;
+        font-size: var(--h3-size);
+        font-weight: var(--h3-weight);
+      }
+    }
+    .section-desc {
+      margin-bottom: 35px;
+    }
+    .box-size-container {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 24px;
+      @media screen and (min-width: 900px) {
+        display: grid;
+        gap: 0 24px;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(12, auto), 40px;
+        .btn-div {
+          grid-column: 3/4;
+        }
+      }
     }
 
     .small-size,
@@ -370,183 +476,91 @@ main {
     .large-size {
       border: 0.5px solid black;
       border-radius: 10px;
-      padding: 1rem;
+      padding: 45px 25px 56px 25px;
       pointer-events: none;
+      text-align: center;
+      @media screen and (min-width: 800px) {
+        display: grid;
+        grid-row: 1/12;
+        grid-template-rows: subgrid;
+        .size-title {
+          grid-row: 1/4;
+          align-self: center;
+        }
+        .size {
+          grid-row: 4/7;
+        }
+        .mo {
+          grid-row: 7/8;
+        }
+        .btn-select {
+          grid-row: 9/12;
+        }
+      }
     }
 
     .small-size:hover,
     .medium-size:hover,
     .large-size:hover {
       border: 2px solid rgba(0, 0, 0, 0.5);
-      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+      /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3); */
     }
 
-    div > h3 {
-      font-size: 0.8rem;
+    .size-title {
+      font-family: var(--h4-family);
+      font-size: var(--h4-size);
+      font-weight: var(--h4-weight);
+      color: var(--grey-3);
+      margin-bottom: 17px;
     }
 
-    .price-num {
-      font-size: 3rem;
-      font-weight: 600;
-      color: var();
+    .size {
+      font-family: var(--h1-family);
+      font-weight: var(--h1-weight);
+      font-size: 54px;
+      color: var(--dark-blue-green);
+      margin-bottom: 11px;
     }
 
-    ul {
-      list-style: none;
-    }
-
-    li {
-      margin-bottom: 0.75rem;
+    .price-num,
+    .mo {
+      font-family: var(--h4-family);
+      font-weight: var(--h4-weight);
+      font-size: 24px;
+      color: var(--yellow);
+      margin-bottom: 17px;
     }
 
     .btn-select {
       border-radius: 10px;
-      font-size: 1rem;
+      font-family: var(--button-1-family);
+      font-size: var(--button-1-size);
+      font-weight: var(--button-1-weight);
       padding: 1rem;
       width: 100%;
       cursor: pointer;
-      border: 1px solid black;
-      background-color: white;
-      color: var(--color-primary);
-      pointer-events: auto;
-    }
-
-    .btn-select:hover {
-      background-color: var(--color-lightnpink);
-      border: 2px solid var(--color-primary);
-    }
-
-    .btn-div {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-
-      a {
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 800;
-        padding: 1rem;
-        cursor: pointer;
-        text-align: center;
-      }
-
-      .btn-back {
-        border: 1px solid black;
-        background-color: white;
-        color: var(--color-primary);
-      }
-
-      .btn-save {
-        border: none;
-        background-color: var(--color-primary);
-        color: white;
-      }
-    }
-    .selected {
-      border: 2px solid rgba(0, 0, 0, 0.5);
-      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
-      .btn-select {
-        background-color: var(--color-lightnpink);
-        border: 2px solid var(--color-primary);
-      }
-    }
-  }
-
-  /* 4. Storage Plan */
-  .select-plan {
-    > div {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .short,
-    .mid,
-    .long {
       border: 0.5px solid black;
-      border-radius: 20px;
-      padding: 0 1rem 1rem 0;
-      pointer-events: none;
-    }
-
-    .short:hover,
-    .mid:hover,
-    .long:hover {
-      border: 2px solid rgba(0, 0, 0, 0.5);
-      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
-      .plan-title {
-        background-color: var(--color-secondary);
-        color: var(--color-input);
-      }
-    }
-
-    .plan-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      display: inline-block;
-      background-color: var(--color-input);
-      color: var(--color-secondary);
-      padding: 1rem;
-      border-radius: 20px 0 20px 0;
-      pointer-events: none;
-    }
-
-    .term-inner-container {
-      border: none;
-      box-sizing: border-box;
-    }
-
-    p {
-      text-align: center;
-    }
-
-    .trip {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--color-secondary);
-
-      .total {
-        font-size: 0.75rem;
-        font-weight: normal;
-      }
-    }
-
-    .term-price {
-      font-size: 1.2rem;
-      color: var(--color-secondary);
-      font-weight: bold;
-    }
-
-    .btn-select {
-      border-radius: 10px;
-      font-size: 1rem;
-      padding: 1rem;
-      margin: 0 1rem;
-      width: 100%;
-      display: block;
-      box-sizing: border-box;
-      cursor: pointer;
-      border: 1px solid black;
       background-color: white;
-      color: var(--color-primary);
+      color: var(--pink);
       pointer-events: auto;
     }
 
     .btn-select:hover {
-      background-color: var(--color-lightnpink);
-      border: 2px solid var(--color-primary);
+      background-color: var(--light-pink-2);
+      border: 2px solid var(--light-pink);
     }
 
     .btn-div {
+      margin-top: 35px;
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      border: none;
 
       a {
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 800;
+        border-radius: 7px;
+        font-family: var(--button-1-family);
+        font-size: var(--button-1-size);
+        font-weight: var(--button-1-weight);
         padding: 1rem;
         cursor: pointer;
         text-align: center;
@@ -554,27 +568,250 @@ main {
       }
 
       .btn-back {
-        border: 1px solid black;
+        border: 0.5px solid black;
         background-color: white;
-        color: var(--color-primary);
+        color: var(--pink);
+      }
+
+      .btn-back:hover {
+        background-color: var(--light-pink-2);
+        border: 1px solid var(--light-pink);
       }
 
       .btn-save {
         border: none;
-        background-color: var(--color-primary);
+        background-color: var(--pink);
+        color: white;
+      }
+      .btn-save:hover {
+        background-color: var(--dark-pink);
+      }
+    }
+
+    .selected {
+      border: 2px solid rgba(0, 0, 0, 0.5);
+      /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3); */
+      .btn-select {
+        background-color: var(--light-pink-2);
+        border: 2px solid var(--light-pink);
+      }
+    }
+  }
+
+  /* 4. Storage Plan */
+  .select-plan {
+    @media screen and (min-width: 900px) {
+      /* general border & spacing */
+      border: 1px solid black;
+      border-radius: 23px;
+      padding: 50px;
+    }
+    h3,
+    p {
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+
+    .section-title {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 13px;
+      @media screen and (min-width: 900px) {
+        display: block;
+        font-size: var(--h3-size);
+        font-weight: var(--h3-weight);
+      }
+    }
+    .section-desc {
+      margin-bottom: 35px;
+      text-align: start;
+    }
+
+    .term-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      @media screen and (min-width: 900px) {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(12, auto) 40px;
+        gap: 0 24px;
+        .btn-div {
+          grid-column: 3/4;
+          grid-row: 12/14;
+        }
+      }
+    }
+
+    .short,
+    .mid,
+    .long {
+      border: 1px solid #d9d9d9;
+      border-radius: 20px;
+      pointer-events: none;
+      @media screen and (min-width: 900px) {
+        grid-row: 1/12;
+        display: grid;
+        grid-template-rows: subgrid;
+        .plan-title {
+          grid-row: 1/4;
+          justify-self: start;
+        }
+        .term-inner-container {
+          grid-row: 4/12;
+          display: grid;
+          grid-template-rows: subgrid;
+          .trip {
+            grid-row: 1/3;
+            align-self: center;
+          }
+          .period {
+            grid-row: 3/5;
+          }
+          .term-price {
+            grid-row: 5/8;
+          }
+          .btn-select {
+            grid-row: 8/12;
+          }
+        }
+      }
+    }
+
+    .short:hover,
+    .mid:hover,
+    .long:hover {
+      border: 1px solid black;
+
+      .plan-title {
+        background-color: var(--dark-blue-green);
+        border: 1px solid var(--dark-blue-green);
         color: white;
       }
     }
+
+    .plan-title {
+      font-family: var(--h4-family);
+      font-size: var(--h4-size);
+      font-weight: var(--h4-weight);
+      display: inline-block;
+      background-color: #d9d9d9;
+      border: 1px solid #d9d9d9;
+      color: var(--dark-blue-green);
+      padding: 10px 24px;
+      margin-bottom: 18.5px;
+      border-radius: 18px 0 20px 0;
+      pointer-events: none;
+    }
+
+    .term-inner-container {
+      border: none;
+      box-sizing: border-box;
+      padding: 0 25.5px;
+      text-align: center;
+    }
+
+    .trip {
+      font-family: var(--h2-family);
+      font-size: var(--h2-size);
+      font-weight: var(--h2-weight);
+      color: var(--dark-blue-green);
+      margin-bottom: 8px;
+      .total {
+        font-size: 0.75rem;
+        font-weight: normal;
+      }
+    }
+
+    .period {
+      font-family: var(--h5-family);
+      font-size: var(--h5-size);
+      font-weight: var(--h5-weight);
+      color: var(--grey-5);
+      margin-bottom: 27.5px;
+    }
+
+    .term-price {
+      font-family: var(--h4-family);
+      font-size: var(--h4-size);
+      font-weight: var(--h4-weight);
+      color: var(--dark-blue-green);
+      margin-bottom: 21px;
+    }
+
+    .btn-select {
+      font-family: var(--button-1-family);
+      font-size: var(--button-1-size);
+      font-weight: var(--button-1-weight);
+      background-color: white;
+      color: var(--pink);
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      margin-bottom: 28px;
+      box-sizing: border-box;
+      border: 1px solid black;
+      border-radius: 7px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+
+    .btn-select:hover {
+      background-color: var(--light-pink-2);
+      border: 2px solid var(--light-pink);
+    }
     .selected {
-      border: 2px solid rgba(0, 0, 0, 0.5);
-      box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3);
+      border: 1px solid black;
       .plan-title {
-        background-color: var(--color-secondary);
-        color: var(--color-input);
+        background-color: var(--dark-blue-green);
+        border: 1px solid var(--dark-blue-green);
+        color: white;
       }
       .btn-select {
-        background-color: var(--color-lightnpink);
-        border: 2px solid var(--color-primary);
+        background-color: var(--light-pink-2);
+        border: 2px solid var(--light-pink);
+      }
+    }
+
+    .btn-div {
+      margin-top: 35px;
+      display: grid;
+      grid-template-columns: 0.66fr 1fr;
+      gap: 1rem;
+
+      a {
+        border-radius: 7px;
+        font-family: var(--button-2-family);
+        font-size: var(--button-2-size);
+        font-weight: var(--button-2-weight);
+        padding: 1rem;
+        cursor: pointer;
+        text-align: center;
+        text-decoration: none;
+      }
+
+      .btn-back {
+        border: 0.5px solid black;
+        background-color: white;
+        color: var(--pink);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .btn-back:hover {
+        background-color: var(--light-pink-2);
+        border: 1px solid var(--light-pink);
+      }
+
+      .btn-save {
+        border: none;
+        background-color: var(--pink);
+        color: white;
+      }
+      .btn-save:hover {
+        background-color: var(--dark-pink);
       }
     }
   }
