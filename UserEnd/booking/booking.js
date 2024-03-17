@@ -548,7 +548,7 @@ times.forEach((el) => {
 
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
-  e.preventDefault();
+  // e.preventDefault();
   const geoCodeArray = [];
   let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
   await tt.services
@@ -874,7 +874,6 @@ backButton.addEventListener("click", function (e) {
   document.getElementById("backButton").style.display = "none";
   document.getElementById("uploadButton").style.display = "inline-block";
 });
-
 
 const load = document.getElementById("loading-screen");
 const body = document.querySelector("body");

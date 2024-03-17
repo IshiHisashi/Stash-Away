@@ -125,15 +125,16 @@ snapShot.forEach((el) => {
 
 // Then, render it
 numTotal.textContent = numItemTotalArr.length;
-numStored.textContent = numItemStoredArr.length;
-numOnRequest.textContent = numItemOnRequestArr.length;
-numRetrieved.textContent = numItemRetrievedArr.length;
+numStored.textContent = `Stored (${numItemStoredArr.length})`;
+numOnRequest.textContent = `On request (${numItemOnRequestArr.length})`;
+numRetrieved.textContent = `Retrieved (${numItemRetrievedArr.length})`;
 
 // Render the main list
 renderList(snapShot);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
+const checkAll = document.getElementById("check-all");
 let cArr = [];
 // Arr to register checked input id.
 const a = document.querySelectorAll("input[type='checkbox']");
@@ -185,6 +186,35 @@ const cleanupList = function () {
   }
 };
 
+// Check-all
+const checkall = function () {
+  checkAll.addEventListener("change", (e) => {
+    cArr = [];
+    if (checkAll.checked) {
+      Array.from(checkboxes).forEach((ch) => {
+        if (!ch.disabled) {
+          ch.checked = true;
+          cArr.push(ch.id);
+        }
+      });
+    } else {
+      Array.from(checkboxes).forEach((ch) => {
+        if (!ch.disabled) {
+          ch.checked = false;
+        }
+      });
+    }
+    // update button
+    if (cArr.length < 2) {
+      numReturnItems.textContent = `(${cArr.length} item)`;
+    } else {
+      numReturnItems.textContent = `(${cArr.length} items)`;
+    }
+  });
+};
+// Execute it
+checkall();
+
 // Search
 // Create arr
 const itemsIDArr = [];
@@ -224,7 +254,9 @@ btnSearch.addEventListener("click", (e) => {
     if (item.status !== "saved" && item.status !== "add requested") {
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li  class='item-list-li'><img src='${
+        `<li  class='item-list-li ${
+          item.status === "retrieved" ? "retrieved" : ""
+        }'><img src='${
           item.picture ? item.picture : ""
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
@@ -293,15 +325,15 @@ btnSearch.addEventListener("click", (e) => {
 });
 
 // Delete search
-btnSerachDelete.addEventListener("click", (e) => {
-  e.preventDefault();
-  // Render
-  cleanupList();
-  renderList(snapShot);
-  // checkbox contorol
-  recallCheckbox();
-  checkControl();
-});
+// btnSerachDelete.addEventListener("click", (e) => {
+//   e.preventDefault();
+//   // Render
+//   cleanupList();
+//   renderList(snapShot);
+//   // checkbox contorol
+//   recallCheckbox();
+//   checkControl();
+// });
 
 // Filtering
 filter.addEventListener("change", async (e) => {
