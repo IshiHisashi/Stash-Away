@@ -179,8 +179,12 @@ footer .site-logo img{
     flex-direction: column;
 }
 footer .footer-link ul li a{
-text-decoration: none;
-color:white;
+    text-decoration: none;
+    color:white;
+}
+.site-logo{
+    display: flex;
+    justify-content: center;
 }
 footer p{
     color: white;
@@ -189,6 +193,10 @@ footer p{
 }
 /* Media query for desktop devices */
 @media (min-width: 900px) {
+    .site-logo {
+        display: flex;
+        justify-content: center;
+    }
     #hero-image img {
         object-fit: cover;
     }
@@ -263,9 +271,11 @@ footer p{
 
     .footer-section{
         flex-direction: row;
-justify-content: space-evenly;    }
+        justify-content: space-evenly; 
+        align-items: center;   }
 
     footer .footer-link ul{
         flex-direction: row;
     }
+    
 }
