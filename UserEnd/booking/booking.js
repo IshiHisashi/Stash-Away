@@ -632,10 +632,20 @@ const btnSelectClick = function (btn, size) {
     )}`;
   });
 };
+// calc function to return price based on selected plan
+const calcTotalPrice = function (discount, size) {
+  if (size) {
+    return Math.trunc(discount * docPlanSize[size].price);
+  } else {
+    return "-";
+  }
+};
+
 // execute
 btnSelectClick(btnSelectSmall, "small");
 btnSelectClick(btnSelectMedium, "medium");
 btnSelectClick(btnSelectLarge, "large");
+
 // ------------------------------
 // 4. Storage Plan
 // define variables
@@ -643,12 +653,7 @@ btnSelectClick(btnSelectLarge, "large");
 let docPlanTerm = companyPlanDoc.term;
 // Read user's size for calc later
 let selectedSize = userDoc.plan?.size;
-// calc function
-const calcTotalPrice = function (discount, size) {
-  if (selectedSize) {
-    return Math.trunc(discount * docPlanSize[size].price);
-  }
-};
+
 // Render term
 tripShort.textContent = `${docPlanTerm.short.numTrip}`;
 tripMid.textContent = `${docPlanTerm.mid.numTrip}`;
