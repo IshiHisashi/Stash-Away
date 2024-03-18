@@ -527,10 +527,10 @@ showCalendar(year, month);
 
 // Time of pickup
 // time options
-var quarterHours = ["00", "30"];
-var times = [];
-for (var i = 9; i < 21; i++) {
-  for (var j = 0; j < 2; j++) {
+let quarterHours = ["00", "30"];
+let times = [];
+for (let i = 9; i < 21; i++) {
+  for (let j = 0; j < 2; j++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
@@ -548,35 +548,52 @@ times.forEach((el) => {
 
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
-  // e.preventDefault();
-  const geoCodeArray = [];
-  let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
-  await tt.services
-    .geocode({
-      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-      query: wholeAddress,
-    })
-    .then((response) => {
-      console.log(response);
-      let userLat = response.results[0].position.lat;
-      let userLon = response.results[0].position.lng;
-      geoCodeArray.push(userLon);
-      geoCodeArray.push(userLat);
-      console.log(geoCodeArray);
+  // Required Alert
+  if (
+    firstname.value === "" ||
+    lastname.value === "" ||
+    city.value === "" ||
+    province.value === "" ||
+    street.value === "" ||
+    unitNumber.value === "" ||
+    zipCode.value === "" ||
+    pickupDate.value === "" ||
+    pickupTime.value === "" ||
+    storageLocation.value === ""
+  ) {
+    e.preventDefault();
+    alert("Please fill in all the required information");
+  } else {
+    // e.preventDefault();
+    const geoCodeArray = [];
+    let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
+    await tt.services
+      .geocode({
+        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+        query: wholeAddress,
+      })
+      .then((response) => {
+        console.log(response);
+        let userLat = response.results[0].position.lat;
+        let userLon = response.results[0].position.lng;
+        geoCodeArray.push(userLon);
+        geoCodeArray.push(userLat);
+        console.log(geoCodeArray);
+      });
+    common.updateDoc(common.doc(db, "users", uid), {
+      "userName.firstName": `${firstname.value}`,
+      "userName.lastName": `${lastname.value}`,
+      "address.city": `${city.value}`,
+      "address.province": `${province.value}`,
+      "address.detail": `${street.value}`,
+      "address.roomNumEtc": `${unitNumber.value}`,
+      "address.geoCode": geoCodeArray,
+      "address.zipCode": `${zipCode.value}`,
+      "ongoing_order.date": `${pickupDate.value}`,
+      "ongoing_order.time": `${pickupTime.value}`,
+      "storageLocation.name": `${storageLocation.value}`,
     });
-  common.updateDoc(common.doc(db, "users", uid), {
-    "userName.firstName": `${firstname.value}`,
-    "userName.lastName": `${lastname.value}`,
-    "address.city": `${city.value}`,
-    "address.province": `${province.value}`,
-    "address.detail": `${street.value}`,
-    "address.roomNumEtc": `${unitNumber.value}`,
-    "address.geoCode": geoCodeArray,
-    "address.zipCode": `${zipCode.value}`,
-    "ongoing_order.date": `${pickupDate.value}`,
-    "ongoing_order.time": `${pickupTime.value}`,
-    "storageLocation.name": `${storageLocation.value}`,
-  });
+  }
 });
 
 // ------------------------------

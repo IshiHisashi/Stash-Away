@@ -298,6 +298,11 @@ main {
       color: var(--grey-3);
     }
 
+    label:after {
+      content: " *";
+      color: var(--alert);
+    }
+
     input,
     select {
       display: block;
@@ -312,6 +317,12 @@ main {
       font-family: var(--body-family);
       font-size: var(--body-size);
       font-weight: var(--body-weight);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border: 2px solid #0a2a38;
     }
 
     .btn-div {
