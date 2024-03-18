@@ -20,7 +20,7 @@ checkbox.onclick = (e) => {
 // determine the page to return to after loggin in
 const pageToReturn = sessionStorage.getItem("pageToReturn")
   ? sessionStorage.getItem("pageToReturn")
-  : "../homepage/homepage.html";
+  : "../homepage/main.html";
 
 // reset forms on load ////////////////////////////////////////////
 // not working... FIX LATER
@@ -59,10 +59,10 @@ btnLogin.onclick = (e) => {
     .then((userCredential) => {
       console.log(userCredential);
       const user = userCredential.user;
-
-      // window.location.href = "../homepage/homepage.html";
-      // window.location.href = "after-login.html";
-      window.location.href = pageToReturn;
+      debugger
+      // window.location.href = pageToReturn;
+      onLoginSuccess();
+      // window.open("after-login.html", "_self");
     })
     .catch((error) => {
       alert(
@@ -70,3 +70,19 @@ btnLogin.onclick = (e) => {
       );
     });
 };
+
+function getReturnUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('returnUrl');
+}
+
+// Simulate the login success logic
+function onLoginSuccess() {
+  debugger
+    const returnUrl = getReturnUrl();
+    if (returnUrl) {
+        window.location.href = decodeURIComponent(returnUrl);
+    } else {
+      window.location.href = "../homepage/main.html";
+    }
+}
