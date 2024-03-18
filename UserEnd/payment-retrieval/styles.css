@@ -133,7 +133,7 @@ a {
     border-radius:50%;
     animation:animateC 2s linear infinite;
   }
-  span
+  #load-span
   {
     display:block;
     position:absolute;
@@ -145,7 +145,7 @@ a {
     transform-origin:left;
     animation:animate 2s linear infinite;
   }
-  span::before
+  #load-span::before
   {
     content:'';
     position:absolute;
@@ -180,4 +180,103 @@ a {
     }
   }
   
-  
+.progress-section-payment {
+  .progress-mobile {
+    margin-top: 28px;
+    @media screen and (min-width: 600px) {
+      display: none;
+    }
+    h2 {
+      font-family: var(--subtitle-2-family);
+      font-size: var(--subtitle-2-size);
+      font-weight: var(--subtitle-2-weight);
+      color: var(--grey-3);
+    }
+    .progress {
+      width: 100%;
+      height: 18px;
+      background-color: var(--grey-1);
+      border-radius: 35px;
+      margin-top: 10.5px;
+    }
+    .progress-bar {
+      width: 75%;
+      height: 18px;
+      border-radius: 35px 0 0 35px;
+      background-color: var(--dark-blue-green);
+      z-index: 100;
+    }
+  }
+
+  .progress-large {
+    display: none;
+    margin-top: 28px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    @media screen and (min-width: 600px) {
+      display: block;
+    }
+    .progress-texts {
+      margin-top: 11px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .progress-texts > div {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* For checked */
+    .icon-wrapper {
+      background-color: var(--dark-blue-green);
+      border-radius: 100%;
+      width: 16px;
+      height: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .check {
+      color: white;
+      transform: scale(0.7);
+    }
+    /* For now */
+    .circle-now {
+      background-color: var(--yellow);
+      width: 16px;
+      height: 16px;
+      border-radius: 100%;
+    }
+    /* For yet */
+    .circle-yet {
+      background-color: #d9d9d9;
+      width: 16px;
+      height: 16px;
+      border-radius: 100%;
+    }
+    .text-yet {
+      color: var(--grey-2);
+    }
+    h2 {
+      font-family: var(--subtitle-2-family);
+      font-size: var(--subtitle-2-size);
+      font-weight: var(--subtitle-2-weight);
+      color: var(--grey-3);
+    }
+    .progress {
+      width: 100%;
+      height: 6px;
+      background-color: var(--grey-1);
+      border-radius: 11px;
+      margin-top: 10.5px;
+    }
+    .progress-bar {
+      width: 90%;
+      height: 6px;
+      border-radius: 11px 0 0 11px;
+      background-color: var(--dark-blue-green);
+      z-index: 100;
+    }
+  }
+}

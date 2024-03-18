@@ -8,64 +8,96 @@
     <title>Payment</title>
 </head>
 <body>
-    <h1>PAYMENT</h1>
-    <section id="items">
-        <h2>Your Items</h2>
-        <div>
-            <ul id="items-list"></ul>
+    <main>
+        <section class="progress-section-payment">
+            <div class="progress-mobile">
+              <div class="progress-texts">
+                <h2>Payment</h2>
+              </div>
+              <div class="progress">
+                <div class="progress-bar"></div>
+              </div>
+            </div>
+    
+            <div class="progress-large">
+              <div class="progress">
+                <div class="progress-bar"></div>
+              </div>
+              <div class="progress-texts">
+                <div class="confirm">
+                  <div class="icon-wrapper"><span class="check">&check;</span></div>
+                  <h2>Confirm items</h2>
+                </div>
+                <div class="delivery">
+                  <div class="icon-wrapper"><span class="check">&check;</span></div>
+                  <h2>Delivery Details</h2>
+                </div>
+                <div class="payment">
+                  <span class="circle-now"></span>
+                  <h2>Payment</h2>
+                </div>
+              </div>
+            </div>
+        </section>
+        <h1>PAYMENT</h1>
+        <section id="items">
+            <h2>Your Items</h2>
+            <div>
+                <ul id="items-list"></ul>
+            </div>
+        </section>
+        <section id="payment">
+            <h2>Your Total</h2>
+            <div id="payment-detail">
+                <div id="box-size" class="small-letters">
+                    <h3>
+                        Delivery fee(should be overwritten by actual plan from DB)
+                    </h3>
+                    <p>Here is gonna be delivery fee</p>
+                </div>
+                <div id="free-trip-left" class="small-letters">
+                    <h3>
+                        Free trip left(should be overwritten too)
+                    </h3>
+                    <p>maybe discounted price?</p>
+                </div>
+                <div id="subtotal" class="small-letters">
+                    <h3>
+        
+                        Subtotal
+                    </h3>
+                    <p>Based on info above</p>
+                </div>
+                <div id="gst" class="small-letters">
+                    <h3>
+                        GST
+                    </h3>
+                    <p>subtotal * gst percentage</p>
+                </div>
+                <div id="pst" class="small-letters">
+                    <h3>
+                        PST
+                    </h3>
+                    <p>subtotal * pst percentage</p>
+                </div>
+                <div id="total">
+                    <h3>Total</h3>
+                    <p>sum up three numbers above.</p>
+                </div>
+                <div id="payment-method"></div>
+            </div>
+        </section>
+        <section id="btns">
+            <a href="../delivery-mode/delivery-mode.html" id="back">Back</a>
+            <a href="../updates/pickup-and-delivery-updates.html" id="btn-retrieval">Place Order</a>
+            <!-- <a id="proceedLink" href="../order-confirmation/order-confirmation.html"></a> -->
+        </section>
+        <div id="loading-screen">
+            <div id="loading">
+              Loading
+              <span id="load-span"></span>
+            </div>
         </div>
-    </section>
-    <section id="payment">
-        <h2>Your Total</h2>
-        <div id="payment-detail">
-            <div id="box-size" class="small-letters">
-                <h3>
-                    Delivery fee(should be overwritten by actual plan from DB)
-                </h3>
-                <p>Here is gonna be delivery fee</p>
-            </div>
-            <div id="free-trip-left" class="small-letters">
-                <h3>
-                    Free trip left(should be overwritten too)
-                </h3>
-                <p>maybe discounted price?</p>
-            </div>
-            <div id="subtotal" class="small-letters">
-                <h3>
-                    
-                    Subtotal
-                </h3>
-                <p>Based on info above</p>
-            </div>
-            <div id="gst" class="small-letters">
-                <h3>
-                    GST
-                </h3>
-                <p>subtotal * gst percentage</p>
-            </div>
-            <div id="pst" class="small-letters">
-                <h3>
-                    PST
-                </h3>
-                <p>subtotal * pst percentage</p>
-            </div>
-            <div id="total">
-                <h3>Total</h3>
-                <p>sum up three numbers above.</p>
-            </div>
-            <div id="payment-method"></div>
-        </div>
-    </section>
-    <section id="btns">
-        <a href="../delivery-mode/delivery-mode.html" id="back">Back</a>
-        <a href="../updates/pickup-and-delivery-updates.html" id="btn-retrieval">Place Order</a>
-        <!-- <a id="proceedLink" href="../order-confirmation/order-confirmation.html"></a> -->
-    </section>
-    <div id="loading-screen">
-        <div id="loading">
-          Loading
-          <span></span>
-        </div>
-    </div>
+    </main>
 </body>
 </html>
