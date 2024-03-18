@@ -40,11 +40,9 @@ function updateUIBasedOnUser(user) {
 }
 function toggleDropdown(event) {
     document.getElementById("myDropdown").classList.toggle("show");
-    // Prevent event from propagating to the window
     event.stopPropagation();
 }
 
-// Close the dropdown menu if the user clicks outside of it
 window.onclick = function (event) {
     var dropdowns = document.getElementsByClassName("dropdown-content");
     for (var i = 0; i < dropdowns.length; i++) {
@@ -129,7 +127,15 @@ if (btnProfile) {
 const btnLogout = document.getElementById('btnLogout');
 if (btnLogout) {
     btnLogout.addEventListener('click', function () {
-        alert('Log Out - Not yet developed!');
+        common
+            .signOut(common.auth)
+            .then(() => {
+                console.log("signed out");
+                window.location.href = "main.html";
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     });
 }
 
@@ -147,7 +153,6 @@ if (btnBookNow) {
         if (isAuthenticated()) {
             window.location.href = `${basePath}booking/booking.html`;
         } else {
-            // Redirect to login and specify the return URL
             window.location.href = `${basePath}authentication/login.html?returnUrl=${encodeURIComponent(`${basePath}booking/booking.html`)}`;
         }
     });

@@ -98,12 +98,17 @@ header {
 }
 
 #btnLogin {
-  color: white;
-  background-color: #e04462;
+  color: rgb(0, 0, 0);
+  background-color: #ffffff;
   border-style: none;
   padding: 8px;
   cursor: pointer;
   margin: 5px; /* Hide buttons by default */
+}
+
+.button-set{
+  display: grid;
+  justify-content:end;
 }
 
 /* Media query for desktop devices */
@@ -202,6 +207,10 @@ header {
     background-color: #e04462;
     padding: 14px 20px;
     margin: 10px;
+  }
+
+  .button-set{
+    display: flex;
   }
 }
 
