@@ -96,12 +96,16 @@ form > div > input::placeholder {
   color: var(--grey-2);
 }
 
+form > div > input:focus-visible {
+  outline: 1.5px solid var(--grey-2);
+}
+
 form > div:nth-of-type(9) p,
 form > div:nth-of-type(10) p {
   margin: 0;
   font-size: var(--small-text-size);
   font-weight: var(--small-text-weight);
-  color: var(--alert);
+  color: var(--grey-2);
 
   line-height: 0;
   overflow: hidden;
@@ -141,7 +145,7 @@ form > div:nth-of-type(11) span.checkmark:hover {
   border: 1px solid var(--pink);
 }
 
-form > div:nth-of-type(11):has(input:checked) > span.checkmark {
+form > div:nth-of-type(11):has(input:checked) span.checkmark {
   border: 1px solid var(--pink);
 }
 
@@ -185,6 +189,11 @@ form button#signup:hover {
 }
 form button#signup:active {
   background-color: var(--light-pink);
+}
+
+form button#signup:disabled {
+  background-color: var(--grey-1);
+  cursor: unset;
 }
 
 form > p:first-of-type {
@@ -308,6 +317,9 @@ h2 {
   width: 100%;
   text-align: center;
 }
+#phoneVerificationForm input:focus-visible {
+  outline: 1.5px solid var(--grey-2);
+}
 
 #phoneVerificationForm input #spin,
 input::-webkit-inner-spin-button {
@@ -333,6 +345,11 @@ input::-webkit-inner-spin-button {
 }
 #phoneVerificationForm button#phoneVerification:active {
   background-color: var(--light-pink);
+}
+
+#phoneVerificationForm button#phoneVerification:disabled {
+  background-color: var(--grey-1);
+  cursor: unset;
 }
 
 #phoneVerificationForm button#resend {

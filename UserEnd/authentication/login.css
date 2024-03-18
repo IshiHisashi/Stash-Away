@@ -92,6 +92,10 @@ form > div > input::placeholder {
   color: var(--grey-2);
 }
 
+form > div > input:focus-visible {
+  outline: 1.5px solid var(--grey-2);
+}
+
 form > div:last-of-type {
   display: flex;
   justify-content: space-between;
@@ -174,6 +178,11 @@ form button:hover {
 }
 form button:active {
   background-color: var(--light-pink);
+}
+
+form button:disabled {
+  background-color: var(--grey-1);
+  cursor: unset;
 }
 
 form > p {

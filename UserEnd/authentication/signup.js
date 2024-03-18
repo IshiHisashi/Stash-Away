@@ -23,9 +23,7 @@ const checkboxActual = document.querySelector(
 );
 const checkboxContainer = document.querySelector("form > div:nth-of-type(11)");
 checkboxContainer.onclick = (e) => {
-  // e.preventDefault();
-  checkboxActual.checked = checkboxActual.checked ? false : true;
-
+  checkboxActual.checked = !checkboxActual.checked;
   checkboxStyled.querySelector("img").src = checkboxActual.checked
     ? "icons/check_red.svg"
     : "";
@@ -63,12 +61,12 @@ if (navigator.geolocation) {
       const currentLoc = [];
       currentLoc.push(currentLgt);
       currentLoc.push(currentLat);
-      console.log(currentLoc);
+      // console.log(currentLoc);
 
       async function getAddress(url) {
         let response = await fetch(url);
         let data = await response.json();
-        console.log(data);
+        // console.log(data);
         if (data.addresses[0].address.streetNameAndNumber) {
           document.getElementById("signupaddressdetail").value =
             data.addresses[0].address.streetNameAndNumber;
@@ -108,7 +106,62 @@ if (navigator.geolocation) {
   console.log("Geolocation is not supported by this browser.");
 }
 
-// FIX LATER - password validation has to be implemented here (onchange).
+// password validation: must be more than six character
+const password = document.querySelector("#signuppassword");
+password.onchange = (e) => {
+  if (e.target.value.length < 6) {
+    document.querySelector("form > div:nth-of-type(9) p").classList.add("show");
+    document.querySelector("form > div:nth-of-type(9) input").style.border =
+      "1px solid var(--alert)";
+  } else {
+    document
+      .querySelector("form > div:nth-of-type(9) p")
+      .classList.remove("show");
+    document.querySelector("form > div:nth-of-type(9) input").style.border =
+      "1px solid var(--grey-2)";
+  }
+};
+
+// password confirmation
+const passwordRe = document.querySelector("#signuppassword-re");
+passwordRe.onchange = (e) => {
+  if (e.target.value !== password.value) {
+    document
+      .querySelector("form > div:nth-of-type(10) p")
+      .classList.add("show");
+    document.querySelector("form > div:nth-of-type(10) input").style.border =
+      "1px solid var(--alert)";
+  } else {
+    document
+      .querySelector("form > div:nth-of-type(10) p")
+      .classList.remove("show");
+    document.querySelector("form > div:nth-of-type(10) input").style.border =
+      "1px solid var(--grey-2)";
+  }
+};
+
+// enable create account button
+document
+  .querySelector("#signupForm")
+  .querySelectorAll("[required]")
+  .forEach((el) => {
+    el.oninput = (e) => {
+      console.log(e);
+      // condition 1: all the required inputs are filled
+      const inputArray = Array.from(
+        document.querySelector("#signupForm").querySelectorAll("[required]")
+      );
+      const condition1 = inputArray.every((el) => el.value);
+
+      // condition 2: password validation and confirmation are ok
+      const condition2 = !document.querySelector(".show");
+
+      // condition 3: agree checkbox value is true
+      const condition3 = document.querySelector("#agree").checked;
+
+      btnSignup.disabled = !(condition1 & condition2 & condition3);
+    };
+  });
 
 btnSignup.onclick = (e) => {
   e.preventDefault();
@@ -183,7 +236,13 @@ btnSignup.onclick = (e) => {
                 .querySelector("#phoneVerificationForm")
                 .classList.add("show");
 
+              // enable submit code button
+              const code = document.querySelector("#code");
               const btnVerify = document.querySelector("#phoneVerification");
+              code.oninput = (e) => {
+                console.log(e);
+                btnVerify.disabled = !e.target.value;
+              };
 
               btnVerify.onclick = async (e) => {
                 e.preventDefault();
@@ -221,23 +280,22 @@ btnSignup.onclick = (e) => {
             })
             .catch((error) => {
               // SMS not sent.
-              console.log(error);
               window.recaptchaVerifier.render().then(function (widgetId) {
                 grecaptcha.reset(widgetId);
               });
+              alert(`Failed to send SMS. Please try again. ${error.message}`);
             });
 
           // window.location.href = "after-login.html";
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error);
+          alert(
+            `Failed to send a verification email. Please try again. ${error.message}`
+          );
         }
       })();
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-      console.log(errorCode);
-      console.log(errorMessage);
+      alert(`Failed to create an account. Please try again. ${error.message}`);
     });
 };

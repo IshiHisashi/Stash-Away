@@ -146,16 +146,15 @@
               </div>
 
               <div>
-                <input type="checkbox" name="agree" value="true" id="agree" />
-                <span class="checkmark"><img src="" /></span>
+                <input type="checkbox" name="agree" id="agree" required />
                 <label for="agree"
-                  >I understand and agree with the
-                  <a href="#">Terms of Service</a> and
+                  ><span class="checkmark"><img src="" /></span>I understand and
+                  agree with the <a href="#">Terms of Service</a> and
                   <a href="#">Privacy Policy</a>.</label
                 >
               </div>
 
-              <button id="signup">Create Account</button>
+              <button id="signup" disabled>Create Account</button>
 
               <p>OR</p>
               <div>
@@ -180,7 +179,7 @@
               >
               <input type="number" id="code" required />
 
-              <button id="phoneVerification">Submit Code</button>
+              <button id="phoneVerification" disabled>Submit Code</button>
               <button id="resend">Resend Code</button>
             </form>
           </div>
