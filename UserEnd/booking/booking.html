@@ -28,23 +28,26 @@
       <!-- Prathibha start : 1.Booking_addItem-->
       <section class="addItem" id="addItem">
         <div class="item-description-wrapper">
-        <h3><div class="num-title"><span>1</span></div> List Your Items.</h3>
-        <p>
-          Jumpstart your Stashaway storage by listing and photographing items
-          for easy identification during their stay.
-        </p>
-      </div>
+          <h3>
+            <div class="num-title"><span>1</span></div> List Your Items.
+          </h3>
+          <p>
+            Jumpstart your Stashaway storage by listing and photographing items
+            for easy identification during their stay.
+          </p>
+        </div>
+        <div>
         <div class="item-wrapper">
           <!-- <label>Write an item to store</label> -->
           <div class="input-icon-wrapper">
-            <input type="text" id="newItemName" placeholder="Enter Item Name"/>
-            <i class="fa-solid fa-camera" id="listup-pic"></i>
+            <input type="text" id="newItemName" placeholder="Enter Item Name" />
+            <img src="../icons/camera-01.png" id="listup-pic" alt="camera-icon">
+          </div>
+          <!-- <button type="submit" class="btn-delete">delete</button> -->
+          <div class="btn-add-div">
+            <a id="saveItem" class="btn-add" type="button">Add <span>+</span></a>
+          </div>
         </div>
-                   <!-- <button type="submit" class="btn-delete">delete</button> -->
-        <div class="btn-div">
-          <a id="saveItem" class="btn-add" type="button">Add+</a>
-        </div>
-      </div>
         <!-- MODAL -->
         <div id="easyModal" class="modal">
           <div class="modal-content">
@@ -100,7 +103,7 @@
             <span class="modalClose">×</span>
           </div>
         </div>
-       
+
         <!-- <button id="btnLoad" type="submit">
               <i class="fa-solid fa-rotate-right"></i> Load saved data
             </button> -->
@@ -110,170 +113,177 @@
           <ul id="item-list">
             <p>You item list...</p>
           </ul>
-          <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+          
+        </div>
+        <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+      </div>
+      </section>
+      <!-- Prathibha end -->
+
+      <!-- Ishi start : 2.Bokking_pickup-Info -->
+      <section class="pickup-info" id="pickup-info">
+        <div class="text-header">
+          <h3 class="section-title">
+            <div class="num-title"><span>2</span></div> Pick-Up Address
+          </h3>
+          <p class="section-desc">
+            Provide your address and enjoy hassle-free pick up of your items
+            from our team!
+          </p>
+        </div>
+        <div class="form-wrapper">
+          <div class="fname-div">
+            <label>First Name</label>
+            <input type="text" id="firstname" />
+          </div>
+          <div class="lname-div">
+            <label>Last Name</label>
+            <input type="text" id="lastname" />
+          </div>
+          <div class="unitnum-div">
+            <label>House No./ Building No. / Floor No.</label>
+            <input type="text" id="unitnumber" />
+          </div>
+          <div class="street-div">
+            <label>Street</label>
+            <input type="text" id="street" />
+          </div>
+          <div class="city-div">
+            <label>City</label>
+            <input type="text" id="city" />
+          </div>
+          <div class="province-div">
+            <label>Province</label>
+            <input type="text" id="province" />
+          </div>
+          <div class="zipcode-div">
+            <label>Zip Code</label>
+            <input type="text" id="zipcode" />
+          </div>
+          <div class="pickupDate-div">
+            <label>Date of Pick-Up</label>
+            <input type="text" id="pickup-date" />
+            <!-- Calendar trial -->
+            <div id="calendar-wrapper">
+              <div id="calendar-header">
+                <button id="prev" type="button">
+                  < <button id="next" type="button">>
+                </button>
+              </div>
+              <div id="calendar"></div>
+            </div>
+          </div>
+          <div class="PickupTime-div">
+            <label>Time of Pick-Up</label>
+            <select name="" id="pickup-time"></select>
+          </div>
+          <div class="storageLocation-div">
+            <label>Choose Storage Location</label>
+            <select name="" id="storage-location">
+              <option value="North-Vancouver">North-Vancouver</option>
+              <option value="Richmond">Richmond</option>
+              <option value="Surrey">Surrey</option>
+              <option value="Abbotsford">Abbotsford</option>
+              <option value="Coquitlam">Coquitlam</option>
+            </select>
+          </div>
+          <!-- btn -->
+          <div class="btn-div">
+            <a class="btn-back" href="#addItem">Back</a>
+            <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3.Booking_Storage size selection -->
+      <section class="storage-size" id="storage-size">
+        <h3 class="section-title">
+          <div class="num-title"><span>3</span></div> Storage Size
+        </h3>
+        <p class="section-desc">
+          Maximize efficiency and security by choosing the perfect storage box
+          size for your items.
+        </p>
+        <div class="box-size-container">
+          <div class="size-box small-size">
+            <h3 class="size-title">SMALL CLOSET SIZE</h3>
+            <p class="size">5’ x 5’</p>
+            <p class="mo"><span id="small-price" class="price-num"></span>/ mo</p>
+            <button class="btn-select" id="btn-small">Select</button>
+          </div>
+          <div class="size-box medium-size">
+            <h3 class="size-title">ONE BEDROOM APARTMENT SIZE</h3>
+            <p class="size">5’ x 10’</p>
+            <p class="mo"><span id="medium-price" class="price-num"></span>/ mo</p>
+
+            <button class="btn-select" id="btn-medium">Select</button>
+          </div>
+          <div class="size-box large-size">
+            <h3 class="size-title">GARAGE SIZE</h3>
+            <p class="size">10’ x 10’</p>
+            <p class="mo"><span id="large-price" class="price-num"></span>/ mo</p>
+
+            <button class="btn-select" id="btn-large">Select</button>
+          </div>
+
+          <!-- btn -->
+          <div class="btn-div">
+            <a class="btn-back" href="#pickup-info">Back</a>
+            <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
+          </div class='term-container'>
 
         </div>
       </section>
-        <!-- Prathibha end -->
 
-        <!-- Ishi start : 2.Bokking_pickup-Info -->
-        <section class="pickup-info" id="pickup-info">
-          <div class="text-header">
-            <h3 class="section-title"><div class="num-title"><span>2</span></div> Pick-Up Address</h3>
-            <p class="section-desc">
-              Provide your address and enjoy hassle-free pick up of your items
-              from our team!
-            </p>
-          </div>
-          <div class="form-wrapper">
-            <div class="fname-div">
-              <label>First Name</label>
-              <input type="text" id="firstname" />
-            </div>
-            <div class="lname-div">
-              <label>Last Name</label>
-              <input type="text" id="lastname" />
-            </div>
-            <div class="unitnum-div">
-              <label>House No./ Building No. / Floor No.</label>
-              <input type="text" id="unitnumber" />
-            </div>
-            <div class="street-div">
-              <label>Street</label>
-              <input type="text" id="street" />
-            </div>
-            <div class="city-div">
-              <label>City</label>
-              <input type="text" id="city" />
-            </div>
-            <div class="province-div">
-              <label>Province</label>
-              <input type="text" id="province" />
-            </div>
-            <div class="zipcode-div">
-              <label>Zip Code</label>
-              <input type="text" id="zipcode" />
-            </div>
-            <div class="pickupDate-div">
-              <label>Date of Pick-Up</label>
-              <input type="text" id="pickup-date" />
-              <!-- Calendar trial -->
-              <div id="calendar-wrapper">
-                <div id="calendar-header">
-                  <button id="prev" type="button">
-                    < <button id="next" type="button">>
-                  </button>
-                </div>
-                <div id="calendar"></div>
-              </div>
-            </div>
-            <div class="PickupTime-div">
-              <label>Time of Pick-Up</label>
-              <select name="" id="pickup-time"></select>
-            </div>
-            <div class="storageLocation-div">
-              <label>Choose Storage Location</label>
-              <select name="" id="storage-location">
-                <option value="North-Vancouver">North-Vancouver</option>
-                <option value="Richmond">Richmond</option>
-                <option value="Surrey">Surrey</option>
-                <option value="Abbotsford">Abbotsford</option>
-                <option value="Coquitlam">Coquitlam</option>
-              </select>
-            </div>
-            <!-- btn -->
-            <div class="btn-div">
-              <a class="btn-back" href="#addItem">Back</a>
-              <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
+      <!-- 4.Booking_Plan selection -->
+      <section class="select-plan" id="select-plan">
+        <h3 class="section-title">
+          <div class="num-title"><span>4</span></div> Select Your Plan
+        </h3>
+        <p class="section-desc">
+          Maximize efficiency and security by choosing the perfect storage box
+          size for your items.
+        </p>
+        <div class="term-container">
+          <div class="term-box short">
+            <h3 class="plan-title">Single Month plan</h3>
+            <div class="term-inner-container">
+              <p class="trip">+<span id="trip-short"></span> free Delivery</p>
+              <p class="period">Storage period - <span id="month-short"></span>month</p>
+              <p class="term-price"> <span id="price-short"></span>/ month</p>
+              <button class="btn-select" id="btn-short">Select</button>
             </div>
           </div>
-        </section>
-
-        <!-- 3.Booking_Storage size selection -->
-        <section class="storage-size" id="storage-size">
-          <h3 class="section-title"><div class="num-title"><span>3</span></div> Storage Size</h3>
-          <p class="section-desc">
-            Maximize efficiency and security by choosing the perfect storage box
-            size for your items.
-          </p>
-          <div class="box-size-container">
-            <div class="size-box small-size">
-              <h3 class="size-title">SMALL CLOSET SIZE</h3>
-              <p class="size">5’ x 5’</p>
-              <p class="mo"><span id="small-price" class="price-num"></span>/ mo</p>
-              <button class="btn-select" id="btn-small">Select</button>
+          <div class="term-box mid">
+            <h3 class="plan-title">4 Months plan</h3>
+            <div class="term-inner-container">
+              <p class="trip">+<span id="trip-mid"></span> free Deliveries</p>
+              <p class="period">Storage period - <span id="month-mid"></span>month</p>
+              <p class="term-price"> <span id="price-mid"></span>/ month</p>
+              <button class="btn-select" id="btn-mid">Select</button>
             </div>
-            <div class="size-box medium-size">
-              <h3 class="size-title">ONE BEDROOM APARTMENT SIZE</h3>
-              <p class="size">5’ x 10’</p>
-              <p class="mo"><span id="medium-price" class="price-num"></span>/ mo</p>
-              
-              <button class="btn-select" id="btn-medium">Select</button>
-            </div>
-            <div class="size-box large-size">
-              <h3 class="size-title">GARAGE SIZE</h3>
-              <p class="size">10’ x 10’</p>
-              <p class="mo"><span id="large-price" class="price-num"></span>/ mo</p>
-              
-              <button class="btn-select" id="btn-large">Select</button>
-            </div>
-
-            <!-- btn -->
-            <div class="btn-div">
-              <a class="btn-back" href="#pickup-info">Back</a>
-              <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
-            </div class='term-container'>
-
           </div>
-        </section>
-
-        <!-- 4.Booking_Plan selection -->
-        <section class="select-plan" id="select-plan">
-          <h3 class="section-title"><div class="num-title"><span>4</span></div> Select Your Plan</h3>
-          <p class="section-desc">
-            Maximize efficiency and security by choosing the perfect storage box
-            size for your items.
-          </p>
-          <div class="term-container">
-            <div class="term-box short">
-              <h3 class="plan-title">Single Month plan</h3>
-              <div class="term-inner-container">
-                <p class="trip">+<span id="trip-short"></span> free Delivery</p>
-                <p class="period">Storage period - <span id="month-short"></span>month</p>
-                <p class="term-price"> <span id="price-short"></span>/ month</p>
-                <button class="btn-select" id="btn-short">Select</button>
-              </div>
+          <div class="term-box long">
+            <h3 class="plan-title">Yearly plan</h3>
+            <div class="term-inner-container">
+              <p class="trip">+<span id="trip-long"></span> free Deliveries</p>
+              <p class="period">Storage period - <span id="month-long"></span>month</p>
+              <p class="term-price"> <span id="price-long"></span>/ month</p>
+              <button class="btn-select" id="btn-long">Select</button>
             </div>
-            <div class="term-box mid">
-              <h3 class="plan-title">4 Months plan</h3>
-              <div class="term-inner-container">
-                <p class="trip">+<span id="trip-mid"></span> free Deliveries</p>
-                <p class="period">Storage period - <span id="month-mid"></span>month</p>
-                <p class="term-price"> <span id="price-mid"></span>/ month</p>
-                <button class="btn-select" id="btn-mid">Select</button>
-              </div>
-            </div>
-            <div class="term-box long">
-              <h3 class="plan-title">Yearly plan</h3>
-              <div class="term-inner-container">
-                <p class="trip">+<span id="trip-long"></span> free Deliveries</p>
-                <p class="period">Storage period - <span id="month-long"></span>month</p>
-                <p class="term-price"> <span id="price-long"></span>/ month</p>
-                <button class="btn-select" id="btn-long">Select</button>
-              </div>
-            </div>
-            <!-- btn -->
-            <div class="btn-div">
-              <a class="btn-back" href="#storage-size"><span>Back</span></a>
-              <a class="btn-save" id="btn-save-plan" href="../payment/index.html">Proceed to Payment</a>
-            </div class='term-container'>
-
           </div>
-          </div>
-        </section>
+          <!-- btn -->
+          <div class="btn-div">
+            <a class="btn-back" href="#storage-size"><span>Back</span></a>
+            <a class="btn-save" id="btn-save-plan" href="../payment/index.html">Proceed to Payment</a>
+          </div class='term-container'>
 
-        <!-- USED only in data registration -->
-        <!-- <div><button id="x">Set</button></div> -->
+        </div>
+        </div>
+      </section>
+
+      <!-- USED only in data registration -->
+      <!-- <div><button id="x">Set</button></div> -->
     </form>
     <div id="loading-screen">
       <div id="loading">

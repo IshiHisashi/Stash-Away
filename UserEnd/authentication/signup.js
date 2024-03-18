@@ -14,6 +14,21 @@ import {
   db,
 } from "./firebase_firestore.js";
 
+// checkbox behaviour
+const checkboxStyled = document.querySelector(
+  "form > div:nth-of-type(11) span"
+);
+const checkboxActual = document.querySelector(
+  "form > div:nth-of-type(11) input"
+);
+const checkboxContainer = document.querySelector("form > div:nth-of-type(11)");
+checkboxContainer.onclick = (e) => {
+  checkboxActual.checked = !checkboxActual.checked;
+  checkboxStyled.querySelector("img").src = checkboxActual.checked
+    ? "icons/check_red.svg"
+    : "";
+};
+
 // reset forms on load ////////////////////////////////////////////
 // not working... FIX LATER
 window.onload = () => {
@@ -24,12 +39,11 @@ window.onload = () => {
 
 //
 // check current log in status /////////////////////////////////
-const loginStatusSpan = document.querySelector(".loginStatus");
 const uid = await common.getCurrentUid();
 if (uid) {
-  loginStatusSpan.textContent = `Logged in (user ID: ${uid})`;
+  console.log(`Logged in (user ID: ${uid})`);
 } else {
-  loginStatusSpan.textContent = `Logged out`;
+  console.log(`Logged out`);
 }
 
 //
@@ -47,12 +61,12 @@ if (navigator.geolocation) {
       const currentLoc = [];
       currentLoc.push(currentLgt);
       currentLoc.push(currentLat);
-      console.log(currentLoc);
+      // console.log(currentLoc);
 
       async function getAddress(url) {
         let response = await fetch(url);
         let data = await response.json();
-        console.log(data);
+        // console.log(data);
         if (data.addresses[0].address.streetNameAndNumber) {
           document.getElementById("signupaddressdetail").value =
             data.addresses[0].address.streetNameAndNumber;
@@ -80,21 +94,6 @@ if (navigator.geolocation) {
       let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`;
 
       getAddress(addressUrl);
-
-      // const map = tt.map({
-      //   key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-      //   container: "map",
-      //   center: currentLoc,
-      //   zoom: 9,
-      // });
-
-      // map.on("load", () => {
-      //   var curLocEl = document.createElement("div");
-      //   curLocEl.id = "current-location-marker";
-      //   var currentLocation = new tt.Marker({ element: curLocEl })
-      //     .setLngLat(currentLoc)
-      //     .addTo(map);
-      // });
     },
     (error) => {
       console.log(error);
@@ -107,7 +106,62 @@ if (navigator.geolocation) {
   console.log("Geolocation is not supported by this browser.");
 }
 
-// FIX LATER - password validation has to be implemented here (onchange).
+// password validation: must be more than six character
+const password = document.querySelector("#signuppassword");
+password.onchange = (e) => {
+  if (e.target.value.length < 6) {
+    document.querySelector("form > div:nth-of-type(9) p").classList.add("show");
+    document.querySelector("form > div:nth-of-type(9) input").style.border =
+      "1px solid var(--alert)";
+  } else {
+    document
+      .querySelector("form > div:nth-of-type(9) p")
+      .classList.remove("show");
+    document.querySelector("form > div:nth-of-type(9) input").style.border =
+      "1px solid var(--grey-2)";
+  }
+};
+
+// password confirmation
+const passwordRe = document.querySelector("#signuppassword-re");
+passwordRe.onchange = (e) => {
+  if (e.target.value !== password.value) {
+    document
+      .querySelector("form > div:nth-of-type(10) p")
+      .classList.add("show");
+    document.querySelector("form > div:nth-of-type(10) input").style.border =
+      "1px solid var(--alert)";
+  } else {
+    document
+      .querySelector("form > div:nth-of-type(10) p")
+      .classList.remove("show");
+    document.querySelector("form > div:nth-of-type(10) input").style.border =
+      "1px solid var(--grey-2)";
+  }
+};
+
+// enable create account button
+document
+  .querySelector("#signupForm")
+  .querySelectorAll("[required]")
+  .forEach((el) => {
+    el.oninput = (e) => {
+      console.log(e);
+      // condition 1: all the required inputs are filled
+      const inputArray = Array.from(
+        document.querySelector("#signupForm").querySelectorAll("[required]")
+      );
+      const condition1 = inputArray.every((el) => el.value);
+
+      // condition 2: password validation and confirmation are ok
+      const condition2 = !document.querySelector(".show");
+
+      // condition 3: agree checkbox value is true
+      const condition3 = document.querySelector("#agree").checked;
+
+      btnSignup.disabled = !(condition1 & condition2 & condition3);
+    };
+  });
 
 btnSignup.onclick = (e) => {
   e.preventDefault();
@@ -178,13 +232,17 @@ btnSignup.onclick = (e) => {
               window.confirmationResult = confirmationResult;
 
               document.querySelector("#signupForm").style.display = "none";
-              // document.querySelector(".map-container").style.display = "none";
-              document.querySelector("#loginForm").style.display = "none";
               document
                 .querySelector("#phoneVerificationForm")
                 .classList.add("show");
 
+              // enable submit code button
+              const code = document.querySelector("#code");
               const btnVerify = document.querySelector("#phoneVerification");
+              code.oninput = (e) => {
+                console.log(e);
+                btnVerify.disabled = !e.target.value;
+              };
 
               btnVerify.onclick = async (e) => {
                 e.preventDefault();
@@ -215,62 +273,29 @@ btnSignup.onclick = (e) => {
                   firstVisit: true,
                 });
 
-                window.location.href = "after-login.html";
+                window.location.href = "../home-page-map/index.html";
 
                 return confirmation;
               };
             })
             .catch((error) => {
               // SMS not sent.
-              console.log(error);
               window.recaptchaVerifier.render().then(function (widgetId) {
                 grecaptcha.reset(widgetId);
               });
+              alert(`Failed to send SMS. Please try again. ${error.message}`);
             });
 
           // window.location.href = "after-login.html";
-        } catch (err) {
-          console.log(err);
+        } catch (error) {
+          console.log(error);
+          alert(
+            `Failed to send a verification email. Please try again. ${error.message}`
+          );
         }
       })();
     })
     .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-      console.log(errorCode);
-      console.log(errorMessage);
-    });
-};
-
-//
-// Log-in users ////////////////////////////////////////////////
-
-const btnLogin = document.querySelector("#login");
-
-btnLogin.onclick = (e) => {
-  e.preventDefault();
-  const inputEmail = document.querySelector("#loginemail");
-  const inputPassword = document.querySelector("#loginpassword");
-
-  const email = inputEmail.value;
-  const password = inputPassword.value;
-
-  // log in the user with Firebase auth
-  common
-    .signInWithEmailAndPassword(common.auth, email, password)
-    .then((userCredential) => {
-      console.log(userCredential);
-      const user = userCredential.user;
-
-      // window.open("after-login.html", "_self");
-      window.location.href = "after-login.html";
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(error);
-      console.log(errorCode);
-      console.log(errorMessage);
+      alert(`Failed to create an account. Please try again. ${error.message}`);
     });
 };

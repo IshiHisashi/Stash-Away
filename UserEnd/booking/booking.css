@@ -66,6 +66,33 @@ main {
 
   /* for modal */
   .addItem {
+    margin-top: 10px;
+    @media screen and (min-width: 900px) {
+      /* general border & spacing */
+      border: 1px solid black;
+      border-radius: 23px;
+      padding: 50px;
+
+      /* grid */
+      display: grid;
+      grid-template-columns: 0.5fr 1fr;
+    }
+
+    .item-description-wrapper p {
+      @media screen and (min-width: 900px) {
+        max-width: 190px;
+      }
+    }
+    .item-description-wrapper h3{
+      @media screen and (min-width: 900px) {
+        display: block;
+        font-size: var(--h3-size);
+        font-weight: var(--h3-weight);
+      }
+    }
+
+    
+
     .modal {
       display: none;
       position: fixed;
@@ -172,52 +199,113 @@ main {
       margin-bottom: 0.75rem;
     }
 
-    input {
-      display: block;
-      background-color: var(--color-input);
-      width: 90%;
-      height: 25px;
-      padding: 0.5rem;
-      border: none;
-      border-radius: 5px;
-    }
-
     .item-wrapper {
-      display: flex;
-      gap: 2rem;
+      display: grid;
+      grid-template-columns: 1fr 100px;
+      gap: 1rem;
+      align-items: center;
+      text-align: center;
 
-      .btn-add {
+      input {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        height: 48px;
+        padding: 0.5rem;
+        /* margin-top: 5px; */
+        border: 0.5px solid black;
+        border-radius: 7px;
+        color: var(--grey-2);
+        font-family: var(--body-family);
+        font-size: var(--body-size);
+        font-weight: var(--body-weight);
+      }
+
+      .btn-add-div {
+        display: flex;
+        justify-content: center;
         border: 1px solid black;
+        border-radius: 7px;
         background-color: white;
         color: var(--color-primary);
+        font-family: var(--body-family);
+        font-size: var(--body-size);
+        font-weight: var(--body-weight);
         padding: 0.5rem;
+        height: 48px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+
+      .btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
       }
     }
 
     .item-list-wrapper {
-      overflow: hidden;
-
-      .btn-proceed {
-        border: none;
-        background-color: var(--color-primary);
-        color: white;
-        float: right;
-        width: 50%;
-      }
-
-      a {
-        border-radius: 10px;
-        font-size: 1.2rem;
-        font-weight: 800;
-        padding: 1rem;
-        cursor: pointer;
-        text-align: center;
-        text-decoration: none;
-      }
+      overflow: hidden;      
 
       li.item-list-li {
+        list-style-type: none; /* Removes bullet points from li */
         margin-bottom: 20px;
+      }
+
+      .item-card {
+        display: flex;
+        justify-content: space-between; /* Distributes space between the image/name and icons */
+        align-items: center; /* Vertically centers all items within the .item-card */
+        border: 2px solid #DFDFDF; /* Adjust the border color and size as needed */
+        border-radius: 7px;
+        padding: 10px; /* Adjust the padding as needed */
+        gap: 10px; /* If you want a gap between the image/name and icons */
+      }
+
+      .placeholder-pic {
+        border-radius: 10%; /* Gives the image a round shape */
+        width: 64px; /* Size of the image */
+        height: 56px; /* Size of the image */
+        object-fit: cover;
+      }
+      .editable-item-name {
+        flex-grow: 2; /* Allows the text field to grow and take up available space */
+        padding: 0.5rem;
+      }
+
+      .item-name-container {
+        display: flex;
+        justify-content: flex-end; /* Aligns the children (icons) to the right */
+        align-items: center; /* Centers the icons vertically */
+        gap: 10px;
+      }
+
+      .icon1 {
+        cursor: pointer; 
+        margin-left: 10px; 
+      }
+      .icon2 {
+        cursor: pointer; 
+        margin-left: 10px; 
+      }
+      .icon3 {
+        cursor: pointer; 
+        margin-left: 10px; 
+      }
+
+      .item-set1 {
+        display: flex;
         align-items: center;
+        margin: 0;
+      }
+
+      .save.hidden {
+        display: none;
+      }
+
+      /* When the save icon is not hidden, it should appear inline with other icons */
+      .save:not(.hidden) {
+        display: inline-block; /* Or 'block' if you want it to take up the full space */
       }
     }
 
@@ -229,9 +317,9 @@ main {
         padding-right: 30px;
       }
 
-      .fa-camera {
+      #listup-pic {
         position: absolute;
-        right: 0;
+        right: 20px;
         top: 50%;
         transform: translateY(-50%);
         cursor: pointer;
@@ -244,6 +332,29 @@ main {
 
     .margin {
       margin-right: 10px !important;
+    }
+
+    .btn-proceed {
+      border: none;
+      background-color: var(--color-primary);
+      color: white;
+      width: auto;
+      display: block;
+
+      @media screen and (min-width: 900px) {
+        display: unset;
+        float: right;    
+      }
+    }
+
+    a {
+      border-radius: 10px;
+      font-size: 1.2rem;
+      font-weight: 800;
+      padding: 1rem;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
     }
   }
 

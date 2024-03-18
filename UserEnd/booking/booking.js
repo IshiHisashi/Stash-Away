@@ -99,15 +99,19 @@ const renderListFor = function (doc) {
 
       itemList.insertAdjacentHTML(
         "beforeend",
-        `<li class='item-list-li' style="display: flex; gap: 1rem;">
-            <img src='${itemImageSrc}' class='placeholder-pic' style="margin-right:100px;  width: 10%;" alt='Item Image'>
-            <div style="display: grid; grid-template-columns: 1fr 10% 10% 10%; grid-gap: 5px; width:30%;">
-              <div contenteditable='true' class='editable-item-name' style="width: 100%; margin-right:10px;" id='nameitem_${itemID}'>${item.itemName}</div>
-              <i class="fa-solid fa-check icon save hidden margin" id="saveitem_${itemID}"></i>
-              <i class="fa-solid fa-camera icon pic margin" id="picitem_${itemID}"></i>
-              <i class="fa-solid fa-trash icon delete margin" id="deleteitem_${itemID}"></i>
-            </div>
-          </li>`
+        `<li class='item-list-li'>
+        <div class="item-card">
+          <div class="item-set1">
+            <img src='${itemImageSrc}' class='placeholder-pic' alt='Item Image'>
+            <div contenteditable='true' class='editable-item-name' id='nameitem_${itemID}'>${item.itemName}</div>
+          </div>
+          <div class="item-name-container">
+            <i class="fa-solid fa-check icon1 save hidden margin" id="saveitem_${itemID}"></i>
+            <img class="icon2 pic" src="../icons/camera-02.png" id="picitem_${itemID}">
+            <img class="icon3 delete" src="../icons/delete.png" id="deleteitem_${itemID}">
+          </div>
+        </div>
+      </li>`
       );
 
       const editableNameElement = document.getElementById(`nameitem_${itemID}`);

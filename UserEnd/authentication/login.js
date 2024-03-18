@@ -32,7 +32,6 @@ window.onload = () => {
 
 //
 // check current log in status /////////////////////////////////
-const loginStatusSpan = document.querySelector(".loginStatus");
 const uid = await common.getCurrentUid();
 if (uid) {
   console.log(`Logged in (user ID: ${uid})`);
@@ -44,6 +43,22 @@ if (uid) {
 // Log-in users ////////////////////////////////////////////////
 
 const btnLogin = document.querySelector("#login");
+
+// enable log in button
+const enableLoginButton = () => {
+  // condition: all the required inputs are filled
+  const inputArray = Array.from(document.querySelectorAll("input[required]"));
+  const condition = inputArray.every((el) => el.value);
+  btnLogin.disabled = !condition;
+};
+
+enableLoginButton();
+
+document.querySelectorAll("input[required]").forEach((el) => {
+  el.oninput = (e) => {
+    enableLoginButton();
+  };
+});
 
 btnLogin.onclick = (e) => {
   e.preventDefault();
@@ -59,7 +74,7 @@ btnLogin.onclick = (e) => {
     .then((userCredential) => {
       console.log(userCredential);
       const user = userCredential.user;
-      debugger
+      debugger;
       // window.location.href = pageToReturn;
       onLoginSuccess();
       // window.open("after-login.html", "_self");
@@ -72,17 +87,17 @@ btnLogin.onclick = (e) => {
 };
 
 function getReturnUrl() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('returnUrl');
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get("returnUrl");
 }
 
 // Simulate the login success logic
 function onLoginSuccess() {
-  debugger
-    const returnUrl = getReturnUrl();
-    if (returnUrl) {
-        window.location.href = decodeURIComponent(returnUrl);
-    } else {
-      window.location.href = "../homepage/main.html";
-    }
+  debugger;
+  const returnUrl = getReturnUrl();
+  if (returnUrl) {
+    window.location.href = decodeURIComponent(returnUrl);
+  } else {
+    window.location.href = "../homepage/main.html";
+  }
 }

@@ -85,7 +85,15 @@ form > div > input {
   font-size: var(--body-size);
   font-weight: var(--body-weight);
   line-height: var(--body-line-height);
+  color: var(--grey-3);
+}
+
+form > div > input::placeholder {
   color: var(--grey-2);
+}
+
+form > div > input:focus-visible {
+  outline: 1.5px solid var(--grey-2);
 }
 
 form > div:last-of-type {
@@ -170,6 +178,11 @@ form button:hover {
 }
 form button:active {
   background-color: var(--light-pink);
+}
+
+form button:disabled {
+  background-color: var(--grey-1);
+  cursor: unset;
 }
 
 form > p {
