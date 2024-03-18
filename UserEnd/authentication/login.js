@@ -32,7 +32,6 @@ window.onload = () => {
 
 //
 // check current log in status /////////////////////////////////
-const loginStatusSpan = document.querySelector(".loginStatus");
 const uid = await common.getCurrentUid();
 if (uid) {
   console.log(`Logged in (user ID: ${uid})`);
