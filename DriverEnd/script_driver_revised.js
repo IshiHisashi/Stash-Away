@@ -373,7 +373,11 @@ const executeAfterRender = function () {
     `.orders.${sessionStorage.getItem("currentPage")}`
   ).scrollHeight;
   console.log(footerBegin);
-  document.querySelector("footer").style.top = `${footerBegin + 80}px`;
+  document.querySelector("footer").style.top = `${footerBegin + 60}px`;
+};
+
+window.onresize = () => {
+  executeAfterRender();
 };
 
 // TAB BEHAVIOUR
