@@ -343,3 +343,284 @@ section {
 .item-list-section .retrieved .item-name {
   color: var(--grey-2);
 }
+
+/* HEADER */
+header {
+}
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+}
+
+.logo {
+  padding: 10px;
+}
+
+.hamburger-menu {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  cursor: pointer;
+}
+
+.hamburger-menu div {
+  width: 25px;
+  height: 3px;
+  background-color: black;
+  margin: 5px 0;
+}
+
+.main-menu ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.main-menu ul li {
+  padding: 8px;
+  margin: 5px 0;
+}
+
+.main-menu ul li a {
+  text-decoration: none;
+  color: white;
+  text-transform: uppercase;
+}
+
+.hamburger-menu {
+  display: block;
+}
+
+.main-menu {
+  background-color: #103646;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+  z-index: 999;
+}
+
+.main-menu.active {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.sub-menu {
+  font-size: 14px;
+}
+
+.sub {
+  text-transform: capitalize !important;
+}
+
+#btnBookNow {
+  color: white;
+  background-color: #e04462;
+  border-style: none;
+  padding: 8px;
+  cursor: pointer;
+  margin: 5px;
+}
+
+#ma-img1,
+#ma-img2 {
+  display: none !important;
+}
+
+#btnMyAccount,
+#btnLogin {
+  display: none; /* Hide buttons by default */
+}
+
+#btnLogin {
+  color: rgb(0, 0, 0);
+  background-color: #ffffff;
+  border-style: none;
+  padding: 8px;
+  cursor: pointer;
+  margin: 5px; /* Hide buttons by default */
+}
+
+.button-set {
+  display: grid;
+  justify-content: end;
+}
+
+/* Media query for desktop devices */
+@media (min-width: 600px) {
+  .hamburger-menu {
+    display: none;
+  }
+
+  .main-menu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    align-items: center;
+    background-color: transparent;
+    visibility: visible;
+    transition: none;
+    position: relative;
+    opacity: 1;
+    width: 100%;
+    box-sizing: border-box;
+    top: 20px;
+  }
+
+  .main-menu ul {
+    display: flex;
+    align-items: center;
+  }
+
+  .main-menu ul li a {
+    color: black;
+    text-transform: capitalize;
+  }
+
+  .main-menu ul li:last-child {
+    margin-right: 0;
+  }
+
+  .book-now {
+    padding: 10px 20px;
+    background-color: #e04462;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .sub-menu {
+    visibility: hidden;
+    position: absolute;
+    background-color: white;
+    color: white;
+  }
+
+  #btnMyAccount {
+    color: #e04462 !important;
+  }
+
+  .main-menu ul li:focus-within .sub-menu {
+    visibility: unset;
+    display: block;
+  }
+
+  .sub-menu {
+    transform: translateY(10px);
+    transform: translateX(10px);
+  }
+
+  #ma-img1,
+  #ma-img2 {
+    display: inline-block !important;
+    color: #e04462;
+    padding: 5px;
+  }
+
+  .btn {
+    font-family: "Nunito Sans";
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #000000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  #btnLogin {
+    border: solid 2px;
+    background-color: #ffffff;
+    border-color: #000000;
+    color: #e04462;
+    margin: 10px;
+  }
+
+  #btnBookNow {
+    color: #ffffff;
+    background-color: #e04462;
+    padding: 14px 20px;
+    margin: 10px;
+  }
+
+  .button-set {
+    display: flex;
+  }
+}
+
+/* Footer */
+footer {
+  background-color: #103646;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+footer .footer-link ul {
+  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+footer .social-media ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+footer .site-logo {
+  padding: 1rem;
+  display: flex;
+  justify-content: center;
+}
+footer .footer-link ul li a {
+  text-decoration: none;
+  color: white;
+}
+footer p {
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin: 0;
+}
+/* Media query for desktop devices */
+@media (min-width: 600px) {
+  .footer-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+  }
+
+  footer .footer-link ul {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+
+  footer p {
+    padding-bottom: 1rem;
+  }
+}
