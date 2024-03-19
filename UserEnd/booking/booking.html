@@ -22,6 +22,51 @@
   <!-- HEADER -->
   <header></header>
 
+<!-- Progress bar -->
+<section class="progress-section">
+  <div class="progress-mobile">
+    <div class="progress-texts">
+      <h2 id="list-items-m">List items</h2>
+      <h2 id="pick-up-address-m" class="hide">Pick-Up Address</h2>
+      <h2 id="storage-size-m" class="hide">Storage Size</h2>
+      <h2 id="select-plan-m" class="hide">Select Plan</h2>
+    </div>
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
+  </div>
+
+  <div class="progress-large">
+    <div class="progress">
+      <div class="progress-bar"></div>
+    </div>
+    <div class="progress-texts">
+      <div class="list-your-item"><div class="icon-wrapper hide"><span class="check">&check;</span></div>
+        <span class="circle-now"></span>
+        <h2 id="list-items-l">List items</h2>
+      </div>
+      <div class="pick-up-address">
+        <div class="icon-wrapper hide"><span class="check">&check;</span></div>
+        <span class="circle-yet"></span>
+        <h2 id="pick-up-address-l">Pick-Up Address</h2>
+      </div>
+      <div class="storage-size">
+        <div class="icon-wrapper hide"><span class="check">&check;</span></div>
+        <span class="circle-yet"></span>
+        <h2 id="storage-size-l">Storage Size</h2>
+      </div>
+      <div class="select-plan">
+        <span class="circle-yet"></span>
+        <h2 id="select-plan-l">Select Plan</h2>
+      </div>
+      <div class="payment">
+        <span class="circle-yet"></span>
+        <h2 id="payment-l" class="text-yet">Payment</h2>
+      </div>
+    </div>
+  </div>
+</section>
+
   <!-- Main -->
   <main>
     <form id="form_list">
@@ -189,7 +234,8 @@
           </div>
           <!-- btn -->
           <div class="btn-div">
-            <a class="btn-back" href="#addItem">Back</a>
+            <a class="btn-back" 
+            id="btn-back-pikup" href="#addItem">Back</a>
             <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
           </div>
         </div>
@@ -228,7 +274,8 @@
 
           <!-- btn -->
           <div class="btn-div">
-            <a class="btn-back" href="#pickup-info">Back</a>
+            <a class="btn-back" 
+            id="btn-back-size" href="#pickup-info">Back</a>
             <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
           </div class='term-container'>
 
@@ -274,7 +321,7 @@
           </div>
           <!-- btn -->
           <div class="btn-div">
-            <a class="btn-back" href="#storage-size"><span>Back</span></a>
+            <a class="btn-back" id="btn-back-plan" href="#storage-size"><span>Back</span></a>
             <a class="btn-save" id="btn-save-plan" href="../payment/index.html">Proceed to Payment</a>
           </div class='term-container'>
 

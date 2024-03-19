@@ -24,6 +24,14 @@ const snapShot = await common.getDocs(queryStorage);
 
 // define variable / fnc ------------
 // var_DoM
+// For Progress bar
+const listItemsM = document.getElementById("list-items-m");
+const pickUpAddressM = document.getElementById("pick-up-address-m");
+const storageSizeM = document.getElementById("storage-size-m");
+const selectPlanM = document.getElementById("select-plan-m");
+const progressBarM = document.querySelector(".progress-mobile .progress-bar");
+const progressBarL = document.querySelector(".progress-large .progress-bar");
+
 // For 1. Booking_additem
 const item = document.getElementById("item");
 const newItemName = document.getElementById("newItemName");
@@ -31,6 +39,7 @@ const displayItemName = document.getElementById("displayItemName");
 const displayItemNameElement = document.getElementById("displayItemName");
 const btnSave = document.getElementById("btnSave");
 const itemList = document.getElementById("item-list");
+const btnProceed = document.getElementById("btn-proceed");
 // For 2. Booking_pick-up
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
@@ -42,6 +51,7 @@ const zipCode = document.getElementById("zipcode");
 const pickupDate = document.getElementById("pickup-date");
 const pickupTime = document.getElementById("pickup-time");
 const storageLocation = document.getElementById("storage-location");
+const btnBackPickup = document.getElementById("btn-back-pikup");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
 // For 3. Booking_Size selection
@@ -51,6 +61,8 @@ const largePrice = document.getElementById("large-price");
 const btnSelectSmall = document.getElementById("btn-small");
 const btnSelectMedium = document.getElementById("btn-medium");
 const btnSelectLarge = document.getElementById("btn-large");
+const btnSaveSize = document.getElementById("btn-save-size");
+const btnBackSize = document.getElementById("btn-back-size");
 
 // For 4. Booking_TermPlan selection
 // to be placed here later
@@ -66,6 +78,8 @@ const priceLong = document.getElementById("price-long");
 const btnShort = document.getElementById("btn-short");
 const btnMid = document.getElementById("btn-mid");
 const btnLong = document.getElementById("btn-long");
+const btnSavePlan = document.getElementById("btn-save-plan");
+const btnBackPlan = document.getElementById("btn-back-plan");
 
 //using camera
 const cameraIcon = document.getElementById("cameraIcon");
@@ -409,6 +423,21 @@ async function saveItem() {
 const itemsContainer = document.getElementById("itemsContainer");
 // Prathibha_end
 
+// Press proceed
+btnProceed.addEventListener("click", () => {
+  // update progress bar for Mobile
+  listItemsM.classList.add("hide");
+  pickUpAddressM.classList.remove("hide");
+  progressBarM.style.width = "36%";
+  // update progress bad for Large
+  document.querySelector(".list-your-item >span").classList.add("hide");
+  document.querySelector(".list-your-item>div").classList.remove("hide");
+  document
+    .querySelector(".pick-up-address>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "32%";
+});
+
 //-----------------------------------------
 // Ishi start
 // 2. Booking_Pickup
@@ -549,6 +578,19 @@ times.forEach((el) => {
 });
 
 // Event : Back
+btnBackPickup.addEventListener("click", async () => {
+  // update progress bar for Mobile
+  listItemsM.classList.remove("hide");
+  pickUpAddressM.classList.add("hide");
+  progressBarM.style.width = "18%";
+  // update progress bad for Large
+  document.querySelector(".list-your-item >span").classList.remove("hide");
+  document.querySelector(".list-your-item>div").classList.add("hide");
+  document
+    .querySelector(".pick-up-address >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "18%";
+});
 
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
@@ -598,6 +640,17 @@ btnSavePickup.addEventListener("click", async (e) => {
       "storageLocation.name": `${storageLocation.value}`,
     });
   }
+  // update progress bar for Mobile
+  pickUpAddressM.classList.add("hide");
+  storageSizeM.classList.remove("hide");
+  progressBarM.style.width = "54%";
+  // update progress bad for Large
+  document.querySelector(".pick-up-address >span").classList.add("hide");
+  document.querySelector(".pick-up-address>div").classList.remove("hide");
+  document
+    .querySelector(".storage-size>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "54%";
 });
 
 // ------------------------------
@@ -667,6 +720,36 @@ btnSelectClick(btnSelectSmall, "small");
 btnSelectClick(btnSelectMedium, "medium");
 btnSelectClick(btnSelectLarge, "large");
 
+// Press back
+btnBackSize.addEventListener("click", () => {
+  // update progress bar for Mobile
+  storageSizeM.classList.add("hide");
+  pickUpAddressM.classList.remove("hide");
+  progressBarM.style.width = "36%";
+  // update progress bar for Large
+  document.querySelector(".pick-up-address >span").classList.remove("hide");
+  document.querySelector(".pick-up-address>div").classList.add("hide");
+  document
+    .querySelector(".storage-size >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "36%";
+});
+
+// Press next
+btnSaveSize.addEventListener("click", () => {
+  // update progress bar
+  storageSizeM.classList.add("hide");
+  selectPlanM.classList.remove("hide");
+  progressBarM.style.width = "72%";
+  // update progress bad for Large
+  document.querySelector(".storage-size >span").classList.add("hide");
+  document.querySelector(".storage-size>div").classList.remove("hide");
+  document
+    .querySelector(".select-plan>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "72%";
+});
+
 // ------------------------------
 // 4. Storage Plan
 // define variables
@@ -727,6 +810,21 @@ const btnTermClick = function (btn, term) {
 btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
+
+// Press back
+btnBackPlan.addEventListener("click", () => {
+  // update progress bar for Mobile
+  selectPlanM.classList.add("hide");
+  storageSizeM.classList.remove("hide");
+  progressBarM.style.width = "54%";
+  // update progress bar for Lerge
+  document.querySelector(".storage-size >span").classList.remove("hide");
+  document.querySelector(".storage-size>div").classList.add("hide");
+  document
+    .querySelector(".select-plan >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "54%";
+});
 
 // ---------------------------
 // for modal
