@@ -2,6 +2,20 @@
 
 import * as common from "../../common.js";
 
+// load header and footer
+async function loadComponent(componentName, containerId) {
+  const response = await fetch(
+    `../homepage/${componentName}/${componentName}.html`
+  );
+  const content = await response.text();
+  document.getElementById(containerId).innerHTML = content;
+}
+// document.addEventListener("DOMContentLoaded", async () => {
+await loadComponent("header", "header-container");
+// await loadComponent('body', 'body-container');
+await loadComponent("footer", "footer-container");
+// });
+
 // checkbox behaviour
 const checkbox = document.querySelector("form > div:last-of-type > div");
 checkbox.onclick = (e) => {
@@ -74,10 +88,9 @@ btnLogin.onclick = (e) => {
     .then((userCredential) => {
       console.log(userCredential);
       const user = userCredential.user;
-      debugger;
+      // debugger;
       // window.location.href = pageToReturn;
       onLoginSuccess();
-      // window.open("after-login.html", "_self");
     })
     .catch((error) => {
       alert(
@@ -93,7 +106,7 @@ function getReturnUrl() {
 
 // Simulate the login success logic
 function onLoginSuccess() {
-  debugger;
+  // debugger;
   const returnUrl = getReturnUrl();
   if (returnUrl) {
     window.location.href = decodeURIComponent(returnUrl);
