@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
@@ -46,7 +47,8 @@ const renderDetail = (
   requestedDate,
   requestedTime,
   departTimestamp,
-  ETA
+  ETA,
+  boxSize
 ) => {
   // detail container
   const divDetail = createHtmlElement("div", null, null, "class", "detail");
@@ -312,8 +314,8 @@ const renderDetail = (
     "orderDetails-boxSize"
   );
   const orderDetailsBoxSizeElements = [
-    { type: "p", value: null, textContent: "Box Size" },
-    { type: "p", value: null, textContent: `1 x Small( 18x18x16)` },
+    { type: "p", value: null, textContent: "Storage Size" },
+    { type: "p", value: null, textContent: `${boxSize}` },
   ];
   orderDetailsBoxSizeElements.forEach(({ type, value, textContent }) => {
     const element = createHtmlElement(type, value, textContent);
@@ -347,6 +349,18 @@ const renderDetail = (
 
 const getDetails = async (uid) => {
   try {
+    // get storage size
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    const boxSize =
+      docSnap.data().plan.size === "small"
+        ? "5’ x 5’"
+        : docSnap.data().plan.size === "medium"
+        ? "5’ x 10’"
+        : docSnap.data().plan.size === "large"
+        ? "10’ x 10’"
+        : null;
+
     // query criteria: all the documents under the user's 'order' collection, except it's "done".
     const q = query(
       collection(doc(collection(db, "users"), uid), "order"),
@@ -358,7 +372,7 @@ const getDetails = async (uid) => {
       const obj = { [el.id]: el.data() };
       objArr.push(obj);
     });
-    console.log(objArr);
+    // console.log(objArr);
 
     let addingNumber = 0;
     let retrievalNumber = 0;
@@ -382,19 +396,26 @@ const getDetails = async (uid) => {
           orderObj[orderID].orderTimestamp.seconds * 1000 +
             orderObj[orderID].orderTimestamp.nanoseconds / 1000000
         );
-        const formattedOrderTimestamp = rawOrderTimestamp.toLocaleString(
-          "en-CA",
-          {
+        const arrayOrderTimestamp = rawOrderTimestamp
+          .toLocaleString("en-CA", {
             timeZone: "America/Vancouver",
-            weekday: "short",
+            // weekday: "short",
             year: "numeric",
             month: "short",
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
-            timeZoneName: "shortGeneric",
-          }
-        );
+            // timeZoneName: "shortGeneric",
+          })
+          .split(" ");
+
+        const formattedOrderTimestamp = `${arrayOrderTimestamp[1].substring(
+          0,
+          arrayOrderTimestamp[1].length - 1
+        )}/${arrayOrderTimestamp[0]}/${arrayOrderTimestamp[2].substring(
+          0,
+          arrayOrderTimestamp[2].length - 1
+        )} ${arrayOrderTimestamp[3]}${arrayOrderTimestamp[4]}`;
 
         const dateArray = orderObj[orderID].requestedDateTime.date.split(" ");
 
@@ -408,24 +429,39 @@ const getDetails = async (uid) => {
             orderObj[orderID].departTimestamp.seconds * 1000 +
               orderObj[orderID].departTimestamp.nanoseconds / 1000000
           );
-          formattedDepartTimestamp = rawDepartTimestamp.toLocaleString(
-            "en-CA",
-            {
+          const arrayDepartTimestamp = rawDepartTimestamp
+            .toLocaleString("en-CA", {
               timeZone: "America/Vancouver",
-              weekday: "short",
+              // weekday: "short",
               year: "numeric",
               month: "short",
               day: "numeric",
               hour: "numeric",
               minute: "2-digit",
-              timeZoneName: "shortGeneric",
-            }
-          );
+              // timeZoneName: "shortGeneric",
+            })
+            .split(" ");
+
+          formattedDepartTimestamp = `${arrayDepartTimestamp[1].substring(
+            0,
+            arrayDepartTimestamp[1].length - 1
+          )}/${arrayDepartTimestamp[0]}/${arrayDepartTimestamp[2].substring(
+            0,
+            arrayDepartTimestamp[2].length - 1
+          )} ${arrayDepartTimestamp[3]}${arrayDepartTimestamp[4]}`;
         } else {
           formattedDepartTimestamp = null;
         }
 
-        const formattedETA = orderObj[orderID].ETA;
+        const arrayETA = orderObj[orderID].ETA.split(" ");
+        const formattedETA = `${arrayETA[2].substring(
+          0,
+          arrayETA[2].length - 1
+        )}/${arrayETA[1]}/${arrayETA[3].substring(0, arrayETA[3].length - 1)} ${
+          arrayETA[4]
+        }${arrayETA[5]}`;
+
+        // const boxSize = "1 x Small( 18x18x16)";
 
         renderDetail(
           section,
@@ -438,7 +474,8 @@ const getDetails = async (uid) => {
           requestedDate,
           requestedTime,
           formattedDepartTimestamp,
-          formattedETA
+          formattedETA,
+          boxSize
         );
       }
     });
@@ -475,6 +512,8 @@ const getDetails = async (uid) => {
           )
         );
     }
+
+    executeAfterRender();
   } catch (error) {
     console.log(error);
   }
@@ -509,18 +548,32 @@ const sectionControl = (currentTab, uid) => {
   }
 };
 
+const executeAfterRender = function () {
+  const footerBegin = document.querySelector(
+    `section.${sessionStorage.getItem("currentTab")}`
+  ).scrollHeight;
+  console.log(footerBegin);
+  document.querySelector("footer").style.top = `${footerBegin}px`;
+};
+
 // get currently logged in user.
 const uid = await getCurrentUid();
 if (uid) {
   // render on load
+  let currentTab;
   if (sessionStorage.getItem("currentTab")) {
-    const currentTab = sessionStorage.getItem("currentTab");
+    currentTab = sessionStorage.getItem("currentTab");
     document.querySelector(`main li.${currentTab}`).classList.add("current");
-    sectionControl(currentTab, uid);
   } else {
+    sessionStorage.setItem("currentTab", "adding");
+    currentTab = sessionStorage.getItem("currentTab");
     document.querySelector(`main li.adding`).classList.add("current");
-    sectionControl("adding", uid);
   }
+  sectionControl(currentTab, uid);
+
+  window.onresize = () => {
+    executeAfterRender();
+  };
 
   // TAB BEHAVIOUR
   document.querySelectorAll("main li").forEach((el) => {
@@ -557,21 +610,35 @@ if (uid) {
               changedDoc.doc.data().departTimestamp.seconds * 1000 +
                 changedDoc.doc.data().departTimestamp.nanoseconds / 1000000
             );
-            const formattedDepartTimestamp = rawDepartTimestamp.toLocaleString(
-              "en-CA",
-              {
+            const arrayDepartTimestamp = rawDepartTimestamp
+              .toLocaleString("en-CA", {
                 timeZone: "America/Vancouver",
-                weekday: "short",
+                // weekday: "short",
                 year: "numeric",
                 month: "short",
                 day: "numeric",
                 hour: "numeric",
                 minute: "2-digit",
-                timeZoneName: "shortGeneric",
-              }
-            );
+                // timeZoneName: "shortGeneric",
+              })
+              .split(" ");
 
-            const formattedETA = changedDoc.doc.data().ETA;
+            const formattedDepartTimestamp = `${arrayDepartTimestamp[1].substring(
+              0,
+              arrayDepartTimestamp[1].length - 1
+            )}/${arrayDepartTimestamp[0]}/${arrayDepartTimestamp[2].substring(
+              0,
+              arrayDepartTimestamp[2].length - 1
+            )} ${arrayDepartTimestamp[3]}${arrayDepartTimestamp[4]}`;
+
+            const arrayETA = changedDoc.doc.data().ETA.split(" ");
+            const formattedETA = `${arrayETA[2].substring(
+              0,
+              arrayETA[2].length - 1
+            )}/${arrayETA[1]}/${arrayETA[3].substring(
+              0,
+              arrayETA[3].length - 1
+            )} ${arrayETA[4]}${arrayETA[5]}`;
 
             // update current status
             document.querySelectorAll(

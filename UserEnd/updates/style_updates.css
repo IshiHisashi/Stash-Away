@@ -255,6 +255,10 @@ section:has(.noOrder) {
   line-height: var(--button-2-line-height);
 }
 
+footer {
+  position: relative;
+}
+
 /* MEDIA QUERIES ============================================= */
 
 @media screen and (min-width: 500px) {
