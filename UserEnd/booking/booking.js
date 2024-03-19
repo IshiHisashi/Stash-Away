@@ -444,7 +444,7 @@ btnProceed.addEventListener("click", () => {
   document
     .querySelector(".pick-up-address>span")
     .classList.replace("circle-yet", "circle-now");
-  progressBarL.style.width = "32%";
+  progressBarL.style.width = "22%";
 });
 
 //-----------------------------------------
@@ -601,7 +601,7 @@ btnBackPickup.addEventListener("click", async () => {
   document
     .querySelector(".pick-up-address >span")
     .classList.replace("circle-now", "circle-yet");
-  progressBarL.style.width = "18%";
+  progressBarL.style.width = "5%";
 });
 
 // Event : Save & Proceed
@@ -665,7 +665,7 @@ btnSavePickup.addEventListener("click", async (e) => {
   document
     .querySelector(".storage-size>span")
     .classList.replace("circle-yet", "circle-now");
-  progressBarL.style.width = "54%";
+  progressBarL.style.width = "47%";
 });
 
 // ------------------------------
@@ -754,7 +754,7 @@ btnBackSize.addEventListener("click", () => {
   document
     .querySelector(".storage-size >span")
     .classList.replace("circle-now", "circle-yet");
-  progressBarL.style.width = "36%";
+  progressBarL.style.width = "22%";
 });
 
 // Press next
@@ -772,7 +772,7 @@ btnSaveSize.addEventListener("click", () => {
   document
     .querySelector(".select-plan>span")
     .classList.replace("circle-yet", "circle-now");
-  progressBarL.style.width = "72%";
+  progressBarL.style.width = "70%";
 });
 
 // ------------------------------
@@ -855,7 +855,7 @@ btnBackPlan.addEventListener("click", () => {
   document
     .querySelector(".select-plan >span")
     .classList.replace("circle-now", "circle-yet");
-  progressBarL.style.width = "54%";
+  progressBarL.style.width = "47%";
 });
 
 // Press proceed to payment

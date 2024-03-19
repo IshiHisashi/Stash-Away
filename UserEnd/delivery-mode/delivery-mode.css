@@ -14,12 +14,26 @@ body {
   --color-input: #f4f4f4;
 }
 
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  padding-bottom: 0.1rem;
+}
+
 main {
   display: flex;
   flex-direction: column;
   gap: 27px;
   max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 25px;
+}
+
+.progress-section {
   margin: 0 25px;
+  margin-bottom: 3rem;
 }
 
 .progress-mobile {
@@ -166,7 +180,7 @@ main {
     gap: 44px;
     @media screen and (min-width: 600px) {
       display: grid;
-      grid-template-columns: 1.75fr repeat(3, 1fr);
+      grid-template-columns: 1.25fr repeat(3, 1fr);
     }
   }
   h3 {
