@@ -18,6 +18,18 @@ img {
 
 /* HEADER ================================================= */
 
+header .logo {
+  background-color: var(--white);
+}
+
+header {
+  position: relative;
+}
+
+.logo {
+  padding: 10px;
+}
+
 h1 {
   font-family: var(--h2-family);
   font-size: var(--h2-size);
@@ -33,8 +45,12 @@ header .hero p {
   margin: 0.5rem 0;
 }
 
-header .logo {
-  background-color: var(--white);
+header .hero p::after {
+  content: "";
+  border-top: 3px solid var(--yellow);
+  display: block;
+  width: 36px;
+  transform: translateY(0.5rem);
 }
 
 header > .hero {
