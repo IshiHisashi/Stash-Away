@@ -24,6 +24,12 @@ const snapShot = await common.getDocs(queryStorage);
 
 // define variable / fnc ------------
 // var_DoM
+// For Overlay-control
+const overlay1 = document.getElementById("overlay-1");
+const overlay2 = document.getElementById("overlay-2");
+const overlay3 = document.getElementById("overlay-3");
+const overlay4 = document.getElementById("overlay-4");
+
 // For Progress bar
 const listItemsM = document.getElementById("list-items-m");
 const pickUpAddressM = document.getElementById("pick-up-address-m");
@@ -425,6 +431,9 @@ const itemsContainer = document.getElementById("itemsContainer");
 
 // Press proceed
 btnProceed.addEventListener("click", () => {
+  // Overlay change
+  overlay1.classList.add("overlay");
+  overlay2.classList.remove("overlay");
   // update progress bar for Mobile
   listItemsM.classList.add("hide");
   pickUpAddressM.classList.remove("hide");
@@ -579,6 +588,9 @@ times.forEach((el) => {
 
 // Event : Back
 btnBackPickup.addEventListener("click", async () => {
+  // overlay control
+  overlay1.classList.remove("overlay");
+  overlay2.classList.add("overlay");
   // update progress bar for Mobile
   listItemsM.classList.remove("hide");
   pickUpAddressM.classList.add("hide");
@@ -640,6 +652,9 @@ btnSavePickup.addEventListener("click", async (e) => {
       "storageLocation.name": `${storageLocation.value}`,
     });
   }
+  // overlay contorol
+  overlay2.classList.add("overlay");
+  overlay3.classList.remove("overlay");
   // update progress bar for Mobile
   pickUpAddressM.classList.add("hide");
   storageSizeM.classList.remove("hide");
@@ -726,6 +741,9 @@ btnSelectClick(btnSelectLarge, "large");
 
 // Press back
 btnBackSize.addEventListener("click", () => {
+  // overlay contorol
+  overlay2.classList.remove("overlay");
+  overlay3.classList.add("overlay");
   // update progress bar for Mobile
   storageSizeM.classList.add("hide");
   pickUpAddressM.classList.remove("hide");
@@ -741,6 +759,9 @@ btnBackSize.addEventListener("click", () => {
 
 // Press next
 btnSaveSize.addEventListener("click", () => {
+  // overlay contorol
+  overlay3.classList.add("overlay");
+  overlay4.classList.remove("overlay");
   // update progress bar
   storageSizeM.classList.add("hide");
   selectPlanM.classList.remove("hide");
@@ -821,6 +842,9 @@ btnTermClick(btnLong, "long");
 
 // Press back
 btnBackPlan.addEventListener("click", () => {
+  // overlay contorol
+  overlay3.classList.remove("overlay");
+  overlay4.classList.add("overlay");
   // update progress bar for Mobile
   selectPlanM.classList.add("hide");
   storageSizeM.classList.remove("hide");
