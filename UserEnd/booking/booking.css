@@ -69,6 +69,7 @@ body {
   }
   .progress-bar {
     width: 18%;
+    transition: width 0.5s ease-in;
     height: 18px;
     border-radius: 35px 0 0 35px;
     background-color: var(--dark-blue-green);
@@ -144,7 +145,9 @@ body {
     margin-top: 10.5px;
   }
   .progress-bar {
-    width: 16%;
+    width: 5%;
+
+    transition: width 0.5s ease-in;
     height: 6px;
     border-radius: 11px 0 0 11px;
     background-color: var(--dark-blue-green);
