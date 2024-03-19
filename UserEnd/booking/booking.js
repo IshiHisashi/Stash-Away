@@ -666,6 +666,8 @@ largePrice.textContent = `$${docPlanSize.large.price}`;
 // initial setting (if already selected)
 const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
 if (userDoc.plan?.size) {
+  // able btn
+  document.querySelector(".storage-size .btn-div").classList.remove("grey");
   for (let i = 0; i < btnSelectSizeAll.length; i++) {
     if (btnSelectSizeAll[i].id.includes(userDoc.plan.size)) {
       document
@@ -694,6 +696,8 @@ const btnSelectClick = function (btn, size) {
         document.querySelector(`.${size}-size`).classList.add("selected");
       }
     }
+    // able btn
+    document.querySelector(".storage-size .btn-div").classList.remove("grey");
     // update section#4
     priceShort.textContent = `$${calcTotalPrice(
       docPlanTerm.short.discount,
@@ -782,6 +786,8 @@ priceLong.textContent = `$${calcTotalPrice(
 // initial setting (if already selected)
 const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
 if (userDoc.plan?.term) {
+  // able btn
+  document.querySelector(".select-plan .btn-div").classList.remove("grey");
   for (let i = 0; i < btnSelectTermAll.length; i++) {
     if (btnSelectTermAll[i].id.includes(userDoc.plan.term)) {
       document.querySelector(`.${userDoc.plan.term}`).classList.add("selected");
@@ -804,6 +810,8 @@ const btnTermClick = function (btn, term) {
         document.querySelector(`.${term}`).classList.add("selected");
       }
     }
+    // able btn
+    document.querySelector(".select-plan .btn-div").classList.remove("grey");
   });
 };
 // Execute
@@ -825,6 +833,8 @@ btnBackPlan.addEventListener("click", () => {
     .classList.replace("circle-now", "circle-yet");
   progressBarL.style.width = "54%";
 });
+
+// Press proceed to payment
 
 // ---------------------------
 // for modal
