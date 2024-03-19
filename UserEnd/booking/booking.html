@@ -20,267 +20,342 @@
 
 <body>
   <!-- HEADER -->
-  <header></header>
+  <div class="sticky-head">
+    <header>
+      <div class="logo">
+          <img src="../images/logo.png" alt="logo">
+      </div>
+      <div class="hamburger-menu" type="button" id="btntoggleMenu">
+          <div></div>
+          <div></div>
+          <div></div>
+      </div>
+      <nav class="main-menu">
+          <ul>
+              <li><a type="button" id="btnGeoLocation" class="btn" href="javascript:void(0);">Our Locations</a></li>
+              <li><a type="button" id="btnPricing" class="btn" href="javascript:void(0);">Pricing</a></li>
+              <li><a type="button" id="btnHelpCenter" class="btn" href="javascript:void(0);">Help Center</a></li>
+              <li><a type="button" id="btnMyAccount" class="btn" href="javascript:void(0);"><i id="ma-img1" class="fas fa-image-portrait"></i>My Account<i id="ma-img2" class="fas fa-caret-down"></i></a>
+                  <ul class="sub-menu">
+                      <li><a type="button" id="btnOrderUpdate" class="btn; sub" href="javascript:void(0);">Order Updates</a></li>
+                      <li><a type="button" id="btnViewStorage" class="btn; sub" href="javascript:void(0);">View Storage</a></li>
+                      <li><a type="button" id="btnProfile" class="btn; sub" href="javascript:void(0);">Profile</a></li>
+                      <li><a type="button" id="btnLogout" class="btn; sub" href="javascript:void(0);">Logout</a></li>
+                  </ul>
+              </li>
+          </ul>
+          <div class="button-set">
+              <button id="btnLogin" class="btn">Login</button>
+              <button id="btnBookNow" class="btn">Book Now</button>
+          </div>
+      </nav>
+    </header>
+    
+    <!-- Progress bar -->
+    <section class="progress-section">
+    <div class="progress-mobile">
+      <div class="progress-texts">
+        <h2 id="list-items-m">List items</h2>
+        <h2 id="pick-up-address-m" class="hide">Pick-Up Address</h2>
+        <h2 id="storage-size-m" class="hide">Storage Size</h2>
+        <h2 id="select-plan-m" class="hide">Select Plan</h2>
+      </div>
+      <div class="progress">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+    <div class="progress-large">
+      <div class="progress">
+        <div class="progress-bar"></div>
+      </div>
+      <div class="progress-texts">
+        <div class="list-your-item"><div class="icon-wrapper hide"><span class="check">&check;</span></div>
+          <span class="circle-now"></span>
+          <h2 id="list-items-l">List items</h2>
+        </div>
+        <div class="pick-up-address">
+          <div class="icon-wrapper hide"><span class="check">&check;</span></div>
+          <span class="circle-yet"></span>
+          <h2 id="pick-up-address-l">Pick-Up Address</h2>
+        </div>
+        <div class="storage-size">
+          <div class="icon-wrapper hide"><span class="check">&check;</span></div>
+          <span class="circle-yet"></span>
+          <h2 id="storage-size-l">Storage Size</h2>
+        </div>
+        <div class="select-plan">
+          <span class="circle-yet"></span>
+          <h2 id="select-plan-l">Select Plan</h2>
+        </div>
+        <div class="payment">
+          <span class="circle-yet"></span>
+          <h2 id="payment-l" class="text-yet">Payment</h2>
+        </div>
+      </div>
+    </div>
+    </section>
+  </div>
 
   <!-- Main -->
   <main>
     <form id="form_list">
       <!-- Prathibha start : 1.Booking_addItem-->
-      <section class="addItem" id="addItem">
-        <div class="item-description-wrapper">
-          <h3>
-            <div class="num-title"><span>1</span></div> List Your Items.
-          </h3>
-          <p>
-            Jumpstart your Stashaway storage by listing and photographing items
-            for easy identification during their stay.
-          </p>
-        </div>
-        <div>
-        <div class="item-wrapper">
-          <!-- <label>Write an item to store</label> -->
-          <div class="input-icon-wrapper">
-            <input type="text" id="newItemName" placeholder="Enter Item Name" />
-            <img src="../icons/camera-01.png" id="listup-pic" alt="camera-icon">
+      <div class="" id="overlay-1">
+        <section class="addItem" id="addItem">
+          <div class="item-description-wrapper">
+            <h3>
+              <div class="num-title"><span>1</span></div> List Your Items.
+            </h3>
+            <p>
+              Jumpstart your Stashaway storage by listing and photographing items
+              for easy identification during their stay.
+            </p>
           </div>
-          <!-- <button type="submit" class="btn-delete">delete</button> -->
-          <div class="btn-add-div">
-            <a id="saveItem" class="btn-add" type="button">Add <span>+</span></a>
+          <div>
+          <div class="item-wrapper">
+            <!-- <label>Write an item to store</label> -->
+            <div class="input-icon-wrapper">
+              <input type="text" id="newItemName" placeholder="Enter Item Name" />
+              <img src="../icons/camera-01.png" id="listup-pic" alt="camera-icon">
+            </div>
+            <!-- <button type="submit" class="btn-delete">delete</button> -->
+            <div class="btn-add-div">
+              <a id="saveItem" class="btn-add" type="button">Add <span>+</span></a>
+            </div>
           </div>
-        </div>
-        <!-- MODAL -->
-        <div id="easyModal" class="modal">
-          <div class="modal-content">
-            <!-- <div class="modal-header">
-                  <h1>Great job 🎉</h1>
-                  <span class="modalClose">×</span>
-                </div> -->
-            <div class="modal-body">
-              <!-- HTML from Prathibha -->
-              <div>
+          <!-- MODAL -->
+          <div id="easyModal" class="modal">
+            <div class="modal-content">
+              <!-- <div class="modal-header">
+                    <h1>Great job 🎉</h1>
+                    <span class="modalClose">×</span>
+                  </div> -->
+              <div class="modal-body">
+                <!-- HTML from Prathibha -->
                 <div>
+                  <div>
+                    <div class="btn-div">
+                      <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i></a>
+                      <h3><label for="itemName">Take a Picture of Your Item</label></h3>
+                      <span id="displayItemName"></span>
+                    </div>
+                  </div>
+                  <!-- <div>
+                      <label for="imageOption">Capture Image or Upload Image (Optional)</label>
+                      <div id="radioContainer">
+                        <input type="radio" id="option1" name="options" value="option1">
+                        <label for="option1">Capture Image</label>
+                        <input type="radio" id="option2" name="options" value="option2">
+                        <label for="option2">Upload Image</label>
+                      </div>
+                    </div> -->
+                  <!-- <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i> -->
+                </div>
+                <div>
+                  <div>
+                    <video id="video" width="400" height="300" autoplay hidden></video>
+                  </div>
+                  <div>
+                    <canvas id="canvas" width="400" height="300" hidden></canvas>
+                    <input type="file" id="imageUpload" accept="image/*" hidden>
+                    <!-- <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i> -->
+                  </div>
                   <div class="btn-div">
-                    <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i></a>
-                    <h3><label for="itemName">Take a Picture of Your Item</label></h3>
-                    <span id="displayItemName"></span>
-
+                    <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image</a>
+                    <a id="retake" class="btn-next" style="display: none;">Retake Image</a>
+                    <a id="reupload" class="btn-next" style="display: none;">Reupload Image</a>
+                    <a id="uploadButton" class="btn-next" style="display: none;">Upload Image</a>
+                    <a id="saveImage" class="btn-next" type="button">Save Image</a>
                   </div>
                 </div>
-                <!-- <div>
-                    <label for="imageOption">Capture Image or Upload Image (Optional)</label>
-                    <div id="radioContainer">
-                      <input type="radio" id="option1" name="options" value="option1">
-                      <label for="option1">Capture Image</label>
-                      <input type="radio" id="option2" name="options" value="option2">
-                      <label for="option2">Upload Image</label>
-                    </div>
-                  </div> -->
-                <!-- <i id="cameraIcon" class="fas fa-camera" aria-hidden="true"></i> -->
+                <div id="itemsContainer"></div>
+                <!-- <button id="showItems">Show Items</button> -->
+                <div id="itemsContainer"></div>
+                <!-- end -->
               </div>
-              <div>
-                <div>
-                  <video id="video" width="400" height="300" autoplay hidden></video>
-                </div>
-                <div>
-                  <canvas id="canvas" width="400" height="300" hidden></canvas>
-                  <input type="file" id="imageUpload" accept="image/*" hidden>
-                  <!-- <i id="deleteIcon" class="fas fa-times" aria-hidden="true" style="display: none;"></i> -->
-                </div>
-                <div class="btn-div">
-                  <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image</a>
-                  <a id="retake" class="btn-next" style="display: none;">Retake Image</a>
-                  <a id="reupload" class="btn-next" style="display: none;">Reupload Image</a>
-                  <a id="uploadButton" class="btn-next" style="display: none;">Upload Image</a>
-                  <a id="saveImage" class="btn-next" type="button">Save Image</a>
-                </div>
-              </div>
-              <div id="itemsContainer"></div>
-
-              <!-- <button id="showItems">Show Items</button> -->
-              <div id="itemsContainer"></div>
-              <!-- end -->
+              <span class="modalClose">×</span>
             </div>
-            <span class="modalClose">×</span>
           </div>
+          <!-- <button id="btnLoad" type="submit">
+                <i class="fa-solid fa-rotate-right"></i> Load saved data
+              </button> -->
+          <div class="item-list-wrapper">
+            <!-- <h3>Current item list_on going</h3> -->
+            <ul id="item-list">
+              <p>You item list...</p>
+            </ul>
+        
+          </div>
+          <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
         </div>
-
-        <!-- <button id="btnLoad" type="submit">
-              <i class="fa-solid fa-rotate-right"></i> Load saved data
-            </button> -->
-
-        <div class="item-list-wrapper">
-          <!-- <h3>Current item list_on going</h3> -->
-          <ul id="item-list">
-            <p>You item list...</p>
-          </ul>
-          
-        </div>
-        <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+        </section>
       </div>
-      </section>
       <!-- Prathibha end -->
 
       <!-- Ishi start : 2.Bokking_pickup-Info -->
-      <section class="pickup-info" id="pickup-info">
-        <div class="text-header">
-          <h3 class="section-title">
-            <div class="num-title"><span>2</span></div> Pick-Up Address
-          </h3>
-          <p class="section-desc">
-            Provide your address and enjoy hassle-free pick up of your items
-            from our team!
-          </p>
-        </div>
-        <div class="form-wrapper">
-          <div class="fname-div">
-            <label>First Name</label>
-            <input type="text" id="firstname" />
-          </div>
-          <div class="lname-div">
-            <label>Last Name</label>
-            <input type="text" id="lastname" />
-          </div>
-          <div class="unitnum-div">
-            <label>House No./ Building No. / Floor No.</label>
-            <input type="text" id="unitnumber" />
-          </div>
-          <div class="street-div">
-            <label>Street</label>
-            <input type="text" id="street" />
-          </div>
-          <div class="city-div">
-            <label>City</label>
-            <input type="text" id="city" />
-          </div>
-          <div class="province-div">
-            <label>Province</label>
-            <input type="text" id="province" />
-          </div>
-          <div class="zipcode-div">
-            <label>Zip Code</label>
-            <input type="text" id="zipcode" />
-          </div>
-          <div class="pickupDate-div">
-            <label>Date of Pick-Up</label>
-            <input type="text" id="pickup-date" />
-            <!-- Calendar trial -->
-            <div id="calendar-wrapper">
-              <div id="calendar-header">
-                <button id="prev" type="button">
-                  < <button id="next" type="button">>
-                </button>
-              </div>
-              <div id="calendar"></div>
+        <div class="overlay" id="overlay-2">
+          <section class="pickup-info" id="pickup-info">
+            <div class="text-header">
+              <h3 class="section-title">
+                <div class="num-title"><span>2</span></div> Pick-Up Address
+              </h3>
+              <p class="section-desc">
+                Provide your address and enjoy hassle-free pick up of your items
+                from our team!
+              </p>
             </div>
-          </div>
-          <div class="PickupTime-div">
-            <label>Time of Pick-Up</label>
-            <select name="" id="pickup-time"></select>
-          </div>
-          <div class="storageLocation-div">
-            <label>Choose Storage Location</label>
-            <select name="" id="storage-location">
-              <option value="North-Vancouver">North-Vancouver</option>
-              <option value="Richmond">Richmond</option>
-              <option value="Surrey">Surrey</option>
-              <option value="Abbotsford">Abbotsford</option>
-              <option value="Coquitlam">Coquitlam</option>
-            </select>
-          </div>
-          <!-- btn -->
-          <div class="btn-div">
-            <a class="btn-back" href="#addItem">Back</a>
-            <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
-          </div>
+            <div class="form-wrapper">
+              <div class="fname-div">
+                <label>First Name</label>
+                <input type="text" id="firstname" />
+              </div>
+              <div class="lname-div">
+                <label>Last Name</label>
+                <input type="text" id="lastname" />
+              </div>
+              <div class="unitnum-div">
+                <label>House No./ Building No. / Floor No.</label>
+                <input type="text" id="unitnumber" />
+              </div>
+              <div class="street-div">
+                <label>Street</label>
+                <input type="text" id="street" />
+              </div>
+              <div class="city-div">
+                <label>City</label>
+                <input type="text" id="city" />
+              </div>
+              <div class="province-div">
+                <label>Province</label>
+                <input type="text" id="province" />
+              </div>
+              <div class="zipcode-div">
+                <label>Zip Code</label>
+                <input type="text" id="zipcode" />
+              </div>
+              <div class="pickupDate-div">
+                <label>Date of Pick-Up</label>
+                <input type="text" id="pickup-date" />
+                <!-- Calendar trial -->
+                <div id="calendar-wrapper">
+                  <div id="calendar-header">
+                    <button id="prev" type="button">
+                      < <button id="next" type="button">>
+                    </button>
+                  </div>
+                  <div id="calendar"></div>
+                </div>
+              </div>
+              <div class="PickupTime-div">
+                <label>Time of Pick-Up</label>
+                <select name="" id="pickup-time"></select>
+              </div>
+              <div class="storageLocation-div">
+                <label>Choose Storage Location</label>
+                <select name="" id="storage-location">
+                  <option value="North-Vancouver">North-Vancouver</option>
+                  <option value="Richmond">Richmond</option>
+                  <option value="Surrey">Surrey</option>
+                  <option value="Abbotsford">Abbotsford</option>
+                  <option value="Coquitlam">Coquitlam</option>
+                </select>
+              </div>
+              <!-- btn -->
+              <div class="btn-div">
+                <a class="btn-back"
+                id="btn-back-pikup" href="#addItem">Back</a>
+                <a class="btn-save" id="btn-save-pickup" href="#storage-size">Next</a>
+              </div>
+            </div>
+          </section>
         </div>
-      </section>
 
       <!-- 3.Booking_Storage size selection -->
-      <section class="storage-size" id="storage-size">
-        <h3 class="section-title">
-          <div class="num-title"><span>3</span></div> Storage Size
-        </h3>
-        <p class="section-desc">
-          Maximize efficiency and security by choosing the perfect storage box
-          size for your items.
-        </p>
-        <div class="box-size-container">
-          <div class="size-box small-size">
-            <h3 class="size-title">SMALL CLOSET SIZE</h3>
-            <p class="size">5’ x 5’</p>
-            <p class="mo"><span id="small-price" class="price-num"></span>/ mo</p>
-            <button class="btn-select" id="btn-small">Select</button>
+      <div class="overlay" id="overlay-3">
+        <section class="storage-size" id="storage-size">
+          <h3 class="section-title">
+            <div class="num-title"><span>3</span></div> Storage Size
+          </h3>
+          <p class="section-desc">
+            Maximize efficiency and security by choosing the perfect storage box
+            size for your items.
+          </p>
+          <div class="box-size-container">
+            <div class="size-box small-size">
+              <h3 class="size-title">SMALL CLOSET SIZE</h3>
+              <p class="size">5’ x 5’</p>
+              <p class="mo"><span id="small-price" class="price-num"></span>/ mo</p>
+              <button class="btn-select" id="btn-small">Select</button>
+            </div>
+            <div class="size-box medium-size">
+              <h3 class="size-title">ONE BEDROOM APARTMENT SIZE</h3>
+              <p class="size">5’ x 10’</p>
+              <p class="mo"><span id="medium-price" class="price-num"></span>/ mo</p>
+              <button class="btn-select" id="btn-medium">Select</button>
+            </div>
+            <div class="size-box large-size">
+              <h3 class="size-title">GARAGE SIZE</h3>
+              <p class="size">10’ x 10’</p>
+              <p class="mo"><span id="large-price" class="price-num"></span>/ mo</p>
+              <button class="btn-select" id="btn-large">Select</button>
+            </div>
+            <!-- btn -->
+            <div class="btn-div  grey">
+              <a class="btn-back"
+              id="btn-back-size" href="#pickup-info">Back</a>
+              <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
+            </div class='term-container'>
           </div>
-          <div class="size-box medium-size">
-            <h3 class="size-title">ONE BEDROOM APARTMENT SIZE</h3>
-            <p class="size">5’ x 10’</p>
-            <p class="mo"><span id="medium-price" class="price-num"></span>/ mo</p>
-
-            <button class="btn-select" id="btn-medium">Select</button>
-          </div>
-          <div class="size-box large-size">
-            <h3 class="size-title">GARAGE SIZE</h3>
-            <p class="size">10’ x 10’</p>
-            <p class="mo"><span id="large-price" class="price-num"></span>/ mo</p>
-
-            <button class="btn-select" id="btn-large">Select</button>
-          </div>
-
-          <!-- btn -->
-          <div class="btn-div">
-            <a class="btn-back" href="#pickup-info">Back</a>
-            <a class="btn-save" id="btn-save-size" href="#select-plan">Next</a>
-          </div class='term-container'>
-
-        </div>
-      </section>
+        </section>
+      </div>
 
       <!-- 4.Booking_Plan selection -->
-      <section class="select-plan" id="select-plan">
-        <h3 class="section-title">
-          <div class="num-title"><span>4</span></div> Select Your Plan
-        </h3>
-        <p class="section-desc">
-          Maximize efficiency and security by choosing the perfect storage box
-          size for your items.
-        </p>
-        <div class="term-container">
-          <div class="term-box short">
-            <h3 class="plan-title">Single Month plan</h3>
-            <div class="term-inner-container">
-              <p class="trip">+<span id="trip-short"></span> free Delivery</p>
-              <p class="period">Storage period - <span id="month-short"></span>month</p>
-              <p class="term-price"> <span id="price-short"></span>/ month</p>
-              <button class="btn-select" id="btn-short">Select</button>
+      <div class="overlay" id="overlay-4">
+        <section class="select-plan" id="select-plan">
+          <h3 class="section-title">
+            <div class="num-title"><span>4</span></div> Select Your Plan
+          </h3>
+          <p class="section-desc">
+            Maximize efficiency and security by choosing the perfect storage box
+            size for your items.
+          </p>
+          <div class="term-container">
+            <div class="term-box short">
+              <h3 class="plan-title">Single Month plan</h3>
+              <div class="term-inner-container">
+                <p class="trip">+<span id="trip-short"></span> free Delivery</p>
+                <p class="period">Storage period - <span id="month-short"></span>month</p>
+                <p class="term-price"> <span id="price-short"></span>/ month</p>
+                <button class="btn-select" id="btn-short">Select</button>
+              </div>
             </div>
-          </div>
-          <div class="term-box mid">
-            <h3 class="plan-title">4 Months plan</h3>
-            <div class="term-inner-container">
-              <p class="trip">+<span id="trip-mid"></span> free Deliveries</p>
-              <p class="period">Storage period - <span id="month-mid"></span>month</p>
-              <p class="term-price"> <span id="price-mid"></span>/ month</p>
-              <button class="btn-select" id="btn-mid">Select</button>
+            <div class="term-box mid">
+              <h3 class="plan-title">4 Months plan</h3>
+              <div class="term-inner-container">
+                <p class="trip">+<span id="trip-mid"></span> free Deliveries</p>
+                <p class="period">Storage period - <span id="month-mid"></span>month</p>
+                <p class="term-price"> <span id="price-mid"></span>/ month</p>
+                <button class="btn-select" id="btn-mid">Select</button>
+              </div>
             </div>
-          </div>
-          <div class="term-box long">
-            <h3 class="plan-title">Yearly plan</h3>
-            <div class="term-inner-container">
-              <p class="trip">+<span id="trip-long"></span> free Deliveries</p>
-              <p class="period">Storage period - <span id="month-long"></span>month</p>
-              <p class="term-price"> <span id="price-long"></span>/ month</p>
-              <button class="btn-select" id="btn-long">Select</button>
+            <div class="term-box long">
+              <h3 class="plan-title">Yearly plan</h3>
+              <div class="term-inner-container">
+                <p class="trip">+<span id="trip-long"></span> free Deliveries</p>
+                <p class="period">Storage period - <span id="month-long"></span>month</p>
+                <p class="term-price"> <span id="price-long"></span>/ month</p>
+                <button class="btn-select" id="btn-long">Select</button>
+              </div>
             </div>
+            <!-- btn -->
+            <div class="btn-div grey">
+              <a class="btn-back" id="btn-back-plan" href="#storage-size"><span>Back</span></a>
+              <a class="btn-save" id="btn-save-plan" href="../payment/index.html">Proceed to Payment</a>
+            </div class='term-container'>
           </div>
-          <!-- btn -->
-          <div class="btn-div">
-            <a class="btn-back" href="#storage-size"><span>Back</span></a>
-            <a class="btn-save" id="btn-save-plan" href="../payment/index.html">Proceed to Payment</a>
-          </div class='term-container'>
-
-        </div>
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
 
       <!-- USED only in data registration -->
       <!-- <div><button id="x">Set</button></div> -->
@@ -292,6 +367,30 @@
       </div>
     </div>
   </main>
+  <footer>
+    <div class="footer-section">
+        <div class="site-logo">
+            <img src="../images/logo.png" alt="Logo">
+        </div>
+        <div class="footer-link">
+            <ul>
+                <li><a href="">About Us</a></li>
+                <li><a href="../dummy_payment/dummy_payment.html">Pricing</a></li>
+                <li><a href="../home-page-map/index.html">Our locations</a></li>
+                <li><a href="">Contact Us</a></li>
+            </ul>
+        </div>
+        <div class="social-media">
+            <ul>
+                <li><a href="https://www.youtube.com/"><img src="/UserEnd/icons/youtube.png" alt="Youtube Icon"></a></li>
+                <li><a href="https://www.facebook.com/"><img src="/UserEnd/icons/facebook.png" alt="Facebook Icon"></a></li>
+                <li><a href="https://www.twitter.com/"><img src="../icons/Social.png" alt="/UserEnd/icons/Social.png"></a></li>
+                <li><a href="https://www.instagram.com/"><img src="/UserEnd/icons/instagram.png" alt="Instagram Icon"></a></li>
+            </ul>
+        </div>
+    </div>
+    <p>StashAway @2024, All rights reserved</p>
+</footer>
 </body>
 
 <!-- FROM Prathibha configs-->
