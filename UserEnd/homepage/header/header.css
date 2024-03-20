@@ -55,8 +55,8 @@ header {
 }
 
 .main-menu ul li a#btnMyAccount {
-  display: unset;
   display: flex;
+  align-items: center;
 }
 
 .hamburger-menu {
