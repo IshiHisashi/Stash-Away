@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // load header and footer
-import { initHeader } from "../homepage/header/header.js";
-import { initFooter } from "../homepage/footer/footer.js";
+import { initHeader } from "./../homepage/header/header.js";
+import { initFooter } from "./../homepage/footer/footer.js";
 
 async function loadComponent(componentPath, placeholderId) {
   try {
