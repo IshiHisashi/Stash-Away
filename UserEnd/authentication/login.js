@@ -3,18 +3,39 @@
 import * as common from "../../common.js";
 
 // load header and footer
-async function loadComponent(componentName, containerId) {
-  const response = await fetch(
-    `../homepage/${componentName}/${componentName}.html`
-  );
-  const content = await response.text();
-  document.getElementById(containerId).innerHTML = content;
+import { initHeader } from "../homepage/header/header.js";
+import { initFooter } from "../homepage/footer/footer.js";
+
+async function loadComponent(componentPath, placeholderId) {
+  try {
+    const response = await fetch(componentPath);
+    const componentHTML = await response.text();
+    document.getElementById(placeholderId).innerHTML = componentHTML;
+  } catch (error) {
+    console.error("An error occurred while loading the component:", error);
+  }
 }
-// document.addEventListener("DOMContentLoaded", async () => {
-await loadComponent("header", "header-container");
-// await loadComponent('body', 'body-container');
-await loadComponent("footer", "footer-container");
-// });
+
+async function init() {
+  try {
+    await loadComponent("../homepage/header/header.html", "header-placeholder");
+    initHeader();
+    await loadComponent("../homepage/body/body.html", "body-placeholder");
+    await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
+    initFooter();
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
+}
+
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+  init();
+} else {
+  document.addEventListener("DOMContentLoaded", init);
+}
 
 // checkbox behaviour
 const checkbox = document.querySelector("form > div:last-of-type > div");
