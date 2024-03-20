@@ -41,7 +41,7 @@ footer p {
   margin: 0;
 }
 /* Media query for desktop devices */
-@media (min-width: 600px) {
+@media (min-width: 900px) {
   .footer-section {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

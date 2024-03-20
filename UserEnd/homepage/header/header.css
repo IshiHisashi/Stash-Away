@@ -112,7 +112,7 @@ header {
 }
 
 /* Media query for desktop devices */
-@media (min-width: 600px) {
+@media (min-width: 900px) {
   .hamburger-menu {
     display: none;
   }
