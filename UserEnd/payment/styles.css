@@ -89,7 +89,7 @@ a {
 /* Citation: https://blog.hubspot.com/website/css-loading-animation */
 
 #loading-screen {
-    z-index: 100;
+    z-index: 999;
     background-color: var(--white);
     position: fixed;
     top: 0;
