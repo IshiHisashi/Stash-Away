@@ -115,11 +115,14 @@ if (navigator.geolocation) {
         for (let i in cityArray) {
           let idName = `location-${i}`;
           document.getElementById(idName).value = cityArray[i].name;
-          document.querySelector(`[for="${idName}"]`).innerHTML = `Location: ${
-            cityArray[i].name
-          }<br>Distance: ${
-            Math.round(cityArray[i].distance / 100) / 10
-          } kilo mtrs`;
+          document.querySelector(`[for="${idName}"]`).innerHTML = 
+          `<span class="city-name-in-list">${cityArray[i].name}</span>
+          <div>
+            <img class="loc-icon" src="./../icons/location-marker.png" alt="location logo">
+            <p>${cityArray[i].address}</p>
+          </div>
+          <p>Distance: ${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs from your address</p>
+          `;
         }
       }
 
