@@ -21,38 +21,16 @@
     />
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.1.2-public-preview.15/services/services-web.min.js"></script>
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/plugins/SearchBox/3.1.3-public-preview.0/SearchBox-web.js"></script>
+    <script src="./../homepage/header/header.js" type="module"></script>
+    <script src="./../homepage/footer/footer.js" type="module"></script>
+    <link rel="stylesheet" href="./../homepage/header/header.css">
+    <link rel="stylesheet" href="./../homepage/footer/footer.css">
 
     <title>Select Storage Location</title>
   </head>
   <body>
-    <header>
-      <div class="logo">
-          <img src="../images/logo.png" alt="logo">
-      </div>
-
-      <div class="hamburger-menu" onclick="toggleMenu()">
-          <div></div>
-          <div></div>
-          <div></div>
-      </div>
-
-      <nav class="main-menu">
-          <ul>
-              <li><a href="../home-page-map/index.html">Our Locations</a></li>
-              <li><a href="../dummy_payment/dummy_payment.html">Pricing</a></li>
-              <li><a href="">Help Center</a></li>
-              <li><a href="" class="account-link"><i class="fas fa-image-portrait"></i>My Account<i class="fas fa-caret-down"></i></a>
-                  <ul class="sub-menu">
-                      <li><a href="../order-confirmation/order-confirmation.html">Order Updates</a></li>
-                      <li><a href="../storage-mgmt/storageMgmt.html">View Storage</a></li>
-                      <li><a href="../profile/index.html">Profile</a></li>
-                      <li><a href="">Logout</a></li>
-                  </ul>
-              </li>
-          </ul>
-          <button id="bookNowMenu" class="book-now">Book Now</button>
-      </nav>
-    </header>
+    <div id="header-placeholder">
+    </div>
     <main>
       <div id="map-area">
         <h1>CHOOSE A LOCATION</h1>
@@ -90,38 +68,15 @@
           <div id="map" class="map"></div>
         </div>
       </div>
-      <div id="loading-screen">
-        <div id="loading">
-          Loading
-          <span id="load-span"></span>
-        </div>
-      </div>
-
       </div>
     </main>
-    <footer>
-      <div class="footer-section">
-        <div class="site-logo">
-            <img src="../images/logo.png" alt="Logo">
-        </div>
-        <div class="footer-link">
-            <ul>
-                <li><a href="">About Us</a></li>
-                <li><a href="">Pricing</a></li>
-                <li><a href="../home-page-map/index.html">Our locations</a></li>
-                <li><a href="">Contact Us</a></li>
-            </ul>
-        </div>
-        <div class="social-media">
-            <ul>
-                <li><a href="https://www.youtube.com/"><img src="../icons/youtube.png" alt="Youtube Icon"></a></li>
-                <li><a href="https://www.facebook.com/"><img src="../icons/facebook.png" alt="Facebook Icon"></a></li>
-                <li><a href="#"><img src="../icons/Social.png" alt="Social Icon"></a></li>
-                <li><a href="https://www.instagram.com/"><img src="../icons/instagram.png" alt="Instagram Icon"></a></li>
-            </ul>
-        </div>
+    <div id="footer-placeholder">
+    </div>
+    <div id="loading-screen">
+      <div id="loading">
+        Loading
+        <span id="load-span"></span>
       </div>
-      <p>StashAway @2024, All rights reserved</p>
-    </footer>
+    </div>
   </body>
 </html>

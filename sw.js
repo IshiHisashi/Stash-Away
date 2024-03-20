@@ -2,7 +2,7 @@ if (navigator.serviceWorker) {
   // if navigator.serviceWorker’ exists, browser supports service worker.
   // register the SW file (here assuming it’s called sw.js in same dir.)
   navigator.serviceWorker
-    .register("sw.js")
+    .register("../../sw.js")
     .then((registered) => {
       console.log(`SW Registered (Scope: ${registered.scope})`); // logs a success message
     })
