@@ -3,63 +3,15 @@ import * as common from "../../../common.js";
 let user = null;
 const basePath = "../";
 
-async function init() {
+async function initHeader() {
     try {
         user = await common.getCurrentUserObj();
         updateUIBasedOnUser(user);
     } catch (error) {
         console.error('An error occurred:', error);
     }
-}
 
-function updateUIBasedOnUser(user) {
-    const buttonMyAccount = document.getElementById('btnMyAccount');
-    const buttonOrderUpdate = document.getElementById('btnOrderUpdate');
-    const buttonViewStorage = document.getElementById('btnViewStorage');
-    const buttonProfile = document.getElementById('btnProfile');
-    const buttonLogout = document.getElementById('btnLogout');
-    const buttonLogin = document.getElementById('btnLogin');
-    if (user) {
-        console.log(user.uid);
-        buttonMyAccount.style.display = 'block';
-        buttonOrderUpdate.style.display = 'block';
-        buttonViewStorage.style.display = 'block';
-        buttonProfile.style.display = 'block';
-        buttonLogout.style.display = 'block';
-        buttonLogin.style.display = 'none';
-    } else {
-        console.log('No user is logged in.');
-        buttonMyAccount.style.display = 'none';
-        buttonMyAccount.style.display = 'none';
-        buttonOrderUpdate.style.display = 'none';
-        buttonViewStorage.style.display = 'none';
-        buttonProfile.style.display = 'none';
-        buttonLogout.style.display = 'none';
-        buttonLogin.style.display = 'block';
-    }
-}
-function toggleDropdown(event) {
-    document.getElementById("myDropdown").classList.toggle("show");
-    event.stopPropagation();
-}
-
-window.onclick = function (event) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-        }
-    }
-}
-
-const isAuthenticated = () => {
-    return !!user;
-};
-
-init();
-
-const btntoggleMenu = document.getElementById('btntoggleMenu');
+    const btntoggleMenu = document.getElementById('btntoggleMenu');
 if (btntoggleMenu) {
     btntoggleMenu.addEventListener("click", async (e) => {
         e.preventDefault();
@@ -158,6 +110,29 @@ if (btnBookNow) {
     });
 }
 
+    // Since this logic might depend on the header being fully loaded,
+    // make sure you call this function after the header HTML has been inserted.
+    window.onclick = function(event) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    };
+}
+
+
+function toggleDropdown(event) {
+    document.getElementById("myDropdown").classList.toggle("show");
+    event.stopPropagation();
+}
+
+const isAuthenticated = () => {
+    return !!user;
+};
+
 // const bookNowHero = document.getElementById('bookNowHero');
 // if (bookNowHero) {
 //     bookNowHero.addEventListener('click', function (event) {
@@ -165,3 +140,33 @@ if (btnBookNow) {
 //         window.location.href = '../authentication/login.html';
 //     });
 // }
+
+
+function updateUIBasedOnUser(user) {
+    const buttonMyAccount = document.getElementById('btnMyAccount');
+    const buttonOrderUpdate = document.getElementById('btnOrderUpdate');
+    const buttonViewStorage = document.getElementById('btnViewStorage');
+    const buttonProfile = document.getElementById('btnProfile');
+    const buttonLogout = document.getElementById('btnLogout');
+    const buttonLogin = document.getElementById('btnLogin');
+    if (user) {
+        console.log(user.uid);
+        buttonMyAccount.style.display = 'block';
+        buttonOrderUpdate.style.display = 'block';
+        buttonViewStorage.style.display = 'block';
+        buttonProfile.style.display = 'block';
+        buttonLogout.style.display = 'block';
+        buttonLogin.style.display = 'none';
+    } else {
+        console.log('No user is logged in.');
+        buttonMyAccount.style.display = 'none';
+        buttonMyAccount.style.display = 'none';
+        buttonOrderUpdate.style.display = 'none';
+        buttonViewStorage.style.display = 'none';
+        buttonProfile.style.display = 'none';
+        buttonLogout.style.display = 'none';
+        buttonLogin.style.display = 'block';
+    }
+}
+
+export { initHeader };
