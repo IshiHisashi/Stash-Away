@@ -14,6 +14,20 @@ import {
   db,
 } from "./firebase_firestore.js";
 
+// load header and footer
+async function loadComponent(componentName, containerId) {
+  const response = await fetch(
+    `../homepage/${componentName}/${componentName}.html`
+  );
+  const content = await response.text();
+  document.getElementById(containerId).innerHTML = content;
+}
+// document.addEventListener("DOMContentLoaded", async () => {
+await loadComponent("header", "header-container");
+// await loadComponent('body', 'body-container');
+await loadComponent("footer", "footer-container");
+// });
+
 // checkbox behaviour
 const checkboxStyled = document.querySelector(
   "form > div:nth-of-type(11) span"
@@ -146,7 +160,6 @@ document
   .querySelectorAll("[required]")
   .forEach((el) => {
     el.oninput = (e) => {
-      console.log(e);
       // condition 1: all the required inputs are filled
       const inputArray = Array.from(
         document.querySelector("#signupForm").querySelectorAll("[required]")
@@ -240,7 +253,6 @@ btnSignup.onclick = (e) => {
               const code = document.querySelector("#code");
               const btnVerify = document.querySelector("#phoneVerification");
               code.oninput = (e) => {
-                console.log(e);
                 btnVerify.disabled = !e.target.value;
               };
 
@@ -285,8 +297,6 @@ btnSignup.onclick = (e) => {
               });
               alert(`Failed to send SMS. Please try again. ${error.message}`);
             });
-
-          // window.location.href = "after-login.html";
         } catch (error) {
           console.log(error);
           alert(

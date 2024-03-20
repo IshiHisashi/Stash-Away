@@ -1,12 +1,13 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   onSnapshot,
   query,
   where,
   db,
-} from "../authAndNotification/firebase_firestore.js";
+} from "../authentication/firebase_firestore.js";
 
 import {
   getCurrentUid,
@@ -46,7 +47,8 @@ const renderDetail = (
   requestedDate,
   requestedTime,
   departTimestamp,
-  ETA
+  ETA,
+  boxSize
 ) => {
   // detail container
   const divDetail = createHtmlElement("div", null, null, "class", "detail");
@@ -312,8 +314,8 @@ const renderDetail = (
     "orderDetails-boxSize"
   );
   const orderDetailsBoxSizeElements = [
-    { type: "p", value: null, textContent: "Box Size" },
-    { type: "p", value: null, textContent: `1 x Small( 18x18x16)` },
+    { type: "p", value: null, textContent: "Storage Size" },
+    { type: "p", value: null, textContent: `${boxSize}` },
   ];
   orderDetailsBoxSizeElements.forEach(({ type, value, textContent }) => {
     const element = createHtmlElement(type, value, textContent);
@@ -346,130 +348,174 @@ const renderDetail = (
 };
 
 const getDetails = async (uid) => {
-  // query criteria: all the documents under the user's 'order' collection, except it's "done".
-  const q = query(
-    collection(doc(collection(db, "users"), uid), "order"),
-    where("status", "!=", "done")
-  );
-  const objArr = [];
-  const order = await getDocs(q);
-  order.forEach((el) => {
-    const obj = { [el.id]: el.data() };
-    objArr.push(obj);
-  });
-  console.log(objArr);
+  try {
+    // get storage size
+    const docRef = doc(db, "users", uid);
+    const docSnap = await getDoc(docRef);
+    const boxSize =
+      docSnap.data().plan.size === "small"
+        ? "5’ x 5’"
+        : docSnap.data().plan.size === "medium"
+        ? "5’ x 10’"
+        : docSnap.data().plan.size === "large"
+        ? "10’ x 10’"
+        : null;
 
-  let addingNumber = 0;
-  let retrievalNumber = 0;
+    // query criteria: all the documents under the user's 'order' collection, except it's "done".
+    const q = query(
+      collection(doc(collection(db, "users"), uid), "order"),
+      where("status", "!=", "done")
+    );
+    const objArr = [];
+    const order = await getDocs(q);
+    order.forEach((el) => {
+      const obj = { [el.id]: el.data() };
+      objArr.push(obj);
+    });
+    // console.log(objArr);
 
-  objArr.forEach((orderObj) => {
-    const orderID = Object.keys(orderObj)[0];
-    const status = orderObj[orderID].status;
+    let addingNumber = 0;
+    let retrievalNumber = 0;
 
-    // don't show 'done' status order
-    if (status !== "done") {
-      const address = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
-      const itemKey = orderObj[orderID].itemKey;
+    objArr.forEach((orderObj) => {
+      const orderID = Object.keys(orderObj)[0];
+      const status = orderObj[orderID].status;
 
-      const orderType = orderObj[orderID].orderType;
-      orderType === "add" ? addingNumber++ : retrievalNumber++;
-      const section = document.querySelector(
-        orderType === "add" ? "section.adding" : "section.retrieval"
-      );
+      // don't show 'done' status order
+      if (status !== "done") {
+        const address = `${orderObj[orderID].address.detail}, ${orderObj[orderID].address.city}, ${orderObj[orderID].address.province} ${orderObj[orderID].address.zipCode}`;
+        const itemKey = orderObj[orderID].itemKey;
 
-      const rawOrderTimestamp = new Date(
-        orderObj[orderID].orderTimestamp.seconds * 1000 +
-          orderObj[orderID].orderTimestamp.nanoseconds / 1000000
-      );
-      const formattedOrderTimestamp = rawOrderTimestamp.toLocaleString(
-        "en-CA",
-        {
-          timeZone: "America/Vancouver",
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          timeZoneName: "shortGeneric",
-        }
-      );
-
-      const dateArray = orderObj[orderID].requestedDateTime.date.split(" ");
-
-      const requestedDate =
-        `${dateArray[2]} ${dateArray[1]} ${dateArray[3]} (${dateArray[0]})`.toUpperCase();
-      const requestedTime = orderObj[orderID].requestedDateTime.time;
-
-      let formattedDepartTimestamp;
-      if (orderObj[orderID].departTimestamp) {
-        const rawDepartTimestamp = new Date(
-          orderObj[orderID].departTimestamp.seconds * 1000 +
-            orderObj[orderID].departTimestamp.nanoseconds / 1000000
+        const orderType = orderObj[orderID].orderType;
+        orderType === "add" ? addingNumber++ : retrievalNumber++;
+        const section = document.querySelector(
+          orderType === "add" ? "section.adding" : "section.retrieval"
         );
-        formattedDepartTimestamp = rawDepartTimestamp.toLocaleString("en-CA", {
-          timeZone: "America/Vancouver",
-          weekday: "short",
-          year: "numeric",
-          month: "short",
-          day: "numeric",
-          hour: "numeric",
-          minute: "2-digit",
-          timeZoneName: "shortGeneric",
-        });
-      } else {
-        formattedDepartTimestamp = null;
+
+        const rawOrderTimestamp = new Date(
+          orderObj[orderID].orderTimestamp.seconds * 1000 +
+            orderObj[orderID].orderTimestamp.nanoseconds / 1000000
+        );
+        const arrayOrderTimestamp = rawOrderTimestamp
+          .toLocaleString("en-CA", {
+            timeZone: "America/Vancouver",
+            // weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            // timeZoneName: "shortGeneric",
+          })
+          .split(" ");
+
+        const formattedOrderTimestamp = `${arrayOrderTimestamp[1].substring(
+          0,
+          arrayOrderTimestamp[1].length - 1
+        )}/${arrayOrderTimestamp[0]}/${arrayOrderTimestamp[2].substring(
+          0,
+          arrayOrderTimestamp[2].length - 1
+        )} ${arrayOrderTimestamp[3]}${arrayOrderTimestamp[4]}`;
+
+        const dateArray = orderObj[orderID].requestedDateTime.date.split(" ");
+
+        const requestedDate =
+          `${dateArray[2]} ${dateArray[1]} ${dateArray[3]} (${dateArray[0]})`.toUpperCase();
+        const requestedTime = orderObj[orderID].requestedDateTime.time;
+
+        let formattedDepartTimestamp;
+        if (orderObj[orderID].departTimestamp) {
+          const rawDepartTimestamp = new Date(
+            orderObj[orderID].departTimestamp.seconds * 1000 +
+              orderObj[orderID].departTimestamp.nanoseconds / 1000000
+          );
+          const arrayDepartTimestamp = rawDepartTimestamp
+            .toLocaleString("en-CA", {
+              timeZone: "America/Vancouver",
+              // weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              // timeZoneName: "shortGeneric",
+            })
+            .split(" ");
+
+          formattedDepartTimestamp = `${arrayDepartTimestamp[1].substring(
+            0,
+            arrayDepartTimestamp[1].length - 1
+          )}/${arrayDepartTimestamp[0]}/${arrayDepartTimestamp[2].substring(
+            0,
+            arrayDepartTimestamp[2].length - 1
+          )} ${arrayDepartTimestamp[3]}${arrayDepartTimestamp[4]}`;
+        } else {
+          formattedDepartTimestamp = null;
+        }
+
+        const arrayETA = orderObj[orderID].ETA.split(" ");
+        const formattedETA = `${arrayETA[2].substring(
+          0,
+          arrayETA[2].length - 1
+        )}/${arrayETA[1]}/${arrayETA[3].substring(0, arrayETA[3].length - 1)} ${
+          arrayETA[4]
+        }${arrayETA[5]}`;
+
+        // const boxSize = "1 x Small( 18x18x16)";
+
+        renderDetail(
+          section,
+          orderID,
+          address,
+          itemKey,
+          orderType,
+          status,
+          formattedOrderTimestamp,
+          requestedDate,
+          requestedTime,
+          formattedDepartTimestamp,
+          formattedETA,
+          boxSize
+        );
       }
+    });
 
-      const formattedETA = orderObj[orderID].ETA;
+    if (addingNumber === 0) {
+      if (document.querySelector("section.adding .noOrder")) {
+        document.querySelector("section.adding .noOrder").remove();
+      }
+      document
+        .querySelector("section.adding")
+        .appendChild(
+          createHtmlElement(
+            "p",
+            null,
+            "There is no pickup order.",
+            "class",
+            "noOrder"
+          )
+        );
+    }
+    if (retrievalNumber === 0) {
+      if (document.querySelector("section.retrieval .noOrder")) {
+        document.querySelector("section.retrieval .noOrder").remove();
+      }
+      document
+        .querySelector("section.retrieval")
+        .appendChild(
+          createHtmlElement(
+            "p",
+            null,
+            "There is no delivery order.",
+            "class",
+            "noOrder"
+          )
+        );
+    }
 
-      renderDetail(
-        section,
-        orderID,
-        address,
-        itemKey,
-        orderType,
-        status,
-        formattedOrderTimestamp,
-        requestedDate,
-        requestedTime,
-        formattedDepartTimestamp,
-        formattedETA
-      );
-    }
-  });
-
-  if (addingNumber === 0) {
-    if (document.querySelector("section.adding .noOrder")) {
-      document.querySelector("section.adding .noOrder").remove();
-    }
-    document
-      .querySelector("section.adding")
-      .appendChild(
-        createHtmlElement(
-          "p",
-          null,
-          "There is no pickup order.",
-          "class",
-          "noOrder"
-        )
-      );
-  }
-  if (retrievalNumber === 0) {
-    if (document.querySelector("section.retrieval .noOrder")) {
-      document.querySelector("section.retrieval .noOrder").remove();
-    }
-    document
-      .querySelector("section.retrieval")
-      .appendChild(
-        createHtmlElement(
-          "p",
-          null,
-          "There is no delivery order.",
-          "class",
-          "noOrder"
-        )
-      );
+    executeAfterRender();
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -502,18 +548,32 @@ const sectionControl = (currentTab, uid) => {
   }
 };
 
+const executeAfterRender = function () {
+  const footerBegin = document.querySelector(
+    `section.${sessionStorage.getItem("currentTab")}`
+  ).scrollHeight;
+  console.log(footerBegin);
+  document.querySelector("footer").style.top = `${footerBegin}px`;
+};
+
 // get currently logged in user.
 const uid = await getCurrentUid();
 if (uid) {
   // render on load
+  let currentTab;
   if (sessionStorage.getItem("currentTab")) {
-    const currentTab = sessionStorage.getItem("currentTab");
+    currentTab = sessionStorage.getItem("currentTab");
     document.querySelector(`main li.${currentTab}`).classList.add("current");
-    sectionControl(currentTab, uid);
   } else {
+    sessionStorage.setItem("currentTab", "adding");
+    currentTab = sessionStorage.getItem("currentTab");
     document.querySelector(`main li.adding`).classList.add("current");
-    sectionControl("adding", uid);
   }
+  sectionControl(currentTab, uid);
+
+  window.onresize = () => {
+    executeAfterRender();
+  };
 
   // TAB BEHAVIOUR
   document.querySelectorAll("main li").forEach((el) => {
@@ -534,110 +594,129 @@ if (uid) {
 
   // update info according to Firestore updates
   (async () => {
-    // query criteria: all the documents under the user's 'order' collection
-    const q = query(collection(doc(collection(db, "users"), uid), "order"));
+    try {
+      // query criteria: all the documents under the user's 'order' collection
+      const q = query(collection(doc(collection(db, "users"), uid), "order"));
 
-    // add change listener to the queried place
-    const unsubscribe = await onSnapshot(q, (querySnapshot) => {
-      // get an array of the documents changes since the last snapshot.
-      querySnapshot.docChanges().forEach((changedDoc) => {
-        if (
-          changedDoc.type === "modified" &&
-          changedDoc.doc.data().status === "on going"
-        ) {
-          const rawDepartTimestamp = new Date(
-            changedDoc.doc.data().departTimestamp.seconds * 1000 +
-              changedDoc.doc.data().departTimestamp.nanoseconds / 1000000
-          );
-          const formattedDepartTimestamp = rawDepartTimestamp.toLocaleString(
-            "en-CA",
-            {
-              timeZone: "America/Vancouver",
-              weekday: "short",
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-              hour: "numeric",
-              minute: "2-digit",
-              timeZoneName: "shortGeneric",
-            }
-          );
+      // add change listener to the queried place
+      const unsubscribe = await onSnapshot(q, (querySnapshot) => {
+        // get an array of the documents changes since the last snapshot.
+        querySnapshot.docChanges().forEach((changedDoc) => {
+          if (
+            changedDoc.type === "modified" &&
+            changedDoc.doc.data().status === "on going"
+          ) {
+            const rawDepartTimestamp = new Date(
+              changedDoc.doc.data().departTimestamp.seconds * 1000 +
+                changedDoc.doc.data().departTimestamp.nanoseconds / 1000000
+            );
+            const arrayDepartTimestamp = rawDepartTimestamp
+              .toLocaleString("en-CA", {
+                timeZone: "America/Vancouver",
+                // weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+                // timeZoneName: "shortGeneric",
+              })
+              .split(" ");
 
-          const formattedETA = changedDoc.doc.data().ETA;
+            const formattedDepartTimestamp = `${arrayDepartTimestamp[1].substring(
+              0,
+              arrayDepartTimestamp[1].length - 1
+            )}/${arrayDepartTimestamp[0]}/${arrayDepartTimestamp[2].substring(
+              0,
+              arrayDepartTimestamp[2].length - 1
+            )} ${arrayDepartTimestamp[3]}${arrayDepartTimestamp[4]}`;
 
-          // update current status
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .currentStatus p`
-          )[0].textContent =
-            changedDoc.doc.data().orderType === "add"
-              ? "Out For Pickup"
-              : "Out For Delivery";
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .currentStatus p`
-          )[1].textContent = `ETA: ${formattedETA}`;
+            const arrayETA = changedDoc.doc.data().ETA.split(" ");
+            const formattedETA = `${arrayETA[2].substring(
+              0,
+              arrayETA[2].length - 1
+            )}/${arrayETA[1]}/${arrayETA[3].substring(
+              0,
+              arrayETA[3].length - 1
+            )} ${arrayETA[4]}${arrayETA[5]}`;
 
-          // update timeline (tripStarted)
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .milestone`
-          )[1].innerHTML =
-            '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            // update current status
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .currentStatus p`
+            )[0].textContent =
+              changedDoc.doc.data().orderType === "add"
+                ? "Out For Pickup"
+                : "Out For Delivery";
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .currentStatus p`
+            )[1].textContent = `ETA: ${formattedETA}`;
 
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
-          ).textContent = "TRIP STARTED";
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
-          ).style.color = "#103646";
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
-          ).textContent = formattedDepartTimestamp;
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
-          ).style.color = "#103646";
+            // update timeline (tripStarted)
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .milestone`
+            )[1].innerHTML =
+              '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
-          // update timeline (eta)
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .milestone`
-          )[2].innerHTML =
-            '<svg class="yellow" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#F9B035"/></svg>';
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-eta p`
-          ).textContent = `ETA: ${formattedETA}`;
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-eta p`
-          ).style.color = "#103646";
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
+            ).textContent = "TRIP STARTED";
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
+            ).style.color = "#103646";
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
+            ).textContent = formattedDepartTimestamp;
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
+            ).style.color = "#103646";
 
-          // notification
-          new Notification("StashAway", {
-            body: `Driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${formattedETA}`,
-          });
-        } else if (
-          changedDoc.type === "modified" &&
-          changedDoc.doc.data().status === "done"
-        ) {
-          // update current status
-          document.querySelectorAll(".currentStatus p")[0].textContent = "Done";
+            // update timeline (eta)
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .milestone`
+            )[2].innerHTML =
+              '<svg class="yellow" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#F9B035"/></svg>';
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-eta p`
+            ).textContent = `ETA: ${formattedETA}`;
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-eta p`
+            ).style.color = "#103646";
 
-          // update timeline (eta)
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .milestone`
-          )[2].innerHTML =
-            '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            // notification
+            new Notification("StashAway", {
+              body: `Driver is on the way! Order ID: ${changedDoc.doc.id}, ETA: ${formattedETA}`,
+            });
+          } else if (
+            changedDoc.type === "modified" &&
+            changedDoc.doc.data().status === "done"
+          ) {
+            // update current status
+            document.querySelectorAll(".currentStatus p")[0].textContent =
+              "Done";
 
-          // update timeline (ended)
-          document.querySelectorAll(
-            `#${changedDoc.doc.id} .milestone`
-          )[3].innerHTML =
-            '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripEnded p`
-          ).textContent = "TRIP ENDED";
-          document.querySelector(
-            `#${changedDoc.doc.id} .updates-tripEnded p`
-          ).style.color = "#103646";
-        }
+            // update timeline (eta)
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .milestone`
+            )[2].innerHTML =
+              '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+            // update timeline (ended)
+            document.querySelectorAll(
+              `#${changedDoc.doc.id} .milestone`
+            )[3].innerHTML =
+              '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripEnded p`
+            ).textContent = "TRIP ENDED";
+            document.querySelector(
+              `#${changedDoc.doc.id} .updates-tripEnded p`
+            ).style.color = "#103646";
+          }
+        });
       });
-    });
+    } catch (error) {
+      console.log(error);
+    }
   })();
 } else {
   console.log("log in first!");

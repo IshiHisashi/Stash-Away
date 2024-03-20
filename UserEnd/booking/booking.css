@@ -8,7 +8,7 @@
 
 body {
   color: #666;
-  margin: 0 1rem;
+  /* margin: 0 1rem; */
   overflow-y: hidden;
   /* 👆 This overflow-y is to prevent screen from being scrolled during loading */
 }
@@ -18,6 +18,141 @@ body {
   --color-secondary: #103646;
   --color-input: #f4f4f4;
   --color-lightnpink: #fce4e7;
+}
+/* Stikcy-head */
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  padding-bottom: 0.1rem;
+}
+
+/* overlay */
+.overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+
+/* Progress bar*/
+.progress-mobile {
+  margin-top: 28px;
+  margin-bottom: 18px;
+  margin-left: 24.5px;
+  margin-right: 24.5px;
+  @media screen and (min-width: 800px) {
+    display: none;
+  }
+  h2 {
+    font-family: var(--subtitle-2-family);
+    font-size: var(--subtitle-2-size);
+    font-weight: var(--subtitle-2-weight);
+    color: var(--grey-3);
+  }
+  .hide {
+    display: none;
+  }
+  .progress {
+    width: 100%;
+    height: 18px;
+    background-color: var(--grey-1);
+    border-radius: 35px;
+    margin-top: 10.5px;
+  }
+  .progress-bar {
+    width: 18%;
+    transition: width 0.5s ease-in;
+    height: 18px;
+    border-radius: 35px 0 0 35px;
+    background-color: var(--dark-blue-green);
+    z-index: 100;
+  }
+}
+
+.progress-large {
+  display: none;
+  margin-top: 28px;
+  margin-bottom: 30px;
+  /* max-width: 700px; */
+  margin-left: 24.5px;
+  margin-right: 24.5px;
+  @media screen and (min-width: 800px) {
+    display: block;
+  }
+  .progress-texts {
+    margin-top: 11px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .progress-texts > div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* For checked */
+  .icon-wrapper {
+    background-color: var(--dark-blue-green);
+    border-radius: 100%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .hide {
+    display: none;
+  }
+  .check {
+    color: white;
+    transform: scale(0.7);
+  }
+  /* For now */
+  .circle-now {
+    background-color: var(--yellow);
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+  }
+  /* For yet */
+  .circle-yet {
+    background-color: #d9d9d9;
+    width: 16px;
+    height: 16px;
+    border-radius: 100%;
+  }
+  .text-yet {
+    color: var(--grey-2);
+  }
+  h2 {
+    font-family: var(--subtitle-2-family);
+    font-size: var(--subtitle-2-size);
+    font-weight: var(--subtitle-2-weight);
+    color: var(--grey-3);
+  }
+  .progress {
+    width: 100%;
+    height: 6px;
+    background-color: var(--grey-1);
+    border-radius: 11px;
+    margin-top: 10.5px;
+  }
+  .progress-bar {
+    width: 5%;
+
+    transition: width 0.5s ease-in;
+    height: 6px;
+    border-radius: 11px 0 0 11px;
+    background-color: var(--dark-blue-green);
+    z-index: 100;
+  }
 }
 
 /* Main */
@@ -83,15 +218,13 @@ main {
         max-width: 190px;
       }
     }
-    .item-description-wrapper h3{
+    .item-description-wrapper h3 {
       @media screen and (min-width: 900px) {
         display: block;
         font-size: var(--h3-size);
         font-weight: var(--h3-weight);
       }
     }
-
-    
 
     .modal {
       display: none;
@@ -107,11 +240,12 @@ main {
       .modal-content {
         background-color: #f4f4f4;
         margin: 20% auto;
-        width: 85%;
+        width: 50%;
         height: 40rem;
         box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2),
           0 7px 20px 0 rgba(0, 0, 0, 0.17);
-        position: relative;
+        position: relative;     
+        text-align: center;
       }
 
       .modalClose {
@@ -163,8 +297,10 @@ main {
       }
 
       .btn-back--modal {
-        border: solid 2px black;
-        width: 5%;
+        border: solid 2px #e04462;
+        width: 4rem;
+        height: auto;
+        color: #e04462;
       }
     }
 
@@ -245,7 +381,7 @@ main {
     }
 
     .item-list-wrapper {
-      overflow: hidden;      
+      overflow: hidden;
 
       li.item-list-li {
         list-style-type: none; /* Removes bullet points from li */
@@ -256,7 +392,7 @@ main {
         display: flex;
         justify-content: space-between; /* Distributes space between the image/name and icons */
         align-items: center; /* Vertically centers all items within the .item-card */
-        border: 2px solid #DFDFDF; /* Adjust the border color and size as needed */
+        border: 2px solid #dfdfdf; /* Adjust the border color and size as needed */
         border-radius: 7px;
         padding: 10px; /* Adjust the padding as needed */
         gap: 10px; /* If you want a gap between the image/name and icons */
@@ -281,16 +417,16 @@ main {
       }
 
       .icon1 {
-        cursor: pointer; 
-        margin-left: 10px; 
+        cursor: pointer;
+        margin-left: 10px;
       }
       .icon2 {
-        cursor: pointer; 
-        margin-left: 10px; 
+        cursor: pointer;
+        margin-left: 10px;
       }
       .icon3 {
-        cursor: pointer; 
-        margin-left: 10px; 
+        cursor: pointer;
+        margin-left: 10px;
       }
 
       .item-set1 {
@@ -343,7 +479,7 @@ main {
 
       @media screen and (min-width: 900px) {
         display: unset;
-        float: right;    
+        float: right;
       }
     }
 
@@ -409,6 +545,11 @@ main {
       color: var(--grey-3);
     }
 
+    label:after {
+      content: " *";
+      color: var(--alert);
+    }
+
     input,
     select {
       display: block;
@@ -423,6 +564,12 @@ main {
       font-family: var(--body-family);
       font-size: var(--body-size);
       font-weight: var(--body-weight);
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border: 2px solid #0a2a38;
     }
 
     .btn-div {
@@ -704,6 +851,10 @@ main {
       }
     }
 
+    .grey .btn-save,
+    .grey .btn-save:hover {
+      background-color: var(--grey-1);
+    }
     .selected {
       border: 2px solid rgba(0, 0, 0, 0.5);
       /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3); */
@@ -929,6 +1080,11 @@ main {
       .btn-save:hover {
         background-color: var(--dark-pink);
       }
+    }
+
+    .grey .btn-save,
+    .grey .btn-save:hover {
+      background-color: var(--grey-1);
     }
   }
 }

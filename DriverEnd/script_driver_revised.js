@@ -1,5 +1,5 @@
 import {
-  objArr,
+  // objArr,
   update,
   db,
   getOrder,
@@ -171,52 +171,56 @@ const renderOrders = (
         const oid = ids.split("_")[1];
 
         (async () => {
-          // ETA ///////////////
-          // get arrival location (geocode from the order's address)
-          const responseUserGeo = await tt.services.geocode({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-            query: address,
-          });
-          const userLat = responseUserGeo.results[0].position.lat;
-          const userLon = responseUserGeo.results[0].position.lng;
+          try {
+            // ETA ///////////////
+            // get arrival location (geocode from the order's address)
+            const responseUserGeo = await tt.services.geocode({
+              key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+              query: address,
+            });
+            const userLat = responseUserGeo.results[0].position.lat;
+            const userLon = responseUserGeo.results[0].position.lng;
 
-          // get driver's departure location (= storage location)
-          const docSnap = await getDoc(doc(db, "users", uid));
-          console.log(docSnap);
-          const driverLat = docSnap.data().storageLocation.latitude;
-          const driverLon = docSnap.data().storageLocation.longitude;
+            // get driver's departure location (= storage location)
+            const docSnap = await getDoc(doc(db, "users", uid));
+            console.log(docSnap);
+            const driverLat = docSnap.data().storageLocation.latitude;
+            const driverLon = docSnap.data().storageLocation.longitude;
 
-          // calculate ETA
-          const responseETA = await tt.services.calculateRoute({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-            locations: [
-              [driverLat, driverLon],
-              [userLat, userLon],
-            ],
-          });
-          const rawETA = new Date(responseETA.routes[0].summary.arrivalTime);
-          const formattedETA = rawETA.toLocaleString("en-CA", {
-            timeZone: "America/Vancouver",
-            weekday: "short",
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit",
-            timeZoneName: "shortGeneric",
-          });
+            // calculate ETA
+            const responseETA = await tt.services.calculateRoute({
+              key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+              locations: [
+                [driverLat, driverLon],
+                [userLat, userLon],
+              ],
+            });
+            const rawETA = new Date(responseETA.routes[0].summary.arrivalTime);
+            const formattedETA = rawETA.toLocaleString("en-CA", {
+              timeZone: "America/Vancouver",
+              weekday: "short",
+              year: "numeric",
+              month: "short",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+              timeZoneName: "shortGeneric",
+            });
 
-          // update DB, get updated info back, and show trip details page
-          // --UPDATE DB--
-          // Update driverid and status
-          await update(uid, oid, formattedETA, driverSelect);
-          // Get the updated order info.
-          const get = await getOrder(uid, oid);
-          const order = get.data();
+            // update DB, get updated info back, and show trip details page
+            // --UPDATE DB--
+            // Update driverid and status
+            await update(uid, oid, formattedETA, driverSelect);
+            // Get the updated order info.
+            const get = await getOrder(uid, oid);
+            const order = get.data();
 
-          // get trip details page ready
-          // renderTripDetails(userID, orderID, address, name);
-          window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
+            // get trip details page ready
+            // renderTripDetails(userID, orderID, address, name);
+            window.location.href = `driver/tripDetail.html?uid=${userID}&oid=${orderID}`;
+          } catch (error) {
+            console.log(error);
+          }
         })();
       };
 
@@ -265,6 +269,8 @@ const renderAllTrips = (objArr, currentPage) => {
       );
     }
   });
+
+  executeAfterRender();
 };
 
 const renderNewTrips = (objArr, currentPage) => {
@@ -281,16 +287,7 @@ const renderOngoingTrips = (objArr, currentPage) => {
   renderAllTrips(objOngoingOrdersArr, currentPage);
 };
 
-// render trips on load
-const sectionNewTrips = document.querySelector(".orders.newTrips");
-const sectionOngoingTrips = document.querySelector(".orders.ongoingTrips");
-const sectionAllTrips = document.querySelector(".orders.allTrips");
-
-sectionNewTrips.style.transform = "translateX(-100%)";
-sectionOngoingTrips.style.transform = "translateX(-100%)";
-sectionAllTrips.style.transform = "translateX(0)";
-
-const controlCarousel = (currentPage) => {
+const controlCarousel = (currentPage, objArr) => {
   document
     .querySelector(`.orders.${currentPage}`)
     .querySelectorAll(".order")
@@ -340,60 +337,52 @@ const controlCarousel = (currentPage) => {
   }
 };
 
-if (sessionStorage.getItem("currentPage")) {
-  const currentPage = sessionStorage.getItem("currentPage");
-  controlCarousel(currentPage);
-} else {
-  controlCarousel("allTrips");
+async function loadVariable() {
+  try {
+    const { objArr } = await import("./forDriverEnd/load.js");
+    let currentPage;
+    if (sessionStorage.getItem("currentPage")) {
+      currentPage = sessionStorage.getItem("currentPage");
+    } else {
+      sessionStorage.setItem("currentPage", "allTrips");
+      currentPage = sessionStorage.getItem("currentPage");
+    }
+    controlCarousel(currentPage, objArr);
+  } catch (error) {
+    console.log(error);
+  }
 }
+
+// render trips on load
+const sectionNewTrips = document.querySelector(".orders.newTrips");
+const sectionOngoingTrips = document.querySelector(".orders.ongoingTrips");
+const sectionAllTrips = document.querySelector(".orders.allTrips");
+
+sectionNewTrips.style.transform = "translateX(-100%)";
+sectionOngoingTrips.style.transform = "translateX(-100%)";
+sectionAllTrips.style.transform = "translateX(0)";
+
+loadVariable();
 
 //
 //
 
 // Function to execute when all divOrder elements are rendered
-const executeAfterRender = () => {
+const executeAfterRender = function () {
   const footerBegin = document.querySelector(
     `.orders.${sessionStorage.getItem("currentPage")}`
   ).scrollHeight;
   console.log(footerBegin);
-  document.querySelector("footer").style.top = `${footerBegin + 80}px`;
+  document.querySelector("footer").style.top = `${footerBegin + 60}px`;
 };
 
-// Create a new MutationObserver
-const observer = new MutationObserver((mutationsList, observer) => {
-  // Check if any mutation added nodes
-  for (let mutation of mutationsList) {
-    if (mutation.type === "childList" && mutation.addedNodes.length > 0) {
-      // If added nodes include divOrder elements, execute the code
-      if (
-        Array.from(mutation.addedNodes).some(
-          (node) => node.classList && node.classList.contains("order")
-        )
-      ) {
-        executeAfterRender();
-        // Disconnect the observer as we don't need it anymore once the code is executed
-        observer.disconnect();
-        return;
-      }
-    }
-  }
-});
-
-// Start observing changes in the parent node of divOrder elements
-observer.observe(document.querySelector(".orders.allTrips"), {
-  childList: true,
-});
-
-// Call the function to ensure that if no mutations occur, the code is executed
-executeAfterRender();
-
-// const footerBegin = document.querySelector(".orders.allTrips").clientHeight;
-// console.log(footerBegin);
-// document.querySelector("footer").style.marginTop = `${footerBegin + 32}px`;
+window.onresize = () => {
+  executeAfterRender();
+};
 
 // TAB BEHAVIOUR
 document.querySelectorAll("header li").forEach((el) => {
-  el.onclick = (e) => {
+  el.onclick = async (e) => {
     e.preventDefault();
     const currentPageClass = e.target.classList[0];
     sessionStorage.setItem("currentPage", currentPageClass);
@@ -405,6 +394,11 @@ document.querySelectorAll("header li").forEach((el) => {
     document.querySelector(`li.${currentPage}`).classList.add("current");
     console.log(document.querySelector(`.${currentPage}`).classList);
 
-    controlCarousel(currentPage);
+    try {
+      const { objArr } = await import("./forDriverEnd/load.js");
+      controlCarousel(currentPage, objArr);
+    } catch (error) {
+      console.log(error);
+    }
   };
 });

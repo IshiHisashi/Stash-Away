@@ -1,6 +1,8 @@
 "use strict";
 
 import * as common from "../../common.js";
+import { initHeader } from '../homepage/header/header.js';
+import { initFooter } from '../homepage/footer/footer.js';
 // Initialize Firebase---------------
 const db = common.db;
 // General : Get company info
@@ -24,6 +26,20 @@ const snapShot = await common.getDocs(queryStorage);
 
 // define variable / fnc ------------
 // var_DoM
+// For Overlay-control
+const overlay1 = document.getElementById("overlay-1");
+const overlay2 = document.getElementById("overlay-2");
+const overlay3 = document.getElementById("overlay-3");
+const overlay4 = document.getElementById("overlay-4");
+
+// For Progress bar
+const listItemsM = document.getElementById("list-items-m");
+const pickUpAddressM = document.getElementById("pick-up-address-m");
+const storageSizeM = document.getElementById("storage-size-m");
+const selectPlanM = document.getElementById("select-plan-m");
+const progressBarM = document.querySelector(".progress-mobile .progress-bar");
+const progressBarL = document.querySelector(".progress-large .progress-bar");
+
 // For 1. Booking_additem
 const item = document.getElementById("item");
 const newItemName = document.getElementById("newItemName");
@@ -31,6 +47,7 @@ const displayItemName = document.getElementById("displayItemName");
 const displayItemNameElement = document.getElementById("displayItemName");
 const btnSave = document.getElementById("btnSave");
 const itemList = document.getElementById("item-list");
+const btnProceed = document.getElementById("btn-proceed");
 // For 2. Booking_pick-up
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
@@ -42,6 +59,7 @@ const zipCode = document.getElementById("zipcode");
 const pickupDate = document.getElementById("pickup-date");
 const pickupTime = document.getElementById("pickup-time");
 const storageLocation = document.getElementById("storage-location");
+const btnBackPickup = document.getElementById("btn-back-pikup");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
 // For 3. Booking_Size selection
@@ -51,6 +69,8 @@ const largePrice = document.getElementById("large-price");
 const btnSelectSmall = document.getElementById("btn-small");
 const btnSelectMedium = document.getElementById("btn-medium");
 const btnSelectLarge = document.getElementById("btn-large");
+const btnSaveSize = document.getElementById("btn-save-size");
+const btnBackSize = document.getElementById("btn-back-size");
 
 // For 4. Booking_TermPlan selection
 // to be placed here later
@@ -66,6 +86,8 @@ const priceLong = document.getElementById("price-long");
 const btnShort = document.getElementById("btn-short");
 const btnMid = document.getElementById("btn-mid");
 const btnLong = document.getElementById("btn-long");
+const btnSavePlan = document.getElementById("btn-save-plan");
+const btnBackPlan = document.getElementById("btn-back-plan");
 
 //using camera
 const cameraIcon = document.getElementById("cameraIcon");
@@ -88,6 +110,36 @@ let itemData;
 
 // --------------------------------
 // For Prathibha
+
+async function loadComponent(componentPath, placeholderId) {
+  try {
+      const response = await fetch(componentPath);
+      const componentHTML = await response.text();
+      document.getElementById(placeholderId).innerHTML = componentHTML;
+  } catch (error) {
+      console.error('An error occurred while loading the component:', error);
+  }
+}
+
+async function init() {
+  try {
+      await loadComponent('../homepage/header/header.html', 'header-placeholder');
+      initHeader();
+      await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
+      initFooter();
+  } catch (error) {
+      console.error('An error occurred:', error);
+  }
+}
+
+if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
+  init();
+} else {
+  document.addEventListener('DOMContentLoaded', init);
+}
+
+
+
 const renderListFor = function (doc) {
   for (let i = 0; i < doc.length; i++) {
     if (doc[i].data().status === "saved") {
@@ -409,6 +461,24 @@ async function saveItem() {
 const itemsContainer = document.getElementById("itemsContainer");
 // Prathibha_end
 
+// Press proceed
+btnProceed.addEventListener("click", () => {
+  // Overlay change
+  overlay1.classList.add("overlay");
+  overlay2.classList.remove("overlay");
+  // update progress bar for Mobile
+  listItemsM.classList.add("hide");
+  pickUpAddressM.classList.remove("hide");
+  progressBarM.style.width = "36%";
+  // update progress bad for Large
+  document.querySelector(".list-your-item >span").classList.add("hide");
+  document.querySelector(".list-your-item>div").classList.remove("hide");
+  document
+    .querySelector(".pick-up-address>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "22%";
+});
+
 //-----------------------------------------
 // Ishi start
 // 2. Booking_Pickup
@@ -531,10 +601,10 @@ showCalendar(year, month);
 
 // Time of pickup
 // time options
-var quarterHours = ["00", "30"];
-var times = [];
-for (var i = 9; i < 21; i++) {
-  for (var j = 0; j < 2; j++) {
+let quarterHours = ["00", "30"];
+let times = [];
+for (let i = 9; i < 21; i++) {
+  for (let j = 0; j < 2; j++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
@@ -549,38 +619,85 @@ times.forEach((el) => {
 });
 
 // Event : Back
+btnBackPickup.addEventListener("click", async () => {
+  // overlay control
+  overlay1.classList.remove("overlay");
+  overlay2.classList.add("overlay");
+  // update progress bar for Mobile
+  listItemsM.classList.remove("hide");
+  pickUpAddressM.classList.add("hide");
+  progressBarM.style.width = "18%";
+  // update progress bad for Large
+  document.querySelector(".list-your-item >span").classList.remove("hide");
+  document.querySelector(".list-your-item>div").classList.add("hide");
+  document
+    .querySelector(".pick-up-address >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "5%";
+});
 
 // Event : Save & Proceed
 btnSavePickup.addEventListener("click", async (e) => {
-  // e.preventDefault();
-  const geoCodeArray = [];
-  let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
-  await tt.services
-    .geocode({
-      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-      query: wholeAddress,
-    })
-    .then((response) => {
-      console.log(response);
-      let userLat = response.results[0].position.lat;
-      let userLon = response.results[0].position.lng;
-      geoCodeArray.push(userLon);
-      geoCodeArray.push(userLat);
-      console.log(geoCodeArray);
+  // Required Alert
+  if (
+    firstname.value === "" ||
+    lastname.value === "" ||
+    city.value === "" ||
+    province.value === "" ||
+    street.value === "" ||
+    unitNumber.value === "" ||
+    zipCode.value === "" ||
+    pickupDate.value === "" ||
+    pickupTime.value === "" ||
+    storageLocation.value === ""
+  ) {
+    e.preventDefault();
+    alert("Please fill in all the required information");
+  } else {
+    // e.preventDefault();
+    const geoCodeArray = [];
+    let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
+    await tt.services
+      .geocode({
+        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+        query: wholeAddress,
+      })
+      .then((response) => {
+        console.log(response);
+        let userLat = response.results[0].position.lat;
+        let userLon = response.results[0].position.lng;
+        geoCodeArray.push(userLon);
+        geoCodeArray.push(userLat);
+        console.log(geoCodeArray);
+      });
+    common.updateDoc(common.doc(db, "users", uid), {
+      "userName.firstName": `${firstname.value}`,
+      "userName.lastName": `${lastname.value}`,
+      "address.city": `${city.value}`,
+      "address.province": `${province.value}`,
+      "address.detail": `${street.value}`,
+      "address.roomNumEtc": `${unitNumber.value}`,
+      "address.geoCode": geoCodeArray,
+      "address.zipCode": `${zipCode.value}`,
+      "ongoing_order.date": `${pickupDate.value}`,
+      "ongoing_order.time": `${pickupTime.value}`,
+      "storageLocation.name": `${storageLocation.value}`,
     });
-  common.updateDoc(common.doc(db, "users", uid), {
-    "userName.firstName": `${firstname.value}`,
-    "userName.lastName": `${lastname.value}`,
-    "address.city": `${city.value}`,
-    "address.province": `${province.value}`,
-    "address.detail": `${street.value}`,
-    "address.roomNumEtc": `${unitNumber.value}`,
-    "address.geoCode": geoCodeArray,
-    "address.zipCode": `${zipCode.value}`,
-    "ongoing_order.date": `${pickupDate.value}`,
-    "ongoing_order.time": `${pickupTime.value}`,
-    "storageLocation.name": `${storageLocation.value}`,
-  });
+  }
+  // overlay contorol
+  overlay2.classList.add("overlay");
+  overlay3.classList.remove("overlay");
+  // update progress bar for Mobile
+  pickUpAddressM.classList.add("hide");
+  storageSizeM.classList.remove("hide");
+  progressBarM.style.width = "54%";
+  // update progress bad for Large
+  document.querySelector(".pick-up-address >span").classList.add("hide");
+  document.querySelector(".pick-up-address>div").classList.remove("hide");
+  document
+    .querySelector(".storage-size>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "47%";
 });
 
 // ------------------------------
@@ -596,6 +713,8 @@ largePrice.textContent = `$${docPlanSize.large.price}`;
 // initial setting (if already selected)
 const btnSelectSizeAll = document.querySelectorAll(".storage-size .btn-select");
 if (userDoc.plan?.size) {
+  // able btn
+  document.querySelector(".storage-size .btn-div").classList.remove("grey");
   for (let i = 0; i < btnSelectSizeAll.length; i++) {
     if (btnSelectSizeAll[i].id.includes(userDoc.plan.size)) {
       document
@@ -624,6 +743,8 @@ const btnSelectClick = function (btn, size) {
         document.querySelector(`.${size}-size`).classList.add("selected");
       }
     }
+    // able btn
+    document.querySelector(".storage-size .btn-div").classList.remove("grey");
     // update section#4
     priceShort.textContent = `$${calcTotalPrice(
       docPlanTerm.short.discount,
@@ -649,6 +770,42 @@ const calcTotalPrice = function (discount, size) {
 btnSelectClick(btnSelectSmall, "small");
 btnSelectClick(btnSelectMedium, "medium");
 btnSelectClick(btnSelectLarge, "large");
+
+// Press back
+btnBackSize.addEventListener("click", () => {
+  // overlay contorol
+  overlay2.classList.remove("overlay");
+  overlay3.classList.add("overlay");
+  // update progress bar for Mobile
+  storageSizeM.classList.add("hide");
+  pickUpAddressM.classList.remove("hide");
+  progressBarM.style.width = "36%";
+  // update progress bar for Large
+  document.querySelector(".pick-up-address >span").classList.remove("hide");
+  document.querySelector(".pick-up-address>div").classList.add("hide");
+  document
+    .querySelector(".storage-size >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "22%";
+});
+
+// Press next
+btnSaveSize.addEventListener("click", () => {
+  // overlay contorol
+  overlay3.classList.add("overlay");
+  overlay4.classList.remove("overlay");
+  // update progress bar
+  storageSizeM.classList.add("hide");
+  selectPlanM.classList.remove("hide");
+  progressBarM.style.width = "72%";
+  // update progress bad for Large
+  document.querySelector(".storage-size >span").classList.add("hide");
+  document.querySelector(".storage-size>div").classList.remove("hide");
+  document
+    .querySelector(".select-plan>span")
+    .classList.replace("circle-yet", "circle-now");
+  progressBarL.style.width = "70%";
+});
 
 // ------------------------------
 // 4. Storage Plan
@@ -682,6 +839,8 @@ priceLong.textContent = `$${calcTotalPrice(
 // initial setting (if already selected)
 const btnSelectTermAll = document.querySelectorAll(".select-plan .btn-select");
 if (userDoc.plan?.term) {
+  // able btn
+  document.querySelector(".select-plan .btn-div").classList.remove("grey");
   for (let i = 0; i < btnSelectTermAll.length; i++) {
     if (btnSelectTermAll[i].id.includes(userDoc.plan.term)) {
       document.querySelector(`.${userDoc.plan.term}`).classList.add("selected");
@@ -704,12 +863,34 @@ const btnTermClick = function (btn, term) {
         document.querySelector(`.${term}`).classList.add("selected");
       }
     }
+    // able btn
+    document.querySelector(".select-plan .btn-div").classList.remove("grey");
   });
 };
 // Execute
 btnTermClick(btnShort, "short");
 btnTermClick(btnMid, "mid");
 btnTermClick(btnLong, "long");
+
+// Press back
+btnBackPlan.addEventListener("click", () => {
+  // overlay contorol
+  overlay3.classList.remove("overlay");
+  overlay4.classList.add("overlay");
+  // update progress bar for Mobile
+  selectPlanM.classList.add("hide");
+  storageSizeM.classList.remove("hide");
+  progressBarM.style.width = "54%";
+  // update progress bar for Lerge
+  document.querySelector(".storage-size >span").classList.remove("hide");
+  document.querySelector(".storage-size>div").classList.add("hide");
+  document
+    .querySelector(".select-plan >span")
+    .classList.replace("circle-now", "circle-yet");
+  progressBarL.style.width = "47%";
+});
+
+// Press proceed to payment
 
 // ---------------------------
 // for modal
