@@ -453,13 +453,17 @@ const getDetails = async (uid) => {
           formattedDepartTimestamp = null;
         }
 
-        const arrayETA = orderObj[orderID].ETA.split(" ");
-        const formattedETA = `${arrayETA[2].substring(
-          0,
-          arrayETA[2].length - 1
-        )}/${arrayETA[1]}/${arrayETA[3].substring(0, arrayETA[3].length - 1)} ${
-          arrayETA[4]
-        }${arrayETA[5]}`;
+        let formattedETA;
+        if (orderObj[orderID].ETA) {
+          const arrayETA = orderObj[orderID].ETA.split(" ");
+          formattedETA = `${arrayETA[2].substring(0, arrayETA[2].length - 1)}/${
+            arrayETA[1]
+          }/${arrayETA[3].substring(0, arrayETA[3].length - 1)} ${arrayETA[4]}${
+            arrayETA[5]
+          }`;
+        } else {
+          formattedETA = null;
+        }
 
         // const boxSize = "1 x Small( 18x18x16)";
 

@@ -20,7 +20,7 @@ async function init() {
   try {
     await loadComponent("../homepage/header/header.html", "header-placeholder");
     initHeader();
-    await loadComponent("../homepage/body/body.html", "body-placeholder");
+    // await loadComponent("../homepage/body/body.html", "body-placeholder");
     await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
     initFooter();
   } catch (error) {
