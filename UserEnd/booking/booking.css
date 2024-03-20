@@ -240,11 +240,12 @@ main {
       .modal-content {
         background-color: #f4f4f4;
         margin: 20% auto;
-        width: 85%;
+        width: 50%;
         height: 40rem;
         box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2),
           0 7px 20px 0 rgba(0, 0, 0, 0.17);
-        position: relative;
+        position: relative;     
+        text-align: center;
       }
 
       .modalClose {
@@ -296,8 +297,10 @@ main {
       }
 
       .btn-back--modal {
-        border: solid 2px black;
-        width: 5%;
+        border: solid 2px #e04462;
+        width: 4rem;
+        height: auto;
+        color: #e04462;
       }
     }
 
