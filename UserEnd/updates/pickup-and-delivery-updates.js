@@ -592,7 +592,7 @@ const executeAfterRender = function () {
     `section.${sessionStorage.getItem("currentTab")}`
   ).scrollHeight;
   console.log(footerBegin);
-  document.querySelector("footer").style.top = `${footerBegin}px`;
+  document.querySelector("footer").style.top = `${footerBegin + 80}px`;
 };
 
 // get currently logged in user.

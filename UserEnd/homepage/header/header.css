@@ -1,3 +1,9 @@
+@import "../../../common.css";
+
+* {
+  font-family: var(--subtitle-family);
+}
+
 img {
   max-width: 100%;
   height: auto;
@@ -10,6 +16,7 @@ header {
   align-items: center;
   position: relative;
   padding: 10px;
+  background-color: white;
 }
 
 .logo {
@@ -45,6 +52,11 @@ header {
   text-decoration: none;
   color: white;
   text-transform: uppercase;
+}
+
+.main-menu ul li a#btnMyAccount {
+  display: flex;
+  align-items: center;
 }
 
 .hamburger-menu {
@@ -106,9 +118,9 @@ header {
   margin: 5px; /* Hide buttons by default */
 }
 
-.button-set{
+.button-set {
   display: grid;
-  justify-content:end;
+  justify-content: end;
 }
 
 /* Media query for desktop devices */
@@ -209,9 +221,7 @@ header {
     margin: 10px;
   }
 
-  .button-set{
+  .button-set {
     display: flex;
   }
 }
-
-
