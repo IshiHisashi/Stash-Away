@@ -79,7 +79,6 @@ fieldset {
   display: flex;
   justify-content: start;
   align-items: center;
-  padding: 30px 15px;
   box-sizing: border-box;
   width: 100%;
   min-height: 50px;
@@ -90,6 +89,7 @@ fieldset {
 
 .each-city-option label {
   flex-grow: 1;
+  padding: 30px 15px;
 }
 
 .each-city-option label div {
