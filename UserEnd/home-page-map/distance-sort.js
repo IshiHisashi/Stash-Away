@@ -123,8 +123,7 @@ if (navigator.geolocation) {
       async function waitforpromises() {
         await Promise.all(promises);
         console.log("All calc distance Resolved");
-        sortAndShow();
-        changeIconForDiv();
+        await sortAndShow();
         changeIconForLabel();
         clickMarker();
         const load = document.getElementById("loading-screen");
@@ -163,24 +162,6 @@ if (navigator.geolocation) {
       }
 
       // ICON CHANGE ============================================
-      function changeIconForDiv() {
-        const inputDiv = document.querySelectorAll("fieldset div");
-        const inputRadioBtns = document.querySelectorAll(
-          'input[name="location"]'
-        );
-        for (let i = 0; i < inputRadioBtns.length; i++) {
-          inputDiv[i].addEventListener("click", () => {
-            body.id = `${inputRadioBtns[i].value}`;
-            for (let p = 0; p < inputRadioBtns.length; p++) {
-              inputRadioBtns[p].removeAttribute("checked");
-            }
-            let cityOption = document.querySelector(
-              `input[value="${inputRadioBtns[i].value}"]`
-            );
-            cityOption.setAttribute("checked", "");
-          });
-        }
-      }
 
       function changeIconForLabel() {
         const labels = document.querySelectorAll("fieldset div label");
