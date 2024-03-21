@@ -1,3 +1,4 @@
+// Registration
 if (navigator.serviceWorker) {
   // if navigator.serviceWorker’ exists, browser supports service worker.
   // register the SW file (here assuming it’s called sw.js in same dir.)
@@ -15,6 +16,7 @@ if (navigator.serviceWorker) {
   console.warn("Service Worker not supported");
 }
 
+// Define var
 const cacheName = "v1"; // you need a name for your cache. It also helps with invalidation later.
 const urlsToCache = [
   "/",
@@ -23,6 +25,8 @@ const urlsToCache = [
   "offline.js",
   "offline.png",
 ]; // list of URLs to cache
+
+// Installation
 self.addEventListener("install", (event) => {
   // self is a global variable refers to worker itself
   event.waitUntil(
@@ -37,6 +41,7 @@ self.addEventListener("install", (event) => {
   );
 });
 
+// Activation
 self.addEventListener("activate", (event) => {
   console.log(`SW: Event fired: ${event.type}`);
   event.waitUntil(
@@ -55,6 +60,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+// Fetch event
 self.addEventListener("fetch", (event) => {
   console.log(event, event.request);
   //   console.log(`SW: Fetch handler`, event.request.url);
@@ -76,6 +82,6 @@ async function NetworkOrOfflinePage(event) {
   } catch (error) {
     // in case of error return a static page
     console.log(error);
-    return caches.match(urlsToCache[1]); // returns default offline page
+    return caches.match(urlsToCache[0]); // returns default offline page
   }
 }
