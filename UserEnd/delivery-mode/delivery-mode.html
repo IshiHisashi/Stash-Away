@@ -3,111 +3,27 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Delivery Confirmation</title>
     <script src="delivery-mode.js" type="module" defer></script>
     <script
       src="https://kit.fontawesome.com/8611811e56.js"
       crossorigin="anonymous"
     ></script>
     <link rel="stylesheet" href="delivery-mode.css" />
+    <link
+      rel="shortcut icon"
+      href="../images/favicon.svg"
+      type="image/x-icon"
+    />
+    <!-- Header & Footer -->
+    <link rel="stylesheet" href="../homepage/header/header.css" />
+    <link rel="stylesheet" href="../homepage/footer/footer.css" />
+    <script src="../homepage/header/header.js" type="module" defer></script>
+    <script src="../homepage/footer/footer.js" type="module" defer></script>
   </head>
   <body>
     <div class="sticky-head">
-      <header>
-        <div class="logo">
-          <img src="../images/logo.png" alt="logo" />
-        </div>
-        <div class="hamburger-menu" type="button" id="btntoggleMenu">
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-        <nav class="main-menu">
-          <ul>
-            <li>
-              <a
-                type="button"
-                id="btnGeoLocation"
-                class="btn"
-                href="javascript:void(0);"
-                >Our Locations</a
-              >
-            </li>
-            <li>
-              <a
-                type="button"
-                id="btnPricing"
-                class="btn"
-                href="javascript:void(0);"
-                >Pricing</a
-              >
-            </li>
-            <li>
-              <a
-                type="button"
-                id="btnHelpCenter"
-                class="btn"
-                href="javascript:void(0);"
-                >Help Center</a
-              >
-            </li>
-            <li>
-              <a
-                type="button"
-                id="btnMyAccount"
-                class="btn"
-                href="javascript:void(0);"
-                ><i id="ma-img1" class="fas fa-image-portrait"></i>My Account<i
-                  id="ma-img2"
-                  class="fas fa-caret-down"
-                ></i
-              ></a>
-              <ul class="sub-menu">
-                <li>
-                  <a
-                    type="button"
-                    id="btnOrderUpdate"
-                    class="btn; sub"
-                    href="javascript:void(0);"
-                    >Order Updates</a
-                  >
-                </li>
-                <li>
-                  <a
-                    type="button"
-                    id="btnViewStorage"
-                    class="btn; sub"
-                    href="javascript:void(0);"
-                    >View Storage</a
-                  >
-                </li>
-                <li>
-                  <a
-                    type="button"
-                    id="btnProfile"
-                    class="btn; sub"
-                    href="javascript:void(0);"
-                    >Profile</a
-                  >
-                </li>
-                <li>
-                  <a
-                    type="button"
-                    id="btnLogout"
-                    class="btn; sub"
-                    href="javascript:void(0);"
-                    >Logout</a
-                  >
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <div class="button-set">
-            <button id="btnLogin" class="btn">Login</button>
-            <button id="btnBookNow" class="btn">Book Now</button>
-          </div>
-        </nav>
-      </header>
+      <div id="header-placeholder"></div>
       <section class="progress-section">
         <div class="progress-mobile">
           <div class="progress-texts">
@@ -176,45 +92,6 @@
         >
       </section>
     </main>
-    <footer>
-      <div class="footer-section">
-        <div class="site-logo">
-          <img src="../images/logo.png" alt="Logo" />
-        </div>
-        <div class="footer-link">
-          <ul>
-            <li><a href="">About Us</a></li>
-            <li><a href="../dummy_payment/dummy_payment.html">Pricing</a></li>
-            <li><a href="../home-page-map/index.html">Our locations</a></li>
-            <li><a href="">Contact Us</a></li>
-          </ul>
-        </div>
-        <div class="social-media">
-          <ul>
-            <li>
-              <a href="https://www.youtube.com/"
-                ><img src="/UserEnd/icons/youtube.png" alt="Youtube Icon"
-              /></a>
-            </li>
-            <li>
-              <a href="https://www.facebook.com/"
-                ><img src="/UserEnd/icons/facebook.png" alt="Facebook Icon"
-              /></a>
-            </li>
-            <li>
-              <a href="https://www.twitter.com/"
-                ><img src="../icons/Social.png" alt="/UserEnd/icons/Social.png"
-              /></a>
-            </li>
-            <li>
-              <a href="https://www.instagram.com/"
-                ><img src="/UserEnd/icons/instagram.png" alt="Instagram Icon"
-              /></a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <p>StashAway @2024, All rights reserved</p>
-    </footer>
+    <div id="footer-placeholder"></div>
   </body>
 </html>
