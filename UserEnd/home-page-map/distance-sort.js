@@ -124,11 +124,13 @@ if (navigator.geolocation) {
         await Promise.all(promises);
         console.log("All calc distance Resolved");
         await sortAndShow();
+        await initializeMap();
         changeIconForLabel();
         clickMarker();
         const load = document.getElementById("loading-screen");
         const body = document.querySelector("body");
         setTimeout(() => {
+          window.scrollTo(0,0);
           load.style.display = "none";
           body.style.overflowY = "auto";
         }, 1000);
@@ -146,12 +148,20 @@ if (navigator.geolocation) {
           let idName = `location-${i}`;
           document.getElementById(idName).value = cityArray[i].name;
           document.querySelector(`[for="${idName}"]`).innerHTML = 
-          `<span class="city-name-in-list">${cityArray[i].name}</span>
-          <div>
-            <img class="loc-icon" src="./../icons/location-marker.png" alt="location logo">
-            <p>${cityArray[i].address}</p>
+          `<div class="location-name">
+            <span class="city-name-in-list">${cityArray[i].name}</span>
+            <img class="location-open" src="./../icons/chevron-down.png" alt="check details of the location">
           </div>
-          <p>Distance: ${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs from your address</p>
+          <div class="hidden-area">
+            <div class="address">
+              <img class="loc-icon" src="./../icons/location-marker.png" alt="location logo">
+              <p>${cityArray[i].address}</p>
+            </div>
+            <div class="distance">
+              <img class="distance-icon" src="./../icons/track.png" alt="distance logo">
+              <p>${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs from your address</p>
+            </div>
+          </div>
           `;
         }
       }
@@ -179,6 +189,12 @@ if (navigator.geolocation) {
               `input[value="${inputRadioBtns[i].value}"]`
             );
             cityOption.setAttribute("checked", "");
+            const hiddenArea = document.querySelector(`label[for="location-${i}"] div[class="hidden-area"]`);
+            if (hiddenArea.style.maxHeight) {
+              hiddenArea.style.maxHeight = null;
+            } else {
+              hiddenArea.style.maxHeight = hiddenArea.scrollHeight + "px";
+            }
           });
         }
       }
@@ -197,6 +213,12 @@ if (navigator.geolocation) {
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`);
             cityOption.setAttribute("checked", "");
+            const hiddenArea = document.querySelector(`input[value="${bodyId}"]`).nextElementSibling.firstElementChild.nextElementSibling;
+            if (hiddenArea.style.maxHeight) {
+              hiddenArea.style.maxHeight = null;
+            } else {
+              hiddenArea.style.maxHeight = hiddenArea.scrollHeight + "px";
+            }
           });
         }
       }
@@ -232,46 +254,49 @@ if (navigator.geolocation) {
         document.getElementById("proceedLink").click();
       };
 
-      // SET MAP =======================================================
-      const map = tt.map({
-        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-        container: "map",
-        center: currentLoc,
-        zoom: 9,
-      });
+      const initializeMap = function() {
+        // SET MAP =================================================
+        const map = tt.map({
+          key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+          container: "map",
+          center: currentLoc,
+          zoom: 9,
+        });
 
-      // MARKER & POPUP SETTINGS =================================
-      var popupOffsets = {
-        top: [0, 0],
-        bottom: [0, -50],
-        "bottom-right": [0, -70],
-        "bottom-left": [0, -70],
-        left: [25, -35],
-        right: [-25, -35],
-      };
+        // MARKER & POPUP SETTINGS =================================
+        var popupOffsets = {
+          top: [0, 0],
+          bottom: [0, -50],
+          "bottom-right": [0, -70],
+          "bottom-left": [0, -70],
+          left: [25, -35],
+          right: [-25, -35],
+        };
 
-      for (let i in cityArray) {
-        var element = document.createElement("div");
-        element.className = "loc-marker";
-        element.id = `marker-${cityArray[i].name}`;
-        var newMarker = new tt.Marker({ element: element })
-          .setLngLat(cityArray[i].geoLoc)
-          .addTo(map);
-        var newPopUp = new tt.Popup({ offset: popupOffsets }).setHTML(
-          `<b>${cityArray[i].name}</b><br>${cityArray[i].address}`
-        );
-        newMarker.setPopup(newPopUp).togglePopup();
+        for (let i in cityArray) {
+          var element = document.createElement("div");
+          element.className = "loc-marker";
+          element.id = `marker-${cityArray[i].name}`;
+          var newMarker = new tt.Marker({ element: element })
+            .setLngLat(cityArray[i].geoLoc)
+            .addTo(map);
+          var newPopUp = new tt.Popup({ offset: popupOffsets }).setHTML(
+            `<b>${cityArray[i].name}</b><br>${cityArray[i].address}`
+          );
+          newMarker.setPopup(newPopUp).togglePopup();
+        }
+
+        // MAP ON LOAD WITH ICON ==============================
+
+        map.on("load", () => {
+          var curLocEl = document.createElement("div");
+          curLocEl.id = "current-location-marker";
+          var currentLocation = new tt.Marker({ element: curLocEl })
+            .setLngLat(currentLoc)
+            .addTo(map);
+        });
       }
 
-      // MAP ON LOAD WITH ICON ==============================
-
-      map.on("load", () => {
-        var curLocEl = document.createElement("div");
-        curLocEl.id = "current-location-marker";
-        var currentLocation = new tt.Marker({ element: curLocEl })
-          .setLngLat(currentLoc)
-          .addTo(map);
-      });
     },
     (error) => {
       console.log(error);
