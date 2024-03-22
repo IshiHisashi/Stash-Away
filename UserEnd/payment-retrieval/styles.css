@@ -85,7 +85,7 @@ h1 {
   color: var(--dark-blue-green);
 }
 
-ul {
+#items-list {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px 13px;
@@ -145,7 +145,7 @@ width: 24px;
     display: none;
 }
 
-a {
+#btns a {
   text-decoration: none;
   text-align: center;
   padding-top: .75rem;
@@ -202,7 +202,7 @@ a {
     box-sizing: border-box;
   }
 
-  ul {
+  #items-list {
     grid-template-columns: repeat(4, 1fr);
   }
 
