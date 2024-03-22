@@ -107,15 +107,13 @@
             <div id="easyModal" class="modal">
               <div class="modal-content">
                 <div class="modal-body">
-                  <div>
-                    <div>
-                      <div class="btn-div">
+
+                      <div class="btn-div-top">
                         <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i>Back</a><br>
-                        <h3><label for="itemName">Take a Picture of Your Item</label></h3>
+                        <h3 id="itemnamelabel"><label for="itemName">Take a Picture of Your Item</label></h3>
                         <span id="displayItemName"></span>
                       </div>
-                    </div>
-                  </div>
+
                   <div>
                     <div>
                       <video id="video" width="400" height="300" autoplay hidden></video>
@@ -125,11 +123,16 @@
                       <input type="file" id="imageUpload" accept="image/*" hidden>
                     </div>
                     <div class="btn-div">
-                      <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image</a>
-                      <a id="retake" class="btn-next" style="display: none;">Retake Image</a>
-                      <a id="reupload" class="btn-next" style="display: none;">Reupload Image</a>
-                      <a id="uploadButton" class="btn-next" style="display: none;">Upload Image</a>
-                      <a id="saveImage" class="btn-next" type="button">Save Image</a>
+                      <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image
+                      <img id="captureIcon" src="../icons/capture.png" alt="" /></a>
+                    </a>
+                      <a id="retake" class="btn-next" style="display: none;">Retake Image
+                        <img id="retakeIcon" src="../icons/capture.png" alt="" /></a>
+                      <a id="reupload" class="btn-next" style="display: none;">Re-Upload Image
+                        <img id="reuploadIcon" src="../icons/upload.png" alt="" /></a>
+                      <a id="uploadButton" class="btn-next" style="display: none;">Upload From Device
+                        <img id="uploadIcon" src="../icons/upload.png" alt="" /></a>
+                      <a id="saveImage" class="btn-next" type="button">Save Image<img id="dropIcon" src="../icons/plus-icon.png" alt="" /></a></a>
                     </div>
                   </div>
                   <div id="itemsContainer"></div>

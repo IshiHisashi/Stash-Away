@@ -44,7 +44,7 @@ footer p {
 @media (min-width: 900px) {
   .footer-section {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 3fr 1fr;
     align-items: center;
   }
 
@@ -52,6 +52,7 @@ footer p {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap:  2rem;
   }
 
   footer p{

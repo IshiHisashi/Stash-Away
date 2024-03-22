@@ -48,6 +48,8 @@ const displayItemNameElement = document.getElementById("displayItemName");
 const btnSave = document.getElementById("btnSave");
 const itemList = document.getElementById("item-list");
 const btnProceed = document.getElementById("btn-proceed");
+const itemNameLabel = document.getElementById("itemnamelabel");
+
 // For 2. Booking_pick-up
 const firstname = document.getElementById("firstname");
 const lastname = document.getElementById("lastname");
@@ -271,10 +273,14 @@ captureBtn.addEventListener("click", function (e) {
   context.clearRect(0, 0, canvas.width, canvas.height);
   context.drawImage(video, xOffset, yOffset, scaledWidth, scaledHeight);
   canvas.hidden = false;
+  document.getElementById("itemnamelabel").style.display = "none";
   document.getElementById("capture").style.display = "none";
-  document.getElementById("retake").style.display = "inline-block";
-  document.getElementById("saveImage").style.display = "inline-block";
+  document.getElementById("retake").style.display = "flex";
+  document.getElementById("saveImage").style.display = "flex";
   document.getElementById("backButton").style.display = "inline-block";
+  document.getElementById("displayItemName").style.display = "inline-block";
+
+
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -294,11 +300,13 @@ retakeBtn.addEventListener("click", function (e) {
   canvas.hidden = true;
   video.hidden = false;
   retakeBtn.style.display = "none";
-  document.getElementById("capture").style.display = "inline-block";
-  document.getElementById("uploadButton").style.display = "inline-block";
+  document.getElementById("capture").style.display = "flex";
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("displayItemName").style.display = "none";
   document.getElementById("reupload").style.display = "none";
+  document.getElementById("itemnamelabel").style.display = "inline-block";
+
 
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
@@ -321,6 +329,8 @@ uploadButton.addEventListener("click", function (e) {
   imageUpload.click();
   canvas.hidden = true;
   video.hidden = true;
+  document.getElementById("itemnamelabel").style.display = "none";
+
 });
 
 reuploadBtn.addEventListener("click", function (e) {
@@ -382,15 +392,15 @@ function processFile(file) {
     document.getElementById("capture").style.display = "none";
     document.getElementById("uploadButton").style.display = "none";
     document.getElementById("retake").style.display = "none";
-    document.getElementById("reupload").style.display = "inline-block";
-    document.getElementById("saveImage").style.display = "inline-block";
+    document.getElementById("reupload").style.display = "flex";
+    document.getElementById("saveImage").style.display = "flex";
     document.getElementById("backButton").style.display = "inline-block";
   } else {
     openCamera();
     document.getElementById("reupload").style.display = "none";
     document.getElementById("saveImage").style.display = "none";
-    document.getElementById("capture").style.display = "inline-block";
-    document.getElementById("uploadButton").style.display = "inline-block";
+    document.getElementById("capture").style.display = "flex";
+    document.getElementById("uploadButton").style.display = "flex";
     document.getElementById("displayItemName").style.display = "none";
     document.getElementById("backButton").style.display = "none";
   }
@@ -914,7 +924,6 @@ function modalOpen(e, itemData = "", itemId = "") {
 
   document.getElementById("imageUpload").style.display = "none";
 
-  debugger;
   if (itemData) {
     onEditModel(itemData.picture);
     if (itemId != "") {
@@ -990,10 +999,10 @@ function clearModelData(isBack = false) {
 function initiateModel() {
   currentEditingItemId = 0;
   displayItemNameElement.textContent = "";
-  document.getElementById("capture").style.display = "inline-block";
+  document.getElementById("capture").style.display = "flex";
   document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
-  document.getElementById("uploadButton").style.display = "inline-block";
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
 }
@@ -1006,15 +1015,15 @@ function onEditModel(picture) {
   if (picture && picture !== "") {
     closeCamera();
     document.getElementById("capture").style.display = "none";
-    document.getElementById("retake").style.display = "inline-block";
-    document.getElementById("reupload").style.display = "inline-block";
+    document.getElementById("retake").style.display = "flex";
+    document.getElementById("reupload").style.display = "flex";
     document.getElementById("uploadButton").style.display = "none";
   } else {
     openCamera();
-    document.getElementById("capture").style.display = "inline-block";
+    document.getElementById("capture").style.display = "flex";
     document.getElementById("retake").style.display = "none";
     document.getElementById("reupload").style.display = "none";
-    document.getElementById("uploadButton").style.display = "inline-block";
+    document.getElementById("uploadButton").style.display = "flex";
   }
   document.getElementById("saveImage").style.display = "none";
 }
@@ -1047,8 +1056,8 @@ function closeCamera() {
       track.stop();
     });
 
-    video.srcObject = null; // Disconnect the stream from the video element
-    video.hidden = true; // Optionally hide the video element
+    video.srcObject = null; 
+    video.hidden = true; 
   }
 }
 
@@ -1056,13 +1065,15 @@ backButton.addEventListener("click", function (e) {
   e.preventDefault();
   clearModelData(true);
   openCamera();
-  document.getElementById("capture").style.display = "inline-block";
+  document.getElementById("capture").style.display = "flex";
   document.getElementById("displayItemName").style.display = "none";
   document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
-  document.getElementById("uploadButton").style.display = "inline-block";
+  document.getElementById("uploadButton").style.display = "flex";  
+  document.getElementById("itemnamelabel").style.display = "inline-block";
+
 });
 
 const load = document.getElementById("loading-screen");

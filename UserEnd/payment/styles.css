@@ -84,32 +84,35 @@ h1 {
   color: var(--dark-blue-green);
 }
 
-ul {
+.payment-list{
+  ul {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 15px 13px;
+  }
+
+  li {
+      list-style: none;
+      display: grid;
+      grid-template-rows: 1fr auto;
+  }
+
+  li img {
+      width: 100%;
+      height: auto;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 10px;
+  }
+
+  li p {
+      font-size: var(--h5-size);
+      font-family: var(--h5-family);
+      color: rgb(66, 66, 66);
+      text-align: center;
+  }
 }
 
-li {
-    list-style: none;
-    display: grid;
-    grid-template-rows: 1fr auto;
-}
-
-li img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 1/1;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-li p {
-    font-size: var(--h5-size);
-    font-family: var(--h5-family);
-    color: rgb(66, 66, 66);
-    text-align: center;
-}
 
 .card-brand-img {
     width: 70px;
@@ -128,14 +131,22 @@ li p {
 }
 
 a {
-    text-decoration: none;
-    text-align: center;
-    padding-top: .75rem;
-    padding-bottom: .75rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-family: var(--button-2-family);
-    font-size: var(--button-2-size);
+  text-decoration: none;
+  text-align: center;
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: var(--button-2-family);
+  font-size: var(--button-2-size);
+}
+
+#btns {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 5rem;
 }
 
 #back {
