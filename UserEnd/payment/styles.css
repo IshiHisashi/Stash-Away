@@ -21,7 +21,8 @@ h1 {
     justify-content: space-between;
 }
 
-ul {
+.payment-list{
+  ul {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
@@ -42,6 +43,8 @@ li p {
     font-family: sans-serif;
     color: rgb(66, 66, 66);
 }
+}
+
 
 .card-brand-img {
     width: 70px;
@@ -65,13 +68,13 @@ li p {
     justify-content: center;
     gap: 2rem;
     margin-bottom: 5rem;
-}
 
-a {
-    text-decoration: none;
-    padding: .75rem 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
+    a {
+      text-decoration: none;
+      padding: .75rem 1.5rem;
+      border-radius: 5px;
+      cursor: pointer;
+  }
 }
 
 #back {
@@ -133,7 +136,8 @@ a {
     border-radius:50%;
     animation:animateC 2s linear infinite;
   }
-  span
+  .loading {
+    span
   {
     display:block;
     position:absolute;
@@ -157,6 +161,7 @@ a {
     right:-8px;
     /* box-shadow:0 0 20px var(--white); */
   }
+}
   @keyframes animateC
   {
     0%
