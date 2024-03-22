@@ -58,6 +58,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     padding: 0 8px;
+    align-items: center;
 }
 
 #payment-detail div h3 {
@@ -123,7 +124,23 @@ h1 {
     display: flex;
     flex-flow: row nowrap;
     justify-content: start;
-    gap: 2rem;
+    gap: 10px;
+    align-items: center;
+}
+
+#payment-detail .each-card > * p {
+  color: var(--grey-2);
+  font-size: var(--subtitle-size);
+  font-family: var(--subtitle-family);
+}
+
+.exp-date {
+  display: none;
+}
+
+#right-arrow {
+  height: 24px;
+  width: 24px;
 }
 
 #proceedLink {
@@ -139,14 +156,6 @@ a {
   cursor: pointer;
   font-family: var(--button-2-family);
   font-size: var(--button-2-size);
-}
-
-#btns {
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-    gap: 2rem;
-    margin-bottom: 5rem;
 }
 
 #back {
@@ -196,8 +205,12 @@ a {
     box-sizing: border-box;
   }
 
-  ul {
+  .payment-list ul {
     grid-template-columns: repeat(4, 1fr);
+  }
+
+  .exp-date {
+    display: unset;
   }
 }
 
