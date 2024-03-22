@@ -229,7 +229,7 @@ main {
     .modal {
       display: none;
       position: fixed;
-      z-index: 1;
+      z-index: 999;
       left: 0;
       top: 0;
       height: 100%;
@@ -238,10 +238,9 @@ main {
       background-color: rgba(0, 0, 0, 0.5);
 
       .modal-content {
-        background-color: #f4f4f4;
         margin: 20% auto;
         width: 50%;
-        height: 40rem;
+        min-width: 80%;
         box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2),
           0 7px 20px 0 rgba(0, 0, 0, 0.17);
         position: relative;     
@@ -251,8 +250,8 @@ main {
       .modalClose {
         font-size: 2rem;
         position: absolute;
-        bottom: 0;
-        left: 50%;
+        top: 3%;;
+        right: 3%;
       }
 
       .modalClose:hover {
@@ -262,6 +261,9 @@ main {
       .modal-body {
         padding: 10px 20px;
         color: black;
+        background-color: #FFFFFF;
+        border-radius: 11px;
+
       }
 
       #radioContainer {
@@ -288,19 +290,59 @@ main {
         height: 100px;
       }
 
-      #capture,
+      #video, #canvas{
+        width: 98%;
+        border-radius: 7px;
+      }
+     #uploadButton,
       #reupload,
       #retake {
-        border: 1px solid black;
-        background-color: white;
+        border: 1px solid #e04462;
+        background-color: rgb(252 228 231);
         color: var(--color-primary);
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+        font-size: var(--button-2-size);
+      }
+      #capture,
+      #saveImage{
+        justify-content: center;
+        align-items: center;
+        gap: .5rem;
+        font-size: var(--button-2-size);
+      }
+
+      #uploadIcon, #captureIcon{
+        scale: 1;     
       }
 
       .btn-back--modal {
-        border: solid 2px #e04462;
         width: 4rem;
         height: auto;
         color: #e04462;
+      }
+
+      .btn-div-top{
+        display: grid;
+      }
+      #itemnamelabel{
+        text-align: left;
+      }
+      #displayItemName{
+        font-size: var(--h3-size-rem);
+        color: var(--dark-blue-green);
+        font-weight: var(--subtitle-weight);
+      }
+      .btn-div{
+        display: flex;
+        flex-direction: column;
+
+        @media screen and (min-width: 900px) {
+          flex-direction: row;
+          justify-content: center;
+          width:98%;
+        }
       }
     }
 
