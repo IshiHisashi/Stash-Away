@@ -3,12 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StashAway | Driver</title>
+    <title>Stashaway | Driver</title>
 
     <!-- tomtom map services CDN -->
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.0/services/services-web.min.js"></script>
 
-    <!-- <script src="script_driver.js" defer type="module"></script> -->
     <script src="script_driver_revised.js" defer type="module"></script>
 
     <link
@@ -24,9 +23,10 @@
     <header>
       <div class="logo">
         <img src="../UserEnd/images/logo.svg" alt="logo" />
+        <img src="../UserEnd/images/logo-icon.svg" alt="logo icon only" />
       </div>
 
-      <div class="hero">
+      <div class="hero hero-in-header">
         <img src="images/Rectangle 65.svg" alt="" />
         <div>
           <h1>Stashaway Drivers:</h1>
@@ -57,7 +57,16 @@
     </header>
 
     <main>
+      <div class="hero hero-in-main">
+        <img src="images/Rectangle 65.svg" alt="" />
+        <div>
+          <h1>Stashaway Drivers:</h1>
+          <p>Navigate, Pick Up, Deliver with Precision</p>
+        </div>
+      </div>
+
       <section class="orders newTrips">
+        <h2>NEW TRIPS</h2>
         <!-- <div class="order">
           <img src="https://picsum.photos/43/43" alt="" />
           <div class="time-and-name">
@@ -94,9 +103,13 @@
         </div> -->
       </section>
 
-      <section class="orders ongoingTrips"></section>
+      <section class="orders ongoingTrips">
+        <h2>ONGOING TRIPS</h2>
+      </section>
 
-      <section class="orders allTrips"></section>
+      <section class="orders allTrips">
+        <h2>ALL TRIPS</h2>
+      </section>
 
       <div class="popupBackground">
         <div class="popup">
@@ -122,7 +135,9 @@
         <div class="footer-link">
           <ul>
             <li><a href="">About Us</a></li>
-            <li><a href="../dummy_payment/dummy_payment.html">Pricing</a></li>
+            <li>
+              <a href="../UserEnd/dummy_payment/dummy_payment.html">Pricing</a>
+            </li>
             <li>
               <a href="../UserEnd/home-page-map/index.html">Our locations</a>
             </li>
@@ -143,7 +158,9 @@
             </li>
             <li>
               <a href="https://www.twitter.com/"
-                ><img src="../UserEnd/icons/Social.png" alt="Twitter Icon"
+                ><img
+                  src="../UserEnd/icons/Social.png"
+                  alt="/UserEnd/icons/Social.png"
               /></a>
             </li>
             <li>

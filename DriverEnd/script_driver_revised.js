@@ -294,6 +294,7 @@ const controlCarousel = (currentPage, objArr) => {
     .forEach((el) => {
       el.remove();
     });
+  // if (window.innerWidth < 600) {
   switch (currentPage) {
     case "newTrips":
       document.querySelector("li.newTrips").classList.add("current");
@@ -303,9 +304,21 @@ const controlCarousel = (currentPage, objArr) => {
         "icons/pick-up-item_grey.svg";
       document.querySelector("li.allTrips img").src =
         "icons/items-stored_grey.svg";
-      sectionNewTrips.style.transform = "translateX(0)";
-      sectionOngoingTrips.style.transform = "translateX(100%)";
-      sectionAllTrips.style.transform = "translateX(200%)";
+      if (window.innerWidth < 600) {
+        sectionNewTrips.style.transform = "translateX(0)";
+        sectionOngoingTrips.style.transform = "translateX(100%)";
+        sectionAllTrips.style.transform = "translateX(200%)";
+        sectionNewTrips.style.display = "grid";
+        sectionOngoingTrips.style.display = "grid";
+        sectionAllTrips.style.display = "grid";
+      } else {
+        sectionNewTrips.style.transform = "unset";
+        sectionOngoingTrips.style.transform = "unset";
+        sectionAllTrips.style.transform = "unset";
+        sectionNewTrips.style.display = "grid";
+        sectionOngoingTrips.style.display = "none";
+        sectionAllTrips.style.display = "none";
+      }
       renderNewTrips(objArr, currentPage);
       break;
     case "ongoingTrips":
@@ -316,9 +329,21 @@ const controlCarousel = (currentPage, objArr) => {
         "icons/pick-up-item_blue.svg";
       document.querySelector("li.allTrips img").src =
         "icons/items-stored_grey.svg";
-      sectionNewTrips.style.transform = "translateX(-100%)";
-      sectionOngoingTrips.style.transform = "translateX(0)";
-      sectionAllTrips.style.transform = "translateX(100%)";
+      if (window.innerWidth < 600) {
+        sectionNewTrips.style.transform = "translateX(-100%)";
+        sectionOngoingTrips.style.transform = "translateX(0)";
+        sectionAllTrips.style.transform = "translateX(100%)";
+        sectionNewTrips.style.display = "grid";
+        sectionOngoingTrips.style.display = "grid";
+        sectionAllTrips.style.display = "grid";
+      } else {
+        sectionNewTrips.style.transform = "unset";
+        sectionOngoingTrips.style.transform = "unset";
+        sectionAllTrips.style.transform = "unset";
+        sectionNewTrips.style.display = "none";
+        sectionOngoingTrips.style.display = "grid";
+        sectionAllTrips.style.display = "none";
+      }
       renderOngoingTrips(objArr, currentPage);
       break;
     case "allTrips":
@@ -329,12 +354,25 @@ const controlCarousel = (currentPage, objArr) => {
         "icons/pick-up-item_grey.svg";
       document.querySelector("li.allTrips img").src =
         "icons/items-stored_blue.svg";
-      sectionNewTrips.style.transform = "translateX(-200%)";
-      sectionOngoingTrips.style.transform = "translateX(-100%)";
-      sectionAllTrips.style.transform = "translateX(0)";
+      if (window.innerWidth < 600) {
+        sectionNewTrips.style.transform = "translateX(-200%)";
+        sectionOngoingTrips.style.transform = "translateX(-100%)";
+        sectionAllTrips.style.transform = "translateX(0)";
+        sectionNewTrips.style.display = "grid";
+        sectionOngoingTrips.style.display = "grid";
+        sectionAllTrips.style.display = "grid";
+      } else {
+        sectionNewTrips.style.transform = "unset";
+        sectionOngoingTrips.style.transform = "unset";
+        sectionAllTrips.style.transform = "unset";
+        sectionNewTrips.style.display = "none";
+        sectionOngoingTrips.style.display = "none";
+        sectionAllTrips.style.display = "grid";
+      }
       renderAllTrips(objArr, currentPage);
       break;
   }
+  // }
 };
 
 async function loadVariable() {
@@ -358,9 +396,21 @@ const sectionNewTrips = document.querySelector(".orders.newTrips");
 const sectionOngoingTrips = document.querySelector(".orders.ongoingTrips");
 const sectionAllTrips = document.querySelector(".orders.allTrips");
 
-sectionNewTrips.style.transform = "translateX(-100%)";
-sectionOngoingTrips.style.transform = "translateX(-100%)";
-sectionAllTrips.style.transform = "translateX(0)";
+if (window.innerWidth < 600) {
+  sectionNewTrips.style.transform = "translateX(-100%)";
+  sectionOngoingTrips.style.transform = "translateX(-100%)";
+  sectionAllTrips.style.transform = "translateX(0)";
+  sectionNewTrips.style.display = "grid";
+  sectionOngoingTrips.style.display = "grid";
+  sectionAllTrips.style.display = "grid";
+} else {
+  sectionNewTrips.style.transform = "unset";
+  sectionOngoingTrips.style.transform = "unset";
+  sectionAllTrips.style.transform = "unset";
+  sectionNewTrips.style.display = "none";
+  sectionOngoingTrips.style.display = "none";
+  sectionAllTrips.style.display = "grid";
+}
 
 loadVariable();
 
@@ -373,10 +423,16 @@ const executeAfterRender = function () {
     `.orders.${sessionStorage.getItem("currentPage")}`
   ).scrollHeight;
   console.log(footerBegin);
-  document.querySelector("footer").style.top = `${footerBegin + 60}px`;
+  if (window.innerWidth < 600) {
+    document.querySelector("footer").style.top = `${footerBegin + 60}px`;
+  } else {
+    document.querySelector("footer").style.top = `unset`;
+  }
 };
 
 window.onresize = () => {
+  loadVariable();
+
   executeAfterRender();
 };
 
