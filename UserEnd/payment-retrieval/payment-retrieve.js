@@ -189,10 +189,13 @@ function getPaymentInfo() {
       this.number = number;
       if (firstDigit(cardNum) == 2 || firstDigit(cardNum) == 5) {
         this.cardBrandUrl = "../images/master-logo.png";
+        this.brandName = "Master";
       } else if (firstDigit(cardNum) == 4) {
         this.cardBrandUrl = "../images/visa-logo.png";
+        this.brandName = "Visa";
       } else if (firstDigit(cardNum) == 3) {
         this.cardBrandUrl = "../images/amex-logo.png";
+        this.brandName = "Amex";
       }
     }
 
@@ -202,21 +205,32 @@ function getPaymentInfo() {
       let image = document.createElement("img");
       image.setAttribute("src", `${this.cardBrandUrl}`);
       image.setAttribute("class", "card-brand-img");
+      let brandName = document.createElement("p")
+      brandName.setAttribute("class", "brand-name");
+      let brandNode = document.createTextNode(`${this.brandName}`);
+      brandName.appendChild(brandNode);
       let cardNumPara = document.createElement("p");
       cardNumPara.setAttribute("class", "card-num");
-      let node = document.createTextNode(`${this.cardNum}`);
+      let lastFourDigits = this.cardNum % Math.pow(10, 4);
+      let node = document.createTextNode(`${lastFourDigits}`);
       cardNumPara.appendChild(node);
       let expiration = document.createElement("p");
       expiration.setAttribute("class", "exp-date");
       let node2 = document.createTextNode(this.expDate);
       expiration.appendChild(node2);
       label.appendChild(image);
+      label.appendChild(brandName);
       label.appendChild(cardNumPara);
       label.appendChild(expiration);
       let eachCard = document.createElement("div");
       eachCard.setAttribute("class", "each-card");
       eachCard.appendChild(label);
+      let changeCardImg = document.createElement("img");
+      changeCardImg.setAttribute("id", "right-arrow");
+      changeCardImg.setAttribute("src", "../icons/chevron-right.png");
+      changeCardImg.setAttribute("alt", "Change payment method");
       cardArea.appendChild(eachCard);
+      cardArea.appendChild(changeCardImg);
     }
   }
 

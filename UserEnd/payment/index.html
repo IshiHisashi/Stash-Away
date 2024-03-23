@@ -15,7 +15,46 @@
 <body>
     <div id="header-placeholder"></div>
     <main>
-        <h1>PAYMENT</h1>
+        <section class="progress-section-payment">
+            <div class="progress-mobile">
+              <div class="progress-texts">
+                <h2>Payment</h2>
+              </div>
+              <div class="progress">
+                <div class="progress-bar"></div>
+              </div>
+            </div>
+          
+            <div class="progress-large">
+              <div class="progress">
+                <div class="progress-bar"></div>
+              </div>
+              <div class="progress-texts">
+                <div class="list-your-item"><div class="icon-wrapper"><span class="check">&check;</span></div>
+                  <h2>List items</h2>
+                </div>
+                <div class="pick-up-address">
+                  <div class="icon-wrapper "><span class="check">&check;</span></div>
+                  <h2>Pick-Up Address</h2>
+                </div>
+                <div class="storage-size">
+                  <div class="icon-wrapper "><span class="check">&check;</span></div>
+                  <h2>Storage Size</h2>
+                </div>
+                <div class="select-plan"><div class="icon-wrapper "><span class="check">&check;</span></div>
+                  <h2>Select Plan</h2>
+                </div>
+                <div class="payment">
+                  <span class="circle-now"></span>
+                  <h2 class="text-yet">Payment</h2>
+                </div>
+              </div>
+            </div>
+        </section>          
+        <div id="title-area">
+            <h1>PAYMENT</h1>
+            <div class="title-bar"></div>
+        </div>
         <section id="items">
             <h2>Your Items</h2>
             <div class="payment-list">
@@ -57,8 +96,8 @@
                     <p>subtotal * pst percentage</p>
                 </div>
                 <div id="total">
-                    <h3>Total</h3>
-                    <p>sum up three numbers above.</p>
+                    <h3 id="total-h3">Total</h3>
+                    <p id="total-p">sum up three numbers above.</p>
                 </div>
                 <div id="payment-method"></div>
             </div>
@@ -66,12 +105,11 @@
         <section id="btns">
             <a href="../booking/booking.html" id="back">Back</a>
             <a id="btn-add">Place Order</a>
-            <!-- <a id="proceedLink" href="../order-confirmation/order-confirmation.html"></a> -->
         </section>
         <div id="loading-screen">
             <div id="loading">
               Loading
-              <span></span>
+              <span id="load-span"></span>
             </div>
           </div>
     </main>
