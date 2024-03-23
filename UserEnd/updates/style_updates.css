@@ -90,6 +90,7 @@ section.retrieval {
   background-color: var(--white);
   padding-left: 2rem;
   padding-right: 2rem;
+  /* padding-bottom: 10rem; */
 }
 
 section:has(.noOrder) {
@@ -101,6 +102,11 @@ section:has(.noOrder) {
   margin-bottom: 3rem;
   display: grid;
   gap: 1rem;
+}
+
+section.adding > div:last-of-type,
+section.retrieval > div:last-of-type {
+  margin-bottom: 10rem;
 }
 
 .detail .preferred-date-and-time {
