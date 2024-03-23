@@ -135,3 +135,23 @@ function onLoginSuccess() {
     window.location.href = "../homepage/main.html";
   }
 }
+
+//
+// Reset password ////////////////////////////////////////
+const resetLink = document.querySelector("#loginForm > div:last-of-type a");
+
+resetLink.onclick = (e) => {
+  e.preventDefault();
+  const email = prompt(
+    "enter your email here - we will send you a password reset email!"
+  );
+
+  common
+    .sendPasswordResetEmail(common.auth, email)
+    .then(() => {
+      alert("password reset email sent!");
+    })
+    .catch((error) => {
+      alert(`Error: ${error.message}`);
+    });
+};
