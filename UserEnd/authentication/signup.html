@@ -15,14 +15,15 @@
     <link rel="stylesheet" href="../homepage/footer/footer.css" />
     <link rel="stylesheet" href="signup.css" />
 
-    <script src="../homepage/header/header.js" type="module" defer></script>
     <script src="signup.js" type="module" defer></script>
+    <!-- <script src="../homepage/header/header.js" type="module" defer></script> -->
 
     <!-- geolocation api -->
     <script src="https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.1.2-public-preview.15/services/services-web.min.js"></script>
   </head>
+
   <body>
-    <div id="header-container">
+    <div id="header-placeholder">
       <!-- Header.html will be included here -->
     </div>
 
@@ -152,8 +153,9 @@
               <div>
                 <input type="checkbox" name="agree" id="agree" required />
                 <label for="agree"
-                  ><span class="checkmark"><img src="" /></span>I understand and
-                  agree with the <a href="#">Terms of Service</a> and
+                  ><span class="checkmark" tabindex="0"><img src="" /></span>I
+                  understand and agree with the
+                  <a href="#">Terms of Service</a> and
                   <a href="#">Privacy Policy</a>.</label
                 >
               </div>
@@ -191,7 +193,7 @@
       </div>
     </main>
 
-    <div id="footer-container">
+    <div id="footer-placeholder">
       <!-- Footer.html will be included here -->
     </div>
   </body>
