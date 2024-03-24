@@ -52,16 +52,18 @@
               </div>
             </form>
             <div class="filter-wrapper">
-              <label>Fliter by status:</label>
-              <select id="filter">
-                <option value="all">All</option>
-                <option value="stored" id="stored-num"></option>
-                <option
-                  value="retrieval requested"
-                  id="on-request-num"
-                ></option>
-                <option value="retrieved" id="retrieved-num"></option>
-              </select>
+              <label>Filter by status</label>
+              <div class="filter-form">
+                <div id="filter-box">
+                  All<img id="filter-arrow" src="../icons/chevron-down-b.png" />
+                </div>
+                <ul id="filter-list" class="hidden">
+                  <li id="all" class="hidden">All</li>
+                  <li id="stored"><p id="stored-num"></p></li>
+                  <li id="retrieval requested"><p id="on-request-num"></p></li>
+                  <li id="retrieved"><p id="retrieved-num"></p></li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>

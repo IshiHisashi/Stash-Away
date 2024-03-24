@@ -29,7 +29,12 @@ const numRetrieved = document.getElementById("retrieved-num");
 const search = document.getElementById("search");
 const btnSearch = document.getElementById("btn-search");
 const itemList = document.querySelector(".item-list");
-const filter = document.getElementById("filter");
+const filterBox = document.getElementById("filter-box");
+const filterList = document.getElementById("filter-list");
+const all = document.getElementById("all");
+const stored = document.getElementById("stored");
+const retrievalRequested = document.getElementById("retrieval requested");
+const retrieved = document.getElementById("retrieved");
 const numReturnItems = document.getElementById("num-return-items");
 const btnRequestReturn = document.getElementById("btn-request-return");
 
@@ -355,27 +360,56 @@ btnSearch.addEventListener("click", (e) => {
   });
 });
 
-// Filtering
-filter.addEventListener("change", async (e) => {
+// Filter
+// define filtering function
+const filtering = function (option) {
+  option.addEventListener("click", async (e) => {
+    e.preventDefault();
+    cleanupList();
+    // update filter box
+    filterBox.textContent = option.textContent;
+    // hide filter list
+    filterList.classList.add("hidden");
+    if (option.id === "all") {
+      // Render all
+      renderList(snapShot);
+      // checkbox contorol
+      recallCheckbox();
+      checkControl();
+      // filter reset
+      stored.classList.remove("hidden");
+      retrievalRequested.classList.remove("hidden");
+      retrieved.classList.remove("hidden");
+      all.classList.add("hidden");
+    } else {
+      // retrieve data under a certain filter condition
+      const querySnapshot = await common.queryFunction(option.id, uid);
+      // Then, render it
+      renderList(querySnapshot);
+      // checkbox contorol
+      recallCheckbox();
+      checkControl();
+      // filter reset
+      all.classList.remove("hidden");
+      stored.classList.remove("hidden");
+      retrievalRequested.classList.remove("hidden");
+      retrieved.classList.remove("hidden");
+      option.classList.add("hidden");
+    }
+  });
+};
+
+// Open filter-list
+filterBox.addEventListener("click", (e) => {
   e.preventDefault();
-  cleanupList();
-  const conditionValue = filter.value;
-  if (conditionValue === "all") {
-    // Render all
-    renderList(snapShot);
-    // checkbox contorol
-    recallCheckbox();
-    checkControl();
-  } else {
-    // retrieve data under a certain filter condition
-    const querySnapshot = await common.queryFunction(conditionValue, uid);
-    // Then, render it
-    renderList(querySnapshot);
-    // checkbox contorol
-    recallCheckbox();
-    checkControl();
-  }
+  filterList.classList.toggle("hidden");
 });
+
+// Execute filtering
+filtering(all);
+filtering(stored);
+filtering(retrievalRequested);
+filtering(retrieved);
 
 // Checkbox
 const checkedArr = [];
@@ -410,3 +444,5 @@ btnRequestReturn.addEventListener("click", async (e) => {
     window.location.href = "../order-confirmation/order-confirmation.html";
   }
 });
+
+//
