@@ -34,37 +34,22 @@
     </div>
 
     <main>
-      <div id="hero">
-        <div class="hero-desc-large-screen">
-          <h1>Streamlined Storage:</h1>
-          <p>View and Retrieve with Ease</p>
-          <div class="yellow-bar"></div>
-        </div>
-      </div>
-
       <div class="section-wrapper">
         <section class="filter-section">
           <div class="storage-num-wrapper">
-            <p class="small-letter">Your Storage</p>
+            <h5 class="small-letter">Your Storage</h5>
             <h4 class="total-p">Total: <span id="total-num"></span> Items</h4>
-            <div class="num-breakdown">
-              <!-- <p>In storage : <span id="stored-num"></span></p>
-              <p>On request : <span id="on-request-num"></span></p>
-              <p>Retrieved : <span id="retrieved-num"></span></p> -->
-            </div>
+            <div class="num-breakdown"></div>
           </div>
           <div class="section-header">
             <form>
               <label>Search</label>
               <div class="search-box">
-                <input id="search" type="text" />
+                <input id="search" type="text" autocomplete="off" />
                 <button id="btn-search">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
-              <!-- <button id="btn-search-delete">
-                <i class="fa-solid fa-xmark"></i>
-              </button> -->
             </form>
             <div class="filter-wrapper">
               <label>Fliter by status:</label>
