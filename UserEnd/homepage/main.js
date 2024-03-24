@@ -1,6 +1,6 @@
-
-import { initHeader } from '../homepage/header/header.js';
-import { initFooter } from '../homepage/footer/footer.js';
+import { initHeader } from './header/header.js';
+import { initFooter } from './footer/footer.js';
+import { initBody } from './body/body.js';
 
 async function loadComponent(componentPath, placeholderId) {
     try {
@@ -14,17 +14,20 @@ async function loadComponent(componentPath, placeholderId) {
 
 async function init() {
     try {
-        await loadComponent('../homepage/header/header.html', 'header-placeholder');
+        await loadComponent('./header/header.html', 'header-placeholder');
         initHeader();
-        await loadComponent('../homepage/body/body.html', 'body-placeholder');
-        await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
+
+        await loadComponent('./body/body.html', 'body-placeholder');
+        initBody();
+
+        await loadComponent('./footer/footer.html', 'footer-placeholder');
         initFooter();
     } catch (error) {
         console.error('An error occurred:', error);
     }
 }
 
-if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
+if (document.readyState === 'complete' || (document.readyState !== 'loading' && !document.documentElement.doScroll)) {
     init();
 } else {
     document.addEventListener('DOMContentLoaded', init);
