@@ -139,9 +139,9 @@ section {
       height: 48px;
       box-sizing: border-box;
       border-radius: 7px;
-      border: 0.5px solid black;
+      border: 0.5px solid var(--grey-2);
       background-color: white;
-      color: black;
+      color: var(--grey-2);
       padding: 0.75rem;
       cursor: pointer;
     }
@@ -157,7 +157,7 @@ section {
       width: 100%;
       list-style: none;
       background-color: white;
-      border-radius: 7px;
+      border-radius: 13px;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
       box-sizing: border-box;
       line-height: 2;
@@ -165,8 +165,17 @@ section {
       z-index: 1;
       overflow: auto;
     }
-    li {
+    li,
+    li p {
       cursor: pointer;
+      font-family: var(--h5-family);
+      font-size: var(--h5-size);
+      font-weight: var(--h5-weight);
+      color: #21272a;
+    }
+    li:hover,
+    li p:hover {
+      color: var(--color-primary);
     }
   }
 }
