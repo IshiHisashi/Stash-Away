@@ -1,55 +1,489 @@
-#hero-image {
-  position: relative;
-}
+.body-css {
+  #hero-image {
+    position: relative;
+  }
 
-#hero-image .book-now {
-  position: absolute;
-  left: 25%;
-  top: 75%;
-  padding: 10px;
-  z-index: 90;
-}
+  #hero-image .book-now {
+    position: absolute;
+    left: 25%;
+    top: 75%;
+    padding: 10px;
+    z-index: 90;
+  }
 
-.hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  z-index: -1000;
-}
-
-.hero-caption {
-  position: absolute;
-  top: 25%;
-  left: 25%;
-  font-size: 3em;
-  color: white;
-}
-
-.hero-caption::after {
-  content: "";
-  display: block;
-  width: 25%;
-  height: 5px;
-  background-color: #f9b035;
-  position: absolute;
-  bottom: -10px;
-  left: 0;
-}
-
-#hero-image img {
-  width: 100%;
-  max-height: 30em;
-}
-
-.hero-description {
-  position: absolute;
-  top: 60%;
-  left: 25%;
-  color: white;
-}
-/* Media query for desktop devices */
-@media (min-width: 900px) {
-  #hero-image img {
+  .hero-img {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    z-index: -1000;
+  }
+
+  .hero-caption {
+    position: absolute;
+    top: 25%;
+    left: 25%;
+    font-size: 3em;
+    color: white;
+  }
+
+  .hero-caption::after {
+    content: "";
+    display: block;
+    width: 25%;
+    height: 5px;
+    background-color: #f9b035;
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+  }
+
+  #hero-image img {
+    width: 100%;
+    max-height: 30em;
+  }
+
+  .hero-description {
+    position: absolute;
+    top: 60%;
+    left: 25%;
+    color: white;
+  }
+  /* Media query for desktop devices */
+  @media (min-width: 900px) {
+    #hero-image img {
+      object-fit: cover;
+    }
+  }
+
+  /* COLOR========== */
+  :root {
+    /* TYPE */
+    --h1-family: "Oswald";
+    --h1-size: 40px;
+    --h1-size-rem: 2.5rem;
+    --h1-weight: 600;
+    --h1-style: normal;
+    --h1-line-height: 125%;
+    --h2-family: "Oswald";
+    --h2-size: 32px;
+    --h2-size-rem: 2rem;
+    --h2-weight: 600;
+    --h2-style: normal;
+    --h2-line-height: 125%;
+    --h3-family: "Oswald";
+    --h3-size: 26px;
+    --h3-size-rem: 1.625rem;
+    --h3-weight: 500;
+    --h3-style: normal;
+    --h3-line-height: 130%;
+    --h4-family: "Oswald";
+    --h4-size: 20px;
+    --h4-size-rem: 1.25rem;
+    --h4-weight: 500;
+    --h4-style: normal;
+    --h4-line-height: 130%;
+    --h5-family: "Oswald";
+    --h5-size: 16px;
+    --h5-size-rem: 1rem;
+    --h5-weight: 400;
+    --h5-style: normal;
+    --h5-line-height: 130%;
+    --body-family: "Nunito Sans";
+    --body-size: 16px;
+    --body-size-rem: 1rem;
+    --body-weight: 400;
+    --body-style: normal;
+    --body-line-height: 125%;
+    --button-1-family: "Nunito Sans";
+    --button-1-size: 18px;
+    --button-1-size-rem: 1.125rem;
+    --button-1-weight: 700;
+    --button-1-style: normal;
+    --button-1-line-height: 125%;
+    --subtitle-family: "Nunito Sans";
+    --subtitle-size: 16px;
+    --subtitle-size-rem: 1rem;
+    --subtitle-weight: 600;
+    --subtitle-style: normal;
+    --subtitle-line-height: 130%;
+    --subtitle-2-family: "Nunito Sans";
+    --subtitle-2-size: 14px;
+    --subtitle-2-size-rem: 0.875rem;
+    --subtitle-2-weight: 600;
+    --subtitle-2-style: normal;
+    --subtitle-2-line-height: 130%;
+    --small-text-family: "Nunito Sans";
+    --small-text-size: 12px;
+    --small-text-size-rem: 0.75rem;
+    --small-text-weight: 400;
+    --small-text-style: normal;
+    --small-text-line-height: 130%;
+    --button-2-family: "Nunito Sans";
+    --button-2-size: 16px;
+    --button-2-size-rem: 1rem;
+    --button-2-weight: 700;
+    --button-2-style: normal;
+    --button-2-line-height: 125%;
+    --nav-menu-family: "Nunito Sans";
+    --nav-menu-size: 24px;
+    --nav-menu-size-rem: 1.5rem;
+    --nav-menu-weight: 700;
+    --nav-menu-style: normal;
+    --nav-menu-line-height: 130%;
+    --p18-family: "Nunito Sans";
+    --p18-size: 18px;
+    --p18-size-rem: 1.125rem;
+    --p18-weight: 400;
+    --p18-style: normal;
+    --p18-line-height: 130%;
+    --labels-tags-family: "Nunito Sans";
+    --labels-tags-size: 11px;
+    --labels-tags-size-rem: 0.6875rem;
+    --labels-tags-weight: 600;
+    --labels-tags-style: normal;
+    --labels-tags-line-height: 130%;
+
+    /* COLORS */
+    --grey-3: rgb(17 17 17);
+    --grey-1: rgb(223 223 223);
+    --pink: rgb(224 68 98);
+    --light-pink: rgb(235 90 118);
+    --dark-pink: rgb(215 46 78);
+    --grey-2: rgb(119 119 119);
+    --light-pink-2: rgb(252 228 231);
+    --white: rgb(255 255 255);
+    --grey-4: rgb(244 244 244);
+    --yellow: rgb(249 176 53);
+    --alert: rgb(255 0 0);
+    --white: rgb(255 255 255);
+    --light-green: rgb(199 233 187);
+    --light-yellow: rgb(255 189 77);
+    --light-yellow-2: rgb(255 210 133);
+    --light-yellow-3: rgb(255 223 169);
+    --dark-blue-green: rgb(16 54 70);
+    --light-blue-2: rgb(115 155 179);
+    --blue-green: rgb(51 72 84);
+    --confirmed: rgb(66 151 37);
+    --grey-5: rgb(88 88 88);
+    --light-blue: rgb(243 248 251);
+  }
+
+  body {
+    font-family: "Nunito Sans", "Oswald", sans-serif;
+    margin: 0;
+    line-height: 1.5rem;
+  }
+  main {
+    margin: 0;
+  }
+  html {
+    margin: 0;
+  }
+  main {
+    text-align: center;
+  }
+  img {
+    width: 100%;
+  }
+
+  .horizontal-border {
+    width: 45px;
+    height: 5px;
+    background-color: var(--yellow);
+    margin: 10px auto;
+    border-radius: 30px;
+  }
+  button {
+    width: 164px;
+    height: 56px;
+    font-family: "Nunito Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    background-color: var(--pink);
+    border: none;
+    border-radius: 7px;
+    color: #fff;
+  }
+  .intro-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  /* TYPOGRAPHY ====================================== */
+
+  h1,
+  h2 {
+    font-family: "Oswald", sans-serif;
+  }
+  p,
+  h3,
+  a {
+    font-family: "Nunito Sans", sans-serif;
+    color: var(--grey-3);
+  }
+  h1 {
+    font-size: var(--h1-size);
+    color: var(--dark-blue-green);
+    text-transform: uppercase;
+    font-weight: var(--h1-weight);
+  }
+  p {
+    font-size: 1rem;
+    color: var(--grey-5);
+  }
+  h2 {
+    font-size: var(--h2-size);
+    color: var(--grey-3);
+  }
+  h3 {
+    font-weight: 500;
+  }
+  h4 {
+    font-size: var(--h4-size);
+    font-family: "Oswald", sans-serif;
+    font-weight: 500;
+  }
+  a {
+    font-size: 1rem;
+  }
+
+  /* FEATURES (Section 1) ======================================= */
+
+  .features-section {
+    margin: 6rem 1.5rem;
+  }
+  .intro-section {
+    margin: 4rem 0;
+  }
+  .right-content p,
+  .left-content p {
+    margin-bottom: 1rem;
+  }
+  .content-right {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: start;
+  }
+  .left-content {
+    order: -1;
+  }
+  .content-left {
+    display: flex;
+    flex-direction: column;
+  }
+  .right-content,
+  .left-content {
+    text-align: left;
+  }
+  h1 {
+    color: var(--dark-blue-green);
+  }
+  .feature-1,
+  .feature-2,
+  .feature-3 {
+    display: flex;
+    flex-direction: row;
+    gap: 36px;
+  }
+  .content-right {
+    margin-bottom: 2rem;
+  }
+  #capture-icon2 {
+    display: none;
+  }
+  .feature-image {
+    max-width: 270px;
+    margin-top: 1rem;
+  }
+  .image-left {
+    text-align: left;
+  }
+  .image-right {
+    text-align: left;
+  }
+  .line-icon img {
+    width: 41px;
+  }
+  .vertical-line {
+    border-left: 2px dashed var(--pink);
+    height: 500px;
+  }
+  .line-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  h2 {
+    margin: 0;
+  }
+  a {
+    color: var(--pink);
+    text-decoration: none;
+  }
+  .fa-chevron-right {
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+  }
+  /* CUSTOMER RATE (Section 2) ================================== */
+
+  .ratings-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 6rem;
+  }
+  .box {
+    border: 1.5px solid var(--pink);
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    border-radius: 20px;
+    width: 12rem;
+  }
+  .box img {
+    width: 60px;
+  }
+  .box h3 {
+    margin: 0.25rem;
+    font-family: var(--h3-family);
+    font-size: var(--h3-size);
+    color: var(--dark-blue-green);
+  }
+  .box p {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  /* BENEFITS (Section 3) ===================== */
+
+  .section-left {
+    padding: 5rem 0;
+    background-color: var(--dark-blue-green);
+  }
+  .intro-section {
+    margin-top: 0;
+    margin-bottom: 2.5rem;
+  }
+  h4,
+  .intro-section-white h1,
+  .content-benefit p {
+    color: #fff;
+  }
+
+  .content-benefit p {
+    text-align: left;
+    margin: 0;
+  }
+  h4 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    text-align: left;
+  }
+
+  .benefit {
+    padding: 1rem 1.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+  .content-benefit {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+  }
+  .checkmark {
+    color: rgb(255, 237, 239);
+  }
+
+  /* MEDIA QUERIES ================================== */
+
+  @media screen and (min-width: 600px) {
+    /* Features (Section 1) */
+
+    .intro-section {
+      margin-bottom: 7rem;
+      max-width: 753px;
+    }
+    .features-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .feature-1,
+    .feature-2,
+    .feature-3 {
+      justify-content: center;
+    }
+    .content-right,
+    .content-left {
+      display: flex;
+      flex-direction: row;
+      gap: 6rem;
+      margin: 0;
+    }
+    .line-icon-mid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .icon-left {
+      display: none;
+    }
+    #capture-icon2 {
+      display: block;
+    }
+    .feature-image,
+    .right-content,
+    .left-content,
+    .image-left img {
+      max-width: 411px;
+    }
+    .image-left img {
+      margin-top: 0;
+    }
+    button {
+      margin-top: 4rem;
+    }
+
+    /* Ratings (Section 2) ==========================*/
+
+    .ratings-section {
+      display: flex;
+      flex-direction: row;
+      gap: 4rem;
+      justify-content: center;
+    }
+    .box {
+      padding: 3.5rem;
+    }
+
+    /* Benefits (Section 3) ========================= */
+
+    .benefits-section {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      padding: 0;
+    }
+    .benefit {
+      padding-left: 0;
+    }
+    .image-right {
+      max-width: 45%;
+    }
+    .section-left {
+      display: flex;
+      padding: 3rem 6rem 3rem 17.5rem;
+      flex-direction: column;
+      align-items: start;
+    }
+    .intro-section-white {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+    .horizontal-border {
+      margin: 0;
+    }
   }
 }
