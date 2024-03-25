@@ -36,6 +36,7 @@ const stored = document.getElementById("stored");
 const retrievalRequested = document.getElementById("retrieval requested");
 const retrieved = document.getElementById("retrieved");
 const numReturnItems = document.getElementById("num-return-items");
+let cArr = null;
 const btnRequestReturn = document.getElementById("btn-request-return");
 
 // Header & Footer
@@ -121,9 +122,11 @@ const renderList = function (snapShot) {
             ? "In storage"
             : ""
         }</p></div> <label><input id=check_${itemID} class="checkbox" type="checkbox" ${
-          getcheckedItem
-            ? getcheckedItem.includes(itemID)
-              ? "checked"
+          !cArr
+            ? getcheckedItem
+              ? getcheckedItem.includes(itemID)
+                ? "checked"
+                : ""
               : ""
             : ""
         }/><span class='checkbox-icon'></span></label>
@@ -172,7 +175,7 @@ renderList(snapShot);
 const checkboxes = document.getElementsByClassName("checkbox");
 const checkAll = document.getElementById("check-all");
 const checkAllIcon = document.getElementById("check-all-icon");
-let cArr = [];
+cArr = [];
 // Arr to register checked input id.
 const a = document.querySelectorAll("input[type='checkbox']");
 a.forEach((e) => {
@@ -366,6 +369,7 @@ btnSearch.addEventListener("click", (e) => {
 // define filtering function
 const filtering = function (option) {
   option.addEventListener("click", async (e) => {
+    console.log(cArr);
     e.preventDefault();
     cleanupList();
     // update filter box
