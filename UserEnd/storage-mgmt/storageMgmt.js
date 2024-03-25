@@ -373,7 +373,11 @@ const filtering = function (option) {
     e.preventDefault();
     cleanupList();
     // update filter box
-    filterBox.textContent = option.textContent;
+    filterBox.innerHTML = "";
+    filterBox.insertAdjacentHTML(
+      "afterbegin",
+      `${option.textContent} <img id="filter-arrow" src="../icons/chevron-down-b.png" />`
+    );
     // hide filter list
     filterList.classList.add("hidden");
     if (option.id === "all") {
