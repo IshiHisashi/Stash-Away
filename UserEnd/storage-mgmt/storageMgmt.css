@@ -194,6 +194,7 @@ section {
   .check-all {
     display: flex;
     justify-content: end;
+    gap: 0.5rem;
     margin-bottom: 16px;
     grid-column: 1/-1;
     @media screen and (min-width: 600px) {
@@ -205,6 +206,7 @@ section {
     font-size: var(--subtitle-2-size);
     font-weight: var(--subtitle-2-weight);
     color: var(--grey-3);
+    padding-top: 2px;
   }
 
   /* List styling */
@@ -287,8 +289,9 @@ section {
       font-weight: bold;
       border-radius: 10px;
     }
-    .checkbox {
+    label {
       grid-row: 1/-1;
+      align-self: center;
     }
     .icon-span {
       display: none;
@@ -345,4 +348,46 @@ section {
 
 .item-list-section .retrieved .item-name {
   color: var(--grey-2);
+}
+
+/* checkbox-styling */
+.checkbox,
+.checkbox-all {
+  display: none;
+}
+.checkbox-icon {
+  line-height: 24px;
+  cursor: pointer;
+}
+.checkbox + .checkbox-icon::after,
+.checkbox-all + .checkbox-icon::after {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url(../icons/checkbox1-unselected-enabled.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.checkbox:checked + .checkbox-icon::after,
+.checkbox-all:checked + .checkbox-icon::after {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url(../icons/checkbox1-selected-enabled.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.checkbox:disabled + .checkbox-icon::after,
+.checkbox-all:disabled + .checkbox-icon::after {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url(../icons/checkbox1-selected-disabled.png);
+  background-repeat: no-repeat;
+  background-size: contain;
 }

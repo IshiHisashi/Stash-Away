@@ -120,13 +120,13 @@ const renderList = function (snapShot) {
             : item.status === "stored"
             ? "In storage"
             : ""
-        }</p></div> <input id=check_${itemID} class="checkbox" type="checkbox" ${
+        }</p></div> <label><input id=check_${itemID} class="checkbox" type="checkbox" ${
           getcheckedItem
             ? getcheckedItem.includes(itemID)
               ? "checked"
               : ""
             : ""
-        }/>
+        }/><span class='checkbox-icon'></span></label>
       <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
         </li>`
       );
@@ -171,6 +171,7 @@ renderList(snapShot);
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
 const checkAll = document.getElementById("check-all");
+const checkAllIcon = document.getElementById("check-all-icon");
 let cArr = [];
 // Arr to register checked input id.
 const a = document.querySelectorAll("input[type='checkbox']");
@@ -224,7 +225,8 @@ const cleanupList = function () {
 
 // Check-all
 const checkall = function () {
-  checkAll.addEventListener("change", (e) => {
+  checkAllIcon.addEventListener("click", (e) => {
+    checkAll.checked ? (checkAll.checked = false) : (checkAll.checked = true);
     cArr = [];
     if (checkAll.checked) {
       Array.from(checkboxes).forEach((ch) => {
@@ -317,7 +319,7 @@ btnSearch.addEventListener("click", (e) => {
             : item.status === "stored"
             ? "In storage"
             : ""
-        }</p></div><input id=check_${itemID} class="checkbox" type="checkbox"/>
+        }</p></div><label><input id=check_${itemID} class="checkbox" type="checkbox"/><span class='checkbox-icon'></span></label>
       <span class='icon-span'><i class="fa-regular fa-image icon pic"  id="pic-item${itemID}"></i></span>
         </li>`
       );
