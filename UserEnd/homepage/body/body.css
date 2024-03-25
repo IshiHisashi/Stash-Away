@@ -262,6 +262,7 @@
     .intro-section-white h1,
     .content-benefit p {
       color: #fff;
+      padding-left:10px;
     }
 
     .content-benefit p {
@@ -288,6 +289,12 @@
     .checkmark {
       color: rgb(255, 237, 239);
     }
+
+    .benefits-section{
+      display: grid;
+    }
+
+    
 
     /* Location ===================== */
 
@@ -475,16 +482,23 @@
       /* Benefits (Section 3) ========================= */
 
       .benefits-section {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        padding: 0;
+       grid-template-columns: 1fr 1fr;
       }
       .benefit {
         padding-left: 0;
       }
       .image-right {
-        max-width: 45%;
+        flex: 1; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        overflow: hidden;
+      }
+      
+      .image-right img {
+        width: 100%; 
+        height: 100%; 
+        object-fit: cover; 
       }
       .section-left {
         display: flex;
