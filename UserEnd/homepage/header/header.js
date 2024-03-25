@@ -20,6 +20,14 @@ async function initHeader() {
         });
     }
 
+    const homeImage = document.getElementById("home-image");
+    if (homeImage) {
+        homeImage.addEventListener("click", async (e) => {
+            e.preventDefault();
+            window.location.href = `${basePath}homepage/main.html`;
+        });
+    }
+
     const btnGeoLocation = document.getElementById("btnGeoLocation");
     if (btnGeoLocation) {
         btnGeoLocation.addEventListener("click", async (e) => {
@@ -61,7 +69,7 @@ async function initHeader() {
     const btnOrderUpdate = document.getElementById("btnOrderUpdate");
     if (btnOrderUpdate) {
         btnOrderUpdate.addEventListener("click", function () {
-            window.location.href = `${basePath}order-confirmation/order-confirmation.html`;
+            window.location.href = `${basePath}updates/pickup-and-delivery-updates.html`;
         });
     }
 

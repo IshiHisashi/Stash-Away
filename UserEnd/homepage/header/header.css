@@ -21,6 +21,7 @@ header {
 
 .logo {
   padding: 10px;
+  cursor: pointer;
 }
 
 .hamburger-menu {
