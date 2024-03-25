@@ -1,0 +1,62 @@
+@import url(../../common.css);
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Oswald:wght@200..700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  padding-bottom: 0.1rem;
+}
+
+main {
+  display: flex;
+  align-items: center;
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+  }
+  .main-img {
+    padding-top: 120px;
+    display: block;
+    margin: 0 auto;
+  }
+  h2 {
+    font-family: var(--h2-family);
+    font-size: var(--h2-size);
+    font-weight: var(--h2-weight);
+    color: var(--dark-blue-green);
+    width: 300px;
+    padding-top: 32px;
+    text-align: center;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 100px;
+  }
+  a {
+    text-decoration: none;
+    color: var(--dark-blue-green);
+  }
+  p {
+    font-family: var(--subtitle-2-family);
+    font-size: var(--subtitle-2-size);
+    font-weight: var(--subtitle-2-weght);
+  }
+  p,
+  .chevron {
+    cursor: pointer;
+  }
+  p:hover {
+    color: var(--pink);
+  }
+}
