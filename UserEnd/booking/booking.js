@@ -1,8 +1,8 @@
 "use strict";
 
 import * as common from "../../common.js";
-import { initHeader } from '../homepage/header/header.js';
-import { initFooter } from '../homepage/footer/footer.js';
+import { initHeader } from "../homepage/header/header.js";
+import { initFooter } from "../homepage/footer/footer.js";
 // Initialize Firebase---------------
 const db = common.db;
 // General : Get company info
@@ -60,6 +60,8 @@ const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
 const pickupDate = document.getElementById("pickup-date");
 const pickupTime = document.getElementById("pickup-time");
+const pickuptimeDiv = document.getElementById("pickup-time-div");
+const pickuptimeUl = document.getElementById("pickup-time-ul");
 const storageLocation = document.getElementById("storage-location");
 const btnBackPickup = document.getElementById("btn-back-pikup");
 const btnSavePickup = document.getElementById("btn-save-pickup");
@@ -115,32 +117,33 @@ let itemData;
 
 async function loadComponent(componentPath, placeholderId) {
   try {
-      const response = await fetch(componentPath);
-      const componentHTML = await response.text();
-      document.getElementById(placeholderId).innerHTML = componentHTML;
+    const response = await fetch(componentPath);
+    const componentHTML = await response.text();
+    document.getElementById(placeholderId).innerHTML = componentHTML;
   } catch (error) {
-      console.error('An error occurred while loading the component:', error);
+    console.error("An error occurred while loading the component:", error);
   }
 }
 
 async function init() {
   try {
-      await loadComponent('../homepage/header/header.html', 'header-placeholder');
-      initHeader();
-      await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
-      initFooter();
+    await loadComponent("../homepage/header/header.html", "header-placeholder");
+    initHeader();
+    await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
+    initFooter();
   } catch (error) {
-      console.error('An error occurred:', error);
+    console.error("An error occurred:", error);
   }
 }
 
-if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
   init();
 } else {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener("DOMContentLoaded", init);
 }
-
-
 
 const renderListFor = function (doc) {
   for (let i = 0; i < doc.length; i++) {
@@ -280,7 +283,6 @@ captureBtn.addEventListener("click", function (e) {
   document.getElementById("backButton").style.display = "inline-block";
   document.getElementById("displayItemName").style.display = "inline-block";
 
-
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -307,7 +309,6 @@ retakeBtn.addEventListener("click", function (e) {
   document.getElementById("reupload").style.display = "none";
   document.getElementById("itemnamelabel").style.display = "inline-block";
 
-
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
@@ -330,7 +331,6 @@ uploadButton.addEventListener("click", function (e) {
   canvas.hidden = true;
   video.hidden = true;
   document.getElementById("itemnamelabel").style.display = "none";
-
 });
 
 reuploadBtn.addEventListener("click", function (e) {
@@ -501,6 +501,15 @@ city.value = userDoc.address.city;
 province.value = userDoc.address.province;
 zipCode.value = userDoc.address.zipCode;
 pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
+// pickuptimeDiv.textContent = userDoc.ongoing_order
+//   ? userDoc.ongoing_order.time
+//   : "-- select time --";
+pickuptimeDiv.insertAdjacentHTML(
+  "afterbegin",
+  `${
+    userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
+  } <img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
+);
 // pickup-time is separately controled by the function generating the option tags.
 storageLocation.value = userDoc.storageLocation.name;
 
@@ -620,12 +629,28 @@ for (let i = 9; i < 21; i++) {
 }
 // render
 times.forEach((el) => {
-  pickupTime.insertAdjacentHTML(
+  pickuptimeUl.insertAdjacentHTML(
     "beforeend",
-    `<option value=${el} ${
-      el === userDoc.ongoing_order?.time ? "selected" : ""
-    }>${el}</option>`
+    `<li class='pickup-time-li' id=${el}>${el}</li>`
   );
+});
+
+// filtering
+pickuptimeDiv.addEventListener("click", (e) => {
+  e.preventDefault();
+  pickuptimeUl.classList.toggle("hidden");
+});
+const pickuptimeLi = document.getElementsByClassName("pickup-time-li");
+Array.from(pickuptimeLi).forEach((el) => {
+  el.addEventListener("click", (e) => {
+    e.preventDefault();
+    pickuptimeDiv.innerHTML = "";
+    pickuptimeDiv.insertAdjacentHTML(
+      "afterbegin",
+      `${el.textContent}  <img id="filter-arrow" src="../icons/chevron-down-b.png" />`
+    );
+    pickuptimeUl.classList.add("hidden");
+  });
 });
 
 // Event : Back
@@ -658,7 +683,7 @@ btnSavePickup.addEventListener("click", async (e) => {
     unitNumber.value === "" ||
     zipCode.value === "" ||
     pickupDate.value === "" ||
-    pickupTime.value === "" ||
+    pickuptimeDiv.textContent === "" ||
     storageLocation.value === ""
   ) {
     e.preventDefault();
@@ -690,7 +715,7 @@ btnSavePickup.addEventListener("click", async (e) => {
       "address.geoCode": geoCodeArray,
       "address.zipCode": `${zipCode.value}`,
       "ongoing_order.date": `${pickupDate.value}`,
-      "ongoing_order.time": `${pickupTime.value}`,
+      "ongoing_order.time": `${pickuptimeDiv.textContent}`,
       "storageLocation.name": `${storageLocation.value}`,
     });
   }
@@ -1056,8 +1081,8 @@ function closeCamera() {
       track.stop();
     });
 
-    video.srcObject = null; 
-    video.hidden = true; 
+    video.srcObject = null;
+    video.hidden = true;
   }
 }
 
@@ -1071,9 +1096,8 @@ backButton.addEventListener("click", function (e) {
   document.getElementById("reupload").style.display = "none";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
-  document.getElementById("uploadButton").style.display = "flex";  
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("itemnamelabel").style.display = "inline-block";
-
 });
 
 const load = document.getElementById("loading-screen");

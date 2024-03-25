@@ -215,7 +215,9 @@
             </div>
             <div class="PickupTime-div">
               <label>Time of Pick-Up</label>
-              <select name="" id="pickup-time"></select>
+              <div id="pickup-time-div"><img id="filter-arrow" src="../icons/chevron-down-b.png"/></div>
+              <ul id="pickup-time-ul" class="hidden">
+              </ul>
             </div>
             <div class="storageLocation-div">
               <label>Choose Storage Location</label>
@@ -362,5 +364,6 @@
   const db = firebase.firestore();
   const storage = firebase.storage();
 </script>
+
 
 </html>
