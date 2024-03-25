@@ -59,10 +59,10 @@ const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
 const pickupDate = document.getElementById("pickup-date");
-const pickupTime = document.getElementById("pickup-time");
 const pickuptimeDiv = document.getElementById("pickup-time-div");
 const pickuptimeUl = document.getElementById("pickup-time-ul");
-const storageLocation = document.getElementById("storage-location");
+const storageLocationDiv = document.getElementById("storage-location-div");
+const storageLocationUl = document.getElementById("storage-location-ul");
 const btnBackPickup = document.getElementById("btn-back-pikup");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
@@ -501,17 +501,16 @@ city.value = userDoc.address.city;
 province.value = userDoc.address.province;
 zipCode.value = userDoc.address.zipCode;
 pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
-// pickuptimeDiv.textContent = userDoc.ongoing_order
-//   ? userDoc.ongoing_order.time
-//   : "-- select time --";
 pickuptimeDiv.insertAdjacentHTML(
   "afterbegin",
   `${
     userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
   } <img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
 );
-// pickup-time is separately controled by the function generating the option tags.
-storageLocation.value = userDoc.storageLocation.name;
+storageLocationDiv.insertAdjacentHTML(
+  "afterbegin",
+  `${userDoc.storageLocation.name}<img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
+);
 
 // Calendar
 // display control
@@ -618,6 +617,31 @@ document.addEventListener("click", function (e) {
 });
 showCalendar(year, month);
 
+// Filtering Area (pickuptime & storagelocation)
+// filtering function
+// toggle pull-down list
+const pulldownToggle = function (div, ul) {
+  div.addEventListener("click", (e) => {
+    e.preventDefault();
+    ul.classList.toggle("hidden");
+  });
+};
+// select pulldown
+const selectPulldown = function (arr, div, ul) {
+  Array.from(arr).forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      div.innerHTML = "";
+      div.insertAdjacentHTML(
+        "afterbegin",
+        `${el.textContent}  <img src="../icons/chevron-down-b.png" />`
+      );
+      ul.classList.add("hidden");
+    });
+  });
+};
+
+// Pickup time
 // Time of pickup
 // time options
 let quarterHours = ["00", "30"];
@@ -627,31 +651,25 @@ for (let i = 9; i < 21; i++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
-// render
+// Render
 times.forEach((el) => {
   pickuptimeUl.insertAdjacentHTML(
     "beforeend",
     `<li class='pickup-time-li' id=${el}>${el}</li>`
   );
 });
-
-// filtering
-pickuptimeDiv.addEventListener("click", (e) => {
-  e.preventDefault();
-  pickuptimeUl.classList.toggle("hidden");
-});
 const pickuptimeLi = document.getElementsByClassName("pickup-time-li");
-Array.from(pickuptimeLi).forEach((el) => {
-  el.addEventListener("click", (e) => {
-    e.preventDefault();
-    pickuptimeDiv.innerHTML = "";
-    pickuptimeDiv.insertAdjacentHTML(
-      "afterbegin",
-      `${el.textContent}  <img id="filter-arrow" src="../icons/chevron-down-b.png" />`
-    );
-    pickuptimeUl.classList.add("hidden");
-  });
-});
+// Execute pulldown
+pulldownToggle(pickuptimeDiv, pickuptimeUl);
+selectPulldown(pickuptimeLi, pickuptimeDiv, pickuptimeUl);
+
+// Storage Location
+const storageLocationLi = document.getElementsByClassName(
+  "storage-location-li"
+);
+// Execute pulldown
+pulldownToggle(storageLocationDiv, storageLocationUl);
+selectPulldown(storageLocationLi, storageLocationDiv, storageLocationUl);
 
 // Event : Back
 btnBackPickup.addEventListener("click", async () => {
@@ -684,7 +702,7 @@ btnSavePickup.addEventListener("click", async (e) => {
     zipCode.value === "" ||
     pickupDate.value === "" ||
     pickuptimeDiv.textContent === "" ||
-    storageLocation.value === ""
+    storageLocationDiv.textContent === ""
   ) {
     e.preventDefault();
     alert("Please fill in all the required information");
@@ -716,7 +734,7 @@ btnSavePickup.addEventListener("click", async (e) => {
       "address.zipCode": `${zipCode.value}`,
       "ongoing_order.date": `${pickupDate.value}`,
       "ongoing_order.time": `${pickuptimeDiv.textContent}`,
-      "storageLocation.name": `${storageLocation.value}`,
+      "storageLocation.name": `${storageLocationDiv.textContent}`,
     });
   }
   // overlay contorol
