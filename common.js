@@ -64,6 +64,7 @@ import {
   deleteDoc,
   writeBatch,
   query,
+  orderBy,
   where,
   deleteField,
   onSnapshot,
@@ -216,7 +217,8 @@ export const addOrderSubmitFunction = async function (
 export const queryFunction = async function (conditionValue, uid) {
   const q = query(
     collection(db, "users", uid, "inStorage"),
-    where("status", "==", conditionValue)
+    where("status", "==", conditionValue),
+    orderBy("storedDate", "desc")
   );
   const querySnapshot = await getDocs(q);
   return querySnapshot;

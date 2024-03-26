@@ -16,7 +16,11 @@ let getcheckedItem = userDoc.ongoingRetrievalItems;
 // General : Get item (document) in 'inStorage' (subcollection):
 const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
 const snapShot = await common.getDocs(queryStorage);
-const sortedQ = common.query(queryStorage, common.orderBy("status", "desc"));
+const sortedQ = common.query(
+  queryStorage,
+  common.orderBy("status", "desc"),
+  common.orderBy("storedDate", "desc")
+);
 const snapShotSortedQ = await common.getDocs(sortedQ);
 
 // ---------------------------------
@@ -392,6 +396,7 @@ const filtering = function (option) {
     } else {
       // retrieve data under a certain filter condition
       const querySnapshot = await common.queryFunction(option.id, uid);
+      console.log(querySnapshot);
       // Then, render it
       renderList(querySnapshot);
       // checkbox contorol
