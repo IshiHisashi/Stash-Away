@@ -82,6 +82,6 @@ async function NetworkOrOfflinePage(event) {
   } catch (error) {
     // in case of error return a static page
     // console.log(error);
-    return caches.match(urlsToCache[0]); // returns default offline page
+    return caches.match(urlsToCache[1]); // returns default offline page
   }
 }
