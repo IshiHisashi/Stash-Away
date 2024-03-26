@@ -42,6 +42,14 @@ body {
   z-index: 2;
 }
 
+#addItem,
+#pickup-info,
+#storage-size,
+#select-plan {
+  padding-top: 700px;
+  margin-top: -700px;
+}
+
 /* Progress bar*/
 .progress-mobile {
   margin-top: 28px;
@@ -425,11 +433,11 @@ main {
       }
 
       .btn-add-div.disabled {
-        border: 1px solid #DFDFDF; /* Assuming you want the border color to match the disabled state */
-        background-color: #DFDFDF;
+        border: 1px solid #dfdfdf; /* Assuming you want the border color to match the disabled state */
+        background-color: #dfdfdf;
         cursor: default;
       }
-      
+
       .btn-add-div.disabled .btn-add {
         color: #ffffff; /* Optional: change text color if needed */
         pointer-events: none; /* Prevents clicking */
@@ -541,7 +549,7 @@ main {
     }
 
     .btn-proceed.disabled {
-      background-color: #DFDFDF;
+      background-color: #dfdfdf;
       color: #ffffff; /* Optional: change text color if needed */
       pointer-events: none; /* Prevents clicking */
       cursor: default;

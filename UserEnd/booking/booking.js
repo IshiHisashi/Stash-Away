@@ -202,7 +202,7 @@ const renderListFor = function (doc) {
       });
     }
   }
-  if(doc.length>0){    
+  if (doc.length > 0) {
     updateProceedButtonState();
   }
 };
@@ -452,7 +452,7 @@ async function saveItem() {
     );
     alert("Item image updated successfully!");
     updateProceedButtonState();
-    document.getElementById("newItemName").value = "";  
+    document.getElementById("newItemName").value = "";
     updateButtonState();
   } else {
     await common.addDoc(common.collection(db, "users", uid, "inStorage"), {
@@ -469,25 +469,23 @@ async function saveItem() {
     });
     alert("Item added successfully!");
     updateProceedButtonState();
-    document.getElementById("newItemName").value = "";  
+    document.getElementById("newItemName").value = "";
     updateButtonState();
   }
-
-  
 
   modalClose();
   clearModelData();
 }
 
 function updateProceedButtonState() {
-  const itemList = document.querySelectorAll('.item-list-li');
-  const btnProceed = document.getElementById('btn-proceed');
+  const itemList = document.querySelectorAll(".item-list-li");
+  const btnProceed = document.getElementById("btn-proceed");
   if (itemList.length > 0) {
-    btnProceed.classList.remove('disabled');
+    btnProceed.classList.remove("disabled");
     btnProceed.href = "#pickup-info"; // Enable the link
   } else {
-    btnProceed.classList.add('disabled');
-    btnProceed.removeAttribute('href'); // Disable the link
+    btnProceed.classList.add("disabled");
+    btnProceed.removeAttribute("href"); // Disable the link
   }
 }
 
@@ -526,7 +524,8 @@ zipCode.value = userDoc.address.zipCode;
 pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
 pickuptimeDiv.insertAdjacentHTML(
   "afterbegin",
-  `${userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
+  `${
+    userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
   } <img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
 );
 storageLocationDiv.insertAdjacentHTML(
@@ -726,7 +725,6 @@ btnSavePickup.addEventListener("click", async (e) => {
     pickuptimeDiv.textContent === "" ||
     storageLocationDiv.textContent === ""
   ) {
-    e.preventDefault();
     alert("Please fill in all the required information");
   } else {
     // e.preventDefault();
@@ -758,21 +756,30 @@ btnSavePickup.addEventListener("click", async (e) => {
       "ongoing_order.time": `${pickuptimeDiv.textContent}`,
       "storageLocation.name": `${storageLocationDiv.textContent}`,
     });
+    // overlay contorol
+    overlay2.classList.add("overlay");
+    overlay3.classList.remove("overlay");
+    // update progress bar for Mobile
+    pickUpAddressM.classList.add("hide");
+    storageSizeM.classList.remove("hide");
+    progressBarM.style.width = "54%";
+    // update progress bad for Large
+    document.querySelector(".pick-up-address >span").classList.add("hide");
+    document.querySelector(".pick-up-address>div").classList.remove("hide");
+    document
+      .querySelector(".storage-size>span")
+      .classList.replace("circle-yet", "circle-now");
+    progressBarL.style.width = "47%";
+    // Then, go to next section
+    function scrollToID(id, margin) {
+      const elm = document.getElementById(id);
+      window.scrollTo({
+        top: elm.offsetTop + margin,
+        // behavior: "smooth",
+      });
+    }
+    scrollToID("select-plan");
   }
-  // overlay contorol
-  overlay2.classList.add("overlay");
-  overlay3.classList.remove("overlay");
-  // update progress bar for Mobile
-  pickUpAddressM.classList.add("hide");
-  storageSizeM.classList.remove("hide");
-  progressBarM.style.width = "54%";
-  // update progress bad for Large
-  document.querySelector(".pick-up-address >span").classList.add("hide");
-  document.querySelector(".pick-up-address>div").classList.remove("hide");
-  document
-    .querySelector(".storage-size>span")
-    .classList.replace("circle-yet", "circle-now");
-  progressBarL.style.width = "47%";
 });
 
 // ------------------------------
@@ -1147,16 +1154,15 @@ setTimeout(() => {
   body.style.overflowY = "auto";
 }, 1000);
 
-
 function updateButtonState() {
-  if (newItemName.value.trim() === '') {
-    saveBtn.parentElement.classList.add('disabled');
+  if (newItemName.value.trim() === "") {
+    saveBtn.parentElement.classList.add("disabled");
   } else {
-    saveBtn.parentElement.classList.remove('disabled');
+    saveBtn.parentElement.classList.remove("disabled");
   }
 }
 
 // Initial state check in case there's already text in the input (e.g., browser autofill)
 updateButtonState();
 
-newItemName.addEventListener('input', updateButtonState);
+newItemName.addEventListener("input", updateButtonState);
