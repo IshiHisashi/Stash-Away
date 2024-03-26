@@ -79,7 +79,7 @@ function getProfileInfo() {
   let firstLetterUppercase = size.charAt(0).toUpperCase();
   let remainingLetters = size.slice(1);
   let sizeCapped = firstLetterUppercase + remainingLetters;
-  document.getElementById("storage-size").innerHTML = `${sizeCapped} Storage`;
+  document.getElementById("storage-size").innerHTML = `<img src="../icons/check.png" alt="check icon">${sizeCapped} Storage`;
 
   let duration = profileInfo.plan.term;
   let planDetailsByDuraton;
@@ -107,8 +107,15 @@ function getProfileInfo() {
     document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
     document.getElementById("plan-price").style.textDecoration = "line-through";
   } else {
-    document.getElementById("plan-price").innerHTML =
-      "You might want to get great discount by changing your plan!";
+    let planPrice = document.getElementById("plan-price");
+    planPrice.style.gridRow = "-1/-2";
+    planPrice.style.color = "var(--light-pink)";
+    planPrice.style.fontFamily = "var(--body-family)";
+    planPrice.style.fontSize = "var(--body-size)";
+    planPrice.style.fontWeight = "var(--body-weight)";
+    planPrice.style.lineHeight = "var(--body-line-height)";
+    planPrice.innerHTML =
+      "You might want to get a great discount by changing your plan!";
   }
 
   let discountedPrice =
@@ -117,7 +124,7 @@ function getProfileInfo() {
 
   document.getElementById(
     "free-trip"
-  ).innerHTML = `${planDetailsByDuraton.numTrip} Free Trips`;
+  ).innerHTML = `<img src="../icons/check.png" alt="check icon">${planDetailsByDuraton.numTrip} Free Trips`;
 
   // PAYMENT METHOD SECTION ================================
   class Card {
@@ -128,10 +135,13 @@ function getProfileInfo() {
       this.number = number;
       if (firstDigit(cardNum) == 2 || firstDigit(cardNum) == 5) {
         this.cardBrandUrl = "../images/master-logo.png";
+        this.brandName = "Master";
       } else if (firstDigit(cardNum) == 4) {
         this.cardBrandUrl = "../images/visa-logo.png";
+        this.brandName = "Visa";
       } else if (firstDigit(cardNum) == 3) {
         this.cardBrandUrl = "../images/amex-logo.png";
+        this.brandName = "Amex";
       }
     }
 
@@ -141,10 +151,17 @@ function getProfileInfo() {
       let image = document.createElement("img");
       image.setAttribute("src", `${this.cardBrandUrl}`);
       image.setAttribute("class", "card-brand-img");
+      let brandName = document.createElement("p")
+      brandName.setAttribute("class", "brand-name");
+      let brandNode = document.createTextNode(`${this.brandName}`);
+      brandName.appendChild(brandNode);
       let cardNumPara = document.createElement("p");
       cardNumPara.setAttribute("class", "card-num");
-      let node = document.createTextNode(`${this.cardNum}`);
+      let lastFourDigits = this.cardNum % Math.pow(10, 4);
+      let node = document.createTextNode(`${lastFourDigits}`);
       cardNumPara.appendChild(node);
+      let sepatator = document.createElement("p");
+      sepatator.innerText = "|";
       let expiration = document.createElement("p");
       expiration.setAttribute("class", "exp-date");
       let node2 = document.createTextNode(this.expDate);
@@ -158,7 +175,9 @@ function getProfileInfo() {
         cardRadioBtn.setAttribute("checked", "");
       }
       label.appendChild(image);
+      label.appendChild(brandName);
       label.appendChild(cardNumPara);
+      label.appendChild(sepatator);
       label.appendChild(expiration);
       let eachCard = document.createElement("div");
       eachCard.setAttribute("class", "each-card");

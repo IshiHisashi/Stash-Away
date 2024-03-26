@@ -9,44 +9,297 @@ body {
   overflow-y: hidden;
 }
 
+main {
+  padding: 50px 30px;
+  background-color: var(--grey-4);
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 28px;
+}
+
+main section {
+  padding: 50px 30px;
+  background-color: var(--white);
+  border-radius: 30px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 28px;
+}
+
+.title-area {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+h2 {
+  text-align: center;
+  font-size: var(--h2-size);
+  font-family: var(--h2-family);
+  color: var(--dark-blue-green);
+}
+
+.title-bar {
+  width: 46px;
+  height: 5px;
+  border-radius: 30px;
+  background-color: var(--yellow);
+}
+
 #plan {
     display: flex;
     justify-content: space-between;
 }
 
-#plan-name, #price {
+#plan-name {
     display: flex;
     gap: 1rem;
+    width: 100%;
+}
+
+#duration {
+  width: 100%;
+  text-align: center;
+  margin: 0 10px;
+  border-bottom: 1px solid var(--grey-2);
+}
+
+#duration, #discounted, #plan-price {
+  font-family: var(--h2-family);
+  font-size: var(--h2-size);
+  font-weight: var(--h2-weight);
+  line-height: var(--h2-line-height);
+  color: var(--dark-blue-green);
+  padding: 10px 0;
+}
+
+#plan-price {
+  color: var(--grey-2);
+}
+
+#account-profile fieldset, #payment-method fieldset {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 24px;
+    border: none;
+}
+
+#payment-method fieldset {
+  gap: 15px;
+}
+
+.input-field {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 5px;
+}
+
+.input-field > * {
+  flex-grow: 1;
+  flex-basis: 80%;
+}
+
+.input-field label {
+  font-family: var(--subtitle-2-family);
+  font-size: var(--subtitle-2-size);
+  color: var(--grey-3);
+}
+
+.input-field input {
+  padding: 14px;
+  font-family: var(--body-family);
+  font-size: var(--body-size);
+  color: var(--grey-2);
+  border: 1px solid var(--grey-2);
+  border-radius: 7px;
+}
+
+#save-profile, #cancel-plan {
+  width: 164px;
+  height: 56px;
+  background-color: var(--grey-1);
+  color: var(--white);
+  border: none;
+  border-radius: 7px;
+  margin: 0 auto;
+  font-family: var(--button-1-family);
+  font-size: var(--button-1-size);
+}
+
+#membership-info {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+
+#membership-info > * {
+  flex-grow: 1;
+  flex-basis: 80%;
+  text-align: center;
+}
+
+#change-plan {
+  width: 164px;
+  height: 56px;
+  background-color: var(--light-pink-2);
+  border: 1px solid var(--light-pink);
+  color: var(--pink);
+  border-radius: 7px;
+  margin: 0 auto;
+  font-family: var(--button-2-family);
+  font-size: var(--button-2-size);
+}
+
+#plan {
+  margin-top: 20px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+#price {
+  display: grid;
+  grid-template-rows: auto auto;
+}
+
+#details {
+  margin-top: 35px;
+}
+
+#details ul {
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 12px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#details ul li {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 7px;
+}
+
+#details ul li img {
+  width: 24px;
+  height: 24px;
 }
 
 .each-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--grey-2);
 }
 
 .each-card label {
-    display: flex;
-    gap: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.each-card label p {
+  font-family: var(--body-family);
+  font-size: var(--body-size);
+}
+.each-card input {
+  height: 24px;
+  width: 24px;
+  accent-color: var(--pink);
 }
 
 #default-payment {
-    text-align: right;
-}
-
-#account-profile fieldset {
-    display: flex;
-    flex-flow: column nowrap;
-    gap: .5rem;
-}
-
-#account-profile fieldset button {
-    width: 25%;
+  text-align: right;
 }
 
 .card-brand-img {
     width: 70px;
     height: auto;
+}
+
+#add-payment {
+  border: none;
+  background-color: unset;
+  margin-top: 15px;
+  font-family: var(--subtitle-2-family);
+  font-size: var(--subtitle-2-size);
+  color: var(--dark-pink);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+@media screen and (min-width: 800px){
+  main section {
+    padding: 50px 100px;
+  }
+
+  .title-area {
+    align-items: start;
+  }
+
+  #account-profile fieldset {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .input-field:has(label[for="street"]), .input-field:has(label[for="province"]) {
+    grid-column: 1/2;
+  }
+
+  #save-profile {
+    grid-column: -1/-2;
+    grid-row: 6/7;
+    margin: 0 0 0 auto;
+  }
+
+  #membership {
+    display: grid;
+    grid-template-columns: 1fr auto;
+  }
+
+  #membership-info {
+    grid-column: 1/-1;
+  }
+
+  #membership-info h3 {
+    text-align: left;;
+  }
+
+  #cancel-plan {
+    grid-column: -2/-1;
+  }
+
+  #plan {
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--grey-2);
+    margin-top: 0;
+  }
+
+  #plan-name {
+    width: unset;
+  }
+
+  #duration {
+    margin: 0;
+    border-bottom: unset;
+  }
+
+  #price {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  #details ul {
+    margin: 0 auto 0 0;
+  }
+
+  .each-card {
+    padding-right: 25px;
+  }
 }
 
 /* LOADING SCREEN ========================================== */

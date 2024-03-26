@@ -1,8 +1,8 @@
 "use strict";
 
 import * as common from "../../common.js";
-import { initHeader } from '../homepage/header/header.js';
-import { initFooter } from '../homepage/footer/footer.js';
+import { initHeader } from "../homepage/header/header.js";
+import { initFooter } from "../homepage/footer/footer.js";
 // Initialize Firebase---------------
 const db = common.db;
 // General : Get company info
@@ -59,8 +59,10 @@ const city = document.getElementById("city");
 const province = document.getElementById("province");
 const zipCode = document.getElementById("zipcode");
 const pickupDate = document.getElementById("pickup-date");
-const pickupTime = document.getElementById("pickup-time");
-const storageLocation = document.getElementById("storage-location");
+const pickuptimeDiv = document.getElementById("pickup-time-div");
+const pickuptimeUl = document.getElementById("pickup-time-ul");
+const storageLocationDiv = document.getElementById("storage-location-div");
+const storageLocationUl = document.getElementById("storage-location-ul");
 const btnBackPickup = document.getElementById("btn-back-pikup");
 const btnSavePickup = document.getElementById("btn-save-pickup");
 
@@ -115,32 +117,33 @@ let itemData;
 
 async function loadComponent(componentPath, placeholderId) {
   try {
-      const response = await fetch(componentPath);
-      const componentHTML = await response.text();
-      document.getElementById(placeholderId).innerHTML = componentHTML;
+    const response = await fetch(componentPath);
+    const componentHTML = await response.text();
+    document.getElementById(placeholderId).innerHTML = componentHTML;
   } catch (error) {
-      console.error('An error occurred while loading the component:', error);
+    console.error("An error occurred while loading the component:", error);
   }
 }
 
 async function init() {
   try {
-      await loadComponent('../homepage/header/header.html', 'header-placeholder');
-      initHeader();
-      await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
-      initFooter();
+    await loadComponent("../homepage/header/header.html", "header-placeholder");
+    initHeader();
+    await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
+    initFooter();
   } catch (error) {
-      console.error('An error occurred:', error);
+    console.error("An error occurred:", error);
   }
 }
 
-if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
   init();
 } else {
-  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener("DOMContentLoaded", init);
 }
-
-
 
 const renderListFor = function (doc) {
   for (let i = 0; i < doc.length; i++) {
@@ -199,6 +202,9 @@ const renderListFor = function (doc) {
       });
     }
   }
+  if (doc.length > 0) {
+    updateProceedButtonState();
+  }
 };
 
 async function saveItemNameEdit(itemId, newName) {
@@ -243,6 +249,8 @@ const unsubscribe = common.onSnapshot(queryStorage, (querySnapshot) => {
       common.deleteDoc(
         common.doc(common.db, "users", uid, "inStorage", `${deleteID}`)
       );
+
+      updateProceedButtonState();
     });
   });
 });
@@ -255,8 +263,8 @@ captureBtn.addEventListener("click", function (e) {
   displayItemNameElement.textContent =
     document.getElementById("newItemName").value;
 
-  const fixedWidth = 400;
-  const fixedHeight = 300;
+  const fixedWidth = 450;
+  const fixedHeight = 330;
   canvas.width = fixedWidth;
   canvas.height = fixedHeight;
 
@@ -280,7 +288,6 @@ captureBtn.addEventListener("click", function (e) {
   document.getElementById("backButton").style.display = "inline-block";
   document.getElementById("displayItemName").style.display = "inline-block";
 
-
   video.hidden = true;
   uploadButton.style.display = "none";
 
@@ -301,12 +308,13 @@ retakeBtn.addEventListener("click", function (e) {
   video.hidden = false;
   retakeBtn.style.display = "none";
   document.getElementById("capture").style.display = "flex";
-  document.getElementById("uploadButton").style.display = "flex";
-  document.getElementById("saveImage").style.display = "none";
   document.getElementById("displayItemName").style.display = "none";
+  document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
+  document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("itemnamelabel").style.display = "inline-block";
-
 
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
@@ -330,7 +338,6 @@ uploadButton.addEventListener("click", function (e) {
   canvas.hidden = true;
   video.hidden = true;
   document.getElementById("itemnamelabel").style.display = "none";
-
 });
 
 reuploadBtn.addEventListener("click", function (e) {
@@ -360,8 +367,8 @@ function processFile(file) {
     reader.onload = function (e) {
       const img = new Image();
       img.onload = function () {
-        const fixedWidth = 400;
-        const fixedHeight = 300;
+        const fixedWidth = 450;
+        const fixedHeight = 330;
         canvas.width = fixedWidth;
         canvas.height = fixedHeight;
 
@@ -446,6 +453,9 @@ async function saveItem() {
       }
     );
     alert("Item image updated successfully!");
+    updateProceedButtonState();
+    document.getElementById("newItemName").value = "";
+    updateButtonState();
   } else {
     await common.addDoc(common.collection(db, "users", uid, "inStorage"), {
       itemName,
@@ -460,12 +470,25 @@ async function saveItem() {
       status: "saved",
     });
     alert("Item added successfully!");
+    updateProceedButtonState();
+    document.getElementById("newItemName").value = "";
+    updateButtonState();
   }
-
-  document.getElementById("newItemName").value = "";
 
   modalClose();
   clearModelData();
+}
+
+function updateProceedButtonState() {
+  const itemList = document.querySelectorAll(".item-list-li");
+  const btnProceed = document.getElementById("btn-proceed");
+  if (itemList.length > 0) {
+    btnProceed.classList.remove("disabled");
+    btnProceed.href = "#pickup-info"; // Enable the link
+  } else {
+    btnProceed.classList.add("disabled");
+    btnProceed.removeAttribute("href"); // Disable the link
+  }
 }
 
 const itemsContainer = document.getElementById("itemsContainer");
@@ -501,8 +524,16 @@ city.value = userDoc.address.city;
 province.value = userDoc.address.province;
 zipCode.value = userDoc.address.zipCode;
 pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
-// pickup-time is separately controled by the function generating the option tags.
-storageLocation.value = userDoc.storageLocation.name;
+pickuptimeDiv.insertAdjacentHTML(
+  "afterbegin",
+  `${
+    userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
+  } <img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
+);
+storageLocationDiv.insertAdjacentHTML(
+  "afterbegin",
+  `${userDoc.storageLocation.name}<img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
+);
 
 // Calendar
 // display control
@@ -609,6 +640,31 @@ document.addEventListener("click", function (e) {
 });
 showCalendar(year, month);
 
+// Filtering Area (pickuptime & storagelocation)
+// filtering function
+// toggle pull-down list
+const pulldownToggle = function (div, ul) {
+  div.addEventListener("click", (e) => {
+    e.preventDefault();
+    ul.classList.toggle("hidden");
+  });
+};
+// select pulldown
+const selectPulldown = function (arr, div, ul) {
+  Array.from(arr).forEach((el) => {
+    el.addEventListener("click", (e) => {
+      e.preventDefault();
+      div.innerHTML = "";
+      div.insertAdjacentHTML(
+        "afterbegin",
+        `${el.textContent}  <img src="../icons/chevron-down-b.png" />`
+      );
+      ul.classList.add("hidden");
+    });
+  });
+};
+
+// Pickup time
 // Time of pickup
 // time options
 let quarterHours = ["00", "30"];
@@ -618,15 +674,25 @@ for (let i = 9; i < 21; i++) {
     times.push(i + ":" + quarterHours[j]);
   }
 }
-// render
+// Render
 times.forEach((el) => {
-  pickupTime.insertAdjacentHTML(
+  pickuptimeUl.insertAdjacentHTML(
     "beforeend",
-    `<option value=${el} ${
-      el === userDoc.ongoing_order?.time ? "selected" : ""
-    }>${el}</option>`
+    `<li class='pickup-time-li' id=${el}>${el}</li>`
   );
 });
+const pickuptimeLi = document.getElementsByClassName("pickup-time-li");
+// Execute pulldown
+pulldownToggle(pickuptimeDiv, pickuptimeUl);
+selectPulldown(pickuptimeLi, pickuptimeDiv, pickuptimeUl);
+
+// Storage Location
+const storageLocationLi = document.getElementsByClassName(
+  "storage-location-li"
+);
+// Execute pulldown
+pulldownToggle(storageLocationDiv, storageLocationUl);
+selectPulldown(storageLocationLi, storageLocationDiv, storageLocationUl);
 
 // Event : Back
 btnBackPickup.addEventListener("click", async () => {
@@ -658,10 +724,9 @@ btnSavePickup.addEventListener("click", async (e) => {
     unitNumber.value === "" ||
     zipCode.value === "" ||
     pickupDate.value === "" ||
-    pickupTime.value === "" ||
-    storageLocation.value === ""
+    pickuptimeDiv.textContent === "" ||
+    storageLocationDiv.textContent === ""
   ) {
-    e.preventDefault();
     alert("Please fill in all the required information");
   } else {
     // e.preventDefault();
@@ -690,24 +755,33 @@ btnSavePickup.addEventListener("click", async (e) => {
       "address.geoCode": geoCodeArray,
       "address.zipCode": `${zipCode.value}`,
       "ongoing_order.date": `${pickupDate.value}`,
-      "ongoing_order.time": `${pickupTime.value}`,
-      "storageLocation.name": `${storageLocation.value}`,
+      "ongoing_order.time": `${pickuptimeDiv.textContent}`,
+      "storageLocation.name": `${storageLocationDiv.textContent}`,
     });
+    // overlay contorol
+    overlay2.classList.add("overlay");
+    overlay3.classList.remove("overlay");
+    // update progress bar for Mobile
+    pickUpAddressM.classList.add("hide");
+    storageSizeM.classList.remove("hide");
+    progressBarM.style.width = "54%";
+    // update progress bad for Large
+    document.querySelector(".pick-up-address >span").classList.add("hide");
+    document.querySelector(".pick-up-address>div").classList.remove("hide");
+    document
+      .querySelector(".storage-size>span")
+      .classList.replace("circle-yet", "circle-now");
+    progressBarL.style.width = "47%";
+    // Then, go to next section
+    function scrollToID(id, margin) {
+      const elm = document.getElementById(id);
+      window.scrollTo({
+        top: elm.offsetTop + margin,
+        // behavior: "smooth",
+      });
+    }
+    scrollToID("select-plan");
   }
-  // overlay contorol
-  overlay2.classList.add("overlay");
-  overlay3.classList.remove("overlay");
-  // update progress bar for Mobile
-  pickUpAddressM.classList.add("hide");
-  storageSizeM.classList.remove("hide");
-  progressBarM.style.width = "54%";
-  // update progress bad for Large
-  document.querySelector(".pick-up-address >span").classList.add("hide");
-  document.querySelector(".pick-up-address>div").classList.remove("hide");
-  document
-    .querySelector(".storage-size>span")
-    .classList.replace("circle-yet", "circle-now");
-  progressBarL.style.width = "47%";
 });
 
 // ------------------------------
@@ -1005,6 +1079,7 @@ function initiateModel() {
   document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
+  document.getElementById("itemnamelabel").style.display = "inline-block";
 }
 
 function onEditModel(picture) {
@@ -1038,8 +1113,8 @@ function openCamera() {
         stream = localStream;
         video.srcObject = stream;
         video.hidden = false;
-        video.height = 300;
-        video.width = 400;
+        // video.height = 300;
+        // video.width = 400;
         // captureBtn.style.display = "inline-block";
         // uploadButton.style.display = "none";
         // saveBtn.style.display = "inline-block";
@@ -1056,8 +1131,8 @@ function closeCamera() {
       track.stop();
     });
 
-    video.srcObject = null; 
-    video.hidden = true; 
+    video.srcObject = null;
+    video.hidden = true;
   }
 }
 
@@ -1071,9 +1146,8 @@ backButton.addEventListener("click", function (e) {
   document.getElementById("reupload").style.display = "none";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
-  document.getElementById("uploadButton").style.display = "flex";  
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("itemnamelabel").style.display = "inline-block";
-
 });
 
 const load = document.getElementById("loading-screen");
@@ -1082,3 +1156,16 @@ setTimeout(() => {
   load.style.display = "none";
   body.style.overflowY = "auto";
 }, 1000);
+
+function updateButtonState() {
+  if (newItemName.value.trim() === "") {
+    saveBtn.parentElement.classList.add("disabled");
+  } else {
+    saveBtn.parentElement.classList.remove("disabled");
+  }
+}
+
+// Initial state check in case there's already text in the input (e.g., browser autofill)
+updateButtonState();
+
+newItemName.addEventListener("input", updateButtonState);

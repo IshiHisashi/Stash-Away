@@ -34,49 +34,36 @@
     </div>
 
     <main>
-      <div id="hero">
-        <div class="hero-desc-large-screen">
-          <h1>Streamlined Storage:</h1>
-          <p>View and Retrieve with Ease</p>
-          <div class="yellow-bar"></div>
-        </div>
-      </div>
-
       <div class="section-wrapper">
         <section class="filter-section">
           <div class="storage-num-wrapper">
-            <p class="small-letter">Your Storage</p>
+            <h5 class="small-letter">Your Storage</h5>
             <h4 class="total-p">Total: <span id="total-num"></span> Items</h4>
-            <div class="num-breakdown">
-              <!-- <p>In storage : <span id="stored-num"></span></p>
-              <p>On request : <span id="on-request-num"></span></p>
-              <p>Retrieved : <span id="retrieved-num"></span></p> -->
-            </div>
+            <div class="num-breakdown"></div>
           </div>
           <div class="section-header">
             <form>
               <label>Search</label>
               <div class="search-box">
-                <input id="search" type="text" />
+                <input id="search" type="text" autocomplete="off" />
                 <button id="btn-search">
                   <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
-              <!-- <button id="btn-search-delete">
-                <i class="fa-solid fa-xmark"></i>
-              </button> -->
             </form>
             <div class="filter-wrapper">
-              <label>Fliter by status:</label>
-              <select id="filter">
-                <option value="all">All</option>
-                <option value="stored" id="stored-num"></option>
-                <option
-                  value="retrieval requested"
-                  id="on-request-num"
-                ></option>
-                <option value="retrieved" id="retrieved-num"></option>
-              </select>
+              <label>Filter by status</label>
+              <div class="filter-form">
+                <div id="filter-box">
+                  All<img id="filter-arrow" src="../icons/chevron-down-b.png" />
+                </div>
+                <ul id="filter-list" class="hidden">
+                  <li id="all" class="hidden">All</li>
+                  <li id="stored"><p id="stored-num"></p></li>
+                  <li id="retrieval requested"><p id="on-request-num"></p></li>
+                  <li id="retrieved"><p id="retrieved-num"></p></li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>
@@ -84,7 +71,12 @@
 
       <section class="item-list-section">
         <div class="check-all">
-          <input type="checkbox" id="check-all" />
+          <label for=""
+            ><input type="checkbox" class="checkbox-all" id="check-all" /><span
+              class="checkbox-icon"
+              id="check-all-icon"
+            ></span
+          ></label>
           <p class="check-all-text">Select All</p>
         </div>
         <ul class="item-list"></ul>

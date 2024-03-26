@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Booking</title>
+  <link rel="shortcut icon" href="../images/favicon.svg" type="image/x-icon" />
   <!-- <script src="trydb.js" type="module"></script> -->
   <script src="booking.js" type="module" defer></script>
   <script src="https://kit.fontawesome.com/8611811e56.js" crossorigin="anonymous"></script>
@@ -75,7 +76,7 @@
 
   <!-- Main -->
   <main>
-    <form id="form_list">
+    <form id="form_list" autocomplete="off">
       <!-- Prathibha start : 1.Booking_addItem-->
 
       <div class="" id="overlay-1">
@@ -91,13 +92,12 @@
           </div>
           <div>
             <div class="item-wrapper">
-              <!-- <label>Write an item to store</label> -->
               <div class="input-icon-wrapper">
                 <input type="text" id="newItemName" placeholder="Enter Item Name" />
                 <img src="../icons/camera-01.png" id="listup-pic" alt="camera-icon">
               </div>
-              <!-- <button type="submit" class="btn-delete">delete</button> -->
-              <div class="btn-add-div">
+              <div class="btn-add-div disabled">
+                <!-- Here the disabled class is added -->
                 <a id="saveItem" class="btn-add" type="button">Add <span>+</span></a>
               </div>
             </div>
@@ -108,36 +108,37 @@
               <div class="modal-content">
                 <div class="modal-body">
 
-                      <div class="btn-div-top">
-                        <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i>Back</a><br>
-                        <h3 id="itemnamelabel"><label for="itemName">Take a Picture of Your Item</label></h3>
-                        <span id="displayItemName"></span>
-                      </div>
+                  <div class="btn-div-top">
+                    <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i>Back</a><br>
+                    <h3 id="itemnamelabel"><label for="itemName">Take a Picture of Your Item</label></h3>
+                    <span id="displayItemName"></span>
+                  </div>
 
-                  <div>
+                  <div class="image-sec">
                     <div>
-                      <video id="video" width="400" height="300" autoplay hidden></video>
-                    </div>
-                    <div>
-                      <canvas id="canvas" width="400" height="300" hidden></canvas>
+                      <video id="video" autoplay hidden></video>
+                      <canvas id="canvas" hidden></canvas>
                       <input type="file" id="imageUpload" accept="image/*" hidden>
                     </div>
-                    <div class="btn-div">
-                      <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image
+                    
+                  
+                  <div class="btn-div">
+                    <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image
                       <img id="captureIcon" src="../icons/capture.png" alt="" /></a>
                     </a>
-                      <a id="retake" class="btn-next" style="display: none;">Retake Image
-                        <img id="retakeIcon" src="../icons/capture.png" alt="" /></a>
-                      <a id="reupload" class="btn-next" style="display: none;">Re-Upload Image
-                        <img id="reuploadIcon" src="../icons/upload.png" alt="" /></a>
-                      <a id="uploadButton" class="btn-next" style="display: none;">Upload From Device
-                        <img id="uploadIcon" src="../icons/upload.png" alt="" /></a>
-                      <a id="saveImage" class="btn-next" type="button">Save Image<img id="dropIcon" src="../icons/plus-icon.png" alt="" /></a></a>
-                    </div>
+                    <a id="retake" class="btn-next" style="display: none;">Retake Image
+                      <img id="retakeIcon" src="../icons/capture.png" alt="" /></a>
+                    <a id="reupload" class="btn-next" style="display: none;">Re-Upload Image
+                      <img id="reuploadIcon" src="../icons/upload.png" alt="" /></a>
+                    <a id="uploadButton" class="btn-next" style="display: none;">Upload From Device
+                      <img id="uploadIcon" src="../icons/upload.png" alt="" /></a>
+                    <a id="saveImage" class="btn-next" type="button">Save Image<img id="dropIcon" src="../icons/plus-icon.png" alt="" /></a></a>
                   </div>
-                  <div id="itemsContainer"></div>
                 </div>
-                <span class="modalClose">×</span>
+                  <!-- <div id="itemsContainer"></div> -->
+                  <span class="modalClose">×</span>
+                </div>
+
               </div>
             </div>
 
@@ -148,7 +149,7 @@
               </ul>
 
             </div>
-            <a class="btn-proceed" id="btn-proceed" href="#pickup-info">Proceed</a>
+            <a class="btn-proceed disabled" id="btn-proceed" href="#pickup-info">Proceed</a>
           </div>
         </section>
       </div>
@@ -169,40 +170,40 @@
           <div class="form-wrapper">
             <div class="fname-div">
               <label>First Name</label>
-              <input type="text" id="firstname" />
+              <input type="text" id="firstname" autocomplete="off" />
             </div>
             <div class="lname-div">
               <label>Last Name</label>
-              <input type="text" id="lastname" />
+              <input type="text" id="lastname" autocomplete="off" />
             </div>
             <div class="unitnum-div">
               <label>House No./ Building No. / Floor No.</label>
-              <input type="text" id="unitnumber" />
+              <input type="text" id="unitnumber" autocomplete="off" />
             </div>
             <div class="street-div">
               <label>Street</label>
-              <input type="text" id="street" />
+              <input type="text" id="street" autocomplete="off" />
             </div>
             <div class="city-div">
               <label>City</label>
-              <input type="text" id="city" />
+              <input type="text" id="city" autocomplete="off" />
             </div>
             <div class="province-div">
               <label>Province</label>
-              <input type="text" id="province" />
+              <input type="text" id="province" autocomplete="off" />
             </div>
             <div class="zipcode-div">
               <label>Zip Code</label>
-              <input type="text" id="zipcode" />
+              <input type="text" id="zipcode" autocomplete="off" />
             </div>
             <div class="pickupDate-div">
               <label>Date of Pick-Up</label>
-              <input type="text" id="pickup-date" />
+              <input type="text" id="pickup-date" autocomplete="off" />
               <!-- Calendar trial -->
               <div id="calendar-wrapper">
                 <div id="calendar-header">
                   <button id="prev" type="button"> &lt; </button>
-                    <button id="next" type="button"> &gt; 
+                  <button id="next" type="button"> &gt;
                   </button>
                 </div>
                 <div id="calendar"></div>
@@ -210,17 +211,20 @@
             </div>
             <div class="PickupTime-div">
               <label>Time of Pick-Up</label>
-              <select name="" id="pickup-time"></select>
+              <div id="pickup-time-div"><img id="filter-arrow" src="../icons/chevron-down-b.png" /></div>
+              <ul id="pickup-time-ul" class="hidden">
+              </ul>
             </div>
             <div class="storageLocation-div">
               <label>Choose Storage Location</label>
-              <select name="" id="storage-location">
-                <option value="North-Vancouver">North-Vancouver</option>
-                <option value="Richmond">Richmond</option>
-                <option value="Surrey">Surrey</option>
-                <option value="Abbotsford">Abbotsford</option>
-                <option value="Coquitlam">Coquitlam</option>
-              </select>
+              <div id="storage-location-div"><img src="../icons/chevron-down-b.png" /></div>
+              <ul id="storage-location-ul" class="hidden">
+                <li class="storage-location-li" id="North-Vancouver">North-Vancouver</li>
+                <li class="storage-location-li" id="Richmond">Richmond</li>
+                <li class="storage-location-li" id="Surrey">Surrey</li>
+                <li class="storage-location-li" id="Abbotsford">Abbotsford</li>
+                <li class="storage-location-li" id="Coquitlam">Coquitlam</li>
+              </ul>
             </div>
             <!-- btn -->
             <div class="btn-div">
@@ -329,7 +333,7 @@
   </main>
   <!-- Footer.html will be included here -->
   <div id="footer-placeholder"></div>
-  
+
 
 
 </body>
@@ -357,5 +361,6 @@
   const db = firebase.firestore();
   const storage = firebase.storage();
 </script>
+
 
 </html>
