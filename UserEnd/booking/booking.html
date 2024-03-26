@@ -5,11 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Booking</title>
-  <link
-      rel="shortcut icon"
-      href="../images/favicon.svg"
-      type="image/x-icon"
-    />
+  <link rel="shortcut icon" href="../images/favicon.svg" type="image/x-icon" />
   <!-- <script src="trydb.js" type="module"></script> -->
   <script src="booking.js" type="module" defer></script>
   <script src="https://kit.fontawesome.com/8611811e56.js" crossorigin="anonymous"></script>
@@ -100,7 +96,8 @@
                 <input type="text" id="newItemName" placeholder="Enter Item Name" />
                 <img src="../icons/camera-01.png" id="listup-pic" alt="camera-icon">
               </div>
-              <div class="btn-add-div disabled"> <!-- Here the disabled class is added -->
+              <div class="btn-add-div disabled">
+                <!-- Here the disabled class is added -->
                 <a id="saveItem" class="btn-add" type="button">Add <span>+</span></a>
               </div>
             </div>
@@ -111,36 +108,37 @@
               <div class="modal-content">
                 <div class="modal-body">
 
-                      <div class="btn-div-top">
-                        <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i>Back</a><br>
-                        <h3 id="itemnamelabel"><label for="itemName">Take a Picture of Your Item</label></h3>
-                        <span id="displayItemName"></span>
-                      </div>
+                  <div class="btn-div-top">
+                    <a id="backButton" class="btn-back--modal" type="button"><i class="fa-solid fa-angle-left" id="back-icon"></i>Back</a><br>
+                    <h3 id="itemnamelabel"><label for="itemName">Take a Picture of Your Item</label></h3>
+                    <span id="displayItemName"></span>
+                  </div>
 
-                  <div>
+                  <div class="image-sec">
                     <div>
-                      <video id="video" width="400" height="300" autoplay hidden></video>
-                    </div>
-                    <div>
-                      <canvas id="canvas" width="400" height="300" hidden></canvas>
+                      <video id="video" autoplay hidden></video>
+                      <canvas id="canvas" hidden></canvas>
                       <input type="file" id="imageUpload" accept="image/*" hidden>
                     </div>
-                    <div class="btn-div">
-                      <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image
+                    
+                  
+                  <div class="btn-div">
+                    <a id="capture" class="btn-next" type="button" style="display: none;">Capture Image
                       <img id="captureIcon" src="../icons/capture.png" alt="" /></a>
                     </a>
-                      <a id="retake" class="btn-next" style="display: none;">Retake Image
-                        <img id="retakeIcon" src="../icons/capture.png" alt="" /></a>
-                      <a id="reupload" class="btn-next" style="display: none;">Re-Upload Image
-                        <img id="reuploadIcon" src="../icons/upload.png" alt="" /></a>
-                      <a id="uploadButton" class="btn-next" style="display: none;">Upload From Device
-                        <img id="uploadIcon" src="../icons/upload.png" alt="" /></a>
-                      <a id="saveImage" class="btn-next" type="button">Save Image<img id="dropIcon" src="../icons/plus-icon.png" alt="" /></a></a>
-                    </div>
+                    <a id="retake" class="btn-next" style="display: none;">Retake Image
+                      <img id="retakeIcon" src="../icons/capture.png" alt="" /></a>
+                    <a id="reupload" class="btn-next" style="display: none;">Re-Upload Image
+                      <img id="reuploadIcon" src="../icons/upload.png" alt="" /></a>
+                    <a id="uploadButton" class="btn-next" style="display: none;">Upload From Device
+                      <img id="uploadIcon" src="../icons/upload.png" alt="" /></a>
+                    <a id="saveImage" class="btn-next" type="button">Save Image<img id="dropIcon" src="../icons/plus-icon.png" alt="" /></a></a>
                   </div>
-                  <div id="itemsContainer"></div>
                 </div>
-                <span class="modalClose">×</span>
+                  <!-- <div id="itemsContainer"></div> -->
+                  <span class="modalClose">×</span>
+                </div>
+
               </div>
             </div>
 
@@ -205,7 +203,7 @@
               <div id="calendar-wrapper">
                 <div id="calendar-header">
                   <button id="prev" type="button"> &lt; </button>
-                    <button id="next" type="button"> &gt; 
+                  <button id="next" type="button"> &gt;
                   </button>
                 </div>
                 <div id="calendar"></div>
@@ -213,13 +211,13 @@
             </div>
             <div class="PickupTime-div">
               <label>Time of Pick-Up</label>
-              <div id="pickup-time-div"><img id="filter-arrow" src="../icons/chevron-down-b.png"/></div>
+              <div id="pickup-time-div"><img id="filter-arrow" src="../icons/chevron-down-b.png" /></div>
               <ul id="pickup-time-ul" class="hidden">
               </ul>
             </div>
             <div class="storageLocation-div">
               <label>Choose Storage Location</label>
-              <div id="storage-location-div"><img src="../icons/chevron-down-b.png"/></div>
+              <div id="storage-location-div"><img src="../icons/chevron-down-b.png" /></div>
               <ul id="storage-location-ul" class="hidden">
                 <li class="storage-location-li" id="North-Vancouver">North-Vancouver</li>
                 <li class="storage-location-li" id="Richmond">Richmond</li>
@@ -335,7 +333,7 @@
   </main>
   <!-- Footer.html will be included here -->
   <div id="footer-placeholder"></div>
-  
+
 
 
 </body>

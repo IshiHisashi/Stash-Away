@@ -263,8 +263,8 @@ captureBtn.addEventListener("click", function (e) {
   displayItemNameElement.textContent =
     document.getElementById("newItemName").value;
 
-  const fixedWidth = 400;
-  const fixedHeight = 300;
+  const fixedWidth = 450;
+  const fixedHeight = 330;
   canvas.width = fixedWidth;
   canvas.height = fixedHeight;
 
@@ -308,10 +308,12 @@ retakeBtn.addEventListener("click", function (e) {
   video.hidden = false;
   retakeBtn.style.display = "none";
   document.getElementById("capture").style.display = "flex";
-  document.getElementById("uploadButton").style.display = "flex";
-  document.getElementById("saveImage").style.display = "none";
   document.getElementById("displayItemName").style.display = "none";
+  document.getElementById("retake").style.display = "none";
   document.getElementById("reupload").style.display = "none";
+  document.getElementById("saveImage").style.display = "none";
+  document.getElementById("backButton").style.display = "none";
+  document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("itemnamelabel").style.display = "inline-block";
 
   if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -365,8 +367,8 @@ function processFile(file) {
     reader.onload = function (e) {
       const img = new Image();
       img.onload = function () {
-        const fixedWidth = 400;
-        const fixedHeight = 300;
+        const fixedWidth = 450;
+        const fixedHeight = 330;
         canvas.width = fixedWidth;
         canvas.height = fixedHeight;
 
@@ -1077,6 +1079,7 @@ function initiateModel() {
   document.getElementById("uploadButton").style.display = "flex";
   document.getElementById("saveImage").style.display = "none";
   document.getElementById("backButton").style.display = "none";
+  document.getElementById("itemnamelabel").style.display = "inline-block";
 }
 
 function onEditModel(picture) {
@@ -1110,8 +1113,8 @@ function openCamera() {
         stream = localStream;
         video.srcObject = stream;
         video.hidden = false;
-        video.height = 300;
-        video.width = 400;
+        // video.height = 300;
+        // video.width = 400;
         // captureBtn.style.display = "inline-block";
         // uploadButton.style.display = "none";
         // saveBtn.style.display = "inline-block";
