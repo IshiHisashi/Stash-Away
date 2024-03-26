@@ -13,12 +13,11 @@ console.log(uid);
 const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
 const userDoc = userSnap.data();
 let getcheckedItem = userDoc.ongoingRetrievalItems;
-
-console.log(getcheckedItem);
-
 // General : Get item (document) in 'inStorage' (subcollection):
 const queryStorage = common.collection(db, "users", `${uid}`, "inStorage");
 const snapShot = await common.getDocs(queryStorage);
+const sortedQ = common.query(queryStorage, common.orderBy("status", "desc"));
+const snapShotSortedQ = await common.getDocs(sortedQ);
 
 // ---------------------------------
 // Related with HTML
@@ -169,7 +168,7 @@ numOnRequest.textContent = `On request (${numItemOnRequestArr.length})`;
 numRetrieved.textContent = `Retrieved (${numItemRetrievedArr.length})`;
 
 // Render the main list
-renderList(snapShot);
+renderList(snapShotSortedQ);
 
 // Checkbox
 const checkboxes = document.getElementsByClassName("checkbox");
@@ -259,7 +258,7 @@ checkall();
 // Search
 // Create arr
 const itemsIDArr = [];
-snapShot.forEach((el) => {
+snapShotSortedQ.forEach((el) => {
   const itemArr = [el.id, el.data()];
   itemsIDArr.push(itemArr);
 });
@@ -369,7 +368,6 @@ btnSearch.addEventListener("click", (e) => {
 // define filtering function
 const filtering = function (option) {
   option.addEventListener("click", async (e) => {
-    console.log(cArr);
     e.preventDefault();
     cleanupList();
     // update filter box
@@ -382,7 +380,7 @@ const filtering = function (option) {
     filterList.classList.add("hidden");
     if (option.id === "all") {
       // Render all
-      renderList(snapShot);
+      renderList(snapShotSortedQ);
       // checkbox contorol
       recallCheckbox();
       checkControl();

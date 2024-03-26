@@ -86,6 +86,7 @@ export {
   deleteDoc,
   writeBatch,
   query,
+  orderBy,
   where,
   deleteField,
   onSnapshot,
