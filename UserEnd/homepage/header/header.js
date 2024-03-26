@@ -44,7 +44,7 @@ async function initHeader() {
   const btnPricing = document.getElementById("btnPricing");
   if (btnPricing) {
     btnPricing.addEventListener("click", function () {
-      alert("Pricing Page - Not yet developed!");
+      window.location.href = `${basePath}pricing/pricing.html`;
     });
   }
 
