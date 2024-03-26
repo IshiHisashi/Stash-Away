@@ -152,6 +152,11 @@ fieldset {
   gap: 10px;
 }
 
+.each-city-option label .hidden-area > * {
+  flex-grow: 1;
+  flex-basis: 80%;
+}
+
 /* #Richmond fieldset div:has(input[value="Richmond"]) label .hidden-area, #North-Vancouver fieldset div:has(input[value="North-Vancouver"]) label .hidden-area, #Surrey fieldset div:has(input[value="Surrey"]) label .hidden-area, #Coquitlam fieldset div:has(input[value="Coquitlam"]) label .hidden-area, #Abbotsford fieldset div:has(input[value="Abbotsford"]) label .hidden-area {
   max-height: fit-content;
 } */
