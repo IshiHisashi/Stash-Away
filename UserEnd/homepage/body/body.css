@@ -42,7 +42,7 @@
       height: 5px;
       background-color: #f9b035;
       position: absolute;
-      bottom: -10px;
+      /* bottom: -10px; */
       left: 0;
     }
 
@@ -54,10 +54,6 @@
       font-size: clamp(0.7rem, 2vw, 1.5rem);
     }
 
-    @media (min-width: 900px) {
-      .hero-img {
-      }
-    }
   }
 
   .section2 {

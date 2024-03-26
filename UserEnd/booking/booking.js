@@ -202,6 +202,9 @@ const renderListFor = function (doc) {
       });
     }
   }
+  if(doc.length>0){    
+    updateProceedButtonState();
+  }
 };
 
 async function saveItemNameEdit(itemId, newName) {
@@ -246,6 +249,8 @@ const unsubscribe = common.onSnapshot(queryStorage, (querySnapshot) => {
       common.deleteDoc(
         common.doc(common.db, "users", uid, "inStorage", `${deleteID}`)
       );
+
+      updateProceedButtonState();
     });
   });
 });
@@ -446,6 +451,9 @@ async function saveItem() {
       }
     );
     alert("Item image updated successfully!");
+    updateProceedButtonState();
+    document.getElementById("newItemName").value = "";  
+    updateButtonState();
   } else {
     await common.addDoc(common.collection(db, "users", uid, "inStorage"), {
       itemName,
@@ -460,12 +468,27 @@ async function saveItem() {
       status: "saved",
     });
     alert("Item added successfully!");
+    updateProceedButtonState();
+    document.getElementById("newItemName").value = "";  
+    updateButtonState();
   }
 
-  document.getElementById("newItemName").value = "";
+  
 
   modalClose();
   clearModelData();
+}
+
+function updateProceedButtonState() {
+  const itemList = document.querySelectorAll('.item-list-li');
+  const btnProceed = document.getElementById('btn-proceed');
+  if (itemList.length > 0) {
+    btnProceed.classList.remove('disabled');
+    btnProceed.href = "#pickup-info"; // Enable the link
+  } else {
+    btnProceed.classList.add('disabled');
+    btnProceed.removeAttribute('href'); // Disable the link
+  }
 }
 
 const itemsContainer = document.getElementById("itemsContainer");
@@ -503,8 +526,7 @@ zipCode.value = userDoc.address.zipCode;
 pickupDate.value = userDoc.ongoing_order ? userDoc.ongoing_order.date : "";
 pickuptimeDiv.insertAdjacentHTML(
   "afterbegin",
-  `${
-    userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
+  `${userDoc.ongoing_order ? userDoc.ongoing_order.time : ""
   } <img id="filter-arrow" src="../icons/chevron-down-b.png"/>`
 );
 storageLocationDiv.insertAdjacentHTML(
@@ -1124,3 +1146,17 @@ setTimeout(() => {
   load.style.display = "none";
   body.style.overflowY = "auto";
 }, 1000);
+
+
+function updateButtonState() {
+  if (newItemName.value.trim() === '') {
+    saveBtn.parentElement.classList.add('disabled');
+  } else {
+    saveBtn.parentElement.classList.remove('disabled');
+  }
+}
+
+// Initial state check in case there's already text in the input (e.g., browser autofill)
+updateButtonState();
+
+newItemName.addEventListener('input', updateButtonState);

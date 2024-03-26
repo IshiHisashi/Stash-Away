@@ -214,6 +214,8 @@ main {
     }
 
     .item-description-wrapper p {
+      font-size: var(--body-size);
+
       @media screen and (min-width: 900px) {
         max-width: 190px;
       }
@@ -421,10 +423,22 @@ main {
         align-items: center;
         gap: 10px;
       }
+
+      .btn-add-div.disabled {
+        border: 1px solid #DFDFDF; /* Assuming you want the border color to match the disabled state */
+        background-color: #DFDFDF;
+        cursor: default;
+      }
+      
+      .btn-add-div.disabled .btn-add {
+        color: #ffffff; /* Optional: change text color if needed */
+        pointer-events: none; /* Prevents clicking */
+      }
     }
 
     .item-list-wrapper {
       overflow: hidden;
+      height: 40vh;
 
       li.item-list-li {
         list-style-type: none; /* Removes bullet points from li */
@@ -524,6 +538,13 @@ main {
         display: unset;
         float: right;
       }
+    }
+
+    .btn-proceed.disabled {
+      background-color: #DFDFDF;
+      color: #ffffff; /* Optional: change text color if needed */
+      pointer-events: none; /* Prevents clicking */
+      cursor: default;
     }
 
     a {
