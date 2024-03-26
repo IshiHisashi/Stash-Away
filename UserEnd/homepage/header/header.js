@@ -70,7 +70,7 @@ async function initHeader() {
   const btnOrderUpdate = document.getElementById("btnOrderUpdate");
   if (btnOrderUpdate) {
     btnOrderUpdate.addEventListener("click", function () {
-      window.location.href = `${basePath}order-confirmation/order-confirmation.html`;
+      window.location.href = `${basePath}updates/pickup-and-delivery-updates.html`;
     });
   }
 
