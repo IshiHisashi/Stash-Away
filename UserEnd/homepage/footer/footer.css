@@ -1,5 +1,6 @@
 footer {
   background-color: #103646;
+  padding: 1rem;
 }
 
 .footer-section {
@@ -25,11 +26,18 @@ footer .social-media ul {
   padding: 1rem;
 }
 
-footer .site-logo{
+footer .site-logo {
   padding: 1rem;
   display: flex;
   justify-content: center;
 }
+
+footer .site-logo img {
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 footer .footer-link ul li a {
   text-decoration: none;
   color: white;
@@ -41,6 +49,12 @@ footer p {
   margin: 0;
 }
 /* Media query for desktop devices */
+@media screen and (min-width: 600px) {
+  footer .site-logo img {
+    max-width: 100%;
+  }
+}
+
 @media (min-width: 900px) {
   .footer-section {
     display: grid;
@@ -52,10 +66,10 @@ footer p {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap:  2rem;
+    gap: 2rem;
   }
 
-  footer p{
+  footer p {
     padding-bottom: 1rem;
   }
 }

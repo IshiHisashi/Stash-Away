@@ -24,6 +24,10 @@ header {
   cursor: pointer;
 }
 
+.logo img {
+  max-width: 70%;
+}
+
 .hamburger-menu {
   display: flex;
   flex-direction: column;
@@ -71,7 +75,7 @@ header {
   display: block;
   position: fixed;
   right: 0;
-  top: 111px;
+  top: 77.8px;
   bottom: 0;
   transform: translateX(100%);
   transition: transform 0.3s;
@@ -150,6 +154,16 @@ body:has(.main-menu.active) {
 }
 
 /* Media query for desktop devices */
+@media screen and (min-width: 600px) {
+  .logo img {
+    max-width: 100%;
+  }
+
+  .main-menu {
+    top: 94px;
+  }
+}
+
 @media (min-width: 1150px) {
   header {
     padding-left: 40px;
