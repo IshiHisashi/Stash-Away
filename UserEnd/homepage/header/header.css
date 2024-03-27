@@ -71,7 +71,7 @@ header {
   display: block;
   position: fixed;
   right: 0;
-  top: 111px;
+  top: 94px;
   bottom: 0;
   transform: translateX(100%);
   transition: transform 0.3s;
