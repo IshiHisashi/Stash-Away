@@ -52,11 +52,6 @@ checkbox.onclick = (e) => {
     : "";
 };
 
-// determine the page to return to after loggin in
-const pageToReturn = sessionStorage.getItem("pageToReturn")
-  ? sessionStorage.getItem("pageToReturn")
-  : "../homepage/main.html";
-
 // reset forms on load ////////////////////////////////////////////
 // not working... FIX LATER
 window.onload = () => {
@@ -103,21 +98,41 @@ btnLogin.onclick = (e) => {
   const email = inputEmail.value;
   const password = inputPassword.value;
 
+  if (checkbox.querySelector("input").checked) {
+    // remember the user forever unless they log out intentionally - this is defaul behaviour from Firebase auth.
+    common
+      .signInWithEmailAndPassword(common.auth, email, password)
+      .then((userCredential) => {
+        console.log(userCredential);
+        const user = userCredential.user;
+        onLoginSuccess();
+      })
+      .catch((error) => {
+        alert(
+          `Log in error! Please check the email or the password. ${error.message}`
+        );
+      });
+  } else {
+    // remember the user unless they close the session.
+    common
+      .setPersistence(common.auth, common.browserSessionPersistence)
+      .then(() => {
+        common
+          .signInWithEmailAndPassword(common.auth, email, password)
+          .then((userCredential) => {
+            console.log(userCredential);
+            const user = userCredential.user;
+            onLoginSuccess();
+          })
+          .catch((error) => {
+            alert(
+              `Log in error! Please check the email or the password. ${error.message}`
+            );
+          });
+      });
+  }
+
   // log in the user with Firebase auth
-  common
-    .signInWithEmailAndPassword(common.auth, email, password)
-    .then((userCredential) => {
-      console.log(userCredential);
-      const user = userCredential.user;
-      // debugger;
-      // window.location.href = pageToReturn;
-      onLoginSuccess();
-    })
-    .catch((error) => {
-      alert(
-        `Log in error! Please check the email or the password. ${error.message}`
-      );
-    });
 };
 
 function getReturnUrl() {
