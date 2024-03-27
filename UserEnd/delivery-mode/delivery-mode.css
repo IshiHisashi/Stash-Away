@@ -38,7 +38,7 @@ main {
 
 .progress-mobile {
   margin-top: 28px;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     display: none;
   }
   h2 {
@@ -69,7 +69,7 @@ main {
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     display: block;
   }
   .progress-texts {
@@ -140,7 +140,7 @@ main {
   flex-direction: column;
   gap: 15px;
   align-items: center;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     margin-bottom: 60px;
   }
   h1 {
@@ -159,7 +159,7 @@ main {
 
 .delivery-info-container {
   text-align: center;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     margin-bottom: 51px;
   }
   h2 {
@@ -172,15 +172,18 @@ main {
   .delivery-info {
     /* width: 90%; */
     margin: 0 auto;
+
     padding: 1.5rem;
     border: 1px solid var(--grey-1);
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 44px;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       display: grid;
       grid-template-columns: 1.25fr repeat(3, 1fr);
+      justify-items: space-center;
     }
   }
   h3 {
@@ -189,6 +192,14 @@ main {
     font-weight: var(--h4-weight);
     color: var(--dark-blue-green);
     margin-bottom: 13px;
+    @media screen and (min-width: 800px) {
+      text-align: start;
+    }
+  }
+  .address {
+    @media screen and (min-width: 800px) {
+      margin-left: 3rem;
+    }
   }
   p {
     font-family: var(--p18-family);
@@ -196,10 +207,16 @@ main {
     font-weight: var(--p18-weight);
     line-height: var(--p18-line-height);
     color: black;
+    @media screen and (min-width: 800px) {
+      text-align: start;
+    }
   }
   #address-p {
     width: 80%;
     margin: 0 auto;
+    @media screen and (min-width: 800px) {
+      width: 100%;
+    }
   }
 }
 
@@ -208,7 +225,7 @@ main {
   flex-direction: column;
   gap: 14px;
   margin-bottom: 84px;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     flex-direction: row-reverse;
     justify-content: center;
   }
@@ -228,7 +245,7 @@ main {
     color: white;
     background-color: var(--pink);
     border: 1px solid var(--pink);
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       width: 240px;
     }
   }
@@ -239,7 +256,7 @@ main {
     color: var(--pink);
     background-color: white;
     border: 1px solid black;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       width: 150px;
     }
   }
