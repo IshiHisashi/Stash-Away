@@ -15,17 +15,15 @@ if (navigator.serviceWorker) {
   // if browser doesn't support SW or the connection is not an HTTPS nor localhost
   // console.warn("Service Worker not supported");
 }
-
 // Define var
 const cacheName = "v1"; // you need a name for your cache. It also helps with invalidation later.
 const urlsToCache = [
-  "/",
+  // "/",
   "offline.html",
-  "offline.css",
-  "offline.js",
-  "offline.png",
+  // "offline.css",
+  // "offline.js",
+  // "offline.png",
 ]; // list of URLs to cache
-
 // Installation
 self.addEventListener("install", (event) => {
   // self is a global variable refers to worker itself
@@ -40,7 +38,6 @@ self.addEventListener("install", (event) => {
       })
   );
 });
-
 // Activation
 self.addEventListener("activate", (event) => {
   // console.log(`SW: Event fired: ${event.type}`);
@@ -59,7 +56,6 @@ self.addEventListener("activate", (event) => {
     })
   );
 });
-
 // Fetch event
 self.addEventListener("fetch", (event) => {
   // console.log(event, event.request);
@@ -75,13 +71,13 @@ self.addEventListener("fetch", (event) => {
   // console.log(`Fetching ${event.request.url}`);
   event.respondWith(NetworkOrOfflinePage(event));
 });
-
 async function NetworkOrOfflinePage(event) {
   try {
     return await fetch(event.request); // returns server fetch
   } catch (error) {
     // in case of error return a static page
     // console.log(error);
-    return caches.match(urlsToCache[0]); // returns default offline page
+    return caches.match(urlsToCache[0]);
+    // returns default offline page
   }
 }
