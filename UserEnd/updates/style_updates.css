@@ -1,5 +1,13 @@
 @import "../../common.css";
 
+.sticky-head {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: white;
+  padding-bottom: 0.1rem;
+}
+
 img {
   max-width: 100%;
   height: auto;
