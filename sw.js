@@ -19,11 +19,11 @@ if (navigator.serviceWorker) {
 // Define var
 const cacheName = "v1"; // you need a name for your cache. It also helps with invalidation later.
 const urlsToCache = [
-  "/",
+  // "/",
   "offline.html",
-  "offline.css",
-  "offline.js",
-  "offline.png",
+  // "offline.css",
+  // "offline.js",
+  // "offline.png",
 ]; // list of URLs to cache
 
 // Installation
@@ -82,6 +82,6 @@ async function NetworkOrOfflinePage(event) {
   } catch (error) {
     // in case of error return a static page
     // console.log(error);
-    return caches.match(urlsToCache[1]); // returns default offline page
+    return caches.match(urlsToCache[0]); // returns default offline page
   }
 }

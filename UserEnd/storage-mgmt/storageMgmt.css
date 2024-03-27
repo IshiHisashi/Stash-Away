@@ -184,7 +184,7 @@ section {
   padding: 29px 26px 36px 26px;
   max-width: 1024px;
   margin: 0 auto;
-  @media screen and (min-width: 600px) {
+  @media screen and (min-width: 800px) {
     padding-top: 65px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -197,7 +197,7 @@ section {
     gap: 0.5rem;
     margin-bottom: 16px;
     grid-column: 1/-1;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       margin-bottom: 0;
     }
   }
@@ -213,7 +213,7 @@ section {
   ul {
     list-style: none;
     margin-bottom: 36px;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       grid-column: 1/-1;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -229,7 +229,7 @@ section {
       grid-template-columns: auto 1fr auto;
       grid-template-rows: 1.5fr 2fr;
       gap: 0.25rem 18px;
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: 800px) {
         margin-top: 37px;
       }
     }
@@ -299,7 +299,7 @@ section {
   }
   .request-return-section {
     margin-bottom: 65px;
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 800px) {
       width: 250px;
       grid-column: 1/-1;
       justify-self: center;
@@ -316,7 +316,7 @@ section {
       padding: 12.5px;
       border-radius: 7px;
       cursor: pointer;
-      @media screen and (min-width: 600px) {
+      @media screen and (min-width: 800px) {
         font-size: var (--button-2-size);
         margin-top: 1rem;
       }

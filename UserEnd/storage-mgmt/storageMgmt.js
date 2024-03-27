@@ -100,7 +100,7 @@ const renderList = function (snapShot) {
         `<li  class='item-list-li ${
           item.status === "retrieved" ? "retrieved" : ""
         }'><img src='${
-          item.picture ? item.picture : ""
+          item.picture ? item.picture : "../images/img_no-pic.png"
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
         item.itemName
@@ -301,7 +301,7 @@ btnSearch.addEventListener("click", (e) => {
         `<li  class='item-list-li ${
           item.status === "retrieved" ? "retrieved" : ""
         }'><img src='${
-          item.picture ? item.picture : ""
+          item.picture ? item.picture : "../images/img_no-pic.png"
         }' class=placeholder-pic alt=${itemID}>
       <p class="item-name">${
         item.itemName
