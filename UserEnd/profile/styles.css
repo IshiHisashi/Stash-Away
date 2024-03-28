@@ -191,6 +191,7 @@ h2 {
   justify-content: space-between;
   align-items: center;
   border-bottom: 1px solid var(--grey-2);
+  padding-right: 25px;
 }
 
 .each-card label {
@@ -295,10 +296,6 @@ h2 {
 
   #details ul {
     margin: 0 auto 0 0;
-  }
-
-  .each-card {
-    padding-right: 25px;
   }
 }
 

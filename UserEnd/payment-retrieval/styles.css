@@ -47,11 +47,16 @@ h1 {
   margin-bottom: 25px;
   font-size: var(--h4-size);
   font-family: var(--h4-family);
+  padding: 0 8px;
 }
 
 #payment-detail {
   display: grid;
   gap: 15px;
+}
+
+.payment-list  {
+  padding: 0 8px;
 }
 
 #payment-detail>* {

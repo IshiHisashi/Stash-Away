@@ -143,10 +143,14 @@ fieldset {
   height: 30px;
 }
 
+.location-name img {
+  transition: transform .2s;
+}
+
 .each-city-option label .hidden-area {
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.2s ease-in;
+  transition: max-height .2s ease-in;
   display: flex;
   flex-flow: row wrap;
   gap: 10px;

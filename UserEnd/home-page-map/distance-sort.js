@@ -190,10 +190,13 @@ if (navigator.geolocation) {
             );
             cityOption.setAttribute("checked", "");
             const hiddenArea = document.querySelector(`label[for="location-${i}"] div[class="hidden-area"]`);
+            const labelArrow = document.querySelector(`label[for="location-${i}"] div[class="location-name"] img`);
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
+              labelArrow.style.transform = "rotate(0)";
             } else {
               hiddenArea.style.maxHeight = hiddenArea.scrollHeight + "px";
+              labelArrow.style.transform = "rotate(180deg)";
             }
           });
         }
@@ -214,10 +217,13 @@ if (navigator.geolocation) {
             let cityOption = document.querySelector(`input[value="${bodyId}"]`);
             cityOption.setAttribute("checked", "");
             const hiddenArea = document.querySelector(`input[value="${bodyId}"]`).nextElementSibling.firstElementChild.nextElementSibling;
+            const labelArrow = document.querySelector(`label[for="location-${i}"] div[class="location-name"] img`);
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
+              labelArrow.style.transform = "rotate(0)";
             } else {
               hiddenArea.style.maxHeight = hiddenArea.scrollHeight + "px";
+              labelArrow.style.transform = "rotate(180deg)";
             }
           });
         }
@@ -248,7 +254,7 @@ if (navigator.geolocation) {
         await geo.updateStorageLocation(selectedCityObj);
 
         await alert(
-          `Location: ${selectedCityObj.name} was saved. If you want to change your storage location preference, you can choose a defferent location in a pick-up address section in the next page.`
+          `You chose the storage in ${selectedCityObj.name}. You can also change location in booking process later.`
         );
 
         document.getElementById("proceedLink").click();
@@ -281,7 +287,7 @@ if (navigator.geolocation) {
             .setLngLat(cityArray[i].geoLoc)
             .addTo(map);
           var newPopUp = new tt.Popup({ offset: popupOffsets }).setHTML(
-            `<b>${cityArray[i].name}</b><br>${cityArray[i].address}`
+            `<b>${cityArray[i].name}</b>`
           );
           newMarker.setPopup(newPopUp).togglePopup();
         }
