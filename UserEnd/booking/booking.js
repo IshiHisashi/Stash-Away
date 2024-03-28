@@ -3,6 +3,7 @@
 import * as common from "../../common.js";
 import { initHeader } from "../homepage/header/header.js";
 import { initFooter } from "../homepage/footer/footer.js";
+import { Notyf } from "../../node_modules/notyf/notyf.es.js";
 // Initialize Firebase---------------
 const db = common.db;
 // General : Get company info
@@ -427,6 +428,33 @@ saveBtn.addEventListener("click", async function (e) {
   await saveItem();
 });
 
+// Notyf
+
+const notyf = new Notyf({
+  duration: 2000,
+  position: {
+    x: "right",
+    y: "bottom",
+  },
+  types: [
+    {
+      type: "success",
+      background: "rgb(224 68 98)",
+      icon: {
+        className: "material-icons",
+        tagName: "i",
+        text: "Your item is now listed!!",
+      },
+    },
+    {
+      type: "error",
+      background: "indianred",
+      duration: 2000,
+      dismissible: true,
+    },
+  ],
+});
+
 async function saveItem() {
   const itemName = document.getElementById("newItemName").value;
   debugger;
@@ -469,7 +497,8 @@ async function saveItem() {
       storedDate: "2024-01-31",
       status: "saved",
     });
-    alert("Item added successfully!");
+    // alert("Item added successfully!");
+    notyf.success("Your item is now listed!!");
     updateProceedButtonState();
     document.getElementById("newItemName").value = "";
     updateButtonState();

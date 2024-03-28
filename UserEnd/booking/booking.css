@@ -1387,3 +1387,10 @@ main {
     transform: rotate(405deg);
   }
 }
+
+/* notfy */
+.notyf_message {
+  .notyf_ripple {
+    height: 100px;
+  }
+}

@@ -30,14 +30,7 @@ async function initHeader() {
   const btnGeoLocation = document.getElementById("btnGeoLocation");
   if (btnGeoLocation) {
     btnGeoLocation.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (isAuthenticated()) {
-        window.location.href = `${basePath}home-page-map/index.html`;
-      } else {
-        window.location.href = `${basePath}authentication/login.html?returnUrl=${encodeURIComponent(
-          `${basePath}home-page-map/index.html`
-        )}`;
-      }
+      window.location.href = `${basePath}home-page-map/index.html`;
     });
   }
 

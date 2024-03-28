@@ -19,7 +19,7 @@ export const storageLocationArr = Object.entries(storageQuery.data());
 // Get address info from user's collection
 const userSnap = await common.getDoc(common.doc(db, "users", `${uid}`));
 const userDoc = userSnap.data();
-export const userAddress = userDoc.address;
+export const userAddress = userDoc?.address;
 
 // Send selected geolocation
 export const updateStorageLocation = async function (obj) {
