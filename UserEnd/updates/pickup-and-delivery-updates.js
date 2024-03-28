@@ -87,7 +87,7 @@ const renderDetail = (
 ) => {
   // detail container
   const divDetail = createHtmlElement("div", null, null, "class", "detail");
-  divDetail.setAttribute("id", orderID);
+  divDetail.setAttribute("id", `id${orderID}`);
 
   // preferred date and time
   const divPreferredDateAndTime = createHtmlElement(
@@ -681,44 +681,44 @@ if (uid) {
 
             // update current status
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .currentStatus p`
+              `#id${changedDoc.doc.id} .currentStatus p`
             )[0].textContent =
               changedDoc.doc.data().orderType === "add"
                 ? "Out For Pickup"
                 : "Out For Delivery";
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .currentStatus p`
+              `#id${changedDoc.doc.id} .currentStatus p`
             )[1].textContent = `ETA: ${formattedETA}`;
 
             // update timeline (tripStarted)
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .milestone`
+              `#id${changedDoc.doc.id} .milestone`
             )[1].innerHTML =
               '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
+              `#id${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
             ).textContent = "TRIP STARTED";
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
+              `#id${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(1)`
             ).style.color = "#103646";
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
+              `#id${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
             ).textContent = formattedDepartTimestamp;
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
+              `#id${changedDoc.doc.id} .updates-tripStarted p:nth-of-type(2)`
             ).style.color = "#103646";
 
             // update timeline (eta)
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .milestone`
+              `#id${changedDoc.doc.id} .milestone`
             )[2].innerHTML =
               '<svg class="yellow" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="14" cy="14" r="14" fill="#F9B035"/></svg>';
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-eta p`
+              `#id${changedDoc.doc.id} .updates-eta p`
             ).textContent = `ETA: ${formattedETA}`;
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-eta p`
+              `#id${changedDoc.doc.id} .updates-eta p`
             ).style.color = "#103646";
 
             // notification
@@ -735,20 +735,20 @@ if (uid) {
 
             // update timeline (eta)
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .milestone`
+              `#id${changedDoc.doc.id} .milestone`
             )[2].innerHTML =
               '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
             // update timeline (ended)
             document.querySelectorAll(
-              `#${changedDoc.doc.id} .milestone`
+              `#id${changedDoc.doc.id} .milestone`
             )[3].innerHTML =
               '<svg class="check" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.3332 4L5.99984 11.3333L2.6665 8" stroke="#F4F4F4" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripEnded p`
+              `#id${changedDoc.doc.id} .updates-tripEnded p`
             ).textContent = "TRIP ENDED";
             document.querySelector(
-              `#${changedDoc.doc.id} .updates-tripEnded p`
+              `#id${changedDoc.doc.id} .updates-tripEnded p`
             ).style.color = "#103646";
           }
         });
