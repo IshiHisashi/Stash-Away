@@ -4,8 +4,8 @@
 
     .book-now {
       position: absolute;
-      left: 25%;
-      top: 75%;
+      left: 10%;
+      top: 70%;
       z-index: 90;
       width: 164px;
       height: 56px;
@@ -17,6 +17,9 @@
       border-radius: 7px;
       color: #fff;
       cursor: pointer;
+      @media screen and (min-width: 900px) {
+        top: 80%;
+      }
     }
 
     .hero-img {
@@ -29,10 +32,14 @@
 
     .hero-caption {
       position: absolute;
-      top: 25%;
-      left: 25%;
-      font-size: clamp(1rem, 5vw, 3rem);
+      top: 20%;
+      left: 10%;
+      font-size: clamp(3rem, 5vw, 5rem);
       color: white;
+      font-family: var(--h2-family);
+      @media screen and (min-width: 900px) {
+        top: 15%;
+      }
     }
 
     .hero-caption::after {
@@ -44,14 +51,18 @@
       position: absolute;
       /* bottom: -10px; */
       left: 0;
+      margin-top: 1rem;
     }
 
     .hero-description {
       position: absolute;
-      top: 60%;
-      left: 25%;
+      top: 55%;
+      left: 10%;
       color: white;
-      font-size: clamp(0.7rem, 2vw, 1.5rem);
+      font-size: clamp(1rem, 2vw, 1.5rem);
+      @media screen and (min-width: 900px) {
+        top: 65%;
+      }
     }
   }
 
