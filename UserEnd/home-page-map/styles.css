@@ -161,7 +161,7 @@ fieldset {
   max-height: fit-content;
 } */
 
-@media screen and (min-width: 600px){
+@media screen and (min-width: 1000px){
   main {
     padding-bottom: 100px;
   }

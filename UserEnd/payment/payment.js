@@ -277,5 +277,5 @@ btnAdd.addEventListener("click", async (e) => {
   e.preventDefault();
   await common.addOrderSubmitFunction(snapShot, uid, profileInfo, plansInfo);
   // move to the order-update page
-  window.location.href = "../updates/pickup-and-delivery-updates.html";
+  window.location.href = "../adding-payment-confirmation/adding-payment-confirmation.html";
 });

@@ -260,5 +260,5 @@ btnRetrieval.addEventListener("click", async (e) => {
   await common.retrievalOrderSubmitFunction(uid, getcheckedItem, userDoc);
 
   // Move to the next page
-  window.location.href = "../updates/pickup-and-delivery-updates.html";
+  window.location.href = "../retreival-payment-confirmation/retrieval-payment-confirmation.html";
 });
