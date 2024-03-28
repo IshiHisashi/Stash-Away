@@ -102,7 +102,7 @@ h2 {
 
 .input-field label {
   font-family: var(--subtitle-2-family);
-  font-size: var(--subtitle-2-size);
+  font-size: var(--subtitle-size);
   color: var(--grey-3);
 }
 

@@ -64,67 +64,87 @@ const paymentMethodsArray = [];
 function getProfileInfo() {
   // ACCOUNT PROFILE SECTION =============================
   const inputfields = document.querySelectorAll('input[name="profile-input"]');
-  inputfields[0].value = profileInfo.userName.firstName;
-  inputfields[1].value = profileInfo.userName.lastName;
+  if (profileInfo.userName.firstName) {
+    inputfields[0].value = profileInfo.userName.firstName;
+  }
+  if (profileInfo.userName.lastName) {
+    inputfields[1].value = profileInfo.userName.lastName;
+  }
+  if (profileInfo.contact.email) {
   inputfields[2].value = profileInfo.contact.email;
-  inputfields[3].value = profileInfo.contact.phone;
-  inputfields[4].value = profileInfo.address.roomNumEtc;
-  inputfields[5].value = profileInfo.address.detail;
-  inputfields[6].value = profileInfo.address.city;
-  inputfields[7].value = profileInfo.address.province;
-  inputfields[8].value = profileInfo.address.zipCode;
+  }
+  if (profileInfo.contact.phone) {
+    inputfields[3].value = profileInfo.contact.phone;  
+  }
+  if (profileInfo.address.roomNumEtc) {
+    inputfields[4].value = profileInfo.address.roomNumEtc;  
+  }
+  if (profileInfo.address.detail) {
+    inputfields[5].value = profileInfo.address.detail;  
+  }
+  if (profileInfo.address.city) {
+    inputfields[6].value = profileInfo.address.city;
+  }
+  if (profileInfo.address.province) {
+    inputfields[7].value = profileInfo.address.province;
+  }
+  if (profileInfo.address.zipCode) {
+    inputfields[8].value = profileInfo.address.zipCode;
+  }
 
   // MEMBERSHIPT SECTION ===================================
-  let size = profileInfo.plan.size;
-  let firstLetterUppercase = size.charAt(0).toUpperCase();
-  let remainingLetters = size.slice(1);
-  let sizeCapped = firstLetterUppercase + remainingLetters;
-  document.getElementById("storage-size").innerHTML = `<img src="../icons/check.png" alt="check icon">${sizeCapped} Storage`;
-
-  let duration = profileInfo.plan.term;
-  let planDetailsByDuraton;
-  if (duration == "long") {
-    planDetailsByDuraton = plansInfo.term.long;
-  } else if (duration == "mid") {
-    planDetailsByDuraton = plansInfo.term.mid;
-  } else if (duration == "short") {
-    planDetailsByDuraton = plansInfo.term.short;
+  if (profileInfo.plan) {
+    let size = profileInfo.plan.size;
+    let firstLetterUppercase = size.charAt(0).toUpperCase();
+    let remainingLetters = size.slice(1);
+    let sizeCapped = firstLetterUppercase + remainingLetters;
+    document.getElementById("storage-size").innerHTML = `<img src="../icons/check.png" alt="check icon">${sizeCapped} Storage`;
+  
+    let duration = profileInfo.plan.term;
+    let planDetailsByDuraton;
+    if (duration == "long") {
+      planDetailsByDuraton = plansInfo.term.long;
+    } else if (duration == "mid") {
+      planDetailsByDuraton = plansInfo.term.mid;
+    } else if (duration == "short") {
+      planDetailsByDuraton = plansInfo.term.short;
+    }
+    document.getElementById(
+      "duration"
+    ).innerHTML = `${planDetailsByDuraton.numMonth}-Months Plan`;
+  
+    let originalPrice;
+    if (size == "large") {
+      originalPrice = plansInfo.size.large.price;
+    } else if (size == "medium") {
+      originalPrice = plansInfo.size.medium.price;
+    } else if (size == "small") {
+      originalPrice = plansInfo.size.small.price;
+    }
+  
+    if (duration !== "short") {
+      document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
+      document.getElementById("plan-price").style.textDecoration = "line-through";
+    } else {
+      let planPrice = document.getElementById("plan-price");
+      planPrice.style.gridRow = "-1/-2";
+      planPrice.style.color = "var(--light-pink)";
+      planPrice.style.fontFamily = "var(--body-family)";
+      planPrice.style.fontSize = "var(--body-size)";
+      planPrice.style.fontWeight = "var(--body-weight)";
+      planPrice.style.lineHeight = "var(--body-line-height)";
+      planPrice.innerHTML =
+        "You might want to get a great discount by changing your plan!";
+    }
+  
+    let discountedPrice =
+      Math.round(originalPrice * planDetailsByDuraton.discount * 10) / 10;
+    document.getElementById("discounted").innerHTML = `$${discountedPrice}/month`;
+  
+    document.getElementById(
+      "free-trip"
+    ).innerHTML = `<img src="../icons/check.png" alt="check icon">${planDetailsByDuraton.numTrip} Free Trips`;
   }
-  document.getElementById(
-    "duration"
-  ).innerHTML = `${planDetailsByDuraton.numMonth}-Months Plan`;
-
-  let originalPrice;
-  if (size == "large") {
-    originalPrice = plansInfo.size.large.price;
-  } else if (size == "medium") {
-    originalPrice = plansInfo.size.medium.price;
-  } else if (size == "small") {
-    originalPrice = plansInfo.size.small.price;
-  }
-
-  if (duration !== "short") {
-    document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
-    document.getElementById("plan-price").style.textDecoration = "line-through";
-  } else {
-    let planPrice = document.getElementById("plan-price");
-    planPrice.style.gridRow = "-1/-2";
-    planPrice.style.color = "var(--light-pink)";
-    planPrice.style.fontFamily = "var(--body-family)";
-    planPrice.style.fontSize = "var(--body-size)";
-    planPrice.style.fontWeight = "var(--body-weight)";
-    planPrice.style.lineHeight = "var(--body-line-height)";
-    planPrice.innerHTML =
-      "You might want to get a great discount by changing your plan!";
-  }
-
-  let discountedPrice =
-    Math.round(originalPrice * planDetailsByDuraton.discount * 10) / 10;
-  document.getElementById("discounted").innerHTML = `$${discountedPrice}/month`;
-
-  document.getElementById(
-    "free-trip"
-  ).innerHTML = `<img src="../icons/check.png" alt="check icon">${planDetailsByDuraton.numTrip} Free Trips`;
 
   // PAYMENT METHOD SECTION ================================
   class Card {
@@ -281,6 +301,8 @@ saveProfileBtn.addEventListener("click", async (event) => {
     zipCode,
     geoCode
   );
+  saveProfileBtn.style.backgroundColor = "var(--grey-1)";
+  alert("Account profile is saved.")
 });
 
 const updateProfileInfo = async function (
@@ -351,3 +373,9 @@ const updateDefaultBoolean = async function (array) {
     payment_method: array,
   });
 };
+
+const accountSection = document.querySelector("#account-profile form fieldset");
+accountSection.addEventListener("change", () => {
+  console.log("fired");
+  saveProfileBtn.style.backgroundColor = "var(--pink)";
+})
