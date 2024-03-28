@@ -2,35 +2,38 @@
 import * as geo from "./geo.js";
 import * as common from "./../../common.js";
 
-import { initHeader } from '../homepage/header/header.js';
-import { initFooter } from '../homepage/footer/footer.js';
+import { initHeader } from "../homepage/header/header.js";
+import { initFooter } from "../homepage/footer/footer.js";
 
 async function loadComponent(componentPath, placeholderId) {
-    try {
-        const response = await fetch(componentPath);
-        const componentHTML = await response.text();
-        document.getElementById(placeholderId).innerHTML = componentHTML;
-    } catch (error) {
-        console.error('An error occurred while loading the component:', error);
-    }
+  try {
+    const response = await fetch(componentPath);
+    const componentHTML = await response.text();
+    document.getElementById(placeholderId).innerHTML = componentHTML;
+  } catch (error) {
+    console.error("An error occurred while loading the component:", error);
+  }
 }
 
 async function init() {
-    try {
-        await loadComponent('../homepage/header/header.html', 'header-placeholder');
-        initHeader();
-        // await loadComponent('../homepage/body/body.html', 'body-placeholder');
-        await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
-        initFooter();
-    } catch (error) {
-        console.error('An error occurred:', error);
-    }
+  try {
+    await loadComponent("../homepage/header/header.html", "header-placeholder");
+    initHeader();
+    // await loadComponent('../homepage/body/body.html', 'body-placeholder');
+    await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
+    initFooter();
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 }
 
-if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
-    init();
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+  init();
 } else {
-    document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener("DOMContentLoaded", init);
 }
 
 // Initialize Firebase---------------
@@ -84,8 +87,8 @@ if (navigator.geolocation) {
     (position) => {
       // GET LOCATION ============================================
       // 🚨 Will change this to user's location 🚨
-      let userLgt = profileInfo.address.geoCode[0];
-      let userLat = profileInfo.address.geoCode[1];
+      let userLgt = uid ? profileInfo?.address.geoCode[0] : -123.0965;
+      let userLat = uid ? profileInfo?.address.geoCode[1] : 49.2203;
       const currentLoc = [];
       currentLoc.push(userLgt);
       currentLoc.push(userLat);
@@ -130,7 +133,7 @@ if (navigator.geolocation) {
         const load = document.getElementById("loading-screen");
         const body = document.querySelector("body");
         setTimeout(() => {
-          window.scrollTo(0,0);
+          window.scrollTo(0, 0);
           load.style.display = "none";
           body.style.overflowY = "auto";
         }, 1000);
@@ -147,8 +150,9 @@ if (navigator.geolocation) {
         for (let i in cityArray) {
           let idName = `location-${i}`;
           document.getElementById(idName).value = cityArray[i].name;
-          document.querySelector(`[for="${idName}"]`).innerHTML = 
-          `<div class="location-name">
+          document.querySelector(
+            `[for="${idName}"]`
+          ).innerHTML = `<div class="location-name">
             <span class="city-name-in-list">${cityArray[i].name}</span>
             <img class="location-open" src="./../icons/chevron-down.png" alt="check details of the location">
           </div>
@@ -159,7 +163,9 @@ if (navigator.geolocation) {
             </div>
             <div class="distance">
               <img class="distance-icon" src="./../icons/track.png" alt="distance logo">
-              <p>${Math.round(cityArray[i].distance / 100) / 10} kilo mtrs from your address</p>
+              <p>${
+                Math.round(cityArray[i].distance / 100) / 10
+              } kilo mtrs from your address</p>
             </div>
           </div>
           `;
@@ -189,7 +195,9 @@ if (navigator.geolocation) {
               `input[value="${inputRadioBtns[i].value}"]`
             );
             cityOption.setAttribute("checked", "");
-            const hiddenArea = document.querySelector(`label[for="location-${i}"] div[class="hidden-area"]`);
+            const hiddenArea = document.querySelector(
+              `label[for="location-${i}"] div[class="hidden-area"]`
+            );
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
             } else {
@@ -213,7 +221,9 @@ if (navigator.geolocation) {
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`);
             cityOption.setAttribute("checked", "");
-            const hiddenArea = document.querySelector(`input[value="${bodyId}"]`).nextElementSibling.firstElementChild.nextElementSibling;
+            const hiddenArea = document.querySelector(
+              `input[value="${bodyId}"]`
+            ).nextElementSibling.firstElementChild.nextElementSibling;
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
             } else {
@@ -228,14 +238,20 @@ if (navigator.geolocation) {
       const submitBtn = document.getElementById("submit");
       submitBtn.addEventListener("click", function (e) {
         e.preventDefault();
-
-        if (document.querySelector(`input[checked]`) == null) {
-          alert(
-            "You can select your own storage location by clicking a location icon on the map!"
-          );
+        if (!uid) {
+          window.location.href = `../authentication/login.html?returnUrl=${encodeURIComponent(
+            `../home-page-map/index.html`
+          )}`;
         } else {
-          fireNewLocation();
+          if (document.querySelector(`input[checked]`) == null) {
+            alert(
+              "You can select your own storage location by clicking a location icon on the map!"
+            );
+          } else {
+            fireNewLocation();
+          }
         }
+
         // ----Ishi revised & added----
         // Specify specific obj as a data pacaked to be sent
       });
@@ -254,7 +270,7 @@ if (navigator.geolocation) {
         document.getElementById("proceedLink").click();
       };
 
-      const initializeMap = function() {
+      const initializeMap = function () {
         // SET MAP =================================================
         const map = tt.map({
           key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
@@ -295,8 +311,7 @@ if (navigator.geolocation) {
             .setLngLat(currentLoc)
             .addTo(map);
         });
-      }
-
+      };
     },
     (error) => {
       console.log(error);
