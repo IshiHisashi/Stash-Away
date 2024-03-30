@@ -131,6 +131,10 @@
       font-size: 1rem;
       color: var(--grey-5);
     }
+
+    .main-description {
+      text-align: center;
+    }
     h2 {
       font-size: var(--h2-size);
       color: var(--grey-3);
@@ -150,11 +154,24 @@
     /* FEATURES (Section 1) ======================================= */
 
     .features-section {
-      margin: 6rem 1.5rem;
+      margin: 4rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .intro-section {
-      margin: 4rem 0;
+    
+    .features-section .intro-section {
+      margin: 0 0;
     }
+
+    .features-section .intro-section .main-title {
+      margin-bottom: 0;
+    }
+
+    .features-section .intro-section .horizontal-border {
+      margin-bottom: 40px;
+    }
+
     .right-content p,
     .left-content p {
       margin-bottom: 1rem;
@@ -202,8 +219,15 @@
       text-align: left;
     }
     .line-icon img {
-      width: 41px;
+      width: 60px;
     }
+
+    @media screen and (min-width: 600px) {
+      .line-icon img {
+        width: 80px;
+      }
+    }
+
     .vertical-line {
       border-left: 2px dashed var(--pink);
       height: 500px;
@@ -298,6 +322,25 @@
 
     .benefits-section {
       display: grid;
+    }
+
+    
+
+    .intro-section-white .header{
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: var(--yellow);
+    }
+
+    .intro-section-white .horizontal-border{
+      background-color: #fff;
+    }
+
+    
+
+    .intro-section-white {
+      margin-bottom: 40px;
     }
 
     /* Location ===================== */
@@ -434,8 +477,6 @@
       padding: 100px;
     }
 
-    
-
     .testimonials .title-wrapper {
       display: flex;
       flex-direction: column;
@@ -451,7 +492,7 @@
     * {
       padding: 0;
     }
-    
+
     .testimonials .unique-wrapper {
       max-width: 1100px;
       width: 100%;
@@ -526,7 +567,7 @@
       flex-direction: column;
       justify-content: space-between;
       padding: 15px;
-      border:#e04462  solid 1px;
+      border: #e04462 solid 1px;
     }
 
     .testimonials .unique-card .content {
@@ -555,7 +596,7 @@
       margin: 0;
     }
 
-    .testimonials .unique-card .content .info h2{
+    .testimonials .unique-card .content .info h2 {
       font-size: var(--h3-size);
     }
 
@@ -572,18 +613,18 @@
 
     /* MEDIA QUERIES ================================== */
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 900px) {
       /* Features (Section 1) */
 
       .intro-section {
         margin-bottom: 7rem;
         max-width: 753px;
       }
-      .features-section {
+      /* .features-section {
         display: flex;
         flex-direction: column;
         align-items: center;
-      }
+      } */
       .feature-1,
       .feature-2,
       .feature-3 {
@@ -635,11 +676,15 @@
       /* Benefits (Section 3) ========================= */
 
       .benefits-section {
-        grid-template-columns: 1fr 1fr;
+        display: flex;
+        width: 100%;
+        margin: auto; 
       }
+      
       .benefit {
         padding-left: 0;
       }
+      
       .image-right {
         flex: 1;
         display: flex;
@@ -647,146 +692,185 @@
         align-items: center;
         overflow: hidden;
       }
-
+      
       .image-right img {
-        width: 100%;
-        height: 100%;
+        width: 100%; 
+        max-height: 700px;
+        height: 100%; 
         object-fit: cover;
       }
+      
       .section-left {
+        flex: 1;
+        padding: 3rem; 
         display: flex;
-        padding: 3rem 6rem 3rem 17.5rem;
         flex-direction: column;
-        align-items: start;
+        align-items: center;
       }
+      
       .intro-section-white {
         display: flex;
         flex-direction: column;
         align-items: start;
+        align-self: start;
       }
+
+      .intro-section-white .header{
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+      
       .horizontal-border {
         margin: 0;
       }
+      
+      /* Responsive adjustments */
+      @media (max-width: 600px) {
+        .benefits-section {
+          flex-direction: column;
+        }
+        .section-left, .image-right {
+          flex: none;
+          width: 100%; 
+        }
+        .image-right img {
+          height: 50vh;
+        }
+        .intro-section-white  .header {
+          margin: 0;
+          padding: 0;
+        }
+      }
     }
 
-    .faqs-section{
+    .faqs-section {
+      flex-direction: column;
+      display: flex;
+      align-items: center;
       padding-bottom: 5rem;
       h2 {
         font-family: var(--h2-family);
         font-size: var(--h2-size);
         font-weight: var(--h2-weight);
         color: var(--dark-blue-green);
-    }
-    
-    .horizontal-border {
-        border: 2px solid var(--yellow);
-        width: 40px;
+      }
+
+      .horizontal-border {
+        width: 45px;
         border-radius: 5px;
-    }
-    
-    .item {
+      }
+
+      .item {
         font-family: var(--h4-family);
         font-size: var(--h4-size);
         font-weight: var(--h4-weight);
-    }
-    
-    .answer {
+      }
+
+      .item p {
+        margin: 0;
+        font-family: "Oswald";
+        font-weight: var(--h4-weight);
+      }
+
+      .answer {
         font-family: var(--body-family);
         font-size: var(--body-size);
         font-weight: var(--body-weight);
         line-height: var(--body-line-height);
         color: var(--dark-blue-green);
-    }
-    
-    a {
+      }
+
+      a {
         text-decoration: none;
         color: var(--yellow);
         font-size: var(--button-2-size);
         font-weight: var(--button-2-weight);
-    }
-    
-    
-    /* LAYOUT======================= */
-    .title-container {
+      }
+
+      /* LAYOUT======================= */
+      .title-container {
         display: flex;
         justify-content: center;
         flex-direction: column;
         align-items: center;
-    }
-    
-    h2 {
+      }
+
+      h2 {
         margin: 1rem;
-    }
-    
-    .horizontal-border {
+      }
+
+      .horizontal-border {
         margin-bottom: 2rem;
-    }
-    
-    .question {
+      }
+
+      .question {
         margin: 15px;
         padding: 1rem;
         background-color: var(--white);
         border: 1px solid var(--grey-1);
         border-radius: 10px;
-    
+
         display: grid;
         /* grid-template-columns: 1fr 24px; */
-        gap: 0.5rem;
+        /* gap: 0.5rem; */
         align-items: center;
         overflow: hidden;
-    }
-    
-    .button {
+      }
+
+      .button {
         text-align: center;
-    }
-    
-    
-    @media screen and (min-width: 1200px) {
+      }
+
+      @media screen and (min-width: 600px) {
         .questions {
-            margin: 0 350px;
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          width: 1026px;
+          max-width: 100%;
         }
-    }
-    
-    input {
+      }
+
+      input {
         position: absolute;
         opacity: 0;
         z-index: -1;
-    }
-    
-    .item {
+      }
+
+      .item {
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-    }
-    
-    .item p {
+      }
+
+      .item p {
         margin: 0;
-    }
-    
-    .label-toggle {
+      }
+
+      .label-toggle {
         background: url("../../images/plus.svg");
         background-repeat: no-repeat;
         background-position: center;
         min-width: 30px;
         height: 30px;
         text-align: center;
-    }
-    
-    .answer {
+      }
+
+      .answer {
         max-height: 0;
-    }
-    
-    input:checked + .item > .label-toggle  {
+      }
+
+      input:checked + .item > .label-toggle {
         background: url("../../images/minus.svg");
         background-repeat: no-repeat;
         background-position: center;
-    }
-    
-    input:checked ~ .answer {
+      }
+
+      input:checked ~ .answer {
         max-height: 100vh;
-    }
-    
+      }
     }
 
     /* Locations Section Media ============================ */
@@ -815,11 +899,11 @@
       .locations .wrapper i {
         box-shadow: 0 3px 6px rgba(255, 255, 255, 0.23);
       }
-      @media screen and (min-width: 600px) {
+      /* @media screen and (min-width: 600px) {
         .questions {
             margin: 0 350px;
         }
-    }
+    } */
     }
 
     @media screen and (max-width: 600px) {
@@ -848,8 +932,6 @@
       }
     }
 
-
-    
     /* Testimonials Section Media ============================ */
 
     @media screen and (max-width: 900px) {
