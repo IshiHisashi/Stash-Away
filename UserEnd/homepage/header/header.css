@@ -43,6 +43,10 @@ header {
   margin: 5px 0;
 }
 
+
+.main-menu{
+  font-size: var(--nav-menu-size);
+}
 .main-menu ul {
   list-style-type: none;
   padding: 0;
@@ -92,7 +96,7 @@ body:has(.main-menu.active) {
 }
 
 .sub-menu {
-  font-size: 14px;
+  font-size: var(--nav-menu-size);
 }
 
 .sub {
