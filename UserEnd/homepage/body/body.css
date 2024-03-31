@@ -18,7 +18,10 @@
       color: #fff;
       cursor: pointer;
       @media screen and (min-width: 900px) {
-        top: 80%;
+        top: 75%;
+      }
+      @media screen and (min-width: 1500px) {
+        top: 78%;
       }
     }
 
@@ -61,6 +64,9 @@
       color: white;
       font-size: clamp(1rem, 2vw, 1.5rem);
       @media screen and (min-width: 900px) {
+        top: 60%;
+      }
+      @media screen and (min-width: 1500px) {
         top: 65%;
       }
     }
@@ -159,7 +165,7 @@
       flex-direction: column;
       align-items: center;
     }
-    
+
     .features-section .intro-section {
       margin: 0 0;
     }
@@ -219,12 +225,19 @@
       text-align: left;
     }
     .line-icon img {
-      width: 60px;
+      width: 120px;
+      margin-top: 0.3rem;
+    }
+    .feature-1 .line-icon img {
+      width: 80px;
     }
 
-    @media screen and (min-width: 600px) {
+    @media screen and (min-width: 700px) {
       .line-icon img {
-        width: 80px;
+        width: 50px;
+      }
+      .feature-1 .line-icon img {
+        width: 50px;
       }
     }
 
@@ -255,27 +268,38 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 6rem;
+      /* margin-bottom: 6rem; */
+      margin: 0 2rem 6rem 2rem;
     }
     .box {
       border: 1.5px solid var(--pink);
       margin-bottom: 2.5rem;
       padding: 1.5rem;
       border-radius: 20px;
-      width: 12rem;
+      width: 19rem;
+      height: 15rem;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
     }
     .box img {
       width: 60px;
+      margin: 0 auto;
     }
     .box h3 {
       margin: 0.25rem;
       font-family: var(--h3-family);
       font-size: var(--h3-size);
       color: var(--dark-blue-green);
+      text-align: center;
     }
     .box p {
       font-size: 1rem;
       margin: 0;
+      text-align: center;
     }
 
     /* BENEFITS (Section 3) ===================== */
@@ -324,20 +348,16 @@
       display: grid;
     }
 
-    
-
-    .intro-section-white .header{
+    .intro-section-white .header {
       margin: 0;
       padding: 0;
       text-align: center;
       color: var(--yellow);
     }
 
-    .intro-section-white .horizontal-border{
+    .intro-section-white .horizontal-border {
       background-color: #fff;
     }
-
-    
 
     .intro-section-white {
       margin-bottom: 40px;
@@ -651,10 +671,12 @@
       .feature-image,
       .right-content,
       .left-content,
-      .image-left img {
+      .image-left img,
+      .image-right img {
         max-width: 411px;
       }
-      .image-left img {
+      .image-left img,
+      .image-right img {
         margin-top: 0;
       }
       button {
@@ -678,13 +700,13 @@
       .benefits-section {
         display: flex;
         width: 100%;
-        margin: auto; 
+        margin: auto;
       }
-      
+
       .benefit {
         padding-left: 0;
       }
-      
+
       .image-right {
         flex: 1;
         display: flex;
@@ -692,22 +714,22 @@
         align-items: center;
         overflow: hidden;
       }
-      
+
       .image-right img {
-        width: 100%; 
+        width: 100%;
         max-height: 700px;
-        height: 100%; 
+        height: 100%;
         object-fit: cover;
       }
-      
+
       .section-left {
         flex: 1;
-        padding: 3rem; 
+        padding: 3rem;
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      
+
       .intro-section-white {
         display: flex;
         flex-direction: column;
@@ -715,29 +737,30 @@
         align-self: start;
       }
 
-      .intro-section-white .header{
+      .intro-section-white .header {
         margin: 0;
         padding: 0;
         text-align: center;
       }
-      
+
       .horizontal-border {
         margin: 0;
       }
-      
+
       /* Responsive adjustments */
       @media (max-width: 600px) {
         .benefits-section {
           flex-direction: column;
         }
-        .section-left, .image-right {
+        .section-left,
+        .image-right {
           flex: none;
-          width: 100%; 
+          width: 100%;
         }
         .image-right img {
           height: 50vh;
         }
-        .intro-section-white  .header {
+        .intro-section-white .header {
           margin: 0;
           padding: 0;
         }
