@@ -141,6 +141,20 @@ if (navigator.geolocation) {
   console.log("Geolocation is not supported by this browser.");
 }
 
+// format phone number
+const phone = document.querySelector("#signupphone");
+phone.onchange = (e) => {
+  console.log(e.target.value);
+  if (e.target.value.length === 11) {
+    const phoneArray = String(phone.value).split("");
+    phoneArray.splice(0, 0, "+");
+    phoneArray.splice(2, 0, " ");
+    phoneArray.splice(6, 0, "-");
+    phoneArray.splice(10, 0, "-");
+    phone.value = phoneArray.join("");
+  }
+};
+
 // password validation: must be more than six character
 const password = document.querySelector("#signuppassword");
 password.onchange = (e) => {
@@ -193,7 +207,7 @@ document
       // condition 3: agree checkbox value is true
       const condition3 = document.querySelector("#agree").checked;
 
-      btnSignup.disabled = !(condition1 & condition2 & condition3);
+      btnSignup.disabled = !(condition1 && condition2 && condition3);
     };
   });
 
