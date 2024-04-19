@@ -431,6 +431,10 @@ const checkedDocs = [];
 // Save the checked items into arr
 btnRequestReturn.addEventListener("click", async (e) => {
   e.preventDefault();
+  if (cArr.length === 0) {
+    alert("You have not choosen any of stored item");
+    return;
+  }
 
   Array.from(checkboxes).forEach(async (el) => {
     if (el.checked) {
@@ -450,12 +454,12 @@ btnRequestReturn.addEventListener("click", async (e) => {
   // record it on database tentatively
   await common.recordCheckedFunction(checkedArr, uid);
   // move page
-  if (cArr.length === 0) {
-    alert("You have not choosen any of stored item");
-  }
-  if (cArr.length > 0) {
-    window.location.href = "../order-confirmation/order-confirmation.html";
-  }
+  // if (cArr.length === 0) {
+  //   alert("You have not choosen any of stored item");
+  // }
+  // if (cArr.length > 0) {
+  window.location.href = "../order-confirmation/order-confirmation.html";
+  // }
 });
 
 //
