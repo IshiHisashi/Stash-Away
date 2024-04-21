@@ -1,4 +1,7 @@
 "use strict";
+
+import { tomtomMapsApiKey } from "../../api.js";
+
 import * as geo from "./geo.js";
 import * as common from "./../../common.js";
 
@@ -107,7 +110,7 @@ if (navigator.geolocation) {
           new Promise((resolve, reject) => {
             tt.services
               .calculateRoute({
-                key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+                key: tomtomMapsApiKey,
                 routeType: "shortest",
                 locations: twoLocs,
               })
@@ -195,8 +198,12 @@ if (navigator.geolocation) {
               `input[value="${inputRadioBtns[i].value}"]`
             );
             cityOption.setAttribute("checked", "");
-            const hiddenArea = document.querySelector(`label[for="location-${i}"] div[class="hidden-area"]`);
-            const labelArrow = document.querySelector(`label[for="location-${i}"] div[class="location-name"] img`);
+            const hiddenArea = document.querySelector(
+              `label[for="location-${i}"] div[class="hidden-area"]`
+            );
+            const labelArrow = document.querySelector(
+              `label[for="location-${i}"] div[class="location-name"] img`
+            );
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
               labelArrow.style.transform = "rotate(0)";
@@ -222,8 +229,12 @@ if (navigator.geolocation) {
             }
             let cityOption = document.querySelector(`input[value="${bodyId}"]`);
             cityOption.setAttribute("checked", "");
-            const hiddenArea = document.querySelector(`input[value="${bodyId}"]`).nextElementSibling.firstElementChild.nextElementSibling;
-            const labelArrow = document.querySelector(`label[for="location-${i}"] div[class="location-name"] img`);
+            const hiddenArea = document.querySelector(
+              `input[value="${bodyId}"]`
+            ).nextElementSibling.firstElementChild.nextElementSibling;
+            const labelArrow = document.querySelector(
+              `label[for="location-${i}"] div[class="location-name"] img`
+            );
             if (hiddenArea.style.maxHeight) {
               hiddenArea.style.maxHeight = null;
               labelArrow.style.transform = "rotate(0)";
@@ -275,7 +286,7 @@ if (navigator.geolocation) {
       const initializeMap = function () {
         // SET MAP =================================================
         const map = tt.map({
-          key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+          key: tomtomMapsApiKey,
           container: "map",
           center: currentLoc,
           zoom: 9,

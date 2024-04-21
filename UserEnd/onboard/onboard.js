@@ -6,60 +6,64 @@
 // Geocoding: https://developer.tomtom.com/geocoding-api/documentation/geocode
 // Reverse geocoding: https://developer.tomtom.com/reverse-geocoding-api/documentation/reverse-geocode
 
+import { tomtomMapsApiKey } from "../../api.js";
 
-
-if ( navigator.geolocation ) {
+if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
-      (position) => {
-          let currentLgt = position.coords.longitude;
-          let currentLat = position.coords.latitude;
-          const currentLoc = [];
-          currentLoc.push(currentLgt);
-          currentLoc.push(currentLat);
-          // console.log("Longitude: " + position.coords.longitude);
-          // console.log("Latitude: " + position.coords.latitude);
-          // console.log("Time: " + new Date(position.timestamp));
-          console.log(currentLoc);
+    (position) => {
+      let currentLgt = position.coords.longitude;
+      let currentLat = position.coords.latitude;
+      const currentLoc = [];
+      currentLoc.push(currentLgt);
+      currentLoc.push(currentLat);
+      // console.log("Longitude: " + position.coords.longitude);
+      // console.log("Latitude: " + position.coords.latitude);
+      // console.log("Time: " + new Date(position.timestamp));
+      console.log(currentLoc);
 
-          async function getAddress (url) {
-            let response = await fetch(url);
-            let data = await response.json();
-            console.log(data);
-            document.getElementById("street").value = data.addresses[0].address.streetNameAndNumber;
-            document.getElementById("city").value = data.addresses[0].address.municipality;
-            document.getElementById("province").value = data.addresses[0].address.countrySubdivisionName;
-            document.getElementById("zip-code").value = data.addresses[0].address.extendedPostalCode;
-            return data;
-          }
-
-          // 🚨🚨🚨 Store the data into the DB!!!
-
-          let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`
-
-          getAddress(addressUrl);
-
-          const map = tt.map({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
-            container: "map",
-            center: currentLoc,
-            zoom: 9
-          })
-
-          map.on('load', () => {
-            var curLocEl = document.createElement("div");
-            curLocEl.id = "current-location-marker";
-            var currentLocation = new tt.Marker({ element:curLocEl }).setLngLat(currentLoc).addTo(map);
-          })
-          
-      },
-      (error) => {
-          console.log(error);
-          if (error.code == error.PERMISSION_DENIED) {
-              window.alert("geolocation permission denied")
-          }
+      async function getAddress(url) {
+        let response = await fetch(url);
+        let data = await response.json();
+        console.log(data);
+        document.getElementById("street").value =
+          data.addresses[0].address.streetNameAndNumber;
+        document.getElementById("city").value =
+          data.addresses[0].address.municipality;
+        document.getElementById("province").value =
+          data.addresses[0].address.countrySubdivisionName;
+        document.getElementById("zip-code").value =
+          data.addresses[0].address.extendedPostalCode;
+        return data;
       }
+
+      // 🚨🚨🚨 Store the data into the DB!!!
+
+      let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=${tomtomMapsApiKey}&radius=100&returnMatchType=AddressPoint`;
+
+      getAddress(addressUrl);
+
+      const map = tt.map({
+        key: tomtomMapsApiKey,
+        container: "map",
+        center: currentLoc,
+        zoom: 9,
+      });
+
+      map.on("load", () => {
+        var curLocEl = document.createElement("div");
+        curLocEl.id = "current-location-marker";
+        var currentLocation = new tt.Marker({ element: curLocEl })
+          .setLngLat(currentLoc)
+          .addTo(map);
+      });
+    },
+    (error) => {
+      console.log(error);
+      if (error.code == error.PERMISSION_DENIED) {
+        window.alert("geolocation permission denied");
+      }
+    }
   );
 } else {
-  console.log("Geolocation is not supported by this browser.")
+  console.log("Geolocation is not supported by this browser.");
 }
-

@@ -1,5 +1,7 @@
 "use strict";
 
+import { tomtomMapsApiKey } from "../../api.js";
+
 import * as common from "../../common.js";
 import { initHeader } from "../homepage/header/header.js";
 import { initFooter } from "../homepage/footer/footer.js";
@@ -763,7 +765,7 @@ btnSavePickup.addEventListener("click", async (e) => {
     let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
     await tt.services
       .geocode({
-        key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+        key: tomtomMapsApiKey,
         query: wholeAddress,
       })
       .then((response) => {

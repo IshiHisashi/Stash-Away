@@ -1,5 +1,7 @@
 "use strict";
 
+import { tomtomMapsApiKey } from "../../api.js";
+
 import * as common from "../../common.js";
 
 import {
@@ -126,7 +128,7 @@ if (navigator.geolocation) {
         return data;
       }
 
-      let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY&radius=100&returnMatchType=AddressPoint`;
+      let addressUrl = `https://api.tomtom.com/search/2/reverseGeocode/${currentLat},${currentLgt}.json?key=${tomtomMapsApiKey}&radius=100&returnMatchType=AddressPoint`;
 
       getAddress(addressUrl);
     },
@@ -228,7 +230,7 @@ btnSignup.onclick = (e) => {
   let wholeAddress = `${addressdetail}, ${city}, Britich Columbia`;
   tt.services
     .geocode({
-      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      key: tomtomMapsApiKey,
       query: wholeAddress,
     })
     .then((response) => {

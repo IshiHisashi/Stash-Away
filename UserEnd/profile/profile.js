@@ -1,34 +1,40 @@
+import { tomtomMapsApiKey } from "../../api.js";
+
 import * as common from "../../common.js";
 
-import { initHeader } from '../homepage/header/header.js';
-import { initFooter } from '../homepage/footer/footer.js';
+import { initHeader } from "../homepage/header/header.js";
+import { initFooter } from "../homepage/footer/footer.js";
+import { tomtomMapsApiKey } from "../../api.js";
 
 async function loadComponent(componentPath, placeholderId) {
-    try {
-        const response = await fetch(componentPath);
-        const componentHTML = await response.text();
-        document.getElementById(placeholderId).innerHTML = componentHTML;
-    } catch (error) {
-        console.error('An error occurred while loading the component:', error);
-    }
+  try {
+    const response = await fetch(componentPath);
+    const componentHTML = await response.text();
+    document.getElementById(placeholderId).innerHTML = componentHTML;
+  } catch (error) {
+    console.error("An error occurred while loading the component:", error);
+  }
 }
 
 async function init() {
-    try {
-        await loadComponent('../homepage/header/header.html', 'header-placeholder');
-        initHeader();
-        // await loadComponent('../homepage/body/body.html', 'body-placeholder');
-        await loadComponent('../homepage/footer/footer.html', 'footer-placeholder');
-        initFooter();
-    } catch (error) {
-        console.error('An error occurred:', error);
-    }
+  try {
+    await loadComponent("../homepage/header/header.html", "header-placeholder");
+    initHeader();
+    // await loadComponent('../homepage/body/body.html', 'body-placeholder');
+    await loadComponent("../homepage/footer/footer.html", "footer-placeholder");
+    initFooter();
+  } catch (error) {
+    console.error("An error occurred:", error);
+  }
 }
 
-if (document.readyState === 'complete' || document.readyState !== 'loading' && !document.documentElement.doScroll) {
-    init();
+if (
+  document.readyState === "complete" ||
+  (document.readyState !== "loading" && !document.documentElement.doScroll)
+) {
+  init();
 } else {
-    document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener("DOMContentLoaded", init);
 }
 
 // Initialize Firebase---------------
@@ -71,16 +77,16 @@ function getProfileInfo() {
     inputfields[1].value = profileInfo.userName.lastName;
   }
   if (profileInfo.contact.email) {
-  inputfields[2].value = profileInfo.contact.email;
+    inputfields[2].value = profileInfo.contact.email;
   }
   if (profileInfo.contact.phone) {
-    inputfields[3].value = profileInfo.contact.phone;  
+    inputfields[3].value = profileInfo.contact.phone;
   }
   if (profileInfo.address.roomNumEtc) {
-    inputfields[4].value = profileInfo.address.roomNumEtc;  
+    inputfields[4].value = profileInfo.address.roomNumEtc;
   }
   if (profileInfo.address.detail) {
-    inputfields[5].value = profileInfo.address.detail;  
+    inputfields[5].value = profileInfo.address.detail;
   }
   if (profileInfo.address.city) {
     inputfields[6].value = profileInfo.address.city;
@@ -98,8 +104,10 @@ function getProfileInfo() {
     let firstLetterUppercase = size.charAt(0).toUpperCase();
     let remainingLetters = size.slice(1);
     let sizeCapped = firstLetterUppercase + remainingLetters;
-    document.getElementById("storage-size").innerHTML = `<img src="../icons/check.png" alt="check icon">${sizeCapped} Storage`;
-  
+    document.getElementById(
+      "storage-size"
+    ).innerHTML = `<img src="../icons/check.png" alt="check icon">${sizeCapped} Storage`;
+
     let duration = profileInfo.plan.term;
     let planDetailsByDuraton;
     if (duration == "long") {
@@ -112,7 +120,7 @@ function getProfileInfo() {
     document.getElementById(
       "duration"
     ).innerHTML = `${planDetailsByDuraton.numMonth}-Months Plan`;
-  
+
     let originalPrice;
     if (size == "large") {
       originalPrice = plansInfo.size.large.price;
@@ -121,10 +129,13 @@ function getProfileInfo() {
     } else if (size == "small") {
       originalPrice = plansInfo.size.small.price;
     }
-  
+
     if (duration !== "short") {
-      document.getElementById("plan-price").innerHTML = `$${originalPrice}/month`;
-      document.getElementById("plan-price").style.textDecoration = "line-through";
+      document.getElementById(
+        "plan-price"
+      ).innerHTML = `$${originalPrice}/month`;
+      document.getElementById("plan-price").style.textDecoration =
+        "line-through";
     } else {
       let planPrice = document.getElementById("plan-price");
       planPrice.style.gridRow = "-1/-2";
@@ -136,11 +147,13 @@ function getProfileInfo() {
       planPrice.innerHTML =
         "You might want to get a great discount by changing your plan!";
     }
-  
+
     let discountedPrice =
       Math.round(originalPrice * planDetailsByDuraton.discount * 10) / 10;
-    document.getElementById("discounted").innerHTML = `$${discountedPrice}/month`;
-  
+    document.getElementById(
+      "discounted"
+    ).innerHTML = `$${discountedPrice}/month`;
+
     document.getElementById(
       "free-trip"
     ).innerHTML = `<img src="../icons/check.png" alt="check icon">${planDetailsByDuraton.numTrip} Free Trips`;
@@ -171,7 +184,7 @@ function getProfileInfo() {
       let image = document.createElement("img");
       image.setAttribute("src", `${this.cardBrandUrl}`);
       image.setAttribute("class", "card-brand-img");
-      let brandName = document.createElement("p")
+      let brandName = document.createElement("p");
       brandName.setAttribute("class", "brand-name");
       let brandNode = document.createTextNode(`${this.brandName}`);
       brandName.appendChild(brandNode);
@@ -241,7 +254,7 @@ if (uid) {
   async function loadingAndShow() {
     await getProfileInfo();
     await radioBtnWork();
-    console.log("all the data retrieved.")
+    console.log("all the data retrieved.");
     const load = document.getElementById("loading-screen");
     const body = document.querySelector("body");
     setTimeout(() => {
@@ -276,7 +289,7 @@ saveProfileBtn.addEventListener("click", async (event) => {
   const wholeAddress = await `${street}, ${city}, Britich Columbia`;
   await tt.services
     .geocode({
-      key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+      key: tomtomMapsApiKey,
       query: wholeAddress,
     })
     .then((response) => {
@@ -302,7 +315,7 @@ saveProfileBtn.addEventListener("click", async (event) => {
     geoCode
   );
   saveProfileBtn.style.backgroundColor = "var(--grey-1)";
-  alert("Account profile is saved.")
+  alert("Account profile is saved.");
 });
 
 const updateProfileInfo = async function (
@@ -378,4 +391,4 @@ const accountSection = document.querySelector("#account-profile form fieldset");
 accountSection.addEventListener("change", () => {
   console.log("fired");
   saveProfileBtn.style.backgroundColor = "var(--pink)";
-})
+});

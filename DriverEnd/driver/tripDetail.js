@@ -1,5 +1,7 @@
 "use strict";
 
+import { tomtomMapsApiKey } from "../../api.js";
+
 import {
   objArr,
   update,
@@ -197,7 +199,7 @@ const renderTripDetails = (userID, orderID, address, name, status) => {
           // ETA ///////////////
           // get arrival location (geocode from the order's address)
           const responseUserGeo = await tt.services.geocode({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+            key: tomtomMapsApiKey,
             query: address,
           });
           const userLat = responseUserGeo.results[0].position.lat;
@@ -211,7 +213,7 @@ const renderTripDetails = (userID, orderID, address, name, status) => {
 
           // calculate ETA
           const responseETA = await tt.services.calculateRoute({
-            key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+            key: tomtomMapsApiKey,
             locations: [
               [driverLat, driverLon],
               [userLat, userLon],

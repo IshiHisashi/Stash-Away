@@ -7,6 +7,8 @@ import {
   doc,
 } from "./forDriverEnd/load.js";
 
+import { tomtomMapsApiKey } from "../api.js";
+
 document.querySelector(".popupBackground").onclick = (e) => {
   e.preventDefault();
   e.target.querySelector("form").remove();
@@ -175,7 +177,7 @@ const renderOrders = (
             // ETA ///////////////
             // get arrival location (geocode from the order's address)
             const responseUserGeo = await tt.services.geocode({
-              key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+              key: tomtomMapsApiKey,
               query: address,
             });
             const userLat = responseUserGeo.results[0].position.lat;
@@ -189,7 +191,7 @@ const renderOrders = (
 
             // calculate ETA
             const responseETA = await tt.services.calculateRoute({
-              key: "bHlx31Cqd8FUqVEk3CDmB9WfmR95FBvY",
+              key: tomtomMapsApiKey,
               locations: [
                 [driverLat, driverLon],
                 [userLat, userLon],
