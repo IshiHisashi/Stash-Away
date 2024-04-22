@@ -11,6 +11,8 @@
 
 ## Demo
 ### Video
+<p>(Please click below thumbnail then you'll be navigated to youtube link)</p>
+
 [![](https://img.youtube.com/vi/HOvOjbfgq40/0.jpg)](https://www.youtube.com/watch?v=HOvOjbfgq40)
 
 ### Screenshots(Desktop)
@@ -65,7 +67,21 @@
   </tr>
 </table>
 
-## How to Start
+## How to Use the app
+### User end
+<p>You can access from <a href=https://stash-away.vercel.app/UserEnd/homepage/main.html>Here</a></p>
+<p>Then, please create your account or try this sample account</p>
+<pre>
+  <code>
+    Email : stashaway.wmddproject@gmail.com
+    Password : samplepass
+  </code>
+</pre>
+
+
+### Driver end
+<p>You can access from <a href=https://stash-away.vercel.app/DriverEnd/driver.html>Here</a></p>
+
 
 ## Teck Stack
 <p>This application is nicely developed by making the most of firebase and a geolocation API</p>
