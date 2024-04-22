@@ -80,7 +80,6 @@ const btnSaveSize = document.getElementById("btn-save-size");
 const btnBackSize = document.getElementById("btn-back-size");
 
 // For 4. Booking_TermPlan selection
-// to be placed here later
 const tripShort = document.getElementById("trip-short");
 const tripMid = document.getElementById("trip-mid");
 const tripLong = document.getElementById("trip-long");
@@ -523,7 +522,6 @@ function updateProceedButtonState() {
 }
 
 const itemsContainer = document.getElementById("itemsContainer");
-// Prathibha_end
 
 // Press proceed
 btnProceed.addEventListener("click", () => {
@@ -544,7 +542,7 @@ btnProceed.addEventListener("click", () => {
 });
 
 //-----------------------------------------
-// Ishi start
+// Ishi
 // 2. Booking_Pickup
 // Rendering as default values
 firstname.value = userDoc.userName.firstName;
@@ -614,7 +612,6 @@ function createCalendar(year, month) {
   let dayCount = 1;
   let calendarHtml = "";
 
-  // calendarHtml += "<h1>" + year + "/" + month + "</h1>";
   calendarHtml += "<table>";
   for (let i = 0; i < weeks.length; i++) {
     calendarHtml += "<td>" + weeks[i] + "</td>";
@@ -760,7 +757,6 @@ btnSavePickup.addEventListener("click", async (e) => {
   ) {
     alert("Please fill in all the required information");
   } else {
-    // e.preventDefault();
     const geoCodeArray = [];
     let wholeAddress = await `${street.value}, ${city.value}, Britich Columbia`;
     await tt.services
