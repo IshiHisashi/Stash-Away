@@ -58,18 +58,18 @@
     <th>Description</th>
   </thead>
   <tr>
-    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/UserEnd>UserEnd</td>
+    <td><a target="_blank" href=https://github.com/IshiHisashi/Stash-Away/tree/main/UserEnd>UserEnd</td>
     <td>This facilitates interface for users such as main page, booking process, storage management and retrieval process</td>
   </tr>
   <tr>
-    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/DriverEnd>DriverEnd</td>
+    <td><a target="_blank" href=https://github.com/IshiHisashi/Stash-Away/tree/main/DriverEnd>DriverEnd</td>
     <td>This represents task management function for drivers to receive request from users and revert update back to them. </td>
   </tr>
 </table>
 
 ## How to Use the app
 ### User end
-<p>You can access from <a href=https://stash-away.vercel.app/UserEnd/homepage/main.html>Here</a></p>
+<p>You can access from <a target="_blank" href=https://stash-away.vercel.app/UserEnd/homepage/main.html>Here</a></p>
 <p>Then, please create your account or try this sample account</p>
 <pre>
   <code>
@@ -80,7 +80,7 @@
 
 
 ### Driver end
-<p>You can access from <a href=https://stash-away.vercel.app/DriverEnd/driver.html>Here</a></p>
+<p>You can access from <a target="_blank" href=https://stash-away.vercel.app/DriverEnd/driver.html>Here</a></p>
 
 
 ## Teck Stack
@@ -120,17 +120,17 @@
   <tr>
     <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Hisashi%20Ishihara.png height=50></td>
     <td>Hisashi Ishihara</td>
-    <td><a href=https://github.com/IshiHisashi>@IshiHisashi</td>
+    <td><a target="_blank" href=https://github.com/IshiHisashi>@IshiHisashi</td>
       <td>Handling database | Built booking & storage management framework</td>
   </tr>
   <tr>
     <td><img src=></td>
     <td>Pratibha Wijetunga</td>
-    <td><a href=https://github.com/shehani-wijetunga>@shehani-wijetunga</td>
+    <td><a target="_blank" href=https://github.com/shehani-wijetunga>@shehani-wijetunga</td>
     <td>Camera & upload image from device for adding-item feature | Built home page</td>
   </tr>
   <tr>
-    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Sacha.jpeg height=50></td>
+    <td><img  target="_blank"src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Sacha.jpeg height=50></td>
     <td>Sachi Asano</td>
     <td><a href=https://github.com/c-est-sa>@c-est-sa</td>
     <td> Authentication | Notification | Built driver's end and order tracing structure </td>  
@@ -138,7 +138,7 @@
   <tr>
     <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Aki.jpeg height=50></td>
     <td>Akifumi Hayashi</td>
-    <td><a href=https://github.com/Akiodesukedo>@Akiodesukedo</td>
+    <td><a target="_blank" href=https://github.com/Akiodesukedo>@Akiodesukedo</td>
     <td>Select Geo Location | Calculation of ETA | Built order-confirmation page </td>  
   </tr>
 </table>
