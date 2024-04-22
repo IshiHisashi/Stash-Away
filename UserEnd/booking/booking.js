@@ -5,7 +5,7 @@ import { tomtomMapsApiKey } from "../../api.js";
 import * as common from "../../common.js";
 import { initHeader } from "../homepage/header/header.js";
 import { initFooter } from "../homepage/footer/footer.js";
-import { Notyf } from "../../node_modules/notyf/notyf.es.js";
+// import { Notyf } from "../../node_modules/notyf/notyf.es.js";
 // Initialize Firebase---------------
 const db = common.db;
 // General : Get company info
