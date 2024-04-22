@@ -11,6 +11,7 @@
 
 ## Demo
 ### Video
+[![](https://img.youtube.com/vi/HOvOjbfgq40/0.jpg)](https://www.youtube.com/watch?v=HOvOjbfgq40)
 
 ### Screenshots(Desktop)
 <table>
@@ -55,11 +56,11 @@
     <th>Description</th>
   </thead>
   <tr>
-    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/UserEnd>User End</td>
+    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/UserEnd>UserEnd</td>
     <td>This facilitates interface for users such as main page, booking process, storage management and retrieval process</td>
   </tr>
   <tr>
-    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/DriverEnd>Driver End</td>
+    <td><a href=https://github.com/IshiHisashi/Stash-Away/tree/main/DriverEnd>DriverEnd</td>
     <td>This represents task management function for drivers to receive request from users and revert update back to them. </td>
   </tr>
 </table>
@@ -88,7 +89,7 @@
     </tr>
     <tr>
       <td>Web API for Notification</td>
-      <td>To send notification (when driver departs for pickup/deliver)</td>
+      <td>To send notification (when driver departs for pickup/delivery)</td>
     </tr>
   </table>
 
