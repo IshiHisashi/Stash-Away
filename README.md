@@ -118,25 +118,25 @@
     <th>Role</th>
   </thead>
   <tr>
-    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Hisashi%20Ishihara.png height=50></td>
+    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Ishi_prof.png height=50></td>
     <td>Hisashi Ishihara</td>
     <td><a target="_blank" href=https://github.com/IshiHisashi>@IshiHisashi</td>
       <td>Handling database | Built booking & storage management framework</td>
   </tr>
   <tr>
-    <td><img src=></td>
+    <td><img  target="_blank"src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Prathibha_prof.png height=50></td>
     <td>Pratibha Wijetunga</td>
     <td><a target="_blank" href=https://github.com/shehani-wijetunga>@shehani-wijetunga</td>
     <td>Camera & upload image from device for adding-item feature | Built home page</td>
   </tr>
   <tr>
-    <td><img  target="_blank"src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Sacha.jpeg height=50></td>
+    <td><img  target="_blank"src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Sacha_prof.png height=50></td>
     <td>Sachi Asano</td>
     <td><a href=https://github.com/c-est-sa>@c-est-sa</td>
     <td> Authentication | Notification | Built driver's end and order tracing structure </td>  
   </tr>
   <tr>
-    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Aki.jpeg height=50></td>
+    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Aki_prof.png height=50></td>
     <td>Akifumi Hayashi</td>
     <td><a target="_blank" href=https://github.com/Akiodesukedo>@Akiodesukedo</td>
     <td>Select Geo Location | Calculation of ETA | Built order-confirmation page </td>  
