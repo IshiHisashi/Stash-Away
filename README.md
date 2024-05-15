@@ -118,7 +118,7 @@
     <th>Role</th>
   </thead>
   <tr>
-    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Ishi_prof.png height=50></td>
+    <td><img src=https://github.com/IshiHisashi/Stash-Away/blob/main/UserEnd/images/Ishi_prof.png height=50 width=50></td>
     <td>Hisashi Ishihara</td>
     <td><a target="_blank" href=https://github.com/IshiHisashi>@IshiHisashi</td>
       <td>Handling database | Built booking & storage management framework</td>
